@@ -17,10 +17,10 @@
     "baseUrl": ".",
     "paths": {
       "~/*": [
-        "./*"
+        "./app/*"
       ],
       "@/*": [
-        "./*"
+        "./app/*"
       ]
     },
     "types": [
@@ -28,6 +28,18 @@
       "@nuxt/types"
     ]
   },
+  "files": [
+    "./vue-shims.d.ts"
+  ],
+  "include": [
+    "./app/components/**/*.ts",
+    "./app/components/**/*.vue",
+    "./app/layouts/**/*.ts",
+    "./app/layouts/**/*.vue",
+    "./app/pages/**/*.ts",
+    "./app/pages/**/*.vue",
+    "./app/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
