@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install g++
+      run: sudo apt-get install g++ build-essential
     - name: yarn install
       uses: nuxt/actions-yarn@node-11
       with:
