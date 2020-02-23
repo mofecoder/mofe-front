@@ -11,9 +11,9 @@
             <div class="statements" v-html="$md.render(problem.statement)" />
             <h3>制約</h3>
             <div class="statements" v-html="$md.render(problem.constraints)" />
-            <h3>入力例</h3>
+            <h3>入力</h3>
             <div class="statements" v-html="$md.render(problem.inputFormat)" />
-            <h3>出力例</h3>
+            <h3>出力</h3>
             <div class="statements" v-html="$md.render(problem.outputFormat)" />
           </v-card-text>
         </v-card>
