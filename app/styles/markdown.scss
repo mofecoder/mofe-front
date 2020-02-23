@@ -1,0 +1,29 @@
+@mixin markdown() {
+  .MathJax {
+    font-size: 110%;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  th {
+    padding: 0.2em 1em;
+  }
+  td {
+    padding: 0.5em 1em;
+  }
+  th,
+  td {
+    border-top: #000000 solid 1px;
+    border-bottom: #000000 solid 1px;
+  }
+  code {
+    width: 100%;
+    color: black;
+    padding: 0.5em;
+    font-size: 1em;
+    &:before,
+    &:after {
+      content: none;
+    }
+  }
+}

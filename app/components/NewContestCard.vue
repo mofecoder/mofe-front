@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { Emit, Vue } from 'vue-property-decorator'
+import { Emit, Vue } from 'nuxt-property-decorator'
 
 export default class NewContestCard extends Vue {
   contestName = ''

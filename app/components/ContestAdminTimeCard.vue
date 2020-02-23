@@ -134,7 +134,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Emit, Prop } from 'vue-property-decorator'
+import { Vue, Component, Watch, Emit, Prop } from 'nuxt-property-decorator'
 @Component
 export default class ContestAdminTimeCard extends Vue {
   @Prop({ type: Boolean })

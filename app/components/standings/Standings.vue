@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import { StandingProblem, Standing } from '~/types/standings'
 
 @Component
@@ -148,6 +148,22 @@ export default class Standings extends Vue {
           score: 200,
           time: 3605,
           penalty: 25
+        },
+        {}
+      ]
+    },
+    {
+      userName: 'chokudai',
+      result: {
+        score: 200,
+        time: 45,
+        penalty: 0
+      },
+      problems: [
+        {},
+        {
+          score: 200,
+          time: 45
         },
         {}
       ]

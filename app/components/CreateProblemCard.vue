@@ -29,8 +29,18 @@
           </v-col>
         </v-row>
         <!-- 問題文 -->
+        <v-row justify="end">
+          <v-btn
+            style="margin-right:12px"
+            text
+            width="auto"
+            color="purple"
+            @click="modals.problemStatement = true"
+            >プレビュー</v-btn
+          >
+        </v-row>
         <v-row>
-          <v-col cols="12" class="py-1">
+          <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="content.problemStatement"
               :rules="rules.required"
@@ -40,9 +50,25 @@
             />
           </v-col>
         </v-row>
+        <markdown-preview-modal
+          title="プレビュー - 問題文"
+          :markdown="content.problemStatement"
+          :value="modals.problemStatement"
+          @close="modals.problemStatement = false"
+        />
         <!-- 制約 -->
+        <v-row justify="end">
+          <v-btn
+            style="margin-right:12px"
+            text
+            width="auto"
+            color="purple"
+            @click="modals.constraints = true"
+            >プレビュー</v-btn
+          >
+        </v-row>
         <v-row>
-          <v-col cols="12" class="py-1">
+          <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="content.constraints"
               :rules="rules.required"
@@ -52,9 +78,25 @@
             />
           </v-col>
         </v-row>
+        <markdown-preview-modal
+          title="プレビュー - 制約"
+          :markdown="content.constraints"
+          :value="modals.constraints"
+          @close="modals.constraints = false"
+        />
         <!-- 入力 -->
+        <v-row justify="end">
+          <v-btn
+            style="margin-right:12px"
+            text
+            width="auto"
+            color="purple"
+            @click="modals.input = true"
+            >プレビュー</v-btn
+          >
+        </v-row>
         <v-row>
-          <v-col cols="12" class="py-1">
+          <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="content.input"
               :rules="rules.required"
@@ -64,9 +106,25 @@
             />
           </v-col>
         </v-row>
+        <markdown-preview-modal
+          title="プレビュー - 入力"
+          :markdown="content.input"
+          :value="modals.input"
+          @close="modals.input = false"
+        />
         <!-- 出力 -->
+        <v-row justify="end">
+          <v-btn
+            style="margin-right:12px"
+            text
+            width="auto"
+            color="purple"
+            @click="modals.output = true"
+            >プレビュー</v-btn
+          >
+        </v-row>
         <v-row>
-          <v-col cols="12" class="py-1">
+          <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="content.output"
               :rules="rules.required"
@@ -76,6 +134,12 @@
             />
           </v-col>
         </v-row>
+        <markdown-preview-modal
+          title="プレビュー - 出力"
+          :markdown="content.output"
+          :value="modals.output"
+          @close="modals.output = false"
+        />
         <!-- サンプル -->
         <!-- 登録ボタン -->
         <v-row>
@@ -90,9 +154,13 @@
   </v-card>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import { Difficulty } from '~/types/contestAdmin'
-@Component
+import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
+
+@Component({
+  components: { MarkdownPreviewModal }
+})
 export default class CreateProblemCard extends Vue {
   rules = {
     point: [
@@ -129,6 +197,13 @@ export default class CreateProblemCard extends Vue {
     constraints: '',
     input: '',
     output: ''
+  }
+
+  modals = {
+    problemStatement: false,
+    constraints: false,
+    input: false,
+    output: false
   }
 
   valid = false

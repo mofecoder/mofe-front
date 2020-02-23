@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import ContestHeader from '~/components/ContestHeader.vue'
 import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import Standings from '~/components/standings/Standings.vue'

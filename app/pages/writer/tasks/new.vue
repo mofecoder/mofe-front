@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-layout justify-center>
         <v-flex xl6 lg8 md10>
-          <CreateProblemCard v-bind="content" />
+          <CreateProblemCard />
         </v-flex>
       </v-layout>
     </v-container>
@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import CreateProblemCard from '~/components/CreateProblemCard.vue'
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({ components: { CreateProblemCard } })
 export default class PageWriterTaskNew extends Vue {

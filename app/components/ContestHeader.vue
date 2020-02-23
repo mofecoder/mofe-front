@@ -4,7 +4,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 @Component
 export default class ContestHeader extends Vue {
   @Prop({ type: String, required: true })

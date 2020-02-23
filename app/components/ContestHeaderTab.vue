@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="wrap">
-      <a class="tab" @click="go('')">トップ</a>
-      <div class="tab tab--active">問題</div>
+      <a class="tab" :class="active('index')" @click="go('')">トップ</a>
+      <div class="tab" :class="active('tasks')" @click="go('tasks')">問題</div>
       <div class="tab submit" @click="switchSubmit">
         提出一覧<span class="triangle">▼</span>
         <div v-show="showSubmits" class="submits">
@@ -10,7 +10,7 @@
           <div class="tab">みんなの提出</div>
         </div>
       </div>
-      <a class="tab" @click="go('standings')">
+      <a class="tab" :class="active('standings')" @click="go('standings')">
         順位表
       </a>
       <div class="tab tab--disabled">解説</div>
@@ -19,12 +19,23 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'nuxt-property-decorator'
 @Component
 export default class ContestHeaderTab extends Vue {
   showSubmits: boolean = false
   switchSubmit() {
     this.showSubmits = !this.showSubmits
+  }
+
+  get current(): string {
+    const path = this.$route.fullPath
+    const regex = /contests\/\w+\/?(\w+)?\/?(\?.+)?$/.exec(path)
+    if (!regex) return ''
+    return regex[1] || 'index'
+  }
+
+  active(s: string) {
+    return s !== this.current ? [] : ['tab--active']
   }
 
   go(path: string) {

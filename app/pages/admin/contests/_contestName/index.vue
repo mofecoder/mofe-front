@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import ContestAdminProblemsCard from '~/components/ContestAdminProblemsCard.vue'
 import ContestAdminTimeCard from '~/components/ContestAdminTimeCard.vue'
 import ContestAdminSettingsCard from '~/components/ContestAdminSettingsCard.vue'
