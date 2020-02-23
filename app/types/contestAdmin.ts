@@ -1,11 +1,10 @@
 export type Difficulty =
-  | 'Green'
+  | 'Assam'
+  | 'Benihuki'
   | 'Ceylon'
-  | 'Dimbula'
   | 'Darjeeling'
-  | 'Uva'
   | 'Earlgray'
-  | 'Keemun'
+  | 'Flavor'
   | 'ผักชี'
 
 type WriterOrTester = {
