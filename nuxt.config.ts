@@ -1,6 +1,10 @@
+import { Configuration } from '@nuxt/types'
+// @ts-ignore
 import colors from 'vuetify/es5/util/colors'
 
-export default {
+require('dotenv').config()
+
+const nuxtConfig: Configuration = {
   mode: 'universal',
   srcDir: 'app/',
   /*
@@ -17,7 +21,13 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src:
+          'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML'
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color
@@ -30,7 +40,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/api'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -49,13 +59,19 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/markdownit'
   ],
+  env: {
+    API_BASE: process.env.API_BASE || 'https://localhost:5010'
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: process.env.API_BASE
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -77,6 +93,13 @@ export default {
       }
     }
   },
+  markdownit: {
+    injected: true,
+    breaks: true,
+    html: true,
+    linkify: true,
+    typography: true
+  },
   /*
    ** Build configuration
    */
@@ -88,3 +111,5 @@ export default {
     extend(config, ctx) {}
   }
 }
+
+export default nuxtConfig
