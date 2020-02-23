@@ -1,4 +1,4 @@
-name: CI
+name: Yarn CI
 
 on: [push]
 
@@ -9,9 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    - name: yarn install
+      uses: nuxt/actions-yarn@node-11
+    - name: yarn lint
+      uses: nuxt/actions-yarn@node-11
+      with:
+        args: lint
