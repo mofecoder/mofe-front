@@ -1,4 +1,5 @@
 export type Difficulty =
+  | "Milk"
   | 'Assam'
   | 'Benihuki'
   | 'Ceylon'
