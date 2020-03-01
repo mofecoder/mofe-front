@@ -1,82 +1,81 @@
 <template>
   <div>
-    <div v-if="contest">
-      <ContestHeader :name="contest.name" />
+    <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <ContestHeaderTab />
-        <v-card>
-          <v-card-text style="color:inherit">
-            <table class="problems">
-              <thead>
-                <tr>
-                  <td class="row-position" />
-                  <td class="row-difficulty">難易度</td>
-                  <td class="row-name">問題名</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="problem in contest.tasks" :key="problem.slug">
-                  <td>{{ problem.position }}</td>
-                  <td>{{ problem.difficulty }}</td>
-                  <td>
-                    <n-link :to="`tasks/${problem.slug}`">{{
-                      problem.name
-                    }}</n-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </v-card-text>
+        <v-card max-width="600px">
+          <v-list rounded>
+            <v-subheader>問題一覧</v-subheader>
+            <v-list-item-group color="secondary">
+              <v-list-item
+                v-for="problem in contest.tasks"
+                :key="problem.slug"
+                :to="`/contests/${slug}/tasks/${problem.slug}`"
+              >
+                <v-list-item-icon class="position">{{
+                  problem.position
+                }}</v-list-item-icon>
+                <v-list-item-content class="content">
+                  <div>{{ problem.name }}</div>
+                  <DifficultyChip :difficulty="problem.difficulty" />
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
         </v-card>
       </v-container>
-    </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, mixins } from 'nuxt-property-decorator'
 import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import ContestHeader from '~/components/ContestHeader.vue'
-import { Contest } from '~/types/contest'
+import { contestStore } from '~/utils/store-accessor'
+import MixinContest from '~/mixins/contest'
+import DifficultyChip from '~/components/parts/difficulty-chip.vue'
 
 @Component({
   components: {
+    DifficultyChip,
     ContestHeader,
     ContestHeaderTab
-  }
+  },
+  layout: 'contest'
 })
-export default class PageContestTasks extends Vue {
-  contest: Contest | null = null
+export default class PageContestTasks extends mixins(MixinContest) {
+  async created() {
+    await contestStore.getContest(this.$route.params.contestName)
+  }
 
-  async mounted() {
-    this.contest = await this.$api.Contests.index(
-      this.$route.params.contestName
-    )
+  get slug(): string {
+    return this.$route.params.contestName
   }
 }
 </script>
 
 <style scoped lang="scss">
-.problems {
-  border-collapse: collapse;
-  text-align: center;
-  font-size: 1.1rem;
+.position {
+  display: inline-flex;
+  background: #9544aa;
+  color: #ffffff;
+  width: 2rem;
+  height: 2rem;
+  justify-content: center;
+  border-radius: 8px;
+  align-items: center;
+  align-self: center;
+}
+.content {
   width: 100%;
-  .row-position {
-    width: 2em;
-  }
-  .row-difficulty {
-    width: 7em;
-  }
-  table,
-  td {
-    border: #444444 solid 1px;
-  }
-  thead td {
-    padding: 0.2em 0;
-  }
-  tbody td {
-    padding: 0.6em 0;
-  }
+  justify-content: space-between;
+  flex-wrap: unset;
+  flex: unset;
+  overflow: unset;
+}
+</style>
+<style>
+.v-list-item__content > * {
+  flex: unset;
 }
 </style>

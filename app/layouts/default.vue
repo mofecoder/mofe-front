@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-app-bar :clipped-left="true" fixed app>
-      <v-toolbar-title v-text="title" />
+      <n-link to="/" style="color:inherit;text-decoration:inherit;">
+        <v-toolbar-title v-text="title" />
+      </n-link>
     </v-app-bar>
     <v-content>
       <v-container>

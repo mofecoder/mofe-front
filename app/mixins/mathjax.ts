@@ -8,7 +8,7 @@ declare global {
 
 @Component
 export default class MathJax extends Vue {
-  renderMathJax() {
+  renderMathJax(): void {
     if (window.MathJax) {
       window.MathJax.Hub.Config({
         TeX: { equationNumbers: { autoNumber: 'AMS' } },

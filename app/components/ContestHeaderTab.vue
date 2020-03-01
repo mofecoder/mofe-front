@@ -82,15 +82,15 @@ export default class ContestHeaderTab extends Vue {
   flex-flow: column;
   justify-content: space-around;
   position: absolute;
-  left: 0;
+  left: -5px;
   top: 2.5em;
   width: 160px;
   height: 84px;
   z-index: 1;
   margin-top: 3px;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.8);
   .tab {
-    margin: 0;
+    margin: 0 5px;
     background: #e2e2e2;
   }
 }

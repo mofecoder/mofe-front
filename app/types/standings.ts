@@ -4,6 +4,11 @@ type ProblemScore = {
   penalty?: number | null
 }
 
+export interface StandingData {
+  problems: StandingProblem[]
+  standings: Standing[]
+}
+
 export interface Standing {
   userName: string
   result: ProblemScore

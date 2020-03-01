@@ -1,4 +1,12 @@
-import { Difficulty } from '~/types/contestAdmin'
+export type Difficulty =
+  | 'Milk'
+  | 'Assam'
+  | 'Benihuki'
+  | 'Ceylon'
+  | 'Darjeeling'
+  | 'Earlgray'
+  | 'Flavor'
+  | 'ผักชี'
 
 export interface Problem {
   slug: string
@@ -9,6 +17,7 @@ export interface Problem {
 
 export interface ProblemDetail {
   slug: string
+  position: string
   name: string
   statement: string
   difficulty: Difficulty

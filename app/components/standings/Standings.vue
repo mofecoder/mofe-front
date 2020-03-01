@@ -61,114 +61,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { StandingProblem, Standing } from '~/types/standings'
 
 @Component
 export default class Standings extends Vue {
-  problems: StandingProblem[] = [
-    {
-      name: 'A',
-      slug: 'tea001_A',
-      tried: 3,
-      solved: 3
-    },
-    {
-      name: 'B',
-      slug: 'tea001_B',
-      tried: 3,
-      solved: 3
-    },
-    {
-      name: 'C',
-      slug: 'tea001_C',
-      tried: 2,
-      solved: 1
-    }
-  ]
+  @Prop({ required: true })
+  problems!: StandingProblem[]
 
-  standings: Standing[] = [
-    {
-      userName: 'tatyam',
-      result: {
-        score: 600,
-        time: 179
-      },
-      problems: [
-        {
-          score: 100,
-          time: 49
-        },
-        {
-          score: 200,
-          time: 99
-        },
-        {
-          score: 300,
-          time: 179
-        }
-      ]
-    },
-    {
-      userName: 'kichi2004',
-      result: {
-        score: 300,
-        time: 545,
-        penalty: 1
-      },
-      problems: [
-        {
-          score: 100,
-          time: 49
-        },
-        {
-          score: 200,
-          time: 125,
-          penalty: 1
-        },
-        {
-          penalty: 0
-        }
-      ]
-    },
-    {
-      userName: 'earlgray283',
-      result: {
-        score: 300,
-        time: 14105,
-        penalty: 35
-      },
-      problems: [
-        {
-          score: 100,
-          time: 259,
-          penalty: 10
-        },
-        {
-          score: 200,
-          time: 3605,
-          penalty: 25
-        },
-        {}
-      ]
-    },
-    {
-      userName: 'chokudai',
-      result: {
-        score: 200,
-        time: 45,
-        penalty: 0
-      },
-      problems: [
-        {},
-        {
-          score: 200,
-          time: 45
-        },
-        {}
-      ]
-    }
-  ]
+  @Prop({ required: true })
+  standings!: Standing[]
 
   formatTime(time: number | undefined): string {
     if (!time) return ''

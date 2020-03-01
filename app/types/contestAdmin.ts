@@ -1,12 +1,4 @@
-export type Difficulty =
-  | 'Milk'
-  | 'Assam'
-  | 'Benihuki'
-  | 'Ceylon'
-  | 'Darjeeling'
-  | 'Earlgray'
-  | 'Flavor'
-  | 'ผักชี'
+import { Difficulty } from '~/types/problem'
 
 type WriterOrTester = {
   name: string
@@ -15,7 +7,7 @@ type WriterOrTester = {
 
 export interface Problem {
   slug: string
-  problemName: string
+  name: string
   writer: WriterOrTester
   tester: WriterOrTester
   difficulty: Difficulty

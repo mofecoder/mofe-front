@@ -1,12 +1,9 @@
 import { Plugin } from '@nuxt/types'
-import { CafeCoderApi } from '../apis/types'
+import { initializeApi } from '../utils/api'
 import apis from '~/apis'
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    readonly $api: CafeCoderApi
-  }
+const plugin: Plugin = (_, inject) => {
+  inject('api', apis)
+  initializeApi(apis)
 }
-
-const plugin: Plugin = (_, inject) => inject('api', apis)
 export default plugin

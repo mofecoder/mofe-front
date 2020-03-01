@@ -155,7 +155,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Difficulty } from '~/types/contestAdmin'
+import { Difficulty } from '~/types/problem'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 
 @Component({
@@ -171,13 +171,13 @@ export default class CreateProblemCard extends Vue {
   }
 
   difficulties: Difficulty[] = [
-    'Green',
+    'Milk',
+    'Assam',
+    'Benihuki',
     'Ceylon',
-    'Dimbula',
     'Darjeeling',
-    'Uva',
     'Earlgray',
-    'Keemun',
+    'Flavor',
     'ผักชี'
   ]
 
@@ -192,7 +192,7 @@ export default class CreateProblemCard extends Vue {
   } = {
     title: '',
     point: 100,
-    difficulty: 'Green',
+    difficulty: 'Milk',
     problemStatement: '',
     constraints: '',
     input: '',

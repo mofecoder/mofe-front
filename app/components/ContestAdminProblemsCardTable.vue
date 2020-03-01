@@ -1,7 +1,7 @@
 <template>
   <div class="table-wrapper">
     <div v-for="problem in problems" :key="problem.slug" class="table-content">
-      <div class="table-content__content">{{ problem.problemName }}</div>
+      <div class="table-content__content">{{ problem.name }}</div>
       <div class="table-content__content">
         <a :href="problem.writer.link">
           {{ problem.writer.name }}
@@ -27,7 +27,7 @@ export default class ContestAdminProblemsCardTableHeader extends Vue {
   problems: Problem[] = [
     {
       slug: 'A',
-      problemName: 'earlgrayくんの徒歩旅行',
+      name: 'earlgrayくんの徒歩旅行',
       writer: {
         name: 'earlgray'
       },
@@ -40,7 +40,7 @@ export default class ContestAdminProblemsCardTableHeader extends Vue {
     },
     {
       slug: 'B',
-      problemName: '茶碗蒸しくんの鉄道旅行',
+      name: '茶碗蒸しくんの鉄道旅行',
       writer: {
         name: 'tyawanmusi',
         link: 'https://twitter.com/tyawanmusi512'

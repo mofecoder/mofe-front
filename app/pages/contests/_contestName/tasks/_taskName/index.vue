@@ -1,20 +1,38 @@
 <template>
   <div>
     <div v-if="contest">
-      <ContestHeader :name="contest.name" />
       <v-container class="pa-0" fluid>
-        <ContestHeaderTab />
-        <v-card v-if="problem">
-          <v-card-title>{{ problem.name }}</v-card-title>
+        <v-card v-if="problem" class="mx-auto" max-width="800px">
+          <v-card-title class="mb-3">
+            <p style="width:100%">{{ problem.position }}: {{ problem.name }}</p>
+            <DifficultyChip :difficulty="problem.difficulty" />
+          </v-card-title>
           <v-card-text style="color:inherit">
-            <h3>問題文</h3>
-            <div class="statements" v-html="$md.render(problem.statement)" />
-            <h3>制約</h3>
-            <div class="statements" v-html="$md.render(problem.constraints)" />
-            <h3>入力</h3>
-            <div class="statements" v-html="$md.render(problem.inputFormat)" />
-            <h3>出力</h3>
-            <div class="statements" v-html="$md.render(problem.outputFormat)" />
+            <section>
+              <h3>問題文</h3>
+              <div class="statements" v-html="$md.render(problem.statement)" />
+            </section>
+            <section>
+              <h3>制約</h3>
+              <div
+                class="statements"
+                v-html="$md.render(problem.constraints)"
+              />
+            </section>
+            <section>
+              <h3>入力</h3>
+              <div
+                class="statements"
+                v-html="$md.render(problem.inputFormat)"
+              />
+            </section>
+            <section>
+              <h3>出力</h3>
+              <div
+                class="statements"
+                v-html="$md.render(problem.outputFormat)"
+              />
+            </section>
           </v-card-text>
         </v-card>
       </v-container>
@@ -27,29 +45,31 @@ import { Component, mixins } from 'nuxt-property-decorator'
 import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import ContestHeader from '~/components/ContestHeader.vue'
 import { ProblemDetail } from '~/types/problem'
-import { Contest } from '~/types/contest'
 import MathJax from '~/mixins/mathjax'
+import MixinContest from '~/mixins/contest'
+import DifficultyChip from '~/components/parts/difficulty-chip.vue'
 
 @Component({
   components: {
+    DifficultyChip,
     ContestHeader,
     ContestHeaderTab
-  }
+  },
+  layout: 'contest'
 })
-export default class PageContestTasks extends mixins(MathJax) {
+export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   problem: ProblemDetail | null = null
-  contest: Contest | null = null
 
-  async mounted() {
-    this.contest = await this.$api.Contests.index(
-      this.$route.params.contestName
-    )
-    this.problem = await this.$api.Problems.show(
+  created() {
+    this.getContest()
+    this.$api.Problems.show(
       this.$route.params.contestName,
       this.$route.params.taskName
-    )
-    this.$nextTick(() => {
-      this.renderMathJax()
+    ).then((ret: ProblemDetail) => {
+      this.problem = ret
+      this.$nextTick(() => {
+        this.renderMathJax()
+      })
     })
   }
 }

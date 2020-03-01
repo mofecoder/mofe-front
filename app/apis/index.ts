@@ -1,6 +1,13 @@
-import { CafeCoderApi } from './types'
-import { Problems } from './Problems'
-import { Contests } from './Contests'
+import ApiProblems from './Problems'
+import ApiContests from './Contests'
+
+export interface CafeCoderApi {
+  Problems: ApiProblems
+  Contests: ApiContests
+}
+
+const Contests = new ApiContests()
+const Problems = new ApiProblems()
 
 const exports: CafeCoderApi = {
   Problems,
