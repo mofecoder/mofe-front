@@ -27,6 +27,7 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/markdownit": "^1.2.7",
+    "dayjs": "^1.8.21",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
@@ -48,6 +49,7 @@
     "nuxt-property-decorator": "^2.5.1",
     "prettier": "^1.16.4",
     "stylelint": "^10.1.0",
-    "vue-jest": "^4.0.0-0"
+    "vue-jest": "^4.0.0-0",
+    "vuex-module-decorators": "^0.16.1"
   }
 }

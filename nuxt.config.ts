@@ -40,7 +40,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/api'],
+  plugins: ['~/plugins/api.ts'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -69,9 +69,7 @@ const nuxtConfig: Configuration = {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {
-    baseURL: process.env.API_BASE
-  },
+  axios: {},
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
