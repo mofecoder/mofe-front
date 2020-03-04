@@ -8,6 +8,12 @@ export type Difficulty =
   | 'Flavor'
   | 'ผักชี'
 
+type Sample = {
+  input: string
+  output: string
+  explanation?: string
+}
+
 export interface Problem {
   slug: string
   position?: string
@@ -25,4 +31,5 @@ export interface ProblemDetail {
   inputFormat: string
   constraints: string
   point: number
+  samples: Sample[]
 }

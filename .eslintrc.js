@@ -30,6 +30,7 @@ module.exports = {
     'vue/multiline-html-element-content-newline': 'off',
     'vue/max-attributes-per-line': 'off',
     'vue/html-indent': 'off',
-    'vue/no-v-html': 'off'
+    'vue/no-v-html': 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

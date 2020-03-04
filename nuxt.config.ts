@@ -5,7 +5,7 @@ import colors from 'vuetify/es5/util/colors'
 require('dotenv').config()
 
 const nuxtConfig: Configuration = {
-  mode: 'universal',
+  mode: 'spa',
   srcDir: 'app/',
   /*
    ** Headers of the page
@@ -36,7 +36,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/styles/style.scss'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -62,9 +62,7 @@ const nuxtConfig: Configuration = {
     '@nuxtjs/dotenv',
     '@nuxtjs/markdownit'
   ],
-  env: {
-    API_BASE: process.env.API_BASE || 'https://localhost:5010'
-  },
+  env: {},
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options

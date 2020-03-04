@@ -12,4 +12,5 @@ export interface Submit {
   result: Result
   executionTime?: number
   memory?: number
+  points: number
 }

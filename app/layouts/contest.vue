@@ -10,7 +10,7 @@
       style="font-size:1.5em;display:flex;align-items:center"
     >
       <v-app-bar-nav-icon
-        class="d-lg-none"
+        class="d-md-none"
         style="color:white;margin-right:1.5em"
         @click.stop="drawer = !drawer"
       />
@@ -18,7 +18,12 @@
         {{ title }}
       </n-link>
     </v-sheet>
-    <v-navigation-drawer v-model="drawer" app style="margin-top:60px">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      mobile-break-point="960"
+      style="margin-top:60px"
+    >
       <v-list dense>
         <v-list-item-group color="primary">
           <v-list-item

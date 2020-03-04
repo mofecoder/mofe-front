@@ -2,10 +2,10 @@
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card flat>
+        <v-card>
           <v-card-title>すべての提出</v-card-title>
           <v-card-text style="color:inherit">
-            <SubmitTable :submits="submits" />
+            <SubmitTable v-if="submits" :submits="submits" />
           </v-card-text>
         </v-card>
       </v-container>

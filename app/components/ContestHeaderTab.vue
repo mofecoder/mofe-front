@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrap">
+    <div class="standings__wrap">
       <a class="tab" :class="active('index')" @click="go('')">トップ</a>
       <div class="tab" :class="active('tasks')" @click="go('tasks')">問題</div>
       <div class="tab submit" @click="switchSubmit">
@@ -46,7 +46,7 @@ export default class ContestHeaderTab extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.wrap {
+.standings__wrap {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;

@@ -28,7 +28,7 @@ import { StandingData } from '~/types/standings'
 export default class PageContestStandings extends mixins(MixinContest) {
   async created() {
     await this.getContest()
-    this.$api.Contests.standings(this.$route.params.contestSlug).then((res) => {
+    this.$api.Contests.standings(this.$route.params.contestName).then((res) => {
       this.standingData = res
     })
   }
