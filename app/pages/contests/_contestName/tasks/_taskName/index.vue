@@ -46,7 +46,11 @@
               <div class="statement">
                 <code class="sample__code" v-html="sample.output" />
               </div>
-              <div class="statement" v-html="$md.render(sample.explanation)" />
+              <div
+                v-if="sample.explanation"
+                class="statement"
+                v-html="$md.render(sample.explanation)"
+              />
             </section>
             <section>
               <h3>提出</h3>

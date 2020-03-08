@@ -2,7 +2,12 @@ import { Configuration } from '@nuxt/types'
 // @ts-ignore
 import colors from 'vuetify/es5/util/colors'
 
-require('dotenv').config()
+require('dotenv').config({
+  path:
+    process.env.NODE_ENV === 'production'
+      ? 'config/.env.prod'
+      : 'config/.env.dev'
+})
 
 const nuxtConfig: Configuration = {
   mode: 'spa',
@@ -62,7 +67,9 @@ const nuxtConfig: Configuration = {
     '@nuxtjs/dotenv',
     '@nuxtjs/markdownit'
   ],
-  env: {},
+  env: {
+    API_BASE: process.env.API_BASE!
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
