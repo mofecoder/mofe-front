@@ -155,6 +155,13 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
 
   submit() {
     localStorage.setItem('lang', this.language!.innerName)
+    this.$api.Tasks.submit(
+      this.contestSlug,
+      this.$route.params.taskName,
+      this.language!.innerName,
+      this.source,
+      'AC'
+    )
   }
 }
 </script>

@@ -10,4 +10,8 @@ export default class MixinContest extends Vue {
   get contest(): Contest | null {
     return contestStore.contest
   }
+
+  get contestSlug(): string {
+    return this.$route.params.contestName
+  }
 }
