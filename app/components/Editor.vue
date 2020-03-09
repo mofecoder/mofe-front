@@ -21,11 +21,11 @@ export default class Editor extends Vue {
   public value: string = ''
 
   @Prop({ required: true })
-  language!: Language
+  language!: Language | undefined
 
   @Watch('language', { immediate: true })
   onChangeLanguage() {
-    this.$set(this.cmOptions, 'mode', this.language.mime)
+    this.$set(this.cmOptions, 'mode', this.language?.mime || null)
   }
 
   cmOptions = {
