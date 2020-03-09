@@ -128,7 +128,7 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
         (lang) => localStorage.getItem('lang') === lang.innerName
       )[0] || languages[0]
     this.getContest()
-    this.$api.Problems.show(
+    this.$api.Tasks.show(
       this.$route.params.contestName,
       this.$route.params.taskName
     ).then((ret: ProblemDetail) => {
@@ -155,7 +155,6 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
 
   submit() {
     localStorage.setItem('lang', this.language!.innerName)
-    // console.log(this.source)
   }
 }
 </script>
