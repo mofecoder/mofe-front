@@ -53,9 +53,29 @@
               />
             </section>
             <section>
-              <h3>提出</h3>
-              <Editor ref="editor" class="editor" />
-              <v-btn color="primary" @click="submit">
+              <div class="submit__head">
+                <div class="submit__head__title">提出</div>
+                <v-autocomplete
+                  v-model="language"
+                  class="submit__head__select"
+                  :items="selectableLanguages"
+                  label="提出する言語"
+                  dense
+                  hide-details
+                  outlined
+                />
+              </div>
+              <Editor
+                ref="editor"
+                class="submit__editor"
+                :language="language"
+              />
+              <v-btn
+                color="primary"
+                class="mt-2"
+                :disabled="!language"
+                @click="submit"
+              >
                 提出する
               </v-btn>
             </section>
@@ -75,6 +95,8 @@ import MathJax from '~/mixins/mathjax'
 import MixinContest from '~/mixins/contest'
 import DifficultyChip from '~/components/parts/difficulty-chip.vue'
 import Editor from '~/components/Editor.vue'
+import languages from '~/assets/languages'
+import { Language } from '~/types/language'
 
 @Component({
   components: {
@@ -87,6 +109,7 @@ import Editor from '~/components/Editor.vue'
 })
 export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   problem: ProblemDetail | null = null
+  language: Language | undefined = languages[0]
 
   copy(text: string) {
     const tmp = document.createElement('textarea')
@@ -100,6 +123,10 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   }
 
   created() {
+    this.language =
+      languages.filter(
+        (lang) => localStorage.getItem('lang') === lang.innerName
+      )[0] || languages[0]
     this.getContest()
     this.$api.Problems.show(
       this.$route.params.contestName,
@@ -119,7 +146,15 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
     return editor.value
   }
 
+  get selectableLanguages() {
+    return languages.map((lang) => ({
+      text: lang.name,
+      value: lang
+    }))
+  }
+
   submit() {
+    localStorage.setItem('lang', this.language!.innerName)
     // console.log(this.source)
   }
 }
@@ -153,12 +188,24 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
       content: none;
     }
   }
+
+  .__editor {
+    margin: 1em;
+  }
+}
+.submit {
+  &__head {
+    display: flex;
+    &__title {
+      @extend .sample__head__title;
+    }
+    &__select {
+      max-width: 20em;
+    }
+  }
 }
 h3 {
   font-size: 1.5rem;
-}
-.editor {
-  margin: 1em;
 }
 </style>
 
