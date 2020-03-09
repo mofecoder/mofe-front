@@ -1,5 +1,5 @@
 import { Contest } from '~/types/contest'
-import { httpGet } from '~/plugins/axios'
+import { httpGet } from '~/utils/axios'
 import { StandingData } from '~/types/standings'
 import { Submit } from '~/types/submits'
 

@@ -53,7 +53,11 @@ const client = axios.create({
   validateStatus: () => true
 })
 
-async function httpGet<T>(url: string, header = {}, body = {}): Promise<T> {
+async function httpGet<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
   const res = await client.get(url, {
     headers: toSnakeCase(header),
     data: toSnakeCase(body)
@@ -66,5 +70,22 @@ async function httpGet<T>(url: string, header = {}, body = {}): Promise<T> {
   return toCamelCase(res.data) as T
 }
 
+async function httpPost<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  const res = await client.post(url, {
+    headers: toSnakeCase(header),
+    data: toSnakeCase(body)
+  })
+  log('POST', url, res)
+
+  if (isErrorCode(res.status))
+    throw new Error(`HTTP Error (Response: ${res.status})`)
+
+  return toCamelCase(res.data) as T
+}
+
 export default client
-export { httpGet }
+export { httpGet, httpPost }

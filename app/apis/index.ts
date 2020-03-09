@@ -1,4 +1,4 @@
-import ApiProblems from './Problems'
+import ApiProblems from './Tasks'
 import ApiContests from './Contests'
 
 export interface CafeCoderApi {
