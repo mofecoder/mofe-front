@@ -73,7 +73,7 @@
               <v-btn
                 color="primary"
                 class="mt-2"
-                :disabled="!language"
+                :disabled="!language || submitted"
                 @click="submit"
               >
                 提出する
@@ -110,6 +110,7 @@ import { Language } from '~/types/language'
 export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   problem: ProblemDetail | null = null
   language: Language | undefined = languages[0]
+  submitted = false
 
   copy(text: string) {
     const tmp = document.createElement('textarea')
@@ -154,14 +155,21 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   }
 
   submit() {
+    if (!/\S/.test(this.source)) {
+      alert('空のソースは提出できません。')
+      return
+    }
     localStorage.setItem('lang', this.language!.innerName)
+    this.submitted = true
     this.$api.Tasks.submit(
       this.contestSlug,
       this.$route.params.taskName,
       this.language!.innerName,
       this.source,
       'AC'
-    )
+    ).then(() => {
+      this.$router.push(`/contests/${this.contestSlug}/submits/me`)
+    })
   }
 }
 </script>
