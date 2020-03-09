@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import isArray from 'lodash.isarray'
 import isObject from 'lodash.isobject'
 import camelCase from 'lodash.camelcase'
@@ -28,8 +28,29 @@ function toSnakeCase(data: any) {
   return mapKeysDeep(data, callback)
 }
 
+function color(responseCode: number) {
+  if (responseCode < 200) return 'palegreen'
+  if (responseCode < 400) return 'cyan'
+  if (responseCode < 500) return 'orangered'
+  return 'deeppink'
+}
+
+function log(method: string, url: string, res: AxiosResponse) {
+  if (process.env.NODE_ENV === 'production') return
+  console.log(
+    `[Axios] %c[${res.status} ${res.statusText}] %c${method} %c${url}\n%o`,
+    `color: ${color(res.status)}; font-weight: bold`,
+    'color: #F7DC6F; font-weight: bold',
+    'color: #F7DC6F;',
+    res
+  )
+}
+
+const isErrorCode = (statusCode: number) => statusCode >= 400
+
 const client = axios.create({
-  baseURL: process.env.API_BASE
+  baseURL: process.env.API_BASE,
+  validateStatus: () => true
 })
 
 async function httpGet<T>(url: string, header = {}, body = {}): Promise<T> {
@@ -37,14 +58,11 @@ async function httpGet<T>(url: string, header = {}, body = {}): Promise<T> {
     headers: toSnakeCase(header),
     data: toSnakeCase(body)
   })
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(
-      `[axios] %cResponse%c from ${url}: %o`,
-      'color: #F7DC6F; font-weight: bold',
-      'color: #F7DC6F;',
-      res.data
-    )
-  }
+  log('GET', url, res)
+
+  if (isErrorCode(res.status))
+    throw new Error(`HTTP Error (Response: ${res.status})`)
+
   return toCamelCase(res.data) as T
 }
 
