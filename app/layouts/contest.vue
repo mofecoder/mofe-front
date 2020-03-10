@@ -17,6 +17,8 @@
       <n-link to="/" style="color:inherit;text-decoration:inherit">
         {{ title }}
       </n-link>
+      <v-spacer />
+      <v-btn class="white--text" to="/login" text>ログイン</v-btn>
     </v-sheet>
     <v-navigation-drawer
       v-model="drawer"
