@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
+import { userStore } from '~/utils/store-accessor'
 
 @Component
 export default class PageLogin extends Vue {
@@ -55,6 +56,10 @@ export default class PageLogin extends Vue {
         (v && /^[a-zA-Z\d]+$/.test(v)) || 'ユーザ名の形式が無効です。'
     ],
     password: [(v: string) => !!v || 'このフィールドは必須です。']
+  }
+
+  beforeCreate() {
+    if (userStore.getUser) this.$router.replace('/')
   }
 
   submit() {

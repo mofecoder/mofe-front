@@ -5,6 +5,7 @@ import camelCase from 'lodash.camelcase'
 import snakeCase from 'lodash.snakecase'
 import mapValues from 'lodash.mapvalues'
 import mapKeys from 'lodash.mapkeys'
+import { userStore } from '~/utils/store-accessor'
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
   if (isArray(data)) {
@@ -65,7 +66,7 @@ function setToken(header: any) {
   }
 }
 
-function updateToken(header: any) {
+function updateToken(header: any, data: any) {
   const client: string | undefined = header.client
   const accessToken: string | undefined = header.accessToken
   const uid: string | undefined = header.uid
@@ -74,6 +75,7 @@ function updateToken(header: any) {
     localStorage.setItem('client', client)
     localStorage.setItem('accessToken', accessToken)
     localStorage.setItem('uid', uid)
+    userStore.updateUser(data)
   }
 }
 
@@ -94,7 +96,7 @@ async function httpGet<T>(
   if (isErrorCode(res.status))
     throw new Error(`HTTP Error (Response: ${res.status})`)
 
-  updateToken(toCamelCase(res.headers))
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
 
   return toCamelCase(res.data) as T
 }
@@ -115,7 +117,7 @@ async function httpPost<T>(
   if (isErrorCode(res.status))
     throw new Error(`HTTP Error (Response: ${res.status})`)
 
-  updateToken(toCamelCase(res.headers))
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
 
   return toCamelCase(res.data) as T
 }

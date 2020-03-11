@@ -1,14 +1,6 @@
-import { httpPost } from '../utils/axios'
+import { httpPost } from '~/utils/axios'
+import { AuthUser } from '~/types/AuthUser'
 
-interface AuthUser {
-  id: number
-  email: string
-  name: string
-  provider: string
-  uid: string
-  allowPasswordChange: boolean
-  role: string
-}
 type AuthResponse =
   | {
       success: boolean
@@ -25,6 +17,19 @@ export default class {
       {},
       {
         name: userName,
+        password
+      }
+    )
+    return res
+  }
+
+  async signUp(email: string, userName: string, password: string) {
+    const res = await httpPost<AuthResponse>(
+      '/auth',
+      {},
+      {
+        name: userName,
+        email,
         password
       }
     )
