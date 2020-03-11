@@ -8,12 +8,14 @@
             <tr class="row-header">
               <th class="col-username">ユーザ名</th>
               <td class="col-result">得点</td>
-              <td
-                v-for="problem in problems"
-                :key="problem.slug"
-                class="col-problem"
-              >
-                {{ problem.name }}
+              <td class="col-problem">
+                <n-link
+                  v-for="problem in problems"
+                  :key="problem.slug"
+                  :to="`/contests/${contestName}/tasks/${problem.slug}`"
+                >
+                  {{ problem.position }}
+                </n-link>
               </td>
             </tr>
           </thead>
@@ -85,6 +87,10 @@ export default class Standings extends Vue {
     secStr = secStr.substring(secStr.length - 2)
     return `${min}:${secStr}`
   }
+
+  get contestName() {
+    return this.$route.params.contestName
+  }
 }
 </script>
 
@@ -100,7 +106,6 @@ export default class Standings extends Vue {
     border-collapse: collapse;
     text-align: center;
     border: #cccccc solid 1px;
-    font-weight: normal;
 
     .row-header {
       .col-username {

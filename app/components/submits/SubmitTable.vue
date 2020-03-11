@@ -5,6 +5,7 @@
         <th class="date">日時</th>
         <th class="user">ユーザ</th>
         <th class="task">問題</th>
+        <th class="lang">言語</th>
         <th class="points">得点</th>
         <th class="results">結果</th>
         <th class="time">実行時間</th>
@@ -21,21 +22,26 @@
             >{{ item.task.position }}: {{ item.task.name }}</n-link
           >
         </td>
-        <td style="text-align:right;padding-right:0.5em">
-          {{ item.points }}
+        <td>{{ $getLanguage(item.lang).name }}</td>
+        <td style="text-align:right;padding-right:0.3em">
+          {{ item.point }}
         </td>
-        <template v-if="item.executionTime && item.memory">
+        <template v-if="item.executionTime && item.executionMemory">
           <td>
             <div class="cell-result">
-              <div :class="`result-${item.result}`">{{ item.result }}</div>
+              <div :class="`result-${item.status}`">{{ item.status }}</div>
             </div>
           </td>
-          <td>{{ item.executionTime }} ms</td>
-          <td>{{ item.memory }} KB</td>
+          <td style="text-align:right;padding-right:0.3em">
+            {{ item.executionTime }} ms
+          </td>
+          <td style="text-align:right;padding-right:0.3em">
+            {{ item.executionMemory }} KB
+          </td>
         </template>
-        <td v-else class="cell-result" rowspan="3">
+        <td v-else colspan="3">
           <div class="cell-result">
-            <div :class="`result-${item.result}`">{{ item.result }}</div>
+            <div :class="`result-${item.status}`">{{ item.status }}</div>
           </div>
         </td>
         <td>
@@ -85,7 +91,8 @@ export default class SubmitTable extends Vue {
   }
   $width-map: (
     user: 8em,
-    task: 16em,
+    task: 13em,
+    lang: 10em,
     results: 6em,
     points: 5em,
     time: 7em,
@@ -97,8 +104,11 @@ export default class SubmitTable extends Vue {
       width: $width;
     }
   }
-  tbody:nth-child(even) {
-    background-color: #fffff8;
+  thead {
+    background-color: #ffffe0;
+  }
+  tr:nth-child(even) {
+    background-color: #eff4ff;
   }
   tbody td {
     height: 2.4em;
@@ -106,16 +116,19 @@ export default class SubmitTable extends Vue {
   .cell-result {
     display: flex;
     width: 100%;
-    height: 100%;
     justify-content: center;
     $color-ac: #11bb22;
     $color-wa: #f0b000;
+    $color-wj: #888888;
     div {
       border-radius: 4px;
       color: white;
       font-weight: bold;
       font-size: 120%;
       width: 3.3em;
+    }
+    [class^='result'] {
+      height: 1.4em;
     }
     .result-AC {
       background-color: $color-ac;
@@ -124,6 +137,10 @@ export default class SubmitTable extends Vue {
     .result-MLE,
     .result-WA {
       background-color: $color-wa;
+    }
+    .result-WJ,
+    .result-WR {
+      background-color: $color-wj;
     }
   }
 }

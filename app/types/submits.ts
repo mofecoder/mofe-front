@@ -1,6 +1,16 @@
 import { Problem } from '~/types/problem'
 
-type Result = 'WJ' | 'AC' | 'WA' | 'TLE' | 'RE' | 'OLE' | 'IE' | 'CE'
+type Result =
+  | 'WJ'
+  | 'AC'
+  | 'WA'
+  | 'TLE'
+  | 'RE'
+  | 'OLE'
+  | 'IE'
+  | 'CE'
+  | 'MLE'
+  | 'WR'
 
 export interface Submit {
   id: number
@@ -9,8 +19,9 @@ export interface Submit {
     name: string
   }
   task: Problem
-  result: Result
+  status: Result
+  lang: string
   executionTime?: number
-  memory?: number
-  points: number
+  executionMemory?: number
+  point: number
 }

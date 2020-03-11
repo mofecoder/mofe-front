@@ -168,7 +168,7 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
       this.source,
       'AC'
     ).then(() => {
-      this.$router.push(`/contests/${this.contestSlug}/submits/me`)
+      this.$router.push(`/contests/${this.contestSlug}/submits`)
     })
   }
 }

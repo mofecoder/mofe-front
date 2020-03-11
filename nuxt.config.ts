@@ -45,7 +45,7 @@ const nuxtConfig: Configuration = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/api.ts'],
+  plugins: ['~/plugins/api.ts', '~/plugins/language.ts'],
   /*
    ** Nuxt.js dev-modules
    */
