@@ -1,5 +1,5 @@
 import { ProblemDetail } from '~/types/problem'
-import { httpGet } from '~/plugins/axios'
+import { httpGet } from '~/utils/axios'
 
 export default class {
   async show(contestSlug: string, slug: string): Promise<ProblemDetail> {
