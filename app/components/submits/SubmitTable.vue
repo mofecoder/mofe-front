@@ -110,6 +110,9 @@ export default class SubmitTable extends Vue {
     justify-content: center;
     $color-ac: #11bb22;
     $color-wa: #f0b000;
+    $color-wj: #888888;
+    $color-ie: #ff4444;
+    $color-ce: #cc44ff;
     div {
       border-radius: 4px;
       color: white;
@@ -122,8 +125,19 @@ export default class SubmitTable extends Vue {
     }
     .result-TLE,
     .result-MLE,
-    .result-WA {
+    .result-WA,
+    .result-RE,
+    .result-OLE {
       background-color: $color-wa;
+    }
+    .result-IE {
+      background-color: $color-ie;
+    }
+    .result-CE {
+      background-color: $color-ce;
+    }
+    .result-WJ {
+      background-color: $color-wj;
     }
   }
 }

@@ -1,9 +1,10 @@
 import { httpPost } from '~/utils/axios'
 import { AuthUser } from '~/types/AuthUser'
+import { userStore } from '~/utils/store-accessor'
 
 type AuthResponse =
   | {
-      success: boolean
+      success: false
       errors: string[]
     }
   | {
@@ -20,6 +21,9 @@ export default class {
         password
       }
     )
+    if (res && 'data' in res) {
+      userStore.updateUser(res.data)
+    }
     return res
   }
 
@@ -33,6 +37,9 @@ export default class {
         password
       }
     )
+    if (res && 'data' in res) {
+      userStore.updateUser(res.data)
+    }
     return res
   }
 }
