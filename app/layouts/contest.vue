@@ -35,23 +35,9 @@
       v-model="drawer"
       app
       mobile-break-point="960"
-      style="margin-top:60px"
+      style="margin-top:64px"
     >
-      <v-list dense>
-        <v-list-item-group color="primary">
-          <v-list-item
-            v-for="item in links"
-            :key="item.path"
-            link
-            :disabled="item.disabled"
-            :class="{ 'v-list-item--active': item.path === current }"
-          >
-            <v-list-item-content @click="navigation(item.path)">
-              <v-list-item-title v-text="item.name" />
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
+      <ContestSidebar :items="filteredLinks" @click="navigation" />
     </v-navigation-drawer>
     <v-content>
       <v-container>
@@ -64,6 +50,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import { contestStore, userStore } from '~/utils/store-accessor'
+import ContestSidebar from '~/components/ContestSidebar.vue'
 
 type Link = {
   path: string
@@ -71,7 +58,15 @@ type Link = {
   disabled?: boolean
 }
 
-@Component
+type ItemType = {
+  path: string
+  name: string
+  active: boolean
+  disabled?: boolean
+}
+@Component({
+  components: { ContestSidebar }
+})
 export default class LayoutContest extends Vue {
   currentIndex: number | null = null
   drawer: boolean | null = null
@@ -121,6 +116,18 @@ export default class LayoutContest extends Vue {
 
   get user() {
     return userStore.getUser
+  }
+
+  get filteredLinks() {
+    return this.links.map((x) => {
+      const ret: ItemType = {
+        path: x.path,
+        name: x.name,
+        active: x.path === this.current,
+        disabled: x.disabled
+      }
+      return ret
+    })
   }
 
   getCurrentIndex(): number | null {
