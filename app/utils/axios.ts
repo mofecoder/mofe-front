@@ -5,6 +5,7 @@ import camelCase from 'lodash.camelcase'
 import snakeCase from 'lodash.snakecase'
 import mapValues from 'lodash.mapvalues'
 import mapKeys from 'lodash.mapkeys'
+import { userStore } from '~/utils/store-accessor'
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
   if (isArray(data)) {
@@ -53,18 +54,73 @@ const client = axios.create({
   validateStatus: () => true
 })
 
-async function httpGet<T>(url: string, header = {}, body = {}): Promise<T> {
+function setToken(header: any) {
+  const client = localStorage.getItem('client')
+  const accessToken = localStorage.getItem('accessToken')
+  const uid = localStorage.getItem('uid')
+
+  if (client && accessToken && uid) {
+    header.client = client
+    header.accessToken = accessToken
+    header.uid = uid
+  }
+}
+
+function updateToken(header: any, data: any) {
+  const client: string | undefined = header.client
+  const accessToken: string | undefined = header.accessToken
+  const uid: string | undefined = header.uid
+
+  if (client && accessToken && uid) {
+    localStorage.setItem('client', client)
+    localStorage.setItem('accessToken', accessToken)
+    localStorage.setItem('uid', uid)
+    userStore.updateUser(data)
+  }
+}
+
+async function httpGet<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  setToken(header)
   const res = await client.get(url, {
     headers: toSnakeCase(header),
     data: toSnakeCase(body)
   })
   log('GET', url, res)
 
+  if (res.status === 401) throw new Error('Not logged in.')
+
   if (isErrorCode(res.status))
     throw new Error(`HTTP Error (Response: ${res.status})`)
+
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
+
+  return toCamelCase(res.data) as T
+}
+
+async function httpPost<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  setToken(header)
+  const res = await client.post(url, toSnakeCase(body), {
+    headers: toSnakeCase(header)
+  })
+  log('POST', url, res)
+
+  if (res.status === 401) throw new Error('Not logged in.')
+
+  if (isErrorCode(res.status))
+    throw new Error(`HTTP Error (Response: ${res.status})`)
+
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
 
   return toCamelCase(res.data) as T
 }
 
 export default client
-export { httpGet }
+export { httpGet, httpPost }

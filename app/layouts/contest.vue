@@ -4,10 +4,10 @@
       app
       flat
       tile
-      height="2.5em"
+      width="100%"
+      height="4rem"
       color="green darken-4"
-      class="white--text pl-8"
-      style="font-size:1.5em;display:flex;align-items:center"
+      class="white--text pl-8 header"
     >
       <v-app-bar-nav-icon
         class="d-md-none"
@@ -17,6 +17,19 @@
       <n-link to="/" style="color:inherit;text-decoration:inherit">
         {{ title }}
       </n-link>
+      <v-spacer />
+      <template v-if="user">
+        <n-link
+          class="header__user-name pr-8 white--text"
+          style="text-decoration:none"
+          to="/user"
+          >{{ user.name }}</n-link
+        >
+      </template>
+      <template v-else>
+        <v-btn class="white--text" to="/sign_up" text>新規登録</v-btn>
+        <v-btn class="white--text" to="/login" text>ログイン</v-btn>
+      </template>
     </v-sheet>
     <v-navigation-drawer
       v-model="drawer"
@@ -50,7 +63,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
-import { contestStore } from '~/utils/store-accessor'
+import { contestStore, userStore } from '~/utils/store-accessor'
 
 type Link = {
   path: string
@@ -106,6 +119,10 @@ export default class LayoutContest extends Vue {
     return regex[1]
   }
 
+  get user() {
+    return userStore.getUser
+  }
+
   getCurrentIndex(): number | null {
     const current = this.current
     if (current == null) return null
@@ -125,3 +142,19 @@ export default class LayoutContest extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.header {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  &__user-name {
+    color: white;
+    font-size: 1.2rem;
+    align-self: center;
+  }
+}
+</style>
