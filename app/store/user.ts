@@ -13,7 +13,7 @@ interface UserState {
 export default class UserModule extends VuexModule implements UserState {
   user: AuthUser | null = null
 
-  get getUser() {
+  get getUser(): AuthUser | null {
     const json = localStorage.getItem('user')
     return this.user || (json && JSON.parse(json))
   }
