@@ -25,6 +25,23 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
   async created() {
     await this.getContest()
   }
+
+  beforeDestroy() {
+    if (this.timeout) clearInterval(this.timeout)
+  }
+
+  submits: Submit[] | null = null
+  timeout: NodeJS.Timeout | null = null
+
+  reload() {
+    this.$api.Contests.mySubmits(this.$route.params.contestName)
+      .then((res: Submit[]) => {
+        this.submits = res
+      })
+      .catch((err: Error) => {
+        if (err.message === 'Not logged in.') this.$router.replace('/login')
+      })
+  }
 }
 </script>
 
