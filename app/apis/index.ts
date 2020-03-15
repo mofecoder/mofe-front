@@ -1,19 +1,19 @@
-import ApiProblems from './Problems'
+import ApiTasks from './Tasks'
 import ApiContests from './Contests'
 import ApiAuth from './Auth'
 
 export interface CafeCoderApi {
-  Problems: ApiProblems
+  Tasks: ApiTasks
   Contests: ApiContests
   Auth: ApiAuth
 }
 
 const Contests = new ApiContests()
-const Problems = new ApiProblems()
+const Tasks = new ApiTasks()
 const Auth = new ApiAuth()
 
 const exports: CafeCoderApi = {
-  Problems,
+  Tasks,
   Contests,
   Auth
 }

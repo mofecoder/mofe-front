@@ -1,4 +1,5 @@
 import { CafeCoderApi } from '~/apis'
+import { Language } from '~/types/language'
 
 interface Utils {
   escapeHtml(s: string): string
@@ -13,5 +14,6 @@ declare module 'vue/types/vue' {
   interface Vue {
     readonly $api: CafeCoderApi
     readonly $md: MarkdownIt
+    readonly $getLanguage: (lang: string) => Language | null
   }
 }

@@ -16,6 +16,7 @@ export interface Standing {
 }
 
 export interface StandingProblem {
+  position: string
   name: string
   slug: string
   solved: number

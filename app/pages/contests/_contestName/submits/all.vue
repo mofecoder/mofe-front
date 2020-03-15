@@ -28,14 +28,27 @@ import { Submit } from '~/types/submits'
 export default class PageContest extends mixins(MathJax, MixinContest) {
   async created() {
     await this.getContest()
+    this.reload()
+    const callback = () => {
+      this.reload()
+    }
+    this.timeout = setInterval(callback, 5000)
+  }
+
+  beforeDestroy() {
+    if (this.timeout) clearInterval(this.timeout)
+  }
+
+  submits: Submit[] | null = null
+  timeout: NodeJS.Timeout | null = null
+
+  reload() {
     this.$api.Contests.allSubmits(this.$route.params.contestName).then(
       (res: Submit[]) => {
         this.submits = res
       }
     )
   }
-
-  submits: Submit[] | null = null
 }
 </script>
 

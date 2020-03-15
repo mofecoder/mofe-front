@@ -109,9 +109,9 @@ export default class LayoutContest extends Vue {
 
   get current(): string | null {
     const path = this.$route.fullPath
-    const regex = /contests\/\w+\/((\w*)[\w/]*?)\/?(?:\?.+)?$/.exec(path)
+    const regex = /contests\/\w+(?:\/((\w*)[\w/]*?)\/?(?:\?.+)?)?$/.exec(path)
     if (!regex) return null
-    return regex[1]
+    return regex[1] || ''
   }
 
   get user() {

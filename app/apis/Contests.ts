@@ -20,4 +20,9 @@ export default class {
     const res = await httpGet<Submit[]>(`/contests/${contestSlug}/submits/all`)
     return res
   }
+
+  async mySubmits(contestSlug: string): Promise<Submit[]> {
+    const res = await httpGet<Submit[]>(`/contests/${contestSlug}/submits`)
+    return res
+  }
 }
