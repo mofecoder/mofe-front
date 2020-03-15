@@ -2,7 +2,7 @@
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card>
+        <v-card :loading="!submits">
           <v-card-title>自分の提出</v-card-title>
           <v-card-text style="color:inherit">
             <SubmitTable v-if="submits" :submits="submits" />
@@ -43,11 +43,13 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
   timeout: NodeJS.Timeout | null = null
 
   reload() {
-    this.$api.Contests.mySubmits(this.$route.params.contestName).then(
-      (res: Submit[]) => {
+    this.$api.Contests.mySubmits(this.$route.params.contestName)
+      .then((res: Submit[]) => {
         this.submits = res
-      }
-    )
+      })
+      .catch((err: Error) => {
+        if (err.message === 'Not logged in.') this.$router.replace('/login')
+      })
   }
 }
 </script>
