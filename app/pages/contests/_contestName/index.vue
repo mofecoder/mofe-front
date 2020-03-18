@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <template v-if="contest"> </template>
-  </div>
+  <v-card :loading="!contest">
+    <template v-if="contest">
+      <v-card-title v-text="contest.name" />
+      <v-card-subtitle>ペナルティ: {{ penaltyTime }}</v-card-subtitle>
+      <v-card-text v-html="$md.render(contest.description)" />
+    </template>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -17,6 +21,14 @@ import MixinContest from '~/mixins/contest'
 export default class PageContest extends mixins(MathJax, MixinContest) {
   async created() {
     await this.getContest()
+  }
+
+  get penaltyTime(): string {
+    const pena = this.contest!.penaltyTime
+    if (!pena) return 'なし'
+    return pena % 60
+      ? `${Math.ceil(pena / 60)} 分 ${pena % 60} 秒`
+      : `${pena / 60} 分`
   }
 }
 </script>

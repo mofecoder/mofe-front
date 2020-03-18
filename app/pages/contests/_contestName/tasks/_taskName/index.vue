@@ -2,84 +2,100 @@
   <div>
     <div v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card v-if="problem" class="mx-auto" max-width="800px">
-          <v-card-title class="mb-3">
-            <p style="width:100%">{{ problem.position }}: {{ problem.name }}</p>
-            <DifficultyChip :difficulty="problem.difficulty" />
-          </v-card-title>
-          <v-card-text style="color:inherit">
-            <section>
-              <h3>問題文</h3>
-              <div class="statement" v-html="$md.render(problem.statement)" />
-            </section>
-            <section>
-              <h3>制約</h3>
-              <div class="statement" v-html="$md.render(problem.constraints)" />
-            </section>
-            <section>
-              <h3>入力</h3>
-              <div class="statement" v-html="$md.render(problem.inputFormat)" />
-            </section>
-            <section>
-              <h3>出力</h3>
-              <div
-                class="statement"
-                v-html="$md.render(problem.outputFormat)"
-              />
-            </section>
-            <section v-for="(sample, index) in problem.samples" :key="index">
-              <div class="sample__head">
-                <div class="sample__head__title">入力例 {{ index + 1 }}</div>
-                <v-btn color="blue lighten-4" small @click="copy(sample.input)"
-                  >コピー</v-btn
-                >
-              </div>
-              <div class="statement">
-                <code class="sample__code" v-html="sample.input" />
-              </div>
-              <div class="sample__head">
-                <div class="sample__head__title">出力例 {{ index + 1 }}</div>
-                <v-btn color="blue lighten-4" small @click="copy(sample.output)"
-                  >コピー</v-btn
-                >
-              </div>
-              <div class="statement">
-                <code class="sample__code" v-html="sample.output" />
-              </div>
-              <div
-                v-if="sample.explanation"
-                class="statement"
-                v-html="$md.render(sample.explanation)"
-              />
-            </section>
-            <section>
-              <div class="submit__head">
-                <div class="submit__head__title">提出</div>
-                <v-autocomplete
-                  v-model="language"
-                  class="submit__head__select"
-                  :items="selectableLanguages"
-                  label="提出する言語"
-                  dense
-                  hide-details
-                  outlined
+        <v-card class="mx-auto" max-width="800px" :loading="!problem">
+          <template v-if="problem">
+            <v-card-title class="mb-3">
+              <p style="width:100%">
+                {{ problem.position }}: {{ problem.name }}
+              </p>
+              <DifficultyChip :difficulty="problem.difficulty" />
+            </v-card-title>
+            <v-card-text style="color:inherit">
+              <section>
+                <h3>問題文</h3>
+                <div class="statement" v-html="$md.render(problem.statement)" />
+              </section>
+              <section>
+                <h3>制約</h3>
+                <div
+                  class="statement"
+                  v-html="$md.render(problem.constraints)"
                 />
-              </div>
-              <Editor
-                ref="editor"
-                class="submit__editor"
-                :language="language"
-              />
-              <v-btn
-                color="primary"
-                class="mt-2"
-                :disabled="!language || submitted"
-                @click="submit"
-              >
-                提出する
-              </v-btn>
-            </section>
-          </v-card-text>
+              </section>
+              <section>
+                <h3>入力</h3>
+                <div
+                  class="statement"
+                  v-html="$md.render(problem.inputFormat)"
+                />
+              </section>
+              <section>
+                <h3>出力</h3>
+                <div
+                  class="statement"
+                  v-html="$md.render(problem.outputFormat)"
+                />
+              </section>
+              <section v-for="(sample, index) in problem.samples" :key="index">
+                <div class="sample__head">
+                  <div class="sample__head__title">入力例 {{ index + 1 }}</div>
+                  <v-btn
+                    color="blue lighten-4"
+                    small
+                    @click="copy(sample.input)"
+                    >コピー</v-btn
+                  >
+                </div>
+                <div class="statement">
+                  <code class="sample__code" v-html="sample.input" />
+                </div>
+                <div class="sample__head">
+                  <div class="sample__head__title">出力例 {{ index + 1 }}</div>
+                  <v-btn
+                    color="blue lighten-4"
+                    small
+                    @click="copy(sample.output)"
+                    >コピー</v-btn
+                  >
+                </div>
+                <div class="statement">
+                  <code class="sample__code" v-html="sample.output" />
+                </div>
+                <div
+                  v-if="sample.explanation"
+                  class="statement"
+                  v-html="$md.render(sample.explanation)"
+                />
+              </section>
+              <section>
+                <div class="submit__head">
+                  <div class="submit__head__title">提出</div>
+                  <v-autocomplete
+                    v-model="language"
+                    class="submit__head__select"
+                    :items="selectableLanguages"
+                    label="提出する言語"
+                    dense
+                    hide-details
+                    outlined
+                  />
+                </div>
+                <Editor
+                  ref="editor"
+                  class="submit__editor"
+                  :language="language"
+                />
+                <v-btn
+                  color="primary"
+                  class="mt-2"
+                  :disabled="!language || submitted"
+                  @click="submit"
+                >
+                  提出する
+                </v-btn>
+              </section>
+            </v-card-text>
+          </template>
         </v-card>
       </v-container>
     </div>
@@ -167,9 +183,14 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
       this.language!.innerName,
       this.source,
       'AC'
-    ).then(() => {
-      this.$router.push(`/contests/${this.contestSlug}/submits`)
-    })
+    )
+      .then(() => {
+        this.$router.push(`/contests/${this.contestSlug}/submits`)
+      })
+      .catch(() => {
+        alert('提出に失敗しました。')
+        this.submitted = false
+      })
   }
 }
 </script>
