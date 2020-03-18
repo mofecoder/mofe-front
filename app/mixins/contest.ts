@@ -1,6 +1,6 @@
+import { Component, Vue } from 'nuxt-property-decorator'
 import { contestStore } from '../utils/store-accessor'
 import { Contest } from '../types/contest'
-import { Component, Vue } from 'nuxt-property-decorator'
 @Component
 export default class MixinContest extends Vue {
   async getContest(): Promise<void> {

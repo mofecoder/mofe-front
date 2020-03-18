@@ -3,13 +3,15 @@
     <v-layout justify-center="">
       <v-flex xl6 lg8 md10>
         <h1 class="display-1 ma-2">コンテストの作成</h1>
-        <new-contest-card
+        <ContestInformationCard
           class="my-2"
-          @input-title="changeName"
-          @input-slug="changeSlug"
+          :name.sync="name"
+          :slug.sync="slug"
+          :description.sync="description"
+          :penalty.sync="penalty"
         />
-        <contest-admin-time-card is-new class="my-2" @change="onTimeChange" />
-        <v-btn :disabled="disabled" block color="primary" large>
+        <TimeCard is-new class="my-2" @change="onTimeChange" />
+        <v-btn :disabled="disabled" block color="primary" large @click="submit">
           コンテストを作成する
         </v-btn>
       </v-flex>
@@ -19,15 +21,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'nuxt-property-decorator'
-import ContestAdminTimeCard from '~/components/ContestAdminTimeCard.vue'
-import NewContestCard from '~/components/NewContestCard.vue'
+import dayjs from 'dayjs'
+import TimeCard from '~/components/contestAdmin/TimeCard.vue'
+import ContestInformationCard from '~/components/contestAdmin/InformationCard.vue'
 
 @Component({
-  components: { NewContestCard, ContestAdminTimeCard }
+  components: { ContestInformationCard, TimeCard }
 })
 export default class PageNewContest extends Vue {
   name = ''
   slug = ''
+  description = ''
+  penalty = '0'
   dateTimes: {
     startDate: Date | null
     startTime: Date | null
@@ -65,12 +70,19 @@ export default class PageNewContest extends Vue {
     this.dateTimes.ok = ok
   }
 
-  changeName(v: string) {
-    this.name = v
-  }
-
-  changeSlug(v: string) {
-    this.slug = v
+  async submit() {
+    const start = dayjs(
+      this.dateTimes.startDate + ' ' + this.dateTimes.startTime
+    )
+    const end = dayjs(this.dateTimes.endDate + ' ' + this.dateTimes.endTime)
+    await this.$api.Contests.create({
+      name: this.name,
+      slug: this.slug,
+      startAt: start.format(),
+      endAt: end.format(),
+      description: this.description,
+      penaltyTime: parseInt(this.penalty) * 60
+    })
   }
 }
 </script>

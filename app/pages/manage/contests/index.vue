@@ -1,0 +1,61 @@
+<template>
+  <v-data-table :headers="headers" :items="items" locale="ja">
+    <template v-slot:top>
+      <v-toolbar flat color="white">
+        <v-toolbar-title>コンテスト一覧</v-toolbar-title>
+        <v-spacer />
+        <v-btn color="primary" class="mb-2" @click="newContest"
+          >コンテストを作成</v-btn
+        >
+      </v-toolbar>
+    </template>
+    <template v-slot:item.edit="{ item }">
+      <v-icon small @click="edit(item)">mdi-pencil</v-icon>
+    </template>
+  </v-data-table>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import dayjs from 'dayjs'
+import { Contest } from '~/types/contest'
+import 'dayjs/locale/ja'
+
+type ItemType = { name: string; slug: string; startAt: string; endAt: string }
+
+@Component
+export default class PagePageManageContestIndex extends Vue {
+  headers = [
+    { text: 'コンテスト名', value: 'name' },
+    { text: '開始日時', value: 'startAt' },
+    { text: '終了日時', value: 'endAt' },
+    { text: '編集', value: 'edit' }
+  ]
+
+  contests: Contest[] = []
+
+  get items(): ItemType[] {
+    dayjs.locale('ja')
+    return this.contests.map((contest: Contest) => ({
+      name: contest.name,
+      slug: contest.slug,
+      startAt: dayjs(contest.startAt).format('YYYY/MM/DD HH:mm'),
+      endAt: dayjs(contest.endAt).format('YYYY/MM/DD HH:mm')
+    }))
+  }
+
+  async created() {
+    this.contests = await this.$api.Contests.holding()
+  }
+
+  newContest() {
+    this.$router.push('/manage/contests/new')
+  }
+
+  edit(item: ItemType) {
+    this.$router.push('/manage/contests/' + item.slug)
+  }
+}
+</script>
+
+<style scoped lang="scss"></style>

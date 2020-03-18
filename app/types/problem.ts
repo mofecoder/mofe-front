@@ -16,20 +16,25 @@ type Sample = {
 
 export interface Problem {
   slug: string
-  position?: string
-  name: string
-  difficulty: Difficulty
-}
-
-export interface ProblemDetail {
-  slug: string
   position: string
   name: string
-  statement: string
   difficulty: Difficulty
+  points: number
+}
+
+export interface ProblemDetail extends Problem {
+  statement: string
   outputFormat: string
   inputFormat: string
   constraints: string
-  point: number
   samples: Sample[]
+}
+
+export interface CreateProblemParams {
+  name: string
+  difficulty: Difficulty
+  statement: string
+  inputFormat: string
+  outputFormat: string
+  constraints: string
 }

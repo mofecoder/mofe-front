@@ -85,6 +85,7 @@ async function httpGet<T>(
   body: any = {}
 ): Promise<T> {
   setToken(header)
+  header.accept = 'application/json'
   const res = await client.get(url, {
     headers: toSnakeCase(header),
     data: toSnakeCase(body)
@@ -107,6 +108,7 @@ async function httpPost<T>(
   body: any = {}
 ): Promise<T> {
   setToken(header)
+  header.accept = 'application/json'
   const res = await client.post(url, toSnakeCase(body), {
     headers: toSnakeCase(header)
   })
@@ -122,5 +124,27 @@ async function httpPost<T>(
   return toCamelCase(res.data) as T
 }
 
+async function httpPut<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  setToken(header)
+  header.accept = 'application/json'
+  const res = await client.put(url, toSnakeCase(body), {
+    headers: toSnakeCase(header)
+  })
+  log('PUT', url, res)
+
+  if (res.status === 401) throw new Error('Not logged in.')
+
+  if (isErrorCode(res.status))
+    throw new Error(`HTTP Error (Response: ${res.status})`)
+
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
+
+  return toCamelCase(res.data) as T
+}
+
 export default client
-export { httpGet, httpPost }
+export { httpGet, httpPost, httpPut }
