@@ -2,7 +2,7 @@
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card>
+        <v-card :loading="!submits">
           <v-card-title>すべての提出</v-card-title>
           <v-card-text style="color:inherit">
             <SubmitTable v-if="submits" :submits="submits" />

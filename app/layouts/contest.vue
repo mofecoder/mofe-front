@@ -5,18 +5,26 @@
       flat
       tile
       width="100%"
-      height="4rem"
+      min-height="4rem"
+      height="auto"
       color="green darken-4"
       class="white--text pl-8 header"
+      style="flex-wrap:wrap"
     >
       <v-app-bar-nav-icon
         class="d-md-none"
         style="color:white;margin-right:1.5em"
         @click.stop="drawer = !drawer"
       />
-      <n-link to="/" style="color:inherit;text-decoration:inherit">
-        {{ title }}
-      </n-link>
+      <template v-if="contest">
+        <n-link to="/" style="color:inherit;text-decoration:inherit">
+          {{ contest.name }}
+        </n-link>
+        <div class="header__info">
+          <div class="header__info__title">コンテスト日時</div>
+          <div v-for="text in contestTime" :key="text" v-text="text" />
+        </div>
+      </template>
       <v-spacer />
       <template v-if="user">
         <n-link
@@ -49,8 +57,11 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import dayjs from 'dayjs'
 import { contestStore, userStore } from '~/utils/store-accessor'
 import ContestSidebar from '~/components/ContestSidebar.vue'
+import { Contest } from '~/types/contest'
+import 'dayjs/locale/ja'
 
 type Link = {
   path: string
@@ -99,8 +110,8 @@ export default class LayoutContest extends Vue {
     }
   ]
 
-  get title(): string {
-    return contestStore.contest?.name || ''
+  get contest(): Contest | null {
+    return contestStore.contest
   }
 
   created() {
@@ -128,6 +139,24 @@ export default class LayoutContest extends Vue {
       }
       return ret
     })
+  }
+
+  get contestTime(): string[] {
+    dayjs.locale('ja')
+
+    const start = dayjs(contestStore.contest!.startAt)
+    const end = dayjs(contestStore.contest!.endAt)
+
+    if (start.isSame(end, 'day')) {
+      return [
+        start.format('YYYY/MM/DD (dd) HH:mm') + ' - ' + end.format('HH:mm')
+      ]
+    } else {
+      return [
+        start.format('YYYY/MM/DD (dd) HH:mm') + ' - ',
+        end.format('YYYY/MM/DD (dd) HH:mm')
+      ]
+    }
   }
 
   getCurrentIndex(): number | null {
@@ -162,6 +191,14 @@ export default class LayoutContest extends Vue {
     color: white;
     font-size: 1.2rem;
     align-self: center;
+  }
+  &__info {
+    margin-left: 2rem;
+    font-size: 0.9rem;
+    color: #eaeaea;
+    &__title {
+      font-size: 0.7rem;
+    }
   }
 }
 </style>

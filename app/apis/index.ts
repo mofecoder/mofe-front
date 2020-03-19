@@ -6,7 +6,7 @@ import ApiProblems from './Problems'
 export interface CafeCoderApi {
   Tasks: ApiTasks
   Contests: ApiContests
-  Auth: ApiAuth,
+  Auth: ApiAuth
   Problems: ApiProblems
 }
 

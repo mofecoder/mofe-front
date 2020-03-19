@@ -1,9 +1,9 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { $api } from '~/utils/api'
-import { Contest } from '~/types/contest'
+import { ContestDetail } from '~/types/contest'
 
 interface ContestState {
-  contest: Contest | null
+  contest: ContestDetail | null
 }
 
 @Module({
@@ -12,10 +12,10 @@ interface ContestState {
   namespaced: true
 })
 export default class ContestModule extends VuexModule implements ContestState {
-  contest: Contest | null = null
+  contest: ContestDetail | null = null
 
   @Mutation
-  updateContest(contest: Contest) {
+  updateContest(contest: ContestDetail) {
     this.contest = contest
   }
 

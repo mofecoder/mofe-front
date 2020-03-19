@@ -2,7 +2,6 @@ import { Problem } from '~/types/problem'
 import { Problem as ManageProblem } from '~/types/contestAdmin'
 
 export interface Contest {
-  id: number
   slug: string
   name: string
   startAt: string

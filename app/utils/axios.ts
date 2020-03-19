@@ -75,7 +75,7 @@ function updateToken(header: any, data: any) {
     localStorage.setItem('client', client)
     localStorage.setItem('accessToken', accessToken)
     localStorage.setItem('uid', uid)
-    userStore.updateUser(data)
+    if (data) userStore.updateUser(data)
   }
 }
 
