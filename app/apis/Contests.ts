@@ -59,4 +59,24 @@ export default class {
     )
     return res
   }
+
+  async addTask(
+    contestSlug: string,
+    problemId: number,
+    problemSlug: string,
+    position: string
+  ): Promise<void> {
+    await httpPut(
+      `/contests/${contestSlug}/set_task` +
+        `?problem_id=${problemId}` +
+        `&problem_slug=${problemSlug}` +
+        `&position=${position}`
+    )
+  }
+
+  async removeTask(contestSlug: string, problemSlug: string): Promise<void> {
+    await httpPut(
+      `/contests/${contestSlug}/tasks/${problemSlug}/remove_from_contest`
+    )
+  }
 }

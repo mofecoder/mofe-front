@@ -35,8 +35,8 @@
     "lodash.mapvalues": "^4.6.0",
     "lodash.snakecase": "^4.1.1",
     "nuxt": "^2.0.0",
-    "vue-codemirror": "^4.0.6",
-    "nuxt-property-decorator": "^2.5.1"
+    "nuxt-property-decorator": "^2.5.1",
+    "vue-codemirror": "^4.0.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.0.1",

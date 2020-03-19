@@ -15,11 +15,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import CreateProblemCard from '~/components/CreateProblemCard.vue'
 
 @Component({ components: { CreateProblemCard } })
-export default class PageWriterTaskNew extends Vue {
-  onSubmit() {
-    // API に投げる
-  }
-}
+export default class PageWriterTaskNew extends Vue {}
 </script>
 
 <style scoped>

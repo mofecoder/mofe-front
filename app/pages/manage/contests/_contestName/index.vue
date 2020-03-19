@@ -11,7 +11,13 @@
           edit
           @submit="editInformation"
         />
-        <ProblemsCard :tasks="contest.tasks" class="my-4" />
+        <ProblemsCard
+          :tasks="contest.tasks"
+          :loading="loading.tasks"
+          class="my-4"
+          @add="openModal"
+          @remove="remove"
+        />
         <TimeCardEdit
           class="my-4"
           :loading="loading.time"
@@ -22,6 +28,14 @@
         <SettingsCard class="my-4" />
       </v-flex>
     </v-layout>
+    <v-dialog v-model="modal">
+      <AddProblemCard
+        ref="addProblemCard"
+        :items="unsetProblems || []"
+        @close="modal = false"
+        @add="addProblem"
+      />
+    </v-dialog>
     <v-snackbar v-model="updated" :timeout="4000">
       コンテスト情報を更新しました。
     </v-snackbar>
@@ -29,15 +43,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Ref, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import ProblemsCard from '~/components/contestAdmin/ProblemsCard.vue'
 import TimeCardEdit from '~/components/contestAdmin/TimeCardEdit.vue'
 import SettingsCard from '~/components/contestAdmin/SettingsCard.vue'
 import InformationCard from '~/components/contestAdmin/InformationCard.vue'
 import { ContestDetailManage } from '~/types/contest'
+import AddProblemCard from '~/components/contestAdmin/AddProblemCard.vue'
+import { UnsetProblem } from '~/types/contestAdmin'
 @Component({
   components: {
+    AddProblemCard,
     InformationCard,
     ProblemsCard,
     TimeCardEdit,
@@ -45,13 +62,19 @@ import { ContestDetailManage } from '~/types/contest'
   }
 })
 export default class PageContestAdmin extends Vue {
+  @Ref('addProblemCard')
+  addProblemCard!: AddProblemCard
+
   contest: ContestDetailManage | null = null
+  unsetProblems: UnsetProblem[] | null = null
   loading = {
     information: false,
-    time: false
+    time: false,
+    tasks: false
   }
 
   updated: boolean = false
+  modal: boolean = false
 
   get contestName() {
     return this.$route.params.contestName
@@ -65,6 +88,7 @@ export default class PageContestAdmin extends Vue {
     this.contest = await this.$api.Contests.showManage(
       this.$route.params.contestName
     )
+    this.unsetProblems = await this.$api.Problems.index()
   }
 
   async editInformation() {
@@ -90,6 +114,39 @@ export default class PageContestAdmin extends Vue {
     this.updated = true
     await this.reload()
     this.loading.time = false
+  }
+
+  async addProblem(problem: UnsetProblem) {
+    this.modal = false
+    this.loading.tasks = true
+    let pos = ''
+    const used = new Set(this.contest!.tasks.map((x) => x.position))
+    for (let c = 'A'; c !== 'Z'; c = String.fromCharCode(c.charCodeAt(0) + 1)) {
+      if (!used.has(c)) {
+        pos = c
+        break
+      }
+    }
+    await this.$api.Contests.addTask(
+      this.contestName,
+      problem.id,
+      `${this.contestName}_${pos.toLowerCase()}`,
+      pos
+    )
+    await this.reload()
+    this.loading.tasks = false
+  }
+
+  async remove(slug: string) {
+    this.loading.tasks = true
+    await this.$api.Contests.removeTask(this.contestName, slug)
+    await this.reload()
+    this.loading.tasks = false
+  }
+
+  async openModal() {
+    await this.reload()
+    this.modal = true
   }
 }
 </script>
