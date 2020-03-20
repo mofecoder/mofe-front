@@ -40,10 +40,9 @@ export default class MarkdownPreviewModal extends mixins(MathJax) {
 
   @Watch('value')
   change(): void {
-    if (this.value) {
-      this.renderMathJax()
-    }
+    if (this.value) this.renderMathJax()
     this.$nextTick(() => {
+      if (this.value) this.renderMathJax()
       this.show = this.value
     })
   }
@@ -54,12 +53,14 @@ export default class MarkdownPreviewModal extends mixins(MathJax) {
 </script>
 
 <style scoped lang="scss">
-@import '~/styles/markdown.scss';
-.md {
-  @include markdown();
-}
 .modal-content {
   color: inherit !important;
   font-size: 1rem;
+}
+</style>
+<style lang="scss">
+@import '~/styles/markdown.scss';
+.md {
+  @include markdown();
 }
 </style>

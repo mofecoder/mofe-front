@@ -53,9 +53,9 @@
 </template>
 
 <script lang="ts">
-import { Submit } from '~/types/submits'
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
+import { Submit } from '~/types/submits'
 
 @Component
 export default class SubmitTable extends Vue {

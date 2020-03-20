@@ -35,6 +35,7 @@
     "lodash.mapvalues": "^4.6.0",
     "lodash.snakecase": "^4.1.1",
     "nuxt": "^2.0.0",
+    "nuxt-property-decorator": "^2.5.1",
     "vue-codemirror": "^4.0.6"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "@types/lodash.mapkeys": "^4.6.6",
     "@types/lodash.mapvalues": "^4.6.6",
     "@types/lodash.snakecase": "^4.1.6",
+    "@types/node": "^13.9.1",
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
@@ -59,7 +61,6 @@
     "husky": "^2.6.0",
     "jest": "^24.1.0",
     "lint-staged": "^8.2.1",
-    "nuxt-property-decorator": "^2.5.1",
     "prettier": "^1.16.4",
     "stylelint": "^10.1.0",
     "vue-jest": "^4.0.0-0",

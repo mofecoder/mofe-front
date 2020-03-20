@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Ref, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 
 @Component
@@ -48,6 +48,9 @@ export default class PageLogin extends Vue {
   password: string = ''
   error: boolean = false
   err: any = null
+  @Ref() form!: {
+    resetValidation(): void
+  }
 
   rules = {
     name: [
@@ -68,7 +71,7 @@ export default class PageLogin extends Vue {
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') {
           this.error = true
-          ;(this.$refs.form as any).resetValidation()
+          this.form.resetValidation()
           this.password = ''
         }
       })

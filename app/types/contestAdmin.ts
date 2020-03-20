@@ -1,15 +1,12 @@
-import { Difficulty } from '~/types/problem'
+import { Difficulty, Problem as BaseProblem } from '~/types/problem'
 
-type WriterOrTester = {
-  name: string
-  link?: string
+export interface Problem extends BaseProblem {
+  writerUser: string
 }
 
-export interface Problem {
-  slug: string
+export interface UnsetProblem {
+  id: number
   name: string
-  writer: WriterOrTester
-  tester: WriterOrTester
   difficulty: Difficulty
-  points: number
+  writerUser: string
 }

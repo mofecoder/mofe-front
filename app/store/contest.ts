@@ -1,5 +1,5 @@
-import { $api } from '~/utils/api'
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { $api } from '~/utils/api'
 import { ContestDetail } from '~/types/contest'
 
 interface ContestState {
@@ -21,7 +21,7 @@ export default class ContestModule extends VuexModule implements ContestState {
 
   @Action({ commit: 'updateContest' })
   async getContest(slug: string) {
-    const contest = await $api.Contests.index(slug)
+    const contest = await $api.Contests.show(slug)
     return contest
   }
 }

@@ -1,11 +1,22 @@
-import { Contest } from '~/types/contest'
-import { httpGet } from '~/utils/axios'
+import {
+  Contest,
+  ContestCreateParam,
+  ContestDetail,
+  ContestDetailManage,
+  ContestEditParam
+} from '~/types/contest'
+import { httpGet, httpPost, httpPut } from '~/utils/axios'
 import { StandingData } from '~/types/standings'
 import { Submit } from '~/types/submits'
 
 export default class {
-  async index(contestSlug: string): Promise<Contest> {
-    const res = await httpGet<Contest>(`/contests/${contestSlug}`)
+  async index(): Promise<Contest[]> {
+    const res = await httpGet<Contest[]>('/contests')
+    return res
+  }
+
+  async show(contestSlug: string): Promise<ContestDetail> {
+    const res = await httpGet<ContestDetail>(`/contests/${contestSlug}`)
     return res
   }
 
@@ -24,5 +35,48 @@ export default class {
   async mySubmits(contestSlug: string): Promise<Submit[]> {
     const res = await httpGet<Submit[]>(`/contests/${contestSlug}/submits`)
     return res
+  }
+
+  async create(contestInfo: ContestCreateParam): Promise<void> {
+    await httpPost('/contests', {}, contestInfo)
+  }
+
+  async update(
+    contestSlug: string,
+    contestInfo: ContestEditParam
+  ): Promise<void> {
+    await httpPut(`/contests/${contestSlug}`, {}, contestInfo)
+  }
+
+  async holding(): Promise<Contest[]> {
+    const res = await httpGet<Contest[]>('/manage/contests')
+    return res
+  }
+
+  async showManage(contestSlug: string): Promise<ContestDetailManage> {
+    const res = await httpGet<ContestDetailManage>(
+      `/manage/contests/${contestSlug}`
+    )
+    return res
+  }
+
+  async addTask(
+    contestSlug: string,
+    problemId: number,
+    problemSlug: string,
+    position: string
+  ): Promise<void> {
+    await httpPut(
+      `/contests/${contestSlug}/set_task` +
+        `?problem_id=${problemId}` +
+        `&problem_slug=${problemSlug}` +
+        `&position=${position}`
+    )
+  }
+
+  async removeTask(contestSlug: string, problemSlug: string): Promise<void> {
+    await httpPut(
+      `/contests/${contestSlug}/tasks/${problemSlug}/remove_from_contest`
+    )
   }
 }

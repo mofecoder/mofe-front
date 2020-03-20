@@ -6,21 +6,14 @@
         <v-row>
           <v-col cols="12" class="py-1">
             <v-text-field
-              v-model="content.title"
+              v-model="content.name"
               :rules="rules.required"
-              label="タイトル"
+              label="問題名"
             />
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="4" class="py-1">
-            <v-text-field
-              v-model="content.point"
-              :rules="rules.point"
-              label="配点"
-            />
-          </v-col>
-          <v-col cols="8" class="py-1">
+          <v-col cols="12" class="py-1">
             <v-select
               v-model="content.difficulty"
               :items="difficulties"
@@ -42,7 +35,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.problemStatement"
+              v-model="content.statement"
               :rules="rules.required"
               label="問題文"
               outlined
@@ -52,7 +45,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 問題文"
-          :markdown="content.problemStatement"
+          :markdown="content.statement"
           :value="modals.problemStatement"
           @close="modals.problemStatement = false"
         />
@@ -98,7 +91,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.input"
+              v-model="content.inputFormat"
               :rules="rules.required"
               label="入力"
               outlined
@@ -108,7 +101,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 入力"
-          :markdown="content.input"
+          :markdown="content.inputFormat"
           :value="modals.input"
           @close="modals.input = false"
         />
@@ -126,7 +119,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.output"
+              v-model="content.outputFormat"
               :rules="rules.required"
               label="出力"
               outlined
@@ -136,7 +129,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 出力"
-          :markdown="content.output"
+          :markdown="content.outputFormat"
           :value="modals.output"
           @close="modals.output = false"
         />
@@ -155,7 +148,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Difficulty } from '~/types/problem'
+import { CreateProblemParams, Difficulty } from '~/types/problem'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 
 @Component({
@@ -181,22 +174,13 @@ export default class CreateProblemCard extends Vue {
     'ผักชี'
   ]
 
-  content: {
-    difficulty: Difficulty
-    output: string
-    input: string
-    problemStatement: string
-    title: string
-    constraints: string
-    point: number
-  } = {
-    title: '',
-    point: 100,
+  content: CreateProblemParams = {
+    name: '',
     difficulty: 'Milk',
-    problemStatement: '',
+    statement: '',
     constraints: '',
-    input: '',
-    output: ''
+    inputFormat: '',
+    outputFormat: ''
   }
 
   modals = {
@@ -208,8 +192,8 @@ export default class CreateProblemCard extends Vue {
 
   valid = false
 
-  onSubmit() {
-    // API
+  async onSubmit() {
+    await this.$api.Problems.create(this.content)
   }
 }
 </script>

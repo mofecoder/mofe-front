@@ -57,10 +57,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import dayjs from 'dayjs'
 import { contestStore, userStore } from '~/utils/store-accessor'
 import ContestSidebar from '~/components/ContestSidebar.vue'
 import { Contest } from '~/types/contest'
-import dayjs from 'dayjs'
 import 'dayjs/locale/ja'
 
 type Link = {

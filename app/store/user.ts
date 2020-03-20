@@ -1,5 +1,5 @@
-import { AuthUser } from '~/types/AuthUser'
 import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
+import { AuthUser } from '~/types/AuthUser'
 
 interface UserState {
   user: AuthUser | null
