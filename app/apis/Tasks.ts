@@ -1,9 +1,9 @@
-import { ProblemDetail } from '~/types/problem'
+import { TaskDetail } from '~/types/task'
 import { httpGet, httpPost } from '~/utils/axios'
 
 export default class {
-  async show(contestSlug: string, slug: string): Promise<ProblemDetail> {
-    const res = await httpGet<ProblemDetail>(
+  async show(contestSlug: string, slug: string): Promise<TaskDetail> {
+    const res = await httpGet<TaskDetail>(
       `/contests/${contestSlug}/tasks/${slug}`
     )
     return res

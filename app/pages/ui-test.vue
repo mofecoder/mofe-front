@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import { Difficulty } from '~/types/problem'
+import { Difficulty } from '~/types/task'
 
 @Component
 export default class UiTest extends Vue {

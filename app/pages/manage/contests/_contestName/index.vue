@@ -51,7 +51,7 @@ import SettingsCard from '~/components/contestAdmin/SettingsCard.vue'
 import InformationCard from '~/components/contestAdmin/InformationCard.vue'
 import { ContestDetailManage } from '~/types/contest'
 import AddProblemCard from '~/components/contestAdmin/AddProblemCard.vue'
-import { UnsetProblem } from '~/types/contestAdmin'
+import { Problem } from '~/types/contestAdmin'
 @Component({
   components: {
     AddProblemCard,
@@ -66,7 +66,7 @@ export default class PageContestAdmin extends Vue {
   addProblemCard!: AddProblemCard
 
   contest: ContestDetailManage | null = null
-  unsetProblems: UnsetProblem[] | null = null
+  unsetProblems: Problem[] | null = null
   loading = {
     information: false,
     time: false,
@@ -88,7 +88,7 @@ export default class PageContestAdmin extends Vue {
     this.contest = await this.$api.Contests.showManage(
       this.$route.params.contestName
     )
-    this.unsetProblems = await this.$api.Problems.index()
+    this.unsetProblems = await this.$api.Problems.unsetProblems()
   }
 
   async editInformation() {
@@ -116,7 +116,7 @@ export default class PageContestAdmin extends Vue {
     this.loading.time = false
   }
 
-  async addProblem(problem: UnsetProblem) {
+  async addProblem(problem: Problem) {
     this.modal = false
     this.loading.tasks = true
     let pos = ''

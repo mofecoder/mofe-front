@@ -1,12 +1,15 @@
-import { Difficulty, Problem as BaseProblem } from '~/types/problem'
+import { Difficulty, Task as BaseProblem } from '~/types/task'
 
-export interface Problem extends BaseProblem {
+export interface Task extends BaseProblem {
   writerUser: string
 }
 
-export interface UnsetProblem {
+export interface Problem {
   id: number
+  slug?: string
+  position?: string
   name: string
   difficulty: Difficulty
+  points?: number
   writerUser: string
 }

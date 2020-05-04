@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue } from 'nuxt-property-decorator'
-import { Problem } from '~/types/contestAdmin'
+import { Task } from '~/types/contestAdmin'
 
 type ItemType = {
   position: string
@@ -43,7 +43,7 @@ type ItemType = {
 @Component
 export default class ProblemsCardTable extends Vue {
   @Prop()
-  tasks?: Problem[]
+  tasks?: Task[]
 
   get items(): ItemType[] {
     if (!this.tasks) return []

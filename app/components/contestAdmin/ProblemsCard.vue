@@ -14,14 +14,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from 'nuxt-property-decorator'
-import { Problem } from '~/types/contestAdmin'
+import { Task } from '~/types/contestAdmin'
 import ProblemsCardTable from '~/components/contestAdmin/ProblemsCardTable.vue'
 @Component({
   components: { ProblemsCardTable }
 })
 export default class ProblemsCard extends Vue {
   @Prop()
-  tasks?: Problem[]
+  tasks?: Task[]
 
   @Emit()
   add() {}
