@@ -15,7 +15,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import CreateProblemCard from '~/components/CreateProblemCard.vue'
 
 @Component({ components: { CreateProblemCard } })
-export default class PageWriterTaskNew extends Vue {}
+export default class PageWriterProblemNew extends Vue {}
 </script>
 
 <style scoped>

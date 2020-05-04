@@ -1,6 +1,14 @@
 <template>
   <v-card class="wrapper">
-    <v-card-title class="headline">問題の作成</v-card-title>
+    <v-card-title
+      class="headline"
+      style="display:flex;justify-content:space-between"
+    >
+      <p>問題の編集</p>
+      <v-btn color="purple white--text" @click="testcase"
+        >テストケースの設定</v-btn
+      >
+    </v-card-title>
     <v-card-text>
       <v-form v-model="valid" @submit.prevent="onSubmit">
         <v-row>
@@ -138,7 +146,7 @@
         <v-row>
           <v-col cols="12">
             <v-btn :disabled="!valid" color="primary" type="submit" block>
-              登録
+              更新
             </v-btn>
           </v-col>
         </v-row>
@@ -189,8 +197,35 @@ export default class CreateProblemCard extends Vue {
 
   valid = false
 
+  get problemId(): number {
+    return Number(this.$route.params.problemId)
+  }
+
+  async reload() {
+    const tmp = await this.$api.Problems.show(this.problemId)
+    this.content = {
+      name: tmp.name,
+      difficulty: tmp.difficulty,
+      statement: tmp.statement,
+      constraints: tmp.constraints,
+      inputFormat: tmp.inputFormat,
+      outputFormat: tmp.outputFormat
+    }
+  }
+
+  async created() {
+    await this.reload()
+  }
+
   async onSubmit() {
-    await this.$api.Problems.create(this.content)
+    await this.$api.Problems.update(this.problemId, this.content)
+    await this.reload()
+  }
+
+  testcase() {
+    this.$router.push(
+      this.$router.resolve('testcases', undefined, true).location
+    )
   }
 }
 </script>

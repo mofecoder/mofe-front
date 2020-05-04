@@ -8,13 +8,13 @@ export type Difficulty =
   | 'Flavor'
   | 'ผักชี'
 
-type Sample = {
+export type Sample = {
   input: string
   output: string
   explanation?: string
 }
 
-export interface Problem {
+export interface Task {
   slug: string
   position: string
   name: string
@@ -22,19 +22,10 @@ export interface Problem {
   points: number
 }
 
-export interface ProblemDetail extends Problem {
+export interface TaskDetail extends Task {
   statement: string
   outputFormat: string
   inputFormat: string
   constraints: string
   samples: Sample[]
-}
-
-export interface CreateProblemParams {
-  name: string
-  difficulty: Difficulty
-  statement: string
-  inputFormat: string
-  outputFormat: string
-  constraints: string
 }

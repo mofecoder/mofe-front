@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue } from 'nuxt-property-decorator'
-import { UnsetProblem } from '~/types/contestAdmin'
+import { Problem } from '~/types/contestAdmin'
 
 @Component
 export default class AddProblemCard extends Vue {
@@ -53,10 +53,10 @@ export default class AddProblemCard extends Vue {
   loading?: boolean
 
   @Prop({ required: true })
-  items!: UnsetProblem[]
+  items!: Problem[]
 
   @Emit()
-  add(item: UnsetProblem) {
+  add(item: Problem) {
     return item
   }
 }
