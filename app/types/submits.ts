@@ -25,3 +25,7 @@ export interface Submit {
   executionMemory?: number
   point: number
 }
+
+export interface SubmitDetail extends Submit {
+  source: string
+}
