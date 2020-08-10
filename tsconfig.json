@@ -29,7 +29,8 @@
     ]
   },
   "files": [
-    "./vue-shims.d.ts"
+    "./vue-shims.d.ts",
+    "./app/types/plugins.d.ts"
   ],
   "include": [
     "./app/components/**/*.ts",

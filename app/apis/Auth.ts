@@ -1,4 +1,4 @@
-import { httpPost } from '~/utils/axios'
+import { httpGet, httpPost } from '~/utils/axios'
 import { AuthUser } from '~/types/AuthUser'
 import { userStore } from '~/utils/store-accessor'
 
@@ -8,6 +8,7 @@ type AuthResponse =
       errors: string[]
     }
   | {
+      success?: true
       data: AuthUser
     }
 

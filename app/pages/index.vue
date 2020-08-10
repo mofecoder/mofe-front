@@ -50,7 +50,8 @@ import { Problem } from '~/types/contestAdmin'
   components: {
     Logo,
     VuetifyLogo
-  }
+  },
+  middleware: 'authenticated'
 })
 export default class MainPage extends Vue {
   test: any = ''
@@ -58,8 +59,10 @@ export default class MainPage extends Vue {
   problems: Problem[] | null = null
 
   async created() {
-    this.contests = await this.$api.Contests.index()
-    this.problems = await this.$api.Problems.unsetProblems()
+    ;[this.contests, this.problems] = await Promise.all([
+      this.$api.Contests.index(),
+      this.$api.Problems.unsetProblems()
+    ])
   }
 }
 </script>

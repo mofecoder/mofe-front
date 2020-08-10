@@ -35,11 +35,8 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
   }
 
   get language() {
-    return {
-      innerName: 'cpp17_gcc7',
-      name: 'C++17 (g++ 7.4.0)',
-      mime: 'text/x-c++src'
-    }
+    if (!this.submit) return null
+    return this.$getLanguage(this.submit.lang)
   }
 }
 </script>

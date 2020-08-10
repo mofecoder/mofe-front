@@ -9,6 +9,8 @@
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/clike/clike.js'
+import 'codemirror/mode/python/python.js'
+import 'codemirror/mode/go/go.js'
 import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
 import { Language } from '~/types/language'
 
@@ -35,7 +37,7 @@ export default class Editor extends Vue {
   onChangeReadOnly() {
     const isReadonly = this.readOnly === true || this.readOnly === ''
     this.$set(this.cmOptions, 'readOnly', isReadonly)
-    this.$set(this.cmOptions, 'cursorBlinkRate', isReadonly ? -1 : 1)
+    this.$set(this.cmOptions, 'cursorBlinkRate', isReadonly ? -1 : 530)
   }
 
   cmOptions = {
