@@ -33,8 +33,12 @@ function toCamelCase(data: any) {
   return mapKeysDeep(data, callback)
 }
 
-function toSnakeCase(data: any) {
-  const callback = (_: any, key: any) => snakeCase(key)
+function toSnakeCase(data: any, header = false) {
+  const callback = (_: any, key: any) => {
+    let k = snakeCase(key)
+    if (header) k = k.replace('_', '-')
+    return k
+  }
   return mapKeysDeep(data, callback)
 }
 
@@ -96,9 +100,9 @@ async function http<T>(
   body: any = {}
 ): Promise<T> {
   setToken(header)
-  header.accept = 'application/json'
+  if (!header.accept) header.accept = 'application/json'
   const res = await method(url, {
-    headers: toSnakeCase(header),
+    headers: toSnakeCase(header, true),
     data: toSnakeCase(body)
   })
   log(name, url, res)
@@ -124,11 +128,11 @@ async function httpWithData<T>(
   body: any = {}
 ): Promise<T> {
   setToken(header)
-  header.accept = 'application/json'
+  if (!header.accept) header.accept = 'application/json'
   const data = typeof body === 'object' ? toSnakeCase(body) : body
   if (typeof body === 'string') header['content-type'] = 'text/plain'
   const res = await method(url, data, {
-    headers: toSnakeCase(header)
+    headers: toSnakeCase(header, true)
   })
   log(name, url, res)
 

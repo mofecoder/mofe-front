@@ -111,7 +111,11 @@ const nuxtConfig: Configuration = {
      ** You can extend webpack config here
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    extend(config, ctx) {}
+    extend(config, ctx) {
+    }
+  },
+  router: {
+    middleware: 'getUser'
   }
 }
 

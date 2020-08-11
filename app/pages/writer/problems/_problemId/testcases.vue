@@ -152,7 +152,8 @@ import AddTestcaseSetModal from '~/components/modals/AddTestcaseSetModal.vue'
     AddTestcaseSetModal,
     EditTestcaseModal,
     TestcaseUploadExpansionPanel
-  }
+  },
+  middleware: 'authenticated'
 })
 export default class PagePageWriterTaskTestcases extends Vue {
   validate({ params }: { params: { [_: string]: string } }): boolean {

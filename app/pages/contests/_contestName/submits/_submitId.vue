@@ -31,7 +31,7 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
       this.$route.params.contestName,
       Number(this.$route.params.submitId)
     )
-    this.editor.value = this.submit.source
+    this.editor.value = this.submit!.source
   }
 
   get language() {
