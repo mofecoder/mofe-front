@@ -1,5 +1,5 @@
-import { Problem } from '~/types/problem'
-import { Problem as ManageProblem } from '~/types/contestAdmin'
+import { Task } from '~/types/task'
+import { Task as ManageProblem } from '~/types/contestAdmin'
 
 export interface Contest {
   slug: string
@@ -9,7 +9,7 @@ export interface Contest {
 }
 
 export interface ContestDetail extends Contest {
-  tasks: Problem[]
+  tasks: Task[]
   description: string
   penaltyTime: number
 }

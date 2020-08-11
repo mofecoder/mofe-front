@@ -1,4 +1,4 @@
-import { Problem } from '~/types/problem'
+import { Task } from '~/types/task'
 
 type Result =
   | 'WJ'
@@ -18,10 +18,14 @@ export interface Submit {
   user: {
     name: string
   }
-  task: Problem
+  task: Task
   status: Result
   lang: string
   executionTime?: number
   executionMemory?: number
   point: number
+}
+
+export interface SubmitDetail extends Submit {
+  source: string
 }

@@ -7,7 +7,7 @@ import {
 } from '~/types/contest'
 import { httpGet, httpPost, httpPut } from '~/utils/axios'
 import { StandingData } from '~/types/standings'
-import { Submit } from '~/types/submits'
+import { Submit, SubmitDetail } from '~/types/submits'
 
 export default class {
   async index(): Promise<Contest[]> {
@@ -34,6 +34,13 @@ export default class {
 
   async mySubmits(contestSlug: string): Promise<Submit[]> {
     const res = await httpGet<Submit[]>(`/contests/${contestSlug}/submits`)
+    return res
+  }
+
+  async showSubmit(contestSlug: string, id: number): Promise<SubmitDetail> {
+    const res = await httpGet<SubmitDetail>(
+      `/contests/${contestSlug}/submits/${id}`
+    )
     return res
   }
 

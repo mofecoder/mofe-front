@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import isArray from 'lodash.isarray'
 import isObject from 'lodash.isobject'
 import camelCase from 'lodash.camelcase'
@@ -6,6 +6,15 @@ import snakeCase from 'lodash.snakecase'
 import mapValues from 'lodash.mapvalues'
 import mapKeys from 'lodash.mapkeys'
 import { userStore } from '~/utils/store-accessor'
+
+export class HttpError extends Error {
+  constructor(message: string, response: any) {
+    super(message)
+    this.response = response
+  }
+
+  response: any
+}
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
   if (isArray(data)) {
@@ -79,49 +88,78 @@ function updateToken(header: any, data: any) {
   }
 }
 
+async function http<T>(
+  method: (url: string, config?: AxiosRequestConfig) => Promise<AxiosResponse>,
+  name: string,
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  setToken(header)
+  header.accept = 'application/json'
+  const res = await method(url, {
+    headers: toSnakeCase(header),
+    data: toSnakeCase(body)
+  })
+  log(name, url, res)
+
+  if (res.status === 401) throw new Error('Not logged in.')
+
+  if (isErrorCode(res.status))
+    throw new HttpError(`HTTP Error (Response: ${res.status})`, res)
+
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
+  return toCamelCase(res.data) as T
+}
+
+async function httpWithData<T>(
+  method: (
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ) => Promise<AxiosResponse>,
+  name: string,
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  setToken(header)
+  header.accept = 'application/json'
+  const data = typeof body === 'object' ? toSnakeCase(body) : body
+  if (typeof body === 'string') header['content-type'] = 'text/plain'
+  const res = await method(url, data, {
+    headers: toSnakeCase(header)
+  })
+  log(name, url, res)
+
+  if (res.status === 401) throw new Error('Not logged in.')
+
+  if (isErrorCode(res.status))
+    throw new HttpError(`HTTP Error (Response: ${res.status})`, res)
+
+  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
+  return toCamelCase(res.data) as T
+}
+
 async function httpGet<T>(
   url: string,
   header: any = {},
   body: any = {}
 ): Promise<T> {
-  setToken(header)
-  header.accept = 'application/json'
-  const res = await client.get(url, {
-    headers: toSnakeCase(header),
-    data: toSnakeCase(body)
-  })
-  log('GET', url, res)
-
-  if (res.status === 401) throw new Error('Not logged in.')
-
-  if (isErrorCode(res.status))
-    throw new Error(`HTTP Error (Response: ${res.status})`)
-
-  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
-
-  return toCamelCase(res.data) as T
+  const ret = await http<T>(client.get, 'GET', url, header, body)
+  return ret
 }
 
 async function httpPost<T>(
   url: string,
   header: any = {},
-  body: any = {}
+  body: any = {},
+  formData: boolean = false
 ): Promise<T> {
-  setToken(header)
-  header.accept = 'application/json'
-  const res = await client.post(url, toSnakeCase(body), {
-    headers: toSnakeCase(header)
-  })
-  log('POST', url, res)
+  if (formData) header['content-type'] = 'multipart/form-data'
 
-  if (res.status === 401) throw new Error('Not logged in.')
-
-  if (isErrorCode(res.status))
-    throw new Error(`HTTP Error (Response: ${res.status})`)
-
-  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
-
-  return toCamelCase(res.data) as T
+  const ret = await httpWithData<T>(client.post, 'POST', url, header, body)
+  return ret
 }
 
 async function httpPut<T>(
@@ -129,22 +167,23 @@ async function httpPut<T>(
   header: any = {},
   body: any = {}
 ): Promise<T> {
-  setToken(header)
-  header.accept = 'application/json'
-  const res = await client.put(url, toSnakeCase(body), {
-    headers: toSnakeCase(header)
-  })
-  log('PUT', url, res)
+  const ret = await httpWithData<T>(client.put, 'PUT', url, header, body)
+  return ret
+}
 
-  if (res.status === 401) throw new Error('Not logged in.')
+async function httpPatch<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  const ret = await httpWithData<T>(client.patch, 'PATCH', url, header, body)
+  return ret
+}
 
-  if (isErrorCode(res.status))
-    throw new Error(`HTTP Error (Response: ${res.status})`)
-
-  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
-
-  return toCamelCase(res.data) as T
+async function httpDelete<T>(url: string, header: any = {}): Promise<T> {
+  const ret = await http<T>(client.delete, 'DELETE', url, header)
+  return ret
 }
 
 export default client
-export { httpGet, httpPost, httpPut }
+export { httpGet, httpPost, httpPut, httpPatch, httpDelete }

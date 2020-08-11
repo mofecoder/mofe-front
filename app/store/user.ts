@@ -1,5 +1,6 @@
-import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { AuthUser } from '~/types/AuthUser'
+import { httpGet } from '~/utils/axios'
 
 interface UserState {
   user: AuthUser | null
@@ -16,6 +17,20 @@ export default class UserModule extends VuexModule implements UserState {
   get getUser(): AuthUser | null {
     const json = localStorage.getItem('user')
     return this.user || (json && JSON.parse(json))
+  }
+
+  @Action({ commit: 'updateUser' })
+  async fetchUser() {
+    try {
+      const res = await httpGet<{
+        success: boolean
+        data?: AuthUser
+      }>('/auth/validate_token')
+      if (!res.success) return null
+      return res.data
+    } catch {
+      return null
+    }
   }
 
   @Mutation

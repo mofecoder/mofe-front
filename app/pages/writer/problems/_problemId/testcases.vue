@@ -1,0 +1,320 @@
+<template>
+  <v-container class="testcase">
+    <template v-if="problem">
+      <div class="testcase__title">{{ problem.name }} テストケース編集</div>
+    </template>
+    <v-card class="mb-8" :loading="!testcaseSets">
+      <v-card-title>テストケースセット一覧</v-card-title>
+      <v-card-text class="set-list">
+        <v-simple-table v-if="testcaseSets">
+          <thead>
+            <tr>
+              <th>テストケースセット名</th>
+              <th>配点</th>
+              <th>サンプル</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="set in testcaseSets" :key="set.name">
+              <td v-text="set.name" />
+              <td v-text="set.points" />
+              <td class="is-sample" :class="{ '--sample': set.isSample }">
+                {{ set.isSample ? 'Yes' : 'No' }}
+              </td>
+              <td>
+                <v-icon
+                  v-if="!['all', 'sample'].includes(set.name)"
+                  small
+                  dense
+                  @click="deleteSet(set.id)"
+                  >mdi-delete</v-icon
+                >
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+        <v-btn color="primary" small @click="testcaseSetDialog = true"
+          >テストケースセットを追加</v-btn
+        >
+      </v-card-text>
+    </v-card>
+    <v-card class="mb-8" :loading="!testcases || testcaseLoading">
+      <v-card-title>テストケース一覧</v-card-title>
+      <v-card-text class="testcase-list">
+        <v-simple-table v-if="testcases" dense>
+          <thead>
+            <tr>
+              <th style="width:20em">テストケース名</th>
+              <th
+                v-for="set in testcaseSets"
+                :key="set.name"
+                style="width:8em"
+                v-text="set.name"
+              />
+              <th style="width:1em" />
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(testcase, i) in testcases" :key="testcase.name">
+              <td v-text="testcase.name" />
+              <td
+                v-for="(_, j) in testcase.testcaseSets"
+                :key="`${testcase.name}_${j}`"
+              >
+                <v-checkbox
+                  class="mt-0"
+                  :input-value="testcases[i].testcaseSets[j]"
+                  dense
+                  color="orange"
+                  hide-details
+                  @change="(v) => changeTestcaseState(i, j, v)"
+                />
+              </td>
+              <td>
+                <v-icon small dense @click="viewTestcase(testcase.id)"
+                  >mdi-eye</v-icon
+                >
+                <v-icon small dense @click="deleteTestcase(testcase.id)"
+                  >mdi-delete</v-icon
+                >
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+        <v-btn
+          class="mt-2"
+          color="primary"
+          small
+          @click.stop="testcaseDialog = true"
+        >
+          テストケースを追加
+        </v-btn>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>テストケースをアップロードする</v-card-title>
+      <v-card-text>
+        <v-expansion-panels class="mb-8">
+          <TestcaseUploadExpansionPanel />
+        </v-expansion-panels>
+        <v-form @submit.prevent="submit">
+          <v-file-input
+            label="アップロードするファイル"
+            placeholder="ZIPファイルを選択"
+            accept=".zip"
+            @change="change"
+          />
+          <v-btn type="submit" color="primary" block :disabled="!file"
+            >アップロードする</v-btn
+          >
+        </v-form>
+        <div v-if="ok != null" class="testcase__result mt-8">
+          <div
+            class="testcase__result__status mb-2"
+            :class="{ ok: ok, ng: !ok }"
+          >
+            テストケースのアップロードに{{ ok ? '成功' : '失敗' }}しました
+          </div>
+          <ul v-if="messages">
+            <li v-for="item in messages" :key="item" v-text="item" />
+          </ul>
+        </div>
+      </v-card-text>
+    </v-card>
+    <EditTestcaseModal
+      :value="testcaseDialog"
+      :problem-id="problemId"
+      :testcase-id="testcaseId"
+      :readonly="!!testcaseId"
+      :testcase-names="testcaseNames"
+      @close="closeModal"
+      @create="createTestcase"
+    />
+    <AddTestcaseSetModal
+      :value="testcaseSetDialog"
+      :testcase-set-names="testcaseSetNames"
+      @create="createSet"
+      @close="closeSetModal"
+    />
+  </v-container>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
+import { ProblemDetail, Testcase, TestcaseSet } from '~/types/problems'
+import { HttpError } from '~/utils/axios'
+import TestcaseUploadExpansionPanel from '~/components/writer/TestcaseUploadExpansionPanel.vue'
+import EditTestcaseModal from '~/components/modals/EditTestcaseModal.vue'
+import AddTestcaseSetModal from '~/components/modals/AddTestcaseSetModal.vue'
+@Component({
+  components: {
+    AddTestcaseSetModal,
+    EditTestcaseModal,
+    TestcaseUploadExpansionPanel
+  }
+})
+export default class PagePageWriterTaskTestcases extends Vue {
+  validate({ params }: { params: { [_: string]: string } }): boolean {
+    return /^[1-9]\d*$/.test(params.problemId)
+  }
+
+  problem: ProblemDetail | null = null
+  testcaseSets: TestcaseSet[] | null = null
+  testcases: Testcase[] | null = null
+  file: File | null = null
+  messages: string[] = []
+  ok: boolean | null = null
+  testcaseDialog = false
+  testcaseId: number | null = null
+  testcaseSetDialog = false
+  testcaseLoading = false
+
+  get problemId(): number {
+    return Number(this.$route.params.problemId)
+  }
+
+  get testcaseNames() {
+    return this.testcases?.map((x) => x.name) || []
+  }
+
+  get testcaseSetNames() {
+    return this.testcaseSets?.map((x) => x.name) || []
+  }
+
+  async created() {
+    await this.update()
+  }
+
+  async update() {
+    this.testcaseSets = null
+    this.testcases = null
+    this.problem = await this.$api.Problems.show(this.problemId)
+    const res = await this.$api.Testcases.index(this.problemId)
+    this.testcaseSets = res.testcaseSets
+    this.testcases = res.testcases
+  }
+
+  change(file: File) {
+    this.file = file || null
+  }
+
+  submit() {
+    if (!this.file) return
+    this.$api.Testcases.uploadTestcases(this.problemId, this.file)
+      .then((res) => {
+        this.messages = res.messages
+        this.ok = true
+      })
+      .catch((exception: HttpError) => {
+        const res = exception.response
+        this.messages = [res.error]
+        this.ok = false
+      })
+  }
+
+  async deleteTestcase(id: number) {
+    await this.$api.Testcases.delete(this.problemId, id)
+    await this.update()
+  }
+
+  async createTestcase(params: {
+    name: string
+    input: string
+    output: string
+    explanation: string
+  }) {
+    try {
+      await this.$api.Testcases.destroy(this.problemId, params)
+    } catch (error) {
+      if (error.response.status === 400) {
+        alert('テストケースの追加に失敗しました: ' + error.response.data.error)
+        return
+      }
+    }
+    await this.update()
+    this.testcaseDialog = false
+  }
+
+  async createSet(params: { name: string; points: string }) {
+    if (Number.isNaN(Number(params.points))) return
+    try {
+      await this.$api.Testcases.createTestcaseSet(this.problemId, {
+        name: params.name,
+        points: Number(params.points)
+      })
+    } catch (error) {
+      if (error.response.status === 400) {
+        alert(
+          'テストケースセットの追加に失敗しました: ' + error.response.data.error
+        )
+        return
+      }
+    }
+    await this.update()
+    this.testcaseSetDialog = false
+  }
+
+  async deleteSet(id: number) {
+    try {
+      await this.$api.Testcases.destroyTestcaseSet(this.problemId, id)
+    } catch (error) {
+      alert('テストケースセットの削除に失敗しました。')
+      return
+    }
+    await this.update()
+  }
+
+  async changeTestcaseState(i: number, j: number, v: true | null) {
+    if (!this.testcaseSets) return
+    this.testcaseLoading = true
+    await this.$api.Testcases.changeTestcaseState(
+      this.problemId,
+      this.testcases![i].id,
+      this.testcaseSets[j].id,
+      v || false
+    )
+    const res = await this.$api.Testcases.index(this.problemId)
+    this.testcaseSets = res.testcaseSets
+    this.testcases = res.testcases
+    this.testcaseLoading = false
+  }
+
+  viewTestcase(id: number) {
+    this.testcaseId = id
+    this.testcaseDialog = true
+  }
+
+  closeModal() {
+    this.testcaseId = null
+    this.testcaseDialog = false
+  }
+
+  closeSetModal() {
+    this.testcaseSetDialog = false
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.set-list {
+  @include card-text-reset();
+}
+.testcase {
+  &__title {
+    font-size: 1.7rem;
+    font-weight: normal;
+  }
+  &__result {
+    &__status {
+      font-size: 1.4rem;
+      &.ok {
+        color: green;
+      }
+      &.ng {
+        color: red;
+      }
+    }
+  }
+}
+</style>

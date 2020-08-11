@@ -8,12 +8,12 @@
             <tr class="row-header">
               <th class="col-username">ユーザ名</th>
               <td class="col-result">得点</td>
-              <td class="col-problem">
-                <n-link
-                  v-for="problem in problems"
-                  :key="problem.slug"
-                  :to="`/contests/${contestName}/tasks/${problem.slug}`"
-                >
+              <td
+                v-for="problem in problems"
+                :key="problem.slug"
+                class="col-problem"
+              >
+                <n-link :to="`/contests/${contestName}/tasks/${problem.slug}`">
                   {{ problem.position }}
                 </n-link>
               </td>

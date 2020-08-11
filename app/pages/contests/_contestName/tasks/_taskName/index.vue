@@ -106,7 +106,7 @@
 import { Component, mixins, Vue } from 'nuxt-property-decorator'
 import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import ContestHeader from '~/components/ContestHeader.vue'
-import { ProblemDetail } from '~/types/problem'
+import { TaskDetail } from '~/types/task'
 import MathJax from '~/mixins/mathjax'
 import MixinContest from '~/mixins/contest'
 import DifficultyChip from '~/components/parts/difficulty-chip.vue'
@@ -124,7 +124,7 @@ import { Language } from '~/types/language'
   layout: 'contest'
 })
 export default class PageContestTasks extends mixins(MathJax, MixinContest) {
-  problem: ProblemDetail | null = null
+  problem: TaskDetail | null = null
   language: Language | undefined = languages[0]
   submitted = false
 
@@ -148,7 +148,7 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
     this.$api.Tasks.show(
       this.$route.params.contestName,
       this.$route.params.taskName
-    ).then((ret: ProblemDetail) => {
+    ).then((ret: TaskDetail) => {
       this.problem = ret
       this.$nextTick(() => {
         this.renderMathJax()
