@@ -125,11 +125,12 @@ async function httpWithData<T>(
   name: string,
   url: string,
   header: any = {},
-  body: any = {}
+  body: any = {},
+  formData = false
 ): Promise<T> {
   setToken(header)
   if (!header.accept) header.accept = 'application/json'
-  const data = typeof body === 'object' ? toSnakeCase(body) : body
+  const data = typeof body === 'object' && !formData ? toSnakeCase(body) : body
   if (typeof body === 'string') header['content-type'] = 'text/plain'
   const res = await method(url, data, {
     headers: toSnakeCase(header, true)
@@ -162,7 +163,14 @@ async function httpPost<T>(
 ): Promise<T> {
   if (formData) header['content-type'] = 'multipart/form-data'
 
-  const ret = await httpWithData<T>(client.post, 'POST', url, header, body)
+  const ret = await httpWithData<T>(
+    client.post,
+    'POST',
+    url,
+    header,
+    body,
+    formData
+  )
   return ret
 }
 

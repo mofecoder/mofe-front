@@ -188,8 +188,6 @@ export default class PagePageWriterTaskTestcases extends Vue {
   }
 
   async update() {
-    this.testcaseSets = null
-    this.testcases = null
     this.problem = await this.$api.Problems.show(this.problemId)
     const res = await this.$api.Testcases.index(this.problemId)
     this.testcaseSets = res.testcaseSets
@@ -203,9 +201,10 @@ export default class PagePageWriterTaskTestcases extends Vue {
   submit() {
     if (!this.file) return
     this.$api.Testcases.uploadTestcases(this.problemId, this.file)
-      .then((res) => {
-        this.messages = res.messages
+      .then(async ({ messages }: { messages: string[] }) => {
+        this.messages = messages
         this.ok = true
+        await this.update()
       })
       .catch((exception: HttpError) => {
         const res = exception.response
