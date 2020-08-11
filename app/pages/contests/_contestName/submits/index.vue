@@ -23,7 +23,8 @@ import SubmitTable from '~/components/submits/SubmitTable.vue'
 import { Submit } from '~/types/submits'
 @Component({
   components: { SubmitTable, ContestHeaderTab, ContestHeader },
-  layout: 'contest'
+  layout: 'contest',
+  middleware: 'authenticated'
 })
 export default class PageContest extends mixins(MathJax, MixinContest) {
   async created() {

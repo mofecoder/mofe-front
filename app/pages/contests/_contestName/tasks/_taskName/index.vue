@@ -164,10 +164,12 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   }
 
   get selectableLanguages() {
-    return languages.map((lang) => ({
-      text: lang.name,
-      value: lang
-    }))
+    return languages
+      .filter((lang) => !lang.isOutdated)
+      .map((lang) => ({
+        text: lang.name,
+        value: lang
+      }))
   }
 
   submit() {
