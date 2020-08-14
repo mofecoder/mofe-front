@@ -191,7 +191,7 @@ export default class CreateProblemCard extends Vue {
 
   async onSubmit() {
     await this.$api.Problems.create(this.content).then(() => {
-      this.$router.push('manage')
+      this.$router.push('/writer/problems')
     })
   }
 }
