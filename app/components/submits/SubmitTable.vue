@@ -28,8 +28,8 @@
         </td>
         <template v-if="item.executionTime && item.executionMemory">
           <td>
-            <div class="cell-result">
-              <div :class="`result-${item.status}`">{{ item.status }}</div>
+            <div class="chip">
+              <ResultChip :status="item.status" />
             </div>
           </td>
           <td style="text-align:right;padding-right:0.3em">
@@ -41,7 +41,7 @@
         </template>
         <td v-else colspan="3">
           <div class="cell-result">
-            <div :class="`result-${item.status}`">{{ item.status }}</div>
+            <ResultChip :status="item.status" />
           </div>
         </td>
         <td>
@@ -56,8 +56,10 @@
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { Submit } from '~/types/submits'
-
-@Component
+import ResultChip from '~/components/ResultChip.vue'
+@Component({
+  components: { ResultChip }
+})
 export default class SubmitTable extends Vue {
   @Prop({ required: true })
   submits!: Submit[]
@@ -80,30 +82,33 @@ export default class SubmitTable extends Vue {
   th,
   td {
     border: solid 1px black;
+    width: auto;
+  }
+  th {
+    padding: 0 0.3em;
   }
   td {
-    padding: 0.3em 0;
+    padding: 0.3em 0.5em;
   }
   text-align: center;
-  .date {
-    width: 16em;
-    min-width: 11em;
-  }
-  $width-map: (
-    user: 8em,
-    task: 13em,
-    lang: 10em,
-    results: 6em,
-    points: 5em,
-    time: 7em,
-    memory: 7em,
-    detail: 4em
-  );
-  @each $class, $width in $width-map {
-    .#{$class} {
-      width: $width;
-    }
-  }
+  //.date {
+  //  max-width: 11em;
+  //}
+  //$width-map: (
+  //  user: 8em,
+  //  task: 13em,
+  //  lang: 10em,
+  //  results: 6em,
+  //  points: 5em,
+  //  time: 7em,
+  //  memory: 7em,
+  //  detail: 4em
+  //);
+  //@each $class, $width in $width-map {
+  //  .#{$class} {
+  //    width: $width;
+  //  }
+  //}
   thead {
     background-color: #ffffe0;
   }
@@ -117,41 +122,6 @@ export default class SubmitTable extends Vue {
     display: flex;
     width: 100%;
     justify-content: center;
-    $color-ac: #11bb22;
-    $color-wa: #f0b000;
-    $color-wj: #888888;
-    $color-ie: #ff4444;
-    $color-ce: #cc44ff;
-    div {
-      border-radius: 4px;
-      color: white;
-      font-weight: bold;
-      font-size: 120%;
-      width: 3.3em;
-    }
-    [class^='result'] {
-      height: 1.4em;
-    }
-    .result-AC {
-      background-color: $color-ac;
-    }
-    .result-TLE,
-    .result-MLE,
-    .result-WA,
-    .result-RE,
-    .result-OLE {
-      background-color: $color-wa;
-    }
-    .result-IE {
-      background-color: $color-ie;
-    }
-    .result-CE {
-      background-color: $color-ce;
-    }
-    .result-WJ,
-    .result-WR {
-      background-color: $color-wj;
-    }
   }
 }
 </style>

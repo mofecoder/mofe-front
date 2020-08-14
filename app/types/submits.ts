@@ -21,8 +21,8 @@ export interface Submit {
   task: Task
   status: Result
   lang: string
-  executionTime?: number
-  executionMemory?: number
+  executionTime: number | null
+  executionMemory: number | null
   point: number
 }
 

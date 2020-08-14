@@ -1,7 +1,10 @@
 <template>
   <div>
     <template v-if="contest">
-      <v-container class="pa-0" fluid>
+      <v-alert v-if="!contest.tasks">
+        <v-alert type="warning">問題はまだ公開されていません。</v-alert>
+      </v-alert>
+      <v-container v-else class="pa-0" fluid>
         <v-card max-width="600px">
           <v-list rounded>
             <v-subheader>問題一覧</v-subheader>

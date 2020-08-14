@@ -40,10 +40,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Ref, Vue, Emit } from 'nuxt-property-decorator'
+import { Component, Prop, Ref, Vue, Emit, Watch } from 'nuxt-property-decorator'
 
 @Component
-export default class AddTestcaseSetModal extends Vue {
+export default class EditTestcaseSetModal extends Vue {
   @Ref('form')
   form: any
 
@@ -53,8 +53,15 @@ export default class AddTestcaseSetModal extends Vue {
   @Prop({ required: true })
   testcaseSetNames!: string[]
 
+  @Prop()
+  problemId!: number
+
+  @Prop()
+  id!: number
+
   loading = false
   ok = false
+  startName = ''
   params = {
     name: '',
     points: '0'
@@ -75,8 +82,21 @@ export default class AddTestcaseSetModal extends Vue {
     }
   }
 
+  @Watch('value')
+  async getTestcaseSet() {
+    if (!this.value || this.id == null) return
+    this.loading = true
+    const { name, points } = await this.$api.Testcases.showTestcaseSet(
+      this.problemId,
+      this.id
+    )
+    this.startName = name
+    this.params = { name, points: points.toString() }
+    this.loading = false
+  }
+
   create() {
-    this.$emit('create', this.params)
+    this.$emit('save', this.params)
 
     this.form.resetValidation()
     this.params = {
@@ -87,6 +107,7 @@ export default class AddTestcaseSetModal extends Vue {
 
   check(v: string) {
     return (
+      this.startName === v ||
       !this.testcaseSetNames.includes(v) ||
       'この名前のテストケースセットは既に存在します。'
     )

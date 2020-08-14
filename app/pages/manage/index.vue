@@ -16,11 +16,6 @@
           <n-link to="/manage/contests/new">作成</n-link>
         </v-col>
         <v-col>
-          <h2>問題（管理）</h2>
-          <n-link to="/writer/problems">一覧</n-link>
-          <n-link to="/writer/problems/new">作成</n-link>
-        </v-col>
-        <v-col>
           <h2>問題（未所属）</h2>
           <ul v-if="problems && problems.length">
             <li v-for="problem in problems" :key="problem.id">

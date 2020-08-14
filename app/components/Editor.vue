@@ -1,7 +1,5 @@
 <template>
-  <div class="codemirror">
-    <codemirror v-model="value" :options="cmOptions" />
-  </div>
+  <codemirror v-model="value" :options="cmOptions" />
 </template>
 
 <script lang="ts">
@@ -50,4 +48,9 @@ export default class Editor extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.vue-codemirror ::v-deep .CodeMirror {
+  border: solid 1px darkgray;
+  border-radius: 2px;
+}
+</style>

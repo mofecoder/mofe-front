@@ -23,6 +23,7 @@
                 {{ set.isSample ? 'Yes' : 'No' }}
               </td>
               <td>
+                <v-icon small dense @click="editSet(set.id)">mdi-pencil</v-icon>
                 <v-icon
                   v-if="!['all', 'sample'].includes(set.name)"
                   small
@@ -131,10 +132,12 @@
       @close="closeModal"
       @create="createTestcase"
     />
-    <AddTestcaseSetModal
+    <EditTestcaseSetModal
+      :id.sync="editingTestcaseSetId"
       :value="testcaseSetDialog"
+      :problem-id="problemId"
       :testcase-set-names="testcaseSetNames"
-      @create="createSet"
+      @save="saveSet"
       @close="closeSetModal"
     />
   </v-container>
@@ -146,10 +149,10 @@ import { ProblemDetail, Testcase, TestcaseSet } from '~/types/problems'
 import { HttpError } from '~/utils/axios'
 import TestcaseUploadExpansionPanel from '~/components/writer/TestcaseUploadExpansionPanel.vue'
 import EditTestcaseModal from '~/components/modals/EditTestcaseModal.vue'
-import AddTestcaseSetModal from '~/components/modals/AddTestcaseSetModal.vue'
+import EditTestcaseSetModal from '~/components/modals/EditTestcaseSetModal.vue'
 @Component({
   components: {
-    AddTestcaseSetModal,
+    EditTestcaseSetModal,
     EditTestcaseModal,
     TestcaseUploadExpansionPanel
   },
@@ -170,6 +173,7 @@ export default class PagePageWriterTaskTestcases extends Vue {
   testcaseId: number | null = null
   testcaseSetDialog = false
   testcaseLoading = false
+  editingTestcaseSetId: number | null = null
 
   get problemId(): number {
     return Number(this.$route.params.problemId)
@@ -236,23 +240,43 @@ export default class PagePageWriterTaskTestcases extends Vue {
     this.testcaseDialog = false
   }
 
-  async createSet(params: { name: string; points: string }) {
+  async saveSet(params: { name: string; points: string }) {
     if (Number.isNaN(Number(params.points))) return
+    const create = this.editingTestcaseSetId == null
     try {
-      await this.$api.Testcases.createTestcaseSet(this.problemId, {
-        name: params.name,
-        points: Number(params.points)
-      })
+      if (this.editingTestcaseSetId == null) {
+        await this.$api.Testcases.createTestcaseSet(this.problemId, {
+          name: params.name,
+          points: Number(params.points)
+        })
+      } else {
+        await this.$api.Testcases.updateTestcaseSet(
+          this.problemId,
+          this.editingTestcaseSetId,
+          {
+            name: params.name,
+            points: Number(params.points)
+          }
+        )
+        this.editingTestcaseSetId = null
+      }
     } catch (error) {
       if (error.response.status === 400) {
         alert(
-          'テストケースセットの追加に失敗しました: ' + error.response.data.error
+          `テストケースセットの${create ? '追加' : '更新'}に失敗しました: ${
+            error.response.data.error
+          }`
         )
         return
       }
     }
     await this.update()
     this.testcaseSetDialog = false
+  }
+
+  editSet(id: number) {
+    this.editingTestcaseSetId = id
+    this.testcaseSetDialog = true
   }
 
   async deleteSet(id: number) {
@@ -291,6 +315,7 @@ export default class PagePageWriterTaskTestcases extends Vue {
   }
 
   closeSetModal() {
+    this.editingTestcaseSetId = null
     this.testcaseSetDialog = false
   }
 }

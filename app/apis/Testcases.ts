@@ -1,4 +1,10 @@
-import { httpDelete, httpGet, httpPatch, httpPost } from '~/utils/axios'
+import {
+  httpDelete,
+  httpGet,
+  httpPatch,
+  httpPost,
+  httpPut
+} from '~/utils/axios'
 import { Testcase, TestcaseSet } from '~/types/problems'
 type UploadResponseType = { messages: string[] }
 type TestcasesResponseType = {
@@ -44,6 +50,13 @@ export default class {
     await httpPost(`/problems/${problemId}/testcases`, {}, { testcase: params })
   }
 
+  async showTestcaseSet(problemId: number, testcaseSetId: number) {
+    const res = await httpGet<TestcaseSet>(
+      `problems/${problemId}/testcase_sets/${testcaseSetId}`
+    )
+    return res
+  }
+
   async createTestcaseSet(
     problemId: number,
     params: {
@@ -53,6 +66,21 @@ export default class {
   ) {
     await httpPost(
       `problems/${problemId}/testcase_sets`,
+      {},
+      { testcaseSet: params }
+    )
+  }
+
+  async updateTestcaseSet(
+    problemId: number,
+    testcaseSetId: number,
+    params: {
+      name: string
+      points: number
+    }
+  ) {
+    await httpPut(
+      `problems/${problemId}/testcase_sets/${testcaseSetId}`,
       {},
       { testcaseSet: params }
     )

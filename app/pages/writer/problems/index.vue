@@ -4,7 +4,7 @@
       <v-toolbar flat color="white">
         <v-toolbar-title>問題一覧</v-toolbar-title>
         <v-spacer />
-        <v-btn color="primary" class="mb-2" @click="newProblem"
+        <v-btn color="primary" class="mb-2" nuxt to="new" append
           >問題を作成</v-btn
         >
       </v-toolbar>
@@ -32,6 +32,7 @@ export default class PageWriterProblem extends Vue {
     { text: '問題名', value: 'name' },
     { text: '難易度', value: 'difficulty' },
     { text: 'コンテスト名', value: 'contestName' },
+    { text: 'writer', value: 'writerUser' },
     { text: '', value: 'edit', sortable: false }
   ]
 
@@ -42,6 +43,7 @@ export default class PageWriterProblem extends Vue {
       id: p.id,
       name: p.name,
       contestName: p.contest?.name,
+      writerUser: p.writerUser,
       difficulty: p.difficulty,
       contestSlug: p.contest?.slug
     }))
@@ -51,7 +53,6 @@ export default class PageWriterProblem extends Vue {
     this.problems = await this.$api.Problems.index()
   }
 
-  newProblem() {}
   edit(problemId: number) {
     this.$router.push(`/writer/problems/${problemId}`)
   }

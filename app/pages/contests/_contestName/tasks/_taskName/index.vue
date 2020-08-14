@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div v-if="contest">
-      <v-container class="pa-0" fluid>
+    <template v-if="contest">
+      <v-alert v-if="errorMessage" type="error">
+        {{ errorMessage }}
+      </v-alert>
+      <v-container v-else class="pa-0" fluid>
         <v-card class="mx-auto" max-width="800px" :loading="!problem">
           <template v-if="problem">
             <v-card-title class="mb-3">
@@ -98,7 +101,7 @@
           </template>
         </v-card>
       </v-container>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -114,6 +117,7 @@ import Editor from '~/components/Editor.vue'
 import languages from '~/assets/languages'
 import { Language } from '~/types/language'
 import { userStore } from '~/utils/store-accessor'
+import { HttpError } from '~/utils/axios'
 
 @Component({
   components: {
@@ -128,6 +132,7 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   problem: TaskDetail | null = null
   language: Language | undefined = languages[0]
   submitted = false
+  errorMessage: string | null = null
 
   copy(text: string) {
     const tmp = document.createElement('textarea')
@@ -145,12 +150,18 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
     this.$api.Tasks.show(
       this.$route.params.contestName,
       this.$route.params.taskName
-    ).then((ret: TaskDetail) => {
-      this.problem = ret
-      this.$nextTick(() => {
-        this.renderMathJax()
+    )
+      .then((ret: TaskDetail) => {
+        this.problem = ret
+        this.$nextTick(() => {
+          this.renderMathJax()
+        })
       })
-    })
+      .catch((err: Error) => {
+        if (err instanceof HttpError) {
+          this.errorMessage = err.response.data.error
+        }
+      })
   }
 
   created() {
