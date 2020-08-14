@@ -27,9 +27,12 @@ import { Submit } from '~/types/submits'
   middleware: 'authenticated'
 })
 export default class PageContest extends mixins(MathJax, MixinContest) {
-  async created() {
+  async fetch() {
     await this.getContest()
     this.reload()
+  }
+
+  created() {
     const callback = () => {
       this.reload()
     }
@@ -50,6 +53,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
       })
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') this.$router.replace('/login')
+        if (this.timeout) clearInterval(this.timeout)
       })
   }
 }

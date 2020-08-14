@@ -27,7 +27,7 @@ type ItemType = { name: string; slug: string; startAt: string; endAt: string }
 @Component({
   middleware: 'authenticated'
 })
-export default class PagePageManageContestIndex extends Vue {
+export default class PageManageContestIndex extends Vue {
   headers = [
     { text: 'コンテスト名', value: 'name' },
     { text: '開始日時', value: 'startAt' },

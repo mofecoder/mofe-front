@@ -4,7 +4,6 @@
     label
     class="chip"
     :class="item.class"
-    tag="div"
     v-text="item.difficulty"
   />
 </template>

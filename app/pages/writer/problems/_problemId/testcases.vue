@@ -207,7 +207,7 @@ export default class PagePageWriterTaskTestcases extends Vue {
         await this.update()
       })
       .catch((exception: HttpError) => {
-        const res = exception.response
+        const res: any = exception.response
         this.messages = [res.error]
         this.ok = false
       })

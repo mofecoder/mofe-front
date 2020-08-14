@@ -83,6 +83,8 @@ export default class PageNewContest extends Vue {
       endAt: end.format(),
       description: this.description,
       penaltyTime: parseInt(this.penalty) * 60
+    }).then(() => {
+      this.$router.push(`manage/contests/${this.slug}`)
     })
   }
 }

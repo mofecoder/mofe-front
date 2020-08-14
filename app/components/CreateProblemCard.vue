@@ -190,7 +190,9 @@ export default class CreateProblemCard extends Vue {
   valid = false
 
   async onSubmit() {
-    await this.$api.Problems.create(this.content)
+    await this.$api.Problems.create(this.content).then(() => {
+      this.$router.push('manage')
+    })
   }
 }
 </script>

@@ -19,7 +19,7 @@ export default class ContestModule extends VuexModule implements ContestState {
     this.contest = contest
   }
 
-  @Action({ commit: 'updateContest' })
+  @Action({ commit: 'updateContest', rawError: true })
   async getContest(slug: string) {
     const contest = await $api.Contests.show(slug)
     return contest

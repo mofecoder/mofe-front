@@ -82,33 +82,39 @@ export default class LayoutContest extends Vue {
   currentIndex: number | null = null
   drawer: boolean | null = null
 
-  links: Link[] = [
-    {
-      name: 'トップ',
-      path: ''
-    },
-    {
-      name: '問題',
-      path: 'tasks'
-    },
-    {
-      name: 'すべての提出',
-      path: 'submits/all'
-    },
-    {
-      name: '自分の提出',
-      path: 'submits'
-    },
-    {
-      name: '順位表',
-      path: 'standings'
-    },
-    {
-      name: '解説',
-      path: 'explanation',
-      disabled: true
-    }
-  ]
+  get links(): Link[] {
+    const contestEnded =
+      this.contest != null && dayjs(this.contest.endAt).isBefore(Date())
+    const isAdmin = this.user != null && this.user.role === 'admin'
+    return [
+      {
+        name: 'トップ',
+        path: ''
+      },
+      {
+        name: '問題',
+        path: 'tasks'
+      },
+      {
+        name: 'すべての提出',
+        path: 'submits/all',
+        disabled: !contestEnded && !isAdmin
+      },
+      {
+        name: '自分の提出',
+        path: 'submits'
+      },
+      {
+        name: '順位表',
+        path: 'standings'
+      },
+      {
+        name: '解説',
+        path: 'explanation',
+        disabled: true
+      }
+    ]
+  }
 
   get contest(): Contest | null {
     return contestStore.contest

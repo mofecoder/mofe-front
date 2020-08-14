@@ -67,7 +67,7 @@
                   v-html="$md.render(sample.explanation)"
                 />
               </section>
-              <section>
+              <section v-if="loggedIn">
                 <div class="submit__head">
                   <div class="submit__head__title">提出</div>
                   <v-autocomplete
@@ -113,6 +113,7 @@ import DifficultyChip from '~/components/parts/difficulty-chip.vue'
 import Editor from '~/components/Editor.vue'
 import languages from '~/assets/languages'
 import { Language } from '~/types/language'
+import { userStore } from '~/utils/store-accessor'
 
 @Component({
   components: {
@@ -139,12 +140,8 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
     document.body.removeChild(tmp)
   }
 
-  created() {
-    this.language =
-      languages.filter(
-        (lang) => localStorage.getItem('lang') === lang.innerName
-      )[0] || languages[0]
-    this.getContest()
+  async fetch() {
+    await this.getContest()
     this.$api.Tasks.show(
       this.$route.params.contestName,
       this.$route.params.taskName
@@ -154,6 +151,13 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
         this.renderMathJax()
       })
     })
+  }
+
+  created() {
+    this.language =
+      languages.filter(
+        (lang) => localStorage.getItem('lang') === lang.innerName
+      )[0] || languages[0]
   }
 
   get source(): string {
@@ -193,6 +197,10 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
         alert('提出に失敗しました。')
         this.submitted = false
       })
+  }
+
+  get loggedIn() {
+    return !!userStore.getUser
   }
 }
 </script>

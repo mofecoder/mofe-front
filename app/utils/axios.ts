@@ -8,12 +8,24 @@ import mapKeys from 'lodash.mapkeys'
 import { userStore } from '~/utils/store-accessor'
 
 export class HttpError extends Error {
-  constructor(message: string, response: any) {
+  constructor(message: string, response: AxiosResponse) {
     super(message)
     this.response = response
+    Object.defineProperty(this, 'name', {
+      configurable: true,
+      enumerable: false,
+      value: 'HttpError',
+      writable: true
+    })
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, HttpError)
+    }
+
+    Object.setPrototypeOf(this, new.target.prototype)
   }
 
-  response: any
+  response: AxiosResponse
 }
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
