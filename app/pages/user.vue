@@ -14,19 +14,21 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 
-@Component
+@Component({
+  middleware: 'authenticated'
+})
 export default class PageUser extends Vue {
   get user() {
     return userStore.getUser
   }
 
   logout() {
+    this.$api.Auth.signOut()
     userStore.updateUser(null)
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('uid')
+    localStorage.removeItem('client')
     this.$router.push('/')
-  }
-
-  mounted() {
-    if (!this.user) this.$router.replace('/login')
   }
 }
 </script>
