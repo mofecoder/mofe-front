@@ -7,13 +7,12 @@
       <v-container v-else class="pa-0" fluid>
         <v-card class="mx-auto" max-width="800px" :loading="!problem">
           <template v-if="problem">
-            <v-card-title class="mb-3">
-              <p style="width:100%">
-                {{ problem.position }}: {{ problem.name }}
-              </p>
+            <v-card-title class="task-card-title">
+              <h2>{{ problem.position }} - {{ problem.name }}</h2>
+              <p class="task-points">配点: {{ problem.points }}</p>
               <DifficultyChip :difficulty="problem.difficulty" />
             </v-card-title>
-            <v-card-text style="color:inherit">
+            <v-card-text class="mt-3 task-card-text">
               <section>
                 <h3>問題文</h3>
                 <div class="statement" v-html="$md.render(problem.statement)" />
@@ -279,5 +278,17 @@ h3 {
 @import '~/styles/markdown.scss';
 .statement {
   @include markdown();
+}
+.task-points {
+  font-size: 1rem;
+}
+.task-card-title {
+  display: block;
+  h2 {
+    font-size: 1.3em;
+  }
+}
+.task-card-text {
+  color: inherit !important;
 }
 </style>
