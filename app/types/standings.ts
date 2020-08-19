@@ -10,6 +10,7 @@ export interface StandingData {
 }
 
 export interface Standing {
+  rank: number
   userName: string
   result: ProblemScore
   problems: ProblemScore[]

@@ -6,6 +6,7 @@
         <table class="standings__table">
           <thead>
             <tr class="row-header">
+              <th class="col-rank">順位</th>
               <th class="col-username">ユーザ名</th>
               <td class="col-result">得点</td>
               <td
@@ -21,6 +22,7 @@
           </thead>
           <tbody>
             <tr v-for="user in standings" :key="user.userName" class="row-user">
+              <td>{{ user.rank }}</td>
               <th>{{ user.userName }}</th>
               <td class="col-result">
                 <div class="score">
@@ -53,6 +55,7 @@
           </tbody>
           <tfoot>
             <tr class="row-footer">
+              <td />
               <th />
               <td class="col-result" />
               <td v-for="problem in problems" :key="`foot-${problem.slug}`">
