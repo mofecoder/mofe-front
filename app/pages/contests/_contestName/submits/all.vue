@@ -46,7 +46,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     const callback = () => {
       this.reload()
     }
-    this.timeout = setInterval(callback, 5000)
+    this.timeout = setInterval(callback, 30000)
   }
 
   beforeDestroy() {

@@ -39,28 +39,21 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     this.reload()
   }
 
-  created() {
-    const callback = () => {
-      this.reload()
-    }
-    this.timeout = setInterval(callback, 5000)
-  }
-
-  beforeDestroy() {
-    if (this.timeout) clearInterval(this.timeout)
-  }
-
   submits: Submit[] | null = null
-  timeout: NodeJS.Timeout | null = null
 
   reload() {
     this.$api.Contests.mySubmits(this.$route.params.contestName)
       .then((res: Submit[]) => {
         this.submits = res
+        const timeout = this.submits.some(
+          (s) => s.status === 'WJ' || s.status === 'WR'
+        )
+          ? 5000
+          : 15000
+        setTimeout(this.reload, timeout)
       })
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') this.$router.replace('/login')
-        if (this.timeout) clearInterval(this.timeout)
       })
   }
 }
