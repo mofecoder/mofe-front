@@ -31,6 +31,11 @@ const nuxtConfig: Configuration = {
       {
         src:
           'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML'
+      },
+      {
+        'data-ad-client': 'ca-pub-9124734183375163',
+        async: true,
+        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
       }
     ]
   },
