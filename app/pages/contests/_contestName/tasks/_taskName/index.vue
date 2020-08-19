@@ -266,6 +266,9 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
       max-width: 20em;
     }
   }
+  &__editor {
+    margin-top: 0.5rem;
+  }
 }
 h3 {
   font-size: 1.5rem;
