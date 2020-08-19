@@ -31,11 +31,6 @@ const nuxtConfig: Configuration = {
       {
         src:
           'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML'
-      },
-      {
-        'data-ad-client': 'ca-pub-9124734183375163',
-        async: true,
-        src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
       }
     ]
   },
@@ -70,7 +65,14 @@ const nuxtConfig: Configuration = {
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    [
+      '@nuxtjs/google-adsense',
+      {
+        id: process.env.ADSENSE_ID,
+        pageLevelAds: true
+      }
+    ]
   ],
   env: {
     API_BASE: process.env.API_BASE!
@@ -116,8 +118,7 @@ const nuxtConfig: Configuration = {
      ** You can extend webpack config here
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    extend(config, ctx) {
-    }
+    extend(config, ctx) {}
   },
   router: {
     middleware: 'getUser'

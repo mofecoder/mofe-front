@@ -94,3 +94,5 @@ sw.*
 firebase.json
 
 .firebaserc
+
+config/.env.prod
