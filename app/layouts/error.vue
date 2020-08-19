@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
-    <div>{{ JSON.stringify(error) }}</div>
+    <div v-if="error.message">{{ error.message }}</div>
+    <div v-else-if="error.error">{{ error.error }}</div>
     <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>
