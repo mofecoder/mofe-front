@@ -25,7 +25,8 @@ import 'dayjs/locale/ja'
 type ItemType = { name: string; slug: string; startAt: string; endAt: string }
 
 @Component({
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  head: { title: 'コンテストの管理' }
 })
 export default class PageManageContestIndex extends Vue {
   headers = [

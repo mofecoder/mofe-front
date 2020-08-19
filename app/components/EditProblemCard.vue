@@ -155,7 +155,7 @@
   </v-card>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { Difficulty } from '~/types/task'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { ProblemParams } from '~/types/problems'
@@ -197,11 +197,10 @@ export default class CreateProblemCard extends Vue {
 
   valid = false
 
-  get problemId(): number {
-    return Number(this.$route.params.problemId)
-  }
+  @Prop({ required: true })
+  problemId!: number
 
-  async reload() {
+  async fetch() {
     const tmp = await this.$api.Problems.show(this.problemId)
     this.content = {
       name: tmp.name,
@@ -213,13 +212,9 @@ export default class CreateProblemCard extends Vue {
     }
   }
 
-  async created() {
-    await this.reload()
-  }
-
   async onSubmit() {
     await this.$api.Problems.update(this.problemId, this.content)
-    await this.reload()
+    await this.$fetch()
   }
 
   testcase() {

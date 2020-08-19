@@ -159,6 +159,12 @@ import EditTestcaseSetModal from '~/components/modals/EditTestcaseSetModal.vue'
   middleware: 'authenticated'
 })
 export default class PagePageWriterTaskTestcases extends Vue {
+  head() {
+    return {
+      title: `[${this.problemId}] テストケースの設定`
+    }
+  }
+
   validate({ params }: { params: { [_: string]: string } }): boolean {
     return /^[1-9]\d*$/.test(params.problemId)
   }

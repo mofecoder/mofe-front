@@ -47,7 +47,14 @@ import DifficultyChip from '~/components/parts/difficulty-chip.vue'
   layout: 'contest'
 })
 export default class PageContestTasks extends mixins(MixinContest) {
-  async created() {
+  head() {
+    return {
+      title: `問題 - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
+  async fetch() {
     await contestStore.getContest(this.$route.params.contestName)
   }
 

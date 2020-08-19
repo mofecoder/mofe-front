@@ -30,6 +30,13 @@ import { HttpError } from '~/utils/axios'
   layout: 'contest'
 })
 export default class PageContest extends mixins(MathJax, MixinContest) {
+  head() {
+    return {
+      title: `すべての提出 - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
   async fetch() {
     await this.getContest()
     this.reload()

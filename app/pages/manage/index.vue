@@ -40,7 +40,8 @@ import { Contest } from '~/types/contest'
 import { Problem } from '~/types/contestAdmin'
 
 @Component({
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  head: { title: '管理画面' }
 })
 export default class PageManageIndex extends Vue {
   test: any = ''

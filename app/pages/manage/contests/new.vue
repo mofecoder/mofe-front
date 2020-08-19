@@ -27,7 +27,8 @@ import ContestInformationCard from '~/components/contestAdmin/InformationCard.vu
 
 @Component({
   components: { ContestInformationCard, TimeCard },
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  head: { title: 'コンテストの作成' }
 })
 export default class PageNewContest extends Vue {
   name = ''

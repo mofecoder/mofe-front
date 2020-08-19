@@ -42,7 +42,9 @@ import dayjs from 'dayjs'
 import { Contest } from '~/types/contest'
 import { userStore } from '~/utils/store-accessor'
 
-@Component
+@Component({
+  head: { title: 'トップ' }
+})
 export default class PageMainPage extends Vue {
   contests: Contest[] | null = null
   async created() {

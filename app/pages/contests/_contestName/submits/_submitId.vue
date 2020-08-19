@@ -87,6 +87,13 @@ import ResultChip from '~/components/ResultChip.vue'
   layout: 'contest'
 })
 export default class PageSubmitDetail extends mixins(MixinContest) {
+  head() {
+    return {
+      title: `提出 #${this.submit?.id} - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
   @Ref()
   editor!: any
 

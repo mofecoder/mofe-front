@@ -62,7 +62,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 
 @Component({
-  head: () => ({ title: '新規登録' })
+  head: { title: '新規登録' }
 })
 export default class PageLogin extends Vue {
   valid: boolean = false
@@ -125,7 +125,7 @@ export default class PageLogin extends Vue {
     )
   }
 
-  checkPasswordConfirm(): true | string {
+  checkPasswordConfirm(): boolean | string {
     return (
       this.password === this.passwordConfirm || 'パスワードが一致しません。'
     )

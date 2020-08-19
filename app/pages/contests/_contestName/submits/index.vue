@@ -27,6 +27,13 @@ import { Submit } from '~/types/submits'
   middleware: 'authenticated'
 })
 export default class PageContest extends mixins(MathJax, MixinContest) {
+  head() {
+    return {
+      title: `自分の提出 - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
   async fetch() {
     await this.getContest()
     this.reload()

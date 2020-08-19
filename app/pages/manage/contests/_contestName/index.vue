@@ -81,6 +81,12 @@ export default class PageContestAdmin extends Vue {
   updated: boolean = false
   modal: boolean = false
 
+  head() {
+    return {
+      title: `[${this.contestName}] コンテストの編集`
+    }
+  }
+
   get contestName() {
     return this.$route.params.contestName
   }

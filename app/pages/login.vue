@@ -41,7 +41,9 @@
 import { Component, Ref, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 
-@Component
+@Component({
+  head: { title: 'ログイン' }
+})
 export default class PageLogin extends Vue {
   valid: boolean = false
   name: string = ''

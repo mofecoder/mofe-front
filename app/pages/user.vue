@@ -15,7 +15,8 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 
 @Component({
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  head: { title: 'ユーザ情報' }
 })
 export default class PageUser extends Vue {
   get user() {

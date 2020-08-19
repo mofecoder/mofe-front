@@ -25,7 +25,8 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { Problem } from '~/types/problems'
 
 @Component({
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  head: { title: '問題の管理' }
 })
 export default class PageWriterProblem extends Vue {
   headers = [

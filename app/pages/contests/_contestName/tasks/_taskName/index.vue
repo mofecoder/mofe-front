@@ -129,6 +129,13 @@ import { HttpError } from '~/utils/axios'
   layout: 'contest'
 })
 export default class PageContestTasks extends mixins(MathJax, MixinContest) {
+  head() {
+    return {
+      title: this.problem && `${this.problem.position} - ${this.problem.name}`,
+      titleTemplate: null
+    }
+  }
+
   problem: TaskDetail | null = null
   language: Language | undefined = languages[0]
   submitted = false
