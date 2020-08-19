@@ -20,7 +20,7 @@
           <ul v-if="problems && problems.length">
             <li v-for="problem in problems" :key="problem.id">
               <n-link :to="`/writer/problems/${problem.id}`">
-                {{ problem.name }} ({{ problem.name }}) by
+                {{ problem.name }} ({{ problem.difficulty }}) by
                 {{ problem.writerUser }}
               </n-link>
             </li>
