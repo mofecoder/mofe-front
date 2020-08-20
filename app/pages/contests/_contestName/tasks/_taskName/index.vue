@@ -283,7 +283,7 @@ h3 {
   font-size: 1rem;
 }
 .task-card-title {
-  display: block;
+  display: block !important;
   h2 {
     font-size: 1.3em;
   }
