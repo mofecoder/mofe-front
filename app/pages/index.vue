@@ -33,6 +33,22 @@
       to="/writer/problems"
       >問題の管理画面へ</v-btn
     >
+    <!-- CafeCoder Twitter -->
+    <div class="mt-4">
+      <p>解説や障害情報等のお知らせは Twitter で発信しています</p>
+      <a
+        href="https://twitter.com/CafeCoder_?ref_src=twsrc%5Etfw"
+        class="twitter-follow-button"
+        data-lang="ja"
+        data-show-count="true"
+        >Follow @CafeCoder_</a
+      >
+    </div>
+    <script
+      async
+      src="https://platform.twitter.com/widgets.js"
+      charset="utf-8"
+    ></script>
   </div>
 </template>
 
