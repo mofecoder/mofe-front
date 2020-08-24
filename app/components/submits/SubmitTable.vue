@@ -84,11 +84,12 @@ export default class SubmitTable extends Vue {
 
   formatDate(date: Date): string {
     const dt = dayjs(date)
-    return dt.format('YYYY/MM/DD HH:mm:ss')
+    return dt.year() === dayjs().year()
+      ? dt.format('MM/DD HH:mm:ss')
+      : dt.format('YYYY/MM/DD HH:mm:ss')
   }
 
   viewDetail(item) {
-    console.log(item)
     this.$router.push({
       path: `/contests/${this.slug}/submits/${item.id}`
     })

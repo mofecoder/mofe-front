@@ -25,7 +25,7 @@
               <td>{{ user.rank }}</td>
               <th>{{ user.userName }}</th>
               <td class="col-result">
-                <div class="score">
+                <div class="score score--sum">
                   <span class="point">{{ user.result.score }}</span>
                   <span v-if="user.result.penalty" class="penalty"
                     >({{ user.result.penalty }})</span
@@ -84,11 +84,12 @@ export default class Standings extends Vue {
 
   formatTime(time: number | undefined): string {
     if (!time) return ''
-    const min = Math.floor(time / 60)
+    const hour = Math.floor(time / 3600)
+    const min = Math.floor((time % 3600) / 60)
     const sec = time % 60
-    let secStr = `00${sec}`
-    secStr = secStr.substring(secStr.length - 2)
-    return `${min}:${secStr}`
+    const secStr = `00${sec}`.substr(-2)
+    const minStr = `00${min}`.substr(-2)
+    return hour ? `${hour}:${minStr}:${secStr}` : `${min}:${secStr}`
   }
 
   get contestName() {
@@ -111,6 +112,10 @@ export default class Standings extends Vue {
     border: #cccccc solid 1px;
 
     .row-header {
+      .col-rank {
+        width: 4em;
+      }
+
       .col-username {
         width: 10em;
       }
@@ -145,6 +150,11 @@ export default class Standings extends Vue {
             color: #666666;
           }
         }
+      }
+
+      .score--sum .point {
+        color: darkblue;
+        font-weight: bold;
       }
 
       .time {
