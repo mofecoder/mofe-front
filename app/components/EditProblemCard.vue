@@ -1,9 +1,6 @@
 <template>
   <v-card class="wrapper">
-    <v-card-title
-      class="headline"
-      style="display:flex;justify-content:space-between"
-    >
+    <v-card-title class="headline edit-problem-card">
       <p>問題の編集</p>
       <v-btn color="purple white--text" @click="testcase"
         >テストケースの設定</v-btn
@@ -32,7 +29,7 @@
         <!-- 問題文 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -60,7 +57,7 @@
         <!-- 制約 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -88,7 +85,7 @@
         <!-- 入力 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -116,7 +113,7 @@
         <!-- 出力 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -224,3 +221,10 @@ export default class CreateProblemCard extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.edit-problem-card {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

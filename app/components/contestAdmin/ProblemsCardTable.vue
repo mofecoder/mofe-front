@@ -18,7 +18,7 @@
         <td>{{ item.difficulty }}</td>
         <td>{{ item.points }}</td>
         <td>
-          <div style="cursor:pointer" @click="remove(item.slug)">
+          <div class="cursor-pointer" @click="remove(item.slug)">
             <v-icon small color="red">mdi-delete</v-icon>
           </div>
         </td>
@@ -64,4 +64,8 @@ export default class ProblemsCardTable extends Vue {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.cursor-pointer {
+  cursor: pointer;
+}
+</style>

@@ -8,31 +8,26 @@
       min-height="4rem"
       height="auto"
       color="green darken-4"
-      class="white--text pl-8 header"
-      style="flex-wrap:wrap"
+      class="white--text pl-8 contest-header"
     >
       <v-app-bar-nav-icon
-        class="d-md-none"
-        style="color:white;margin-right:1.5em"
+        class="d-md-none contest-header__nav-icon"
         @click.stop="drawer = !drawer"
       />
       <template v-if="contest">
-        <n-link to="/" style="color:inherit;text-decoration:inherit">
+        <n-link class="contest-header__contest-name-link" to="/">
           {{ contest.name }}
         </n-link>
-        <div class="header__info">
-          <div class="header__info__title">コンテスト日時</div>
+        <div class="contest-header__info">
+          <div class="contest-header__info__title">コンテスト日時</div>
           <div v-for="text in contestTime" :key="text" v-text="text" />
         </div>
       </template>
       <v-spacer />
       <template v-if="user">
-        <n-link
-          class="header__user-name pr-8 white--text"
-          style="text-decoration:none"
-          to="/user"
-          >{{ user.name }}</n-link
-        >
+        <n-link class="contest-header__user-name pr-8 white--text" to="/user">{{
+          user.name
+        }}</n-link>
       </template>
       <template v-else>
         <v-btn class="white--text" to="/sign_up" text>新規登録</v-btn>
@@ -41,17 +36,17 @@
     </v-sheet>
     <v-navigation-drawer
       v-model="drawer"
+      class="mt-16"
       app
-      mobile-break-point="960"
-      style="margin-top:64px"
+      mobile-breakpoint="960"
     >
       <ContestSidebar :items="filteredLinks" @click="navigation" />
     </v-navigation-drawer>
-    <v-content>
+    <v-main>
       <v-container>
         <nuxt />
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -186,17 +181,30 @@ export default class LayoutContest extends Vue {
 </script>
 
 <style lang="scss">
-.header {
+.contest-header {
   font-size: 1.5rem;
   display: flex;
   align-items: center;
   position: sticky;
   top: 0;
+  flex-wrap: wrap;
   z-index: 9999;
+
+  &__nav-icon {
+    color: white !important;
+    margin-right: 1.5em;
+  }
+
+  &__contest-name-link {
+    color: inherit !important;
+    text-decoration: inherit !important;
+  }
+
   &__user-name {
     color: white;
     font-size: 1.2rem;
     align-self: center;
+    text-decoration: none;
   }
   &__info {
     margin-left: 2rem;

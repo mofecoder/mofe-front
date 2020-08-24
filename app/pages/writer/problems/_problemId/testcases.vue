@@ -46,14 +46,14 @@
         <v-simple-table v-if="testcases" dense>
           <thead>
             <tr>
-              <th style="width:20em">テストケース名</th>
+              <th class="testcase-list__row-testcase-name">テストケース名</th>
               <th
                 v-for="set in testcaseSets"
                 :key="set.name"
-                style="width:8em"
+                class="testcase-list__row-set"
                 v-text="set.name"
               />
-              <th style="width:1em" />
+              <th class="testcase-list__row-action" />
             </tr>
           </thead>
           <tbody>
@@ -346,6 +346,14 @@ export default class PagePageWriterTaskTestcases extends Vue {
         color: red;
       }
     }
+  }
+}
+.testcase-list {
+  &__row-set {
+    width: 2em;
+  }
+  &__row-action {
+    width: 6em;
   }
 }
 </style>

@@ -4,7 +4,7 @@
       <v-container class="pa-0" fluid>
         <v-card v-if="!errorMessage" :loading="!submits && !errorMessage">
           <v-card-title>すべての提出</v-card-title>
-          <v-card-text style="color:inherit">
+          <v-card-text class="submit-card">
             <SubmitTable v-if="submits" :submits="submits" />
           </v-card-text>
         </v-card>
@@ -72,4 +72,8 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.submit-card {
+  @include card-text-reset();
+}
+</style>

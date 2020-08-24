@@ -4,12 +4,14 @@
       <v-card-title>コンテストの一覧</v-card-title>
       <v-card-text>
         <v-simple-table v-if="contests">
-          <table>
+          <thead>
             <tr>
               <th />
               <th>開始日時</th>
               <th>コンテスト名</th>
             </tr>
+          </thead>
+          <tbody>
             <tr v-for="contest in contests" :key="contest.slug">
               <td v-text="checkStatus(contest)" />
               <td v-text="formatDate(contest.startAt)" />
@@ -20,7 +22,7 @@
                 />
               </td>
             </tr>
-          </table>
+          </tbody>
         </v-simple-table>
         <nuxt-link v-if="loggedIn" to="manage">管理ページへ</nuxt-link>
       </v-card-text>

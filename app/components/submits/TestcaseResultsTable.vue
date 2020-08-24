@@ -1,28 +1,23 @@
 <template>
   <v-simple-table>
-    <table>
-      <thead>
-        <tr>
-          <th>テストケース名</th>
-          <th>結果</th>
-          <th>実行時間</th>
-          <th>メモリ使用量</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(result, i) in testcaseResults"
-          :key="`testcase-result-${i}`"
-        >
-          <td v-text="getTestcaseName(i)" />
-          <td>
-            <ResultChip :status="result.status" dense />
-          </td>
-          <td>{{ result.executionTime }} ms</td>
-          <td>{{ result.executionMemory || '---' }} KB</td>
-        </tr>
-      </tbody>
-    </table>
+    <thead>
+      <tr>
+        <th>テストケース名</th>
+        <th>結果</th>
+        <th>実行時間</th>
+        <th>メモリ使用量</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(result, i) in testcaseResults" :key="`testcase-result-${i}`">
+        <td v-text="getTestcaseName(i)" />
+        <td>
+          <ResultChip :status="result.status" dense />
+        </td>
+        <td>{{ result.executionTime }} ms</td>
+        <td>{{ result.executionMemory || '---' }} KB</td>
+      </tr>
+    </tbody>
   </v-simple-table>
 </template>
 

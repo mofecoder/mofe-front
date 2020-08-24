@@ -23,7 +23,7 @@
           >
         </td>
         <td>{{ $getLanguage(item.lang).name }}</td>
-        <td style="text-align:right;padding-right:0.3em">
+        <td style="text-align: right; padding-right: 0.3em;">
           {{ item.point }}
         </td>
         <template
@@ -34,10 +34,10 @@
               <ResultChip :status="item.status" />
             </div>
           </td>
-          <td style="text-align:right;padding-right:0.3em">
+          <td style="text-align: right; padding-right: 0.3em;">
             {{ item.executionTime }} ms
           </td>
-          <td style="text-align:right;padding-right:0.3em">
+          <td style="text-align: right; padding-right: 0.3em;">
             {{ item.executionMemory || '---' }} KB
           </td>
         </template>

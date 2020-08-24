@@ -35,7 +35,7 @@
       </v-row>
       <v-row justify="end">
         <v-btn
-          style="margin-right:12px"
+          class="mr-3"
           text
           width="auto"
           color="purple"

@@ -15,52 +15,48 @@
           </v-col>
           <v-col cols="12" lg="4">
             <v-simple-table dense class="submit-table">
-              <table>
-                <tbody>
-                  <tr>
-                    <th>提出日時</th>
-                    <td v-text="formatDate(submit.timestamp)" />
-                  </tr>
-                  <tr>
-                    <th>問題</th>
-                    <td>
-                      <nuxt-link
-                        :to="
-                          `/contests/${contest.slug}/tasks/${submit.task.slug}`
-                        "
-                      >
-                        {{ submit.task.position }}: {{ submit.task.name }}
-                      </nuxt-link>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>ユーザ</th>
-                    <td v-text="submit.user.name" />
-                  </tr>
-                  <tr>
-                    <th>言語</th>
-                    <td v-text="language.name" />
-                  </tr>
-                  <tr>
-                    <th>得点</th>
-                    <td v-text="submit.point" />
-                  </tr>
-                  <tr>
-                    <th>結果</th>
-                    <td>
-                      <ResultChip :status="submit.status" />
-                    </td>
-                  </tr>
-                  <tr v-if="submit.executionTime != null">
-                    <th>実行時間</th>
-                    <td>{{ submit.executionTime }} ms</td>
-                  </tr>
-                  <tr v-if="submit.executionMemory != null">
-                    <th>メモリ</th>
-                    <td>{{ submit.executionMemory || '---' }} KB</td>
-                  </tr>
-                </tbody>
-              </table>
+              <tbody>
+                <tr>
+                  <th>提出日時</th>
+                  <td v-text="formatDate(submit.timestamp)" />
+                </tr>
+                <tr>
+                  <th>問題</th>
+                  <td>
+                    <nuxt-link
+                      :to="`/contests/${contest.slug}/tasks/${submit.task.slug}`"
+                    >
+                      {{ submit.task.position }}: {{ submit.task.name }}
+                    </nuxt-link>
+                  </td>
+                </tr>
+                <tr>
+                  <th>ユーザ</th>
+                  <td v-text="submit.user.name" />
+                </tr>
+                <tr>
+                  <th>言語</th>
+                  <td v-text="language.name" />
+                </tr>
+                <tr>
+                  <th>得点</th>
+                  <td v-text="submit.point" />
+                </tr>
+                <tr>
+                  <th>結果</th>
+                  <td>
+                    <ResultChip :status="submit.status" />
+                  </td>
+                </tr>
+                <tr v-if="submit.executionTime != null">
+                  <th>実行時間</th>
+                  <td>{{ submit.executionTime }} ms</td>
+                </tr>
+                <tr v-if="submit.executionMemory != null">
+                  <th>メモリ</th>
+                  <td>{{ submit.executionMemory || '---' }} KB</td>
+                </tr>
+              </tbody>
             </v-simple-table>
           </v-col>
         </v-row>
