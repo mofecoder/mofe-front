@@ -89,9 +89,9 @@ export default class SubmitTable extends Vue {
       : dt.format('YYYY/MM/DD HH:mm:ss')
   }
 
-  viewDetail(item) {
+  viewDetail({ id }: { id: number }) {
     this.$router.push({
-      path: `/contests/${this.slug}/submits/${item.id}`
+      path: `/contests/${this.slug}/submits/${id}`
     })
   }
 }
