@@ -239,7 +239,9 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
     }
   }
   &__code {
+    display: block;
     width: 100%;
+    background: #eeeeee;
     color: black;
     padding: 0.5em;
     margin: 0;
