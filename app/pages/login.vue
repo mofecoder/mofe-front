@@ -57,8 +57,7 @@ export default class PageLogin extends Vue {
   rules = {
     name: [
       (v: string) => !!v || 'このフィールドは必須です。',
-      (v: string) =>
-        (v && /^[a-zA-Z\d]+$/.test(v)) || 'ユーザ名の形式が無効です。'
+      (v: string) => (v && /^\w+$/.test(v)) || 'ユーザ名の形式が無効です。'
     ],
     password: [(v: string) => !!v || 'このフィールドは必須です。']
   }

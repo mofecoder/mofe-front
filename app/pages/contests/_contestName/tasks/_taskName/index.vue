@@ -242,11 +242,14 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
     display: block;
     width: 100%;
     background: #eeeeee;
+    border: solid 1px lightgrey;
     color: black;
     padding: 0.5em;
     margin: 0;
     font-size: 1em;
     font-weight: normal;
+    white-space: pre;
+
     &:before,
     &:after {
       content: none;
