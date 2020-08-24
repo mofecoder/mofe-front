@@ -64,7 +64,14 @@
             </v-simple-table>
           </v-col>
         </v-row>
-        <v-row> </v-row>
+        <v-row>
+          <v-col cols="12">
+            <TestcaseResultsTable
+              :testcase-results="submit.testcaseResults"
+              :sample-count="submit.sampleCount"
+            />
+          </v-col>
+        </v-row>
       </v-container>
     </v-card-text>
   </v-card>
@@ -80,10 +87,11 @@ import MixinContest from '~/mixins/contest'
 import Editor from '~/components/Editor.vue'
 import { SubmitDetail } from '~/types/submits'
 import { HttpError } from '~/utils/axios'
-import ResultChip from '~/components/ResultChip.vue'
+import ResultChip from '~/components/submits/ResultChip.vue'
+import TestcaseResultsTable from '~/components/submits/TestcaseResultsTable.vue'
 
 @Component({
-  components: { ResultChip, Editor },
+  components: { TestcaseResultsTable, ResultChip, Editor },
   layout: 'contest'
 })
 export default class PageSubmitDetail extends mixins(MixinContest) {

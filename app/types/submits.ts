@@ -26,6 +26,15 @@ export interface Submit {
   point: number
 }
 
+export interface TestcaseResult {
+  testcaseName: string | null
+  status: Result
+  executionTime: number
+  executionMemory: number
+}
+
 export interface SubmitDetail extends Submit {
   source: string
+  sampleCount: number | null
+  testcaseResults: TestcaseResult[]
 }
