@@ -28,7 +28,7 @@ const languages: Language[] = [
   },
   {
     innerName: 'cs_mono6',
-    name: 'C# (Mono 6.10.0)',
+    name: 'C# Mono (6.10.0)',
     mime: 'text/x-csharp'
   },
   { innerName: 'java11', name: 'Java11 (11.0.6)', mime: 'text/x-java' },

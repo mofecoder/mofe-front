@@ -28,6 +28,7 @@ $color-wj: #888888;
 $color-ie: #ff4444;
 $color-ce: #cc44ff;
 [class^='result'] {
+  display: inline-block;
   border-radius: 4px;
   color: white;
   font-weight: bold;
