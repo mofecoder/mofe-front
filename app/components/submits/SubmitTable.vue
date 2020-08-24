@@ -26,7 +26,9 @@
         <td style="text-align:right;padding-right:0.3em">
           {{ item.point }}
         </td>
-        <template v-if="item.executionTime && item.executionMemory">
+        <template
+          v-if="item.executionTime !== null && item.executionMemory !== null"
+        >
           <td>
             <div class="chip">
               <ResultChip :status="item.status" />
@@ -36,7 +38,7 @@
             {{ item.executionTime }} ms
           </td>
           <td style="text-align:right;padding-right:0.3em">
-            {{ item.executionMemory }} KB
+            {{ item.executionMemory || '---' }} KB
           </td>
         </template>
         <td v-else colspan="3">
@@ -56,7 +58,7 @@
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { Submit } from '~/types/submits'
-import ResultChip from '~/components/ResultChip.vue'
+import ResultChip from '~/components/submits/ResultChip.vue'
 @Component({
   components: { ResultChip }
 })

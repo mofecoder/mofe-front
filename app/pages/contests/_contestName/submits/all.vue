@@ -46,15 +46,15 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     const callback = () => {
       this.reload()
     }
-    this.timeout = setInterval(callback, 30000)
+    this.timeout = window.setInterval(callback, 30000)
   }
 
   beforeDestroy() {
-    if (this.timeout) clearInterval(this.timeout)
+    if (this.timeout) window.clearInterval(this.timeout)
   }
 
   submits: Submit[] | null = null
-  timeout: NodeJS.Timeout | null = null
+  timeout: number | null = null
   errorMessage: string | null = null
 
   reload() {
@@ -66,7 +66,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
         if (err instanceof HttpError) {
           this.errorMessage = err.response.data.error
         }
-        if (this.timeout) clearInterval(this.timeout)
+        if (this.timeout) window.clearInterval(this.timeout)
       })
   }
 }

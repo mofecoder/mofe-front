@@ -57,7 +57,7 @@
                   </tr>
                   <tr v-if="submit.executionMemory != null">
                     <th>メモリ</th>
-                    <td>{{ submit.executionMemory }} KB</td>
+                    <td>{{ submit.executionMemory || '---' }} KB</td>
                   </tr>
                 </tbody>
               </table>
@@ -92,6 +92,10 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
       title: `提出 #${this.submit?.id} - ${this.contest?.name}`,
       titleTemplate: null
     }
+  }
+
+  validate({ params }: { params: { [key: string]: string } }): boolean {
+    return /^[1-9]\d*$/.test(params.submitId)
   }
 
   @Ref()

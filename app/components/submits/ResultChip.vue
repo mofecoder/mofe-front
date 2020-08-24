@@ -1,5 +1,7 @@
 <template>
-  <div :class="`result-${status}`">{{ status }}</div>
+  <div :class="[`result-${status}`, isDense && 'chip-dense']">
+    {{ status }}
+  </div>
 </template>
 
 <script lang="ts">
@@ -7,8 +9,15 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
 @Component
 export default class ResultChip extends Vue {
-  @Prop()
+  @Prop({ required: true })
   status!: string
+
+  @Prop({ default: false })
+  dense!: string | boolean
+
+  get isDense() {
+    return this.dense || this.dense === ''
+  }
 }
 </script>
 
@@ -22,11 +31,15 @@ $color-ce: #cc44ff;
   border-radius: 4px;
   color: white;
   font-weight: bold;
-  font-size: 120%;
+  font-size: 110%;
   width: 3.3em;
   height: 1.4em;
   text-align: center;
 }
+.chip-dense {
+  font-size: 100%;
+}
+
 .result-AC {
   background-color: $color-ac;
 }

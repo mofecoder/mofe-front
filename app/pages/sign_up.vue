@@ -77,7 +77,7 @@ export default class PageLogin extends Vue {
       (v: string) => !!v || 'このフィールドは必須です。',
       (v: string) =>
         !v ||
-        /^([\w-]+\.)*[\w-]+@([a-zA-Z]\w+[a-zA-Z0-9]\.)+[a-zA-Z]+$/.test(v) ||
+        /^([\w-]+\.)*[\w-]+@([a-zA-Z]\w*[a-zA-Z0-9]\.)+[a-zA-Z]+$/.test(v) ||
         'メールアドレスの形式が無効です。',
       (v: string) => !v || v.length <= 64 || 'メールアドレスが長すぎます。'
     ],

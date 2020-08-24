@@ -86,6 +86,6 @@ export default class PageContestTasks extends mixins(MixinContest) {
 </style>
 <style>
 .v-list-item__content > * {
-  flex: unset;
+  flex: unset !important;
 }
 </style>

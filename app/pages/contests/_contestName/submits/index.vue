@@ -39,7 +39,12 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     this.reload()
   }
 
+  beforeDestroy() {
+    if (this.timeout) window.clearTimeout(this.timeout)
+  }
+
   submits: Submit[] | null = null
+  timeout: number | null = null
 
   reload() {
     this.$api.Contests.mySubmits(this.$route.params.contestName)
@@ -50,7 +55,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
         )
           ? 5000
           : 15000
-        setTimeout(this.reload, timeout)
+        this.timeout = window.setTimeout(this.reload, timeout)
       })
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') this.$router.replace('/login')
