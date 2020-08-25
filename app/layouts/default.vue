@@ -30,6 +30,10 @@
         <nuxt />
       </v-container>
     </v-main>
+    <v-footer app class="d-flex justify-center" absolute>
+      <p class="mb-0 mr-3">Copyright 2020 CafeCoder</p>
+      <nuxt-link to="/privacy_policy">プライバシーポリシー</nuxt-link>
+    </v-footer>
   </v-app>
 </template>
 

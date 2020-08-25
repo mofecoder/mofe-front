@@ -28,6 +28,7 @@
     "@nuxtjs/axios": "^5.12.1",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/google-adsense": "^1.1.3",
+    "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/markdownit": "^1.2.10",
     "dayjs": "^1.8.34",
     "lodash.camelcase": "^4.3.0",
