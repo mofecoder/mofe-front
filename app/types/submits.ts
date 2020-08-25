@@ -24,6 +24,7 @@ export interface Submit {
   executionTime: number | null
   executionMemory: number | null
   point: number
+  judgeStatus: { completed: number; all: number } | null
 }
 
 export interface TestcaseResult {

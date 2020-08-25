@@ -1,8 +1,13 @@
 <template>
-  <div :class="[`result-${status}`, isDense && 'chip-dense']">
-    {{ status }}
-  </div>
-</template>
+  <div
+    :class="[
+      `result-${status}`,
+      isDense && 'chip-dense',
+      judgeStatus && 'chip-judging'
+    ]"
+    v-text="text"
+  ></div
+></template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
@@ -14,6 +19,18 @@ export default class ResultChip extends Vue {
 
   @Prop({ default: false })
   dense!: string | boolean
+
+  @Prop({ default: null })
+  judgeStatus!: { completed: number; all: number } | null
+
+  get text() {
+    if (!this.judgeStatus) {
+      return this.status
+    }
+    return this.status === 'WJ'
+      ? `${this.judgeStatus.completed}/${this.judgeStatus.all}`
+      : `${this.status} ${this.judgeStatus.completed}/${this.judgeStatus.all}`
+  }
 
   get isDense() {
     return this.dense || this.dense === ''
@@ -33,12 +50,19 @@ $color-ce: #cc44ff;
   color: white;
   font-weight: bold;
   font-size: 110%;
-  width: 3.3em;
+  box-sizing: content-box;
+  width: max-content;
   height: 1.4em;
   text-align: center;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 .chip-dense {
   font-size: 100%;
+}
+.chip-judging {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 
 .result-AC {

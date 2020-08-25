@@ -50,11 +50,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     this.$api.Contests.mySubmits(this.$route.params.contestName)
       .then((res: Submit[]) => {
         this.submits = res
-        const timeout = this.submits.some(
-          (s) => s.status === 'WJ' || s.status === 'WR'
-        )
-          ? 5000
-          : 15000
+        const timeout = this.submits.some((s) => s.point == null) ? 2000 : 15000
         this.timeout = window.setTimeout(this.reload, timeout)
       })
       .catch((err: Error) => {

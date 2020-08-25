@@ -64,7 +64,10 @@
                 <tr>
                   <th>結果</th>
                   <td>
-                    <ResultChip :status="submit.status" />
+                    <ResultChip
+                      :status="submit.status"
+                      :judge-status="submit.judgeStatus"
+                    />
                   </td>
                 </tr>
                 <tr v-if="submit.executionTime != null">

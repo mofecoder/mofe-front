@@ -13,7 +13,11 @@
       }}</n-link>
     </template>
     <template v-slot:item.status="{ item }">
-      <ResultChip :status="item.status" dense />
+      <ResultChip
+        :status="item.status"
+        :judge-status="item.judgeStatus"
+        dense
+      />
     </template>
     <template v-slot:item.action="{ item }">
       <v-icon small class="cursor-pointer" @click="viewDetail(item)"
@@ -72,7 +76,8 @@ export default class SubmitTable extends Vue {
       executionMemory:
         item.executionMemory === null
           ? ''
-          : `${item.executionMemory || '---'} KB`
+          : `${item.executionMemory || '---'} KB`,
+      judgeStatus: item.judgeStatus
     }))
   }
 
