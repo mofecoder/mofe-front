@@ -79,8 +79,9 @@ export default class PageLogin extends Vue {
   }
 
   redirect() {
-    // TODO: redirect先を持つ
-    this.$router.push('/')
+    let s: string | (string | null)[] | null = this.$route.query.redirect
+    if (typeof s !== 'string') s = null
+    this.$router.push(s || '/')
   }
 }
 </script>
