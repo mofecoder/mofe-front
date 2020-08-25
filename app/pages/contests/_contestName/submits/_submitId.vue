@@ -5,11 +5,30 @@
       <v-container v-if="submit">
         <v-row>
           <v-col cols="12" lg="8">
+            <v-switch
+              v-model="autoHeight"
+              class="d-inline-flex"
+              color="amber darken-3"
+              dense
+              label="高さを自動調節"
+            />
+            <v-btn
+              class="ml-4"
+              outlined
+              small
+              width="150"
+              :disabled="showCopiedMessage"
+              @click="copy"
+              >{{
+                showCopiedMessage ? 'コピーしました!' : 'ソースコードをコピー'
+              }}</v-btn
+            >
             <Editor
               v-show="submit"
               ref="editor"
               class="editor"
               :language="language"
+              :auto-height="autoHeight"
               read-only
             />
           </v-col>
@@ -60,7 +79,15 @@
             </v-simple-table>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="submit.compileError">
+          <v-col cols="12">
+            <h3>コンパイルエラー</h3>
+            <pre
+              class="compile-error"
+            ><code v-text="submit.compileError" /></pre>
+          </v-col>
+        </v-row>
+        <v-row v-if="submit.testcaseResults.length">
           <v-col cols="12">
             <TestcaseResultsTable
               :testcase-results="submit.testcaseResults"
@@ -85,6 +112,7 @@ import { SubmitDetail } from '~/types/submits'
 import { HttpError } from '~/utils/axios'
 import ResultChip from '~/components/submits/ResultChip.vue'
 import TestcaseResultsTable from '~/components/submits/TestcaseResultsTable.vue'
+import { copy } from '~/utils/clipboard'
 
 @Component({
   components: { TestcaseResultsTable, ResultChip, Editor },
@@ -108,6 +136,7 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
   submit: SubmitDetail | null = null
   errorMessage: string | null = null
   autoHeight = false
+  showCopiedMessage = false
 
   async fetch() {
     await this.getContest()
@@ -126,6 +155,12 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
     this.editor.value = this.submit!.source
   }
 
+  copy() {
+    if (this.submit) copy(this.submit.source)
+    this.showCopiedMessage = true
+    setTimeout(() => (this.showCopiedMessage = false), 3000)
+  }
+
   formatDate(date: Date): string {
     const dt = dayjs(date)
     return dt.format('YYYY/MM/DD HH:mm:ss')
@@ -138,4 +173,11 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.compile-error code {
+  @include block-code();
+  font-size: 0.8rem;
+  line-height: 1.4;
+  overflow: scroll;
+}
+</style>

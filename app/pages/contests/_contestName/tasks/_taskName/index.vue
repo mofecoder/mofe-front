@@ -39,8 +39,8 @@
                 />
               </section>
               <section v-for="(sample, index) in problem.samples" :key="index">
-                <div class="sample__head">
-                  <div class="sample__head__title">入力例 {{ index + 1 }}</div>
+                <div class="submit-head">
+                  <div class="submit-head__title">入力例 {{ index + 1 }}</div>
                   <v-btn
                     color="blue lighten-4"
                     small
@@ -51,8 +51,8 @@
                 <div class="statement">
                   <code class="sample__code" v-html="sample.input" />
                 </div>
-                <div class="sample__head">
-                  <div class="sample__head__title">出力例 {{ index + 1 }}</div>
+                <div class="submit-head">
+                  <div class="submit-head__title">出力例 {{ index + 1 }}</div>
                   <v-btn
                     color="blue lighten-4"
                     small
@@ -70,13 +70,14 @@
                 />
               </section>
               <section v-if="loggedIn">
-                <div class="submit__head">
-                  <div class="submit__head__title">提出</div>
+                <div class="submit-head">
+                  <div class="submit-head__title">提出</div>
                   <v-autocomplete
                     v-model="language"
-                    class="submit__head__select"
+                    class="submit-head__select"
                     :items="selectableLanguages"
                     label="提出する言語"
+                    :filter="langFilter"
                     dense
                     hide-details
                     outlined
@@ -117,6 +118,7 @@ import languages from '~/assets/languages'
 import { Language } from '~/types/language'
 import { userStore } from '~/utils/store-accessor'
 import { HttpError } from '~/utils/axios'
+import { copy } from '~/utils/clipboard'
 
 @Component({
   components: {
@@ -139,17 +141,6 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   language: Language | undefined = languages[0]
   submitted = false
   errorMessage: string | null = null
-
-  copy(text: string) {
-    const tmp = document.createElement('textarea')
-    tmp.style.position = 'fixed'
-    tmp.style.right = '200%'
-    tmp.textContent = text
-    document.body.appendChild(tmp)
-    tmp.select()
-    document.execCommand('copy')
-    document.body.removeChild(tmp)
-  }
 
   async fetch() {
     await this.getContest()
@@ -193,6 +184,21 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
       }))
   }
 
+  copy(text: string) {
+    copy(text)
+  }
+
+  langFilter(_: object, queryText: string, itemText: string) {
+    function toHalf(str: string): string {
+      const offset = 'Ａ'.charCodeAt(0) - 'A'.charCodeAt(0)
+      return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) =>
+        String.fromCharCode(s.charCodeAt(0) - offset)
+      )
+    }
+
+    return itemText.toLowerCase().includes(toHalf(queryText).toLowerCase())
+  }
+
   submit() {
     if (!/\S/.test(this.source)) {
       alert('空のソースは提出できません。')
@@ -227,53 +233,44 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   margin: 1em 0 2em 1.5em;
   font-size: 1.15em;
 }
-.sample {
-  &__head {
-    display: flex;
-    &__title {
-      display: flex;
-      align-items: center;
-      font-size: 1.45rem;
-      font-weight: bold;
-      margin-right: 1rem;
-    }
-  }
-  &__code {
-    display: block;
-    width: 100%;
-    background: #eeeeee;
-    border: solid 1px lightgrey;
-    color: black;
-    padding: 0.5em;
-    margin: 0;
-    font-size: 1em;
-    font-weight: normal;
-    white-space: pre;
 
-    &:before,
-    &:after {
-      content: none;
-    }
+.sample {
+  &__code {
+    @include block-code();
   }
 
   .__editor {
     margin: 1em;
   }
 }
-.submit {
-  &__head {
+
+.sample-head {
+  display: flex;
+  &__title {
     display: flex;
-    &__title {
-      @extend .sample__head__title;
-    }
-    &__select {
-      max-width: 20em;
-    }
+    align-items: center;
+    font-size: 1.45rem;
+    font-weight: bold;
+    margin-right: 1rem;
   }
+}
+
+.submit {
   &__editor {
     margin-top: 0.5rem;
   }
 }
+
+.submit-head {
+  display: flex;
+  &__title {
+    @extend .sample-head__title;
+  }
+  &__select {
+    max-width: 20em;
+  }
+}
+
 h3 {
   font-size: 1.5rem;
 }

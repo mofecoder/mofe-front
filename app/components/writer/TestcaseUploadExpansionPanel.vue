@@ -18,6 +18,10 @@
             <code>dir.zip/dir/input/name.txt</code>
             のような構造にならないように注意してください。
           </p>
+          <p>
+            ※ ファイル名は半角英数と半角アンダーバーで構成され、 txt
+            形式である必要があります。
+          </p>
         </v-col>
       </v-row>
     </v-expansion-panel-content>

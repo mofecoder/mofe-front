@@ -1,3 +1,4 @@
+import { NuxtAxiosInstance } from '@nuxtjs/axios'
 import { CafeCoderApi } from '~/apis'
 import { Language } from '~/types/language'
 
@@ -16,5 +17,6 @@ declare module 'vue/types/vue' {
     readonly $md: MarkdownIt
     readonly $getLanguage: (lang: string) => Language | null
     $fetch: () => any
+    readonly $axios: NuxtAxiosInstance
   }
 }

@@ -43,6 +43,11 @@
     <v-card class="mb-8" :loading="!testcases || testcaseLoading">
       <v-card-title>テストケース一覧</v-card-title>
       <v-card-text class="testcase-list">
+        <p class="red--text">
+          現在、各テストケースの入力・出力の合計で約 1MB
+          までしか追加できないようになっています（手動・アップロードのどちらも）。
+          上限を引き上げられないか、検討中です。
+        </p>
         <v-simple-table v-if="testcases" dense>
           <thead>
             <tr>

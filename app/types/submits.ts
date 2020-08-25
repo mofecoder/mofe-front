@@ -36,5 +36,6 @@ export interface TestcaseResult {
 export interface SubmitDetail extends Submit {
   source: string
   sampleCount: number | null
+  compileError: string | null
   testcaseResults: TestcaseResult[]
 }
