@@ -181,6 +181,5 @@ export default class PageSubmitDetail extends mixins(MixinContest) {
   @include block-code();
   font-size: 0.8rem;
   line-height: 1.4;
-  overflow: scroll;
 }
 </style>
