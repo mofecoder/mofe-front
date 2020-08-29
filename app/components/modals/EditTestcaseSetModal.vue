@@ -12,6 +12,7 @@
                   label="テストケースセット名"
                   required
                   :rules="[rules.required, rules.name, check]"
+                  :disabled="startName === 'sample' || startName === 'all'"
                 />
               </v-col>
             </v-row>
@@ -84,7 +85,12 @@ export default class EditTestcaseSetModal extends Vue {
 
   @Watch('value')
   async getTestcaseSet() {
-    if (!this.value || this.id == null) return
+    if (!this.value) return
+    if (this.id == null) {
+      this.startName = ''
+      this.form.resetValidation()
+      return
+    }
     this.loading = true
     const { name, points } = await this.$api.Testcases.showTestcaseSet(
       this.problemId,

@@ -35,7 +35,7 @@
             </tr>
           </tbody>
         </v-simple-table>
-        <v-btn color="primary" small @click="testcaseSetDialog = true"
+        <v-btn color="primary" small @click="addSet"
           >テストケースセットを追加</v-btn
         >
       </v-card-text>
@@ -285,7 +285,11 @@ export default class PagePageWriterTaskTestcases extends Vue {
     this.testcaseSetDialog = false
   }
 
-  editSet(id: number) {
+  addSet() {
+    this.editSet(null)
+  }
+
+  editSet(id: number | null) {
     this.editingTestcaseSetId = id
     this.testcaseSetDialog = true
   }
