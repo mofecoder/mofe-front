@@ -43,11 +43,6 @@
     <v-card class="mb-8" :loading="!testcases || testcaseLoading">
       <v-card-title>テストケース一覧</v-card-title>
       <v-card-text class="testcase-list">
-        <p class="red--text">
-          現在、各テストケースの入力・出力の合計で約 1MB
-          までしか追加できないようになっています（手動・アップロードのどちらも）。
-          上限を引き上げられないか、検討中です。
-        </p>
         <v-simple-table v-if="testcases" dense>
           <thead>
             <tr>
@@ -78,10 +73,18 @@
                 />
               </td>
               <td>
-                <v-icon small dense @click="viewTestcase(testcase.id)"
+                <v-icon
+                  small
+                  dense
+                  :disabled="testcaseLoading"
+                  @click="viewTestcase(testcase.id)"
                   >mdi-eye</v-icon
                 >
-                <v-icon small dense @click="deleteTestcase(testcase.id)"
+                <v-icon
+                  small
+                  dense
+                  :disabled="testcaseLoading"
+                  @click="deleteTestcase(testcase.id)"
                   >mdi-delete</v-icon
                 >
               </td>
@@ -98,7 +101,7 @@
         </v-btn>
       </v-card-text>
     </v-card>
-    <v-card>
+    <v-card :loading="uploadLoading">
       <v-card-title>テストケースをアップロードする</v-card-title>
       <v-card-text>
         <v-expansion-panels class="mb-8">
@@ -111,7 +114,11 @@
             accept=".zip"
             @change="change"
           />
-          <v-btn type="submit" color="primary" block :disabled="!file"
+          <v-btn
+            type="submit"
+            color="primary"
+            block
+            :disabled="!file || uploadLoading"
             >アップロードする</v-btn
           >
         </v-form>
@@ -185,6 +192,7 @@ export default class PagePageWriterTaskTestcases extends Vue {
   testcaseSetDialog = false
   testcaseLoading = false
   editingTestcaseSetId: number | null = null
+  uploadLoading = false
 
   get problemId(): number {
     return Number(this.$route.params.problemId)
@@ -215,10 +223,12 @@ export default class PagePageWriterTaskTestcases extends Vue {
 
   submit() {
     if (!this.file) return
+    this.uploadLoading = true
     this.$api.Testcases.uploadTestcases(this.problemId, this.file)
       .then(async ({ messages }: { messages: string[] }) => {
         this.messages = messages
         this.ok = true
+        this.file = null
         await this.update()
       })
       .catch((exception: HttpError) => {
@@ -226,11 +236,16 @@ export default class PagePageWriterTaskTestcases extends Vue {
         this.messages = [res.error]
         this.ok = false
       })
+      .finally(() => {
+        this.uploadLoading = false
+      })
   }
 
   async deleteTestcase(id: number) {
+    this.testcaseLoading = true
     await this.$api.Testcases.delete(this.problemId, id)
     await this.update()
+    this.testcaseLoading = false
   }
 
   async createTestcase(params: {
