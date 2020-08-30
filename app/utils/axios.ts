@@ -138,14 +138,16 @@ async function httpWithData<T>(
   url: string,
   header: any = {},
   body: any = {},
-  formData = false
+  formData = false,
+  timeout?: number
 ): Promise<T> {
   setToken(header)
   if (!header.accept) header.accept = 'application/json'
   const data = typeof body === 'object' && !formData ? toSnakeCase(body) : body
   if (typeof body === 'string') header['content-type'] = 'text/plain'
   const res = await method(url, data, {
-    headers: toSnakeCase(header, true)
+    headers: toSnakeCase(header, true),
+    timeout
   })
   log(name, url, res)
 
@@ -171,7 +173,8 @@ async function httpPost<T>(
   url: string,
   header: any = {},
   body: any = {},
-  formData: boolean = false
+  formData: boolean = false,
+  timeout?: number
 ): Promise<T> {
   if (formData) header['content-type'] = 'multipart/form-data'
 
@@ -181,7 +184,8 @@ async function httpPost<T>(
     url,
     header,
     body,
-    formData
+    formData,
+    timeout
   )
   return ret
 }

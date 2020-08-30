@@ -100,7 +100,8 @@ export default class {
       `/problems/${problemId}/testcases/upload`,
       {},
       form,
-      true
+      true,
+      2 * 60 * 1000
     )
     return res
   }
