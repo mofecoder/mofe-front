@@ -148,6 +148,9 @@
           </v-col>
         </v-row>
       </v-form>
+      <v-snackbar v-model="updated" :timeout="4000">
+        問題を更新しました。
+      </v-snackbar>
     </v-card-text>
   </v-card>
 </template>
@@ -193,6 +196,7 @@ export default class CreateProblemCard extends Vue {
   }
 
   valid = false
+  updated = false
 
   @Prop({ required: true })
   problemId!: number
@@ -211,6 +215,7 @@ export default class CreateProblemCard extends Vue {
 
   async onSubmit() {
     await this.$api.Problems.update(this.problemId, this.content)
+    this.updated = true
     await this.$fetch()
   }
 
