@@ -10,6 +10,7 @@ export class HttpError extends Error {
   constructor(message: string, response: AxiosResponse) {
     super(message)
     this.response = response
+    this.response.data = toCamelCase(this.response.data)
     Object.defineProperty(this, 'name', {
       configurable: true,
       enumerable: false,

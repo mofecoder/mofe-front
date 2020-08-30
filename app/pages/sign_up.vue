@@ -54,12 +54,16 @@
         </v-btn>
       </v-form>
     </v-card-text>
+    <v-snackbar v-model="error" :timeout="4000">
+      {{ errorMessage }}
+    </v-snackbar>
   </v-card>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
+import { HttpError } from '~/utils/axios'
 
 @Component({
   head: { title: '新規登録' }
@@ -71,7 +75,7 @@ export default class PageLogin extends Vue {
   passwordConfirm: string = ''
   email: string = ''
   error: boolean = false
-  err: any = null
+  errorMessage: string = ''
   rules = {
     email: [
       (v: string) => !!v || 'このフィールドは必須です。',
@@ -143,6 +147,17 @@ export default class PageLogin extends Vue {
           this.error = true
           ;(this.$refs.form as any).resetValidation()
           this.password = ''
+        } else if (err instanceof HttpError) {
+          const errors: string[] | string | undefined =
+            err.response.data.errors.fullMessages
+          this.error = true
+          if (typeof errors === 'undefined') {
+            this.errorMessage = 'ユーザ登録に失敗しました。'
+          } else if (typeof errors === 'string') {
+            this.errorMessage = errors
+          } else {
+            this.errorMessage = errors.join('\n')
+          }
         }
       })
   }
