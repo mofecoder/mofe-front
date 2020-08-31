@@ -17,16 +17,6 @@
     border-bottom: #000000 solid 1px;
   }
   pre code {
-    display: block;
-    background: #eeeeee;
-    border: solid 1px lightgrey;
-    width: 100%;
-    color: black;
-    padding: 0.5em;
-    font-size: 1em;
-    &:before,
-    &:after {
-      content: none;
-    }
+    @include block-code();
   }
 }

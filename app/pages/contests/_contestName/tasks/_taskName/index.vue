@@ -229,9 +229,24 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
 </script>
 
 <style scoped lang="scss">
+@import '~/styles/markdown.scss';
+
 .statement {
   margin: 1em 0 2em 1.5em;
   font-size: 1.15em;
+
+  ::v-deep {
+    @include markdown();
+
+    pre code {
+      white-space: pre-wrap !important;
+      margin-bottom: 1rem;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
 }
 
 .sample {
@@ -273,13 +288,6 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
 
 h3 {
   font-size: 1.5rem;
-}
-</style>
-
-<style lang="scss">
-@import '~/styles/markdown.scss';
-.statement {
-  @include markdown();
 }
 .task-points {
   font-size: 1rem;
