@@ -1,7 +1,10 @@
 <template>
   <div>
     <template v-if="contest">
-      <v-container class="pa-0" fluid>
+      <v-alert v-if="!contest.tasks">
+        <v-alert type="warning">問題はまだ公開されていません。</v-alert>
+      </v-alert>
+      <v-container v-else class="pa-0" fluid>
         <v-card max-width="600px">
           <v-list rounded>
             <v-subheader>問題一覧</v-subheader>
@@ -44,7 +47,14 @@ import DifficultyChip from '~/components/parts/difficulty-chip.vue'
   layout: 'contest'
 })
 export default class PageContestTasks extends mixins(MixinContest) {
-  async created() {
+  head() {
+    return {
+      title: `問題 - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
+  async fetch() {
     await contestStore.getContest(this.$route.params.contestName)
   }
 
@@ -76,6 +86,6 @@ export default class PageContestTasks extends mixins(MixinContest) {
 </style>
 <style>
 .v-list-item__content > * {
-  flex: unset;
+  flex: unset !important;
 }
 </style>

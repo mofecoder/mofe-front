@@ -26,7 +26,9 @@ import TimeCard from '~/components/contestAdmin/TimeCard.vue'
 import ContestInformationCard from '~/components/contestAdmin/InformationCard.vue'
 
 @Component({
-  components: { ContestInformationCard, TimeCard }
+  components: { ContestInformationCard, TimeCard },
+  middleware: 'authenticated',
+  head: { title: 'コンテストの作成' }
 })
 export default class PageNewContest extends Vue {
   name = ''
@@ -82,6 +84,8 @@ export default class PageNewContest extends Vue {
       endAt: end.format(),
       description: this.description,
       penaltyTime: parseInt(this.penalty) * 60
+    }).then(() => {
+      this.$router.push(`/manage/contests/${this.slug}`)
     })
   }
 }

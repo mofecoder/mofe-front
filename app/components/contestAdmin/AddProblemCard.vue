@@ -15,7 +15,7 @@
         <tbody>
           <tr v-for="item in items" :key="item.id">
             <td>
-              <div style="cursor:pointer" @click="add(item)">
+              <div class="cursor-pointer" @click="add(item)">
                 <v-icon color="blue">mdi-plus</v-icon>
               </div>
             </td>
@@ -23,11 +23,11 @@
             <td>{{ item.difficulty }}</td>
             <td>{{ item.writerUser }}</td>
             <td>
-              <div style="cursor:pointer">
+              <div class="cursor-pointer">
                 <a
                   :href="`/problems/${item.id}`"
+                  class="problem-link"
                   target="_blank"
-                  style="text-decoration:none"
                 >
                   <v-icon small>mdi-eye</v-icon>
                 </a>
@@ -62,4 +62,11 @@ export default class AddProblemCard extends Vue {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.cursor-pointer {
+  cursor: pointer;
+}
+.problem-link {
+  text-decoration: none;
+}
+</style>

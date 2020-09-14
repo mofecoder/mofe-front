@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div v-if="contest">
-      <v-container class="pa-0" fluid>
+    <template v-if="contest">
+      <v-alert v-if="errorMessage" type="error">
+        {{ errorMessage }}
+      </v-alert>
+      <v-container v-else class="pa-0" fluid>
         <v-card class="mx-auto" max-width="800px" :loading="!problem">
           <template v-if="problem">
-            <v-card-title class="mb-3">
-              <p style="width:100%">
-                {{ problem.position }}: {{ problem.name }}
-              </p>
+            <v-card-title class="task-card-title">
+              <h2>{{ problem.position }} - {{ problem.name }}</h2>
+              <p class="task-points">配点: {{ problem.points }}</p>
               <DifficultyChip :difficulty="problem.difficulty" />
             </v-card-title>
-            <v-card-text style="color:inherit">
+            <v-card-text class="mt-3 task-card-text">
               <section>
                 <h3>問題文</h3>
                 <div class="statement" v-html="$md.render(problem.statement)" />
@@ -37,8 +39,8 @@
                 />
               </section>
               <section v-for="(sample, index) in problem.samples" :key="index">
-                <div class="sample__head">
-                  <div class="sample__head__title">入力例 {{ index + 1 }}</div>
+                <div class="submit-head">
+                  <div class="submit-head__title">入力例 {{ index + 1 }}</div>
                   <v-btn
                     color="blue lighten-4"
                     small
@@ -49,8 +51,8 @@
                 <div class="statement">
                   <code class="sample__code" v-html="sample.input" />
                 </div>
-                <div class="sample__head">
-                  <div class="sample__head__title">出力例 {{ index + 1 }}</div>
+                <div class="submit-head">
+                  <div class="submit-head__title">出力例 {{ index + 1 }}</div>
                   <v-btn
                     color="blue lighten-4"
                     small
@@ -67,14 +69,15 @@
                   v-html="$md.render(sample.explanation)"
                 />
               </section>
-              <section>
-                <div class="submit__head">
-                  <div class="submit__head__title">提出</div>
+              <section v-if="loggedIn">
+                <div class="submit-head">
+                  <div class="submit-head__title">提出</div>
                   <v-autocomplete
                     v-model="language"
-                    class="submit__head__select"
+                    class="submit-head__select"
                     :items="selectableLanguages"
                     label="提出する言語"
+                    :filter="langFilter"
                     dense
                     hide-details
                     outlined
@@ -98,7 +101,7 @@
           </template>
         </v-card>
       </v-container>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -113,6 +116,9 @@ import DifficultyChip from '~/components/parts/difficulty-chip.vue'
 import Editor from '~/components/Editor.vue'
 import languages from '~/assets/languages'
 import { Language } from '~/types/language'
+import { userStore } from '~/utils/store-accessor'
+import { HttpError } from '~/utils/axios'
+import { copy } from '~/utils/clipboard'
 
 @Component({
   components: {
@@ -124,19 +130,35 @@ import { Language } from '~/types/language'
   layout: 'contest'
 })
 export default class PageContestTasks extends mixins(MathJax, MixinContest) {
+  head() {
+    return {
+      title: this.problem && `${this.problem.position} - ${this.problem.name}`,
+      titleTemplate: null
+    }
+  }
+
   problem: TaskDetail | null = null
   language: Language | undefined = languages[0]
   submitted = false
+  errorMessage: string | null = null
 
-  copy(text: string) {
-    const tmp = document.createElement('textarea')
-    tmp.style.position = 'fixed'
-    tmp.style.right = '200%'
-    tmp.textContent = text
-    document.body.appendChild(tmp)
-    tmp.select()
-    document.execCommand('copy')
-    document.body.removeChild(tmp)
+  async fetch() {
+    await this.getContest()
+    this.$api.Tasks.show(
+      this.$route.params.contestName,
+      this.$route.params.taskName
+    )
+      .then((ret: TaskDetail) => {
+        this.problem = ret
+        this.$nextTick(() => {
+          this.renderMathJax()
+        })
+      })
+      .catch((err: Error) => {
+        if (err instanceof HttpError) {
+          this.errorMessage = err.response.data.error
+        }
+      })
   }
 
   created() {
@@ -144,16 +166,6 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
       languages.filter(
         (lang) => localStorage.getItem('lang') === lang.innerName
       )[0] || languages[0]
-    this.getContest()
-    this.$api.Tasks.show(
-      this.$route.params.contestName,
-      this.$route.params.taskName
-    ).then((ret: TaskDetail) => {
-      this.problem = ret
-      this.$nextTick(() => {
-        this.renderMathJax()
-      })
-    })
   }
 
   get source(): string {
@@ -164,10 +176,27 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   }
 
   get selectableLanguages() {
-    return languages.map((lang) => ({
-      text: lang.name,
-      value: lang
-    }))
+    return languages
+      .filter((lang) => !lang.isOutdated)
+      .map((lang) => ({
+        text: lang.name,
+        value: lang
+      }))
+  }
+
+  copy(text: string) {
+    copy(text)
+  }
+
+  langFilter(_: object, queryText: string, itemText: string) {
+    function toHalf(str: string): string {
+      const offset = 'Ａ'.charCodeAt(0) - 'A'.charCodeAt(0)
+      return str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) =>
+        String.fromCharCode(s.charCodeAt(0) - offset)
+      )
+    }
+
+    return itemText.toLowerCase().includes(toHalf(queryText).toLowerCase())
   }
 
   submit() {
@@ -192,61 +221,84 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
         this.submitted = false
       })
   }
+
+  get loggedIn() {
+    return !!userStore.getUser
+  }
 }
 </script>
 
 <style scoped lang="scss">
+@import '~/styles/markdown.scss';
+
 .statement {
   margin: 1em 0 2em 1.5em;
   font-size: 1.15em;
-}
-.sample {
-  &__head {
-    display: flex;
-    &__title {
-      display: flex;
-      align-items: center;
-      font-size: 1.45rem;
-      font-weight: bold;
-      margin-right: 1rem;
+
+  ::v-deep {
+    @include markdown();
+
+    pre code {
+      white-space: pre-wrap !important;
+      margin-bottom: 1rem;
+    }
+
+    img {
+      max-width: 100%;
     }
   }
+}
+
+.sample {
   &__code {
-    width: 100%;
-    color: black;
-    padding: 0.5em;
-    margin: 0;
-    font-size: 1em;
-    font-weight: normal;
-    &:before,
-    &:after {
-      content: none;
-    }
+    @include block-code();
   }
 
   .__editor {
     margin: 1em;
   }
 }
-.submit {
-  &__head {
+
+.sample-head {
+  display: flex;
+  &__title {
     display: flex;
-    &__title {
-      @extend .sample__head__title;
-    }
-    &__select {
-      max-width: 20em;
-    }
+    align-items: center;
+    font-size: 1.45rem;
+    font-weight: bold;
+    margin-right: 1rem;
   }
 }
+
+.submit {
+  &__editor {
+    margin-top: 0.5rem;
+  }
+}
+
+.submit-head {
+  display: flex;
+  &__title {
+    @extend .sample-head__title;
+  }
+  &__select {
+    max-width: 20em;
+  }
+}
+
 h3 {
   font-size: 1.5rem;
 }
-</style>
-
-<style lang="scss">
-@import '~/styles/markdown.scss';
-.statement {
-  @include markdown();
+.task-points {
+  font-size: 1rem;
+}
+.task-card-title {
+  display: block !important;
+  h2 {
+    font-size: 1.3em;
+  }
+}
+.task-card-text {
+  color: inherit !important;
 }
 </style>

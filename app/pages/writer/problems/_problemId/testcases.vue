@@ -23,6 +23,7 @@
                 {{ set.isSample ? 'Yes' : 'No' }}
               </td>
               <td>
+                <v-icon small dense @click="editSet(set.id)">mdi-pencil</v-icon>
                 <v-icon
                   v-if="!['all', 'sample'].includes(set.name)"
                   small
@@ -34,7 +35,7 @@
             </tr>
           </tbody>
         </v-simple-table>
-        <v-btn color="primary" small @click="testcaseSetDialog = true"
+        <v-btn color="primary" small @click="addSet"
           >テストケースセットを追加</v-btn
         >
       </v-card-text>
@@ -45,14 +46,14 @@
         <v-simple-table v-if="testcases" dense>
           <thead>
             <tr>
-              <th style="width:20em">テストケース名</th>
+              <th class="testcase-list__row-testcase-name">テストケース名</th>
               <th
                 v-for="set in testcaseSets"
                 :key="set.name"
-                style="width:8em"
+                class="testcase-list__row-set"
                 v-text="set.name"
               />
-              <th style="width:1em" />
+              <th class="testcase-list__row-action" />
             </tr>
           </thead>
           <tbody>
@@ -72,10 +73,18 @@
                 />
               </td>
               <td>
-                <v-icon small dense @click="viewTestcase(testcase.id)"
+                <v-icon
+                  small
+                  dense
+                  :disabled="testcaseLoading"
+                  @click="viewTestcase(testcase.id)"
                   >mdi-eye</v-icon
                 >
-                <v-icon small dense @click="deleteTestcase(testcase.id)"
+                <v-icon
+                  small
+                  dense
+                  :disabled="testcaseLoading"
+                  @click="deleteTestcase(testcase.id)"
                   >mdi-delete</v-icon
                 >
               </td>
@@ -92,7 +101,7 @@
         </v-btn>
       </v-card-text>
     </v-card>
-    <v-card>
+    <v-card :loading="uploadLoading">
       <v-card-title>テストケースをアップロードする</v-card-title>
       <v-card-text>
         <v-expansion-panels class="mb-8">
@@ -105,7 +114,11 @@
             accept=".zip"
             @change="change"
           />
-          <v-btn type="submit" color="primary" block :disabled="!file"
+          <v-btn
+            type="submit"
+            color="primary"
+            block
+            :disabled="!file || uploadLoading"
             >アップロードする</v-btn
           >
         </v-form>
@@ -131,10 +144,12 @@
       @close="closeModal"
       @create="createTestcase"
     />
-    <AddTestcaseSetModal
+    <EditTestcaseSetModal
+      :id.sync="editingTestcaseSetId"
       :value="testcaseSetDialog"
+      :problem-id="problemId"
       :testcase-set-names="testcaseSetNames"
-      @create="createSet"
+      @save="saveSet"
       @close="closeSetModal"
     />
   </v-container>
@@ -146,15 +161,22 @@ import { ProblemDetail, Testcase, TestcaseSet } from '~/types/problems'
 import { HttpError } from '~/utils/axios'
 import TestcaseUploadExpansionPanel from '~/components/writer/TestcaseUploadExpansionPanel.vue'
 import EditTestcaseModal from '~/components/modals/EditTestcaseModal.vue'
-import AddTestcaseSetModal from '~/components/modals/AddTestcaseSetModal.vue'
+import EditTestcaseSetModal from '~/components/modals/EditTestcaseSetModal.vue'
 @Component({
   components: {
-    AddTestcaseSetModal,
+    EditTestcaseSetModal,
     EditTestcaseModal,
     TestcaseUploadExpansionPanel
-  }
+  },
+  middleware: 'authenticated'
 })
 export default class PagePageWriterTaskTestcases extends Vue {
+  head() {
+    return {
+      title: `[${this.problemId}] テストケースの設定`
+    }
+  }
+
   validate({ params }: { params: { [_: string]: string } }): boolean {
     return /^[1-9]\d*$/.test(params.problemId)
   }
@@ -169,6 +191,8 @@ export default class PagePageWriterTaskTestcases extends Vue {
   testcaseId: number | null = null
   testcaseSetDialog = false
   testcaseLoading = false
+  editingTestcaseSetId: number | null = null
+  uploadLoading = false
 
   get problemId(): number {
     return Number(this.$route.params.problemId)
@@ -187,8 +211,6 @@ export default class PagePageWriterTaskTestcases extends Vue {
   }
 
   async update() {
-    this.testcaseSets = null
-    this.testcases = null
     this.problem = await this.$api.Problems.show(this.problemId)
     const res = await this.$api.Testcases.index(this.problemId)
     this.testcaseSets = res.testcaseSets
@@ -201,21 +223,29 @@ export default class PagePageWriterTaskTestcases extends Vue {
 
   submit() {
     if (!this.file) return
+    this.uploadLoading = true
     this.$api.Testcases.uploadTestcases(this.problemId, this.file)
-      .then((res) => {
-        this.messages = res.messages
+      .then(async ({ messages }: { messages: string[] }) => {
+        this.messages = messages
         this.ok = true
+        this.file = null
+        await this.update()
       })
       .catch((exception: HttpError) => {
-        const res = exception.response
+        const res: any = exception.response.data
         this.messages = [res.error]
         this.ok = false
+      })
+      .finally(() => {
+        this.uploadLoading = false
       })
   }
 
   async deleteTestcase(id: number) {
+    this.testcaseLoading = true
     await this.$api.Testcases.delete(this.problemId, id)
     await this.update()
+    this.testcaseLoading = false
   }
 
   async createTestcase(params: {
@@ -236,23 +266,47 @@ export default class PagePageWriterTaskTestcases extends Vue {
     this.testcaseDialog = false
   }
 
-  async createSet(params: { name: string; points: string }) {
+  async saveSet(params: { name: string; points: string }) {
     if (Number.isNaN(Number(params.points))) return
+    const create = this.editingTestcaseSetId == null
     try {
-      await this.$api.Testcases.createTestcaseSet(this.problemId, {
-        name: params.name,
-        points: Number(params.points)
-      })
+      if (this.editingTestcaseSetId == null) {
+        await this.$api.Testcases.createTestcaseSet(this.problemId, {
+          name: params.name,
+          points: Number(params.points)
+        })
+      } else {
+        await this.$api.Testcases.updateTestcaseSet(
+          this.problemId,
+          this.editingTestcaseSetId,
+          {
+            name: params.name,
+            points: Number(params.points)
+          }
+        )
+        this.editingTestcaseSetId = null
+      }
     } catch (error) {
       if (error.response.status === 400) {
         alert(
-          'テストケースセットの追加に失敗しました: ' + error.response.data.error
+          `テストケースセットの${create ? '追加' : '更新'}に失敗しました: ${
+            error.response.data.error
+          }`
         )
         return
       }
     }
     await this.update()
     this.testcaseSetDialog = false
+  }
+
+  addSet() {
+    this.editSet(null)
+  }
+
+  editSet(id: number | null) {
+    this.editingTestcaseSetId = id
+    this.testcaseSetDialog = true
   }
 
   async deleteSet(id: number) {
@@ -291,6 +345,7 @@ export default class PagePageWriterTaskTestcases extends Vue {
   }
 
   closeSetModal() {
+    this.editingTestcaseSetId = null
     this.testcaseSetDialog = false
   }
 }
@@ -315,6 +370,14 @@ export default class PagePageWriterTaskTestcases extends Vue {
         color: red;
       }
     }
+  }
+}
+.testcase-list {
+  &__row-set {
+    width: 2em;
+  }
+  &__row-action {
+    width: 6em;
   }
 }
 </style>

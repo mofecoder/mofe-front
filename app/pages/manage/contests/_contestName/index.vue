@@ -2,6 +2,10 @@
   <v-container fluid>
     <v-layout v-if="contest" justify-center>
       <v-flex xl6 lg8 md10>
+        <v-btn class="mb-3" nuxt to=".." append text color="purple"
+          >コンテスト一覧に戻る</v-btn
+        >
+
         <InformationCard
           :name.sync="contest.name"
           :penalty.sync="contest.penaltyTime"
@@ -59,7 +63,8 @@ import { Problem } from '~/types/contestAdmin'
     ProblemsCard,
     TimeCardEdit,
     SettingsCard
-  }
+  },
+  middleware: 'authenticated'
 })
 export default class PageContestAdmin extends Vue {
   @Ref('addProblemCard')
@@ -75,6 +80,12 @@ export default class PageContestAdmin extends Vue {
 
   updated: boolean = false
   modal: boolean = false
+
+  head() {
+    return {
+      title: `[${this.contestName}] コンテストの編集`
+    }
+  }
 
   get contestName() {
     return this.$route.params.contestName

@@ -127,6 +127,7 @@ export default class EditTestcaseModal extends Vue {
 
   check(v: string) {
     return (
+      this.readonly ||
       !this.testcaseNames.includes(v) ||
       'この名前のテストケースは既に存在します。'
     )

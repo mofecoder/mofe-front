@@ -5,15 +5,27 @@ import camelCase from 'lodash.camelcase'
 import snakeCase from 'lodash.snakecase'
 import mapValues from 'lodash.mapvalues'
 import mapKeys from 'lodash.mapkeys'
-import { userStore } from '~/utils/store-accessor'
 
 export class HttpError extends Error {
-  constructor(message: string, response: any) {
+  constructor(message: string, response: AxiosResponse) {
     super(message)
     this.response = response
+    this.response.data = toCamelCase(this.response.data)
+    Object.defineProperty(this, 'name', {
+      configurable: true,
+      enumerable: false,
+      value: 'HttpError',
+      writable: true
+    })
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, HttpError)
+    }
+
+    Object.setPrototypeOf(this, new.target.prototype)
   }
 
-  response: any
+  response: AxiosResponse
 }
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
@@ -33,8 +45,12 @@ function toCamelCase(data: any) {
   return mapKeysDeep(data, callback)
 }
 
-function toSnakeCase(data: any) {
-  const callback = (_: any, key: any) => snakeCase(key)
+function toSnakeCase(data: any, header = false) {
+  const callback = (_: any, key: any) => {
+    let k = snakeCase(key)
+    if (header) k = k.replace('_', '-')
+    return k
+  }
   return mapKeysDeep(data, callback)
 }
 
@@ -75,7 +91,7 @@ function setToken(header: any) {
   }
 }
 
-function updateToken(header: any, data: any) {
+function updateToken(header: any) {
   const client: string | undefined = header.client
   const accessToken: string | undefined = header.accessToken
   const uid: string | undefined = header.uid
@@ -84,7 +100,6 @@ function updateToken(header: any, data: any) {
     localStorage.setItem('client', client)
     localStorage.setItem('accessToken', accessToken)
     localStorage.setItem('uid', uid)
-    if (data) userStore.updateUser(data)
   }
 }
 
@@ -96,19 +111,19 @@ async function http<T>(
   body: any = {}
 ): Promise<T> {
   setToken(header)
-  header.accept = 'application/json'
+  if (!header.accept) header.accept = 'application/json'
   const res = await method(url, {
-    headers: toSnakeCase(header),
+    headers: toSnakeCase(header, true),
     data: toSnakeCase(body)
   })
   log(name, url, res)
 
   if (res.status === 401) throw new Error('Not logged in.')
 
+  updateToken(toCamelCase(res.headers))
   if (isErrorCode(res.status))
     throw new HttpError(`HTTP Error (Response: ${res.status})`, res)
 
-  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
   return toCamelCase(res.data) as T
 }
 
@@ -121,23 +136,26 @@ async function httpWithData<T>(
   name: string,
   url: string,
   header: any = {},
-  body: any = {}
+  body: any = {},
+  formData = false,
+  timeout?: number
 ): Promise<T> {
   setToken(header)
-  header.accept = 'application/json'
-  const data = typeof body === 'object' ? toSnakeCase(body) : body
+  if (!header.accept) header.accept = 'application/json'
+  const data = typeof body === 'object' && !formData ? toSnakeCase(body) : body
   if (typeof body === 'string') header['content-type'] = 'text/plain'
   const res = await method(url, data, {
-    headers: toSnakeCase(header)
+    headers: toSnakeCase(header, true),
+    timeout
   })
   log(name, url, res)
 
   if (res.status === 401) throw new Error('Not logged in.')
 
+  updateToken(toCamelCase(res.headers))
   if (isErrorCode(res.status))
     throw new HttpError(`HTTP Error (Response: ${res.status})`, res)
 
-  updateToken(toCamelCase(res.headers), toCamelCase(res.data.data))
   return toCamelCase(res.data) as T
 }
 
@@ -154,11 +172,20 @@ async function httpPost<T>(
   url: string,
   header: any = {},
   body: any = {},
-  formData: boolean = false
+  formData: boolean = false,
+  timeout?: number
 ): Promise<T> {
   if (formData) header['content-type'] = 'multipart/form-data'
 
-  const ret = await httpWithData<T>(client.post, 'POST', url, header, body)
+  const ret = await httpWithData<T>(
+    client.post,
+    'POST',
+    url,
+    header,
+    body,
+    formData,
+    timeout
+  )
   return ret
 }
 

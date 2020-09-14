@@ -12,17 +12,18 @@ module.exports = {
     'plugin:nuxt/recommended',
     '@nuxtjs/eslint-config-typescript'
   ],
-  plugins: [
-    'prettier'
-  ],
+  plugins: ['prettier'],
   // add your custom rules here
   rules: {
-    'space-before-function-paren': ['error', {
-      anonymous: 'always',
-      named: 'never',
-      asyncArrow: 'always'
-    }],
-    'curly': 'off',
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always'
+      }
+    ],
+    curly: 'off',
     'arrow-parens': 'off',
     'vue/html-self-closing': 'off',
     'vue/html-closing-bracket-newline': 'off',

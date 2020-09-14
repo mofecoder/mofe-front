@@ -9,7 +9,7 @@ export interface Contest {
 }
 
 export interface ContestDetail extends Contest {
-  tasks: Task[]
+  tasks?: Task[]
   description: string
   penaltyTime: number
 }

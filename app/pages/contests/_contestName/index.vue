@@ -19,8 +19,10 @@ import MixinContest from '~/mixins/contest'
   layout: 'contest'
 })
 export default class PageContest extends mixins(MathJax, MixinContest) {
-  async created() {
-    await this.getContest()
+  head() {
+    return {
+      title: this.contest?.name
+    }
   }
 
   get penaltyTime(): string {

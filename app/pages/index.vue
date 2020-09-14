@@ -1,68 +1,95 @@
 <template>
-  <v-card :loading="!(contests && problems)">
-    <v-container>
-      <v-row>
-        <v-col>
-          <h2>コンテスト（閲覧）</h2>
-          <ul v-if="contests != null">
-            <li v-for="contest in contests" :key="contest.slug">
-              <n-link :to="`/contests/${contest.slug}`" v-text="contest.name" />
-            </li>
-          </ul>
-        </v-col>
-        <v-col>
-          <h2>コンテスト（管理）</h2>
-          <n-link to="/manage/contests">一覧</n-link>
-          <n-link to="/manage/contests/new">作成</n-link>
-        </v-col>
-        <v-col>
-          <h2>問題（管理）</h2>
-          <n-link to="/writer/problems">一覧</n-link>
-          <n-link to="/writer/problems/new">作成</n-link>
-        </v-col>
-        <v-col>
-          <h2>問題（未所属）</h2>
-          <ul v-if="problems && problems.length">
-            <li v-for="problem in problems" :key="problem.id">
-              <n-link :to="`/writer/problems/${problem.id}`">
-                {{ problem.name }} ({{ problem.name }}) by
-                {{ problem.writerUser }}
-              </n-link>
-            </li>
-          </ul>
-          <p v-else-if="problems != null">
-            該当なし
-          </p>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card>
+  <div>
+    <v-card>
+      <v-card-title>コンテストの一覧</v-card-title>
+      <v-card-text>
+        <v-simple-table v-if="contests">
+          <thead>
+            <tr>
+              <th />
+              <th>開始日時</th>
+              <th>コンテスト名</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="contest in contests" :key="contest.slug">
+              <td v-text="checkStatus(contest)" />
+              <td v-text="formatDate(contest.startAt)" />
+              <td>
+                <nuxt-link
+                  :to="`contests/${contest.slug}`"
+                  v-text="contest.name"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+        <nuxt-link v-if="loggedIn" to="manage">管理ページへ</nuxt-link>
+      </v-card-text>
+    </v-card>
+    <v-btn
+      v-if="isWriter"
+      class="mt-4"
+      color="primary"
+      nuxt
+      to="/writer/problems"
+      >問題の管理画面へ</v-btn
+    >
+    <!-- CafeCoder Twitter -->
+    <div class="mt-4">
+      <p>解説や障害情報等のお知らせは Twitter で発信しています</p>
+      <a
+        href="https://twitter.com/CafeCoder_?ref_src=twsrc%5Etfw"
+        class="twitter-follow-button"
+        data-lang="ja"
+        data-show-count="true"
+        >Follow @CafeCoder_</a
+      >
+    </div>
+    <script
+      async
+      src="https://platform.twitter.com/widgets.js"
+      charset="utf-8"
+    ></script>
+  </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'nuxt-property-decorator'
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import { Component, Vue } from 'nuxt-property-decorator'
+import dayjs from 'dayjs'
 import { Contest } from '~/types/contest'
-import { Problem } from '~/types/contestAdmin'
+import { userStore } from '~/utils/store-accessor'
 
 @Component({
-  components: {
-    Logo,
-    VuetifyLogo
-  },
-  middleware: 'authenticated'
+  head: { title: 'トップ' }
 })
-export default class MainPage extends Vue {
-  test: any = ''
+export default class PageMainPage extends Vue {
   contests: Contest[] | null = null
-  problems: Problem[] | null = null
-
   async created() {
-    ;[this.contests, this.problems] = await Promise.all([
-      this.$api.Contests.index(),
-      this.$api.Problems.unsetProblems()
-    ])
+    this.contests = await this.$api.Contests.index()
+  }
+
+  get loggedIn() {
+    return userStore.getUser && userStore.getUser.role === 'admin'
+  }
+
+  get isWriter() {
+    return (
+      userStore.getUser && ['admin', 'writer'].includes(userStore.getUser.role)
+    )
+  }
+
+  formatDate = (date: string) => dayjs(date).format('MM/DD HH:mm')
+
+  checkStatus(contest: Contest) {
+    const startAt = dayjs(contest.startAt)
+    const endAt = dayjs(contest.endAt)
+
+    if (startAt.isAfter(Date())) return '予　定'
+    if (endAt.isBefore(Date())) return '終　了'
+    return '開催中'
   }
 }
 </script>
+
+<style scoped lang="scss"></style>

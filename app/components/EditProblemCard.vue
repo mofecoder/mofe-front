@@ -1,9 +1,6 @@
 <template>
   <v-card class="wrapper">
-    <v-card-title
-      class="headline"
-      style="display:flex;justify-content:space-between"
-    >
+    <v-card-title class="headline edit-problem-card">
       <p>問題の編集</p>
       <v-btn color="purple white--text" @click="testcase"
         >テストケースの設定</v-btn
@@ -32,7 +29,7 @@
         <!-- 問題文 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -60,7 +57,7 @@
         <!-- 制約 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -88,7 +85,7 @@
         <!-- 入力 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -116,7 +113,7 @@
         <!-- 出力 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -151,11 +148,14 @@
           </v-col>
         </v-row>
       </v-form>
+      <v-snackbar v-model="updated" :timeout="4000">
+        問題を更新しました。
+      </v-snackbar>
     </v-card-text>
   </v-card>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { Difficulty } from '~/types/task'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { ProblemParams } from '~/types/problems'
@@ -196,12 +196,12 @@ export default class CreateProblemCard extends Vue {
   }
 
   valid = false
+  updated = false
 
-  get problemId(): number {
-    return Number(this.$route.params.problemId)
-  }
+  @Prop({ required: true })
+  problemId!: number
 
-  async reload() {
+  async fetch() {
     const tmp = await this.$api.Problems.show(this.problemId)
     this.content = {
       name: tmp.name,
@@ -213,13 +213,10 @@ export default class CreateProblemCard extends Vue {
     }
   }
 
-  async created() {
-    await this.reload()
-  }
-
   async onSubmit() {
     await this.$api.Problems.update(this.problemId, this.content)
-    await this.reload()
+    this.updated = true
+    await this.$fetch()
   }
 
   testcase() {
@@ -229,3 +226,10 @@ export default class CreateProblemCard extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.edit-problem-card {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

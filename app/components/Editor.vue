@@ -1,7 +1,9 @@
 <template>
-  <div class="codemirror">
-    <codemirror v-model="value" :options="cmOptions" />
-  </div>
+  <codemirror
+    v-model="value"
+    :class="isAutoHeight && 'codemirror-auto-height'"
+    :options="cmOptions"
+  />
 </template>
 
 <script lang="ts">
@@ -28,6 +30,13 @@ export default class Editor extends Vue {
   @Prop({ default: false })
   readOnly!: string | boolean | null
 
+  @Prop({ default: false })
+  autoHeight!: boolean | string
+
+  get isAutoHeight() {
+    return this.autoHeight !== false
+  }
+
   @Watch('language', { immediate: true })
   onChangeLanguage() {
     this.$set(this.cmOptions, 'mode', this.language?.mime || null)
@@ -45,9 +54,19 @@ export default class Editor extends Vue {
     mode: null,
     lineNumbers: true,
     line: true,
-    lineSeparator: '\n'
+    lineSeparator: '\n',
+    viewportMargin: Infinity
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.vue-codemirror ::v-deep .CodeMirror {
+  border: solid 1px darkgray;
+  border-radius: 2px;
+  height: 24.1em;
+}
+.codemirror-auto-height ::v-deep .CodeMirror {
+  height: auto;
+}
+</style>

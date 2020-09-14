@@ -21,11 +21,22 @@ export interface Submit {
   task: Task
   status: Result
   lang: string
-  executionTime?: number
-  executionMemory?: number
+  executionTime: number | null
+  executionMemory: number | null
   point: number
+  judgeStatus: { completed: number; all: number } | null
+}
+
+export interface TestcaseResult {
+  testcaseName: string | null
+  status: Result
+  executionTime: number
+  executionMemory: number
 }
 
 export interface SubmitDetail extends Submit {
   source: string
+  sampleCount: number | null
+  compileError: string | null
+  testcaseResults: TestcaseResult[]
 }

@@ -4,7 +4,7 @@
       <v-container class="pa-0" fluid>
         <v-card :loading="!submits">
           <v-card-title>自分の提出</v-card-title>
-          <v-card-text style="color:inherit">
+          <v-card-text class="submit-card">
             <SubmitTable v-if="submits" :submits="submits" />
           </v-card-text>
         </v-card>
@@ -23,29 +23,35 @@ import SubmitTable from '~/components/submits/SubmitTable.vue'
 import { Submit } from '~/types/submits'
 @Component({
   components: { SubmitTable, ContestHeaderTab, ContestHeader },
-  layout: 'contest'
+  layout: 'contest',
+  middleware: 'authenticated'
 })
 export default class PageContest extends mixins(MathJax, MixinContest) {
-  async created() {
+  head() {
+    return {
+      title: `自分の提出 - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
+  async fetch() {
     await this.getContest()
     this.reload()
-    const callback = () => {
-      this.reload()
-    }
-    this.timeout = setInterval(callback, 5000)
   }
 
   beforeDestroy() {
-    if (this.timeout) clearInterval(this.timeout)
+    if (this.timeout) window.clearTimeout(this.timeout)
   }
 
   submits: Submit[] | null = null
-  timeout: NodeJS.Timeout | null = null
+  timeout: number | null = null
 
   reload() {
     this.$api.Contests.mySubmits(this.$route.params.contestName)
       .then((res: Submit[]) => {
         this.submits = res
+        const timeout = this.submits.some((s) => s.point == null) ? 2000 : 15000
+        this.timeout = window.setTimeout(this.reload, timeout)
       })
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') this.$router.replace('/login')
@@ -54,4 +60,8 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.submit-card {
+  @include card-text-reset();
+}
+</style>

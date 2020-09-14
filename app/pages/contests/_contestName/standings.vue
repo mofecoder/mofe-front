@@ -26,11 +26,20 @@ import { StandingData } from '~/types/standings'
   layout: 'contest'
 })
 export default class PageContestStandings extends mixins(MixinContest) {
-  async created() {
+  head() {
+    return {
+      title: `順位表 - ${this.contest?.name}`,
+      titleTemplate: null
+    }
+  }
+
+  async fetch() {
     await this.getContest()
-    this.$api.Contests.standings(this.$route.params.contestName).then((res) => {
-      this.standingData = res
-    })
+    await this.$api.Contests.standings(this.$route.params.contestName).then(
+      (res) => {
+        this.standingData = res
+      }
+    )
   }
 
   standingData: StandingData | null = null

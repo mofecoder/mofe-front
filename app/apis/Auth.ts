@@ -1,4 +1,4 @@
-import { httpGet, httpPost } from '~/utils/axios'
+import { httpDelete, httpPost } from '~/utils/axios'
 import { AuthUser } from '~/types/AuthUser'
 import { userStore } from '~/utils/store-accessor'
 
@@ -41,6 +41,11 @@ export default class {
     if (res && 'data' in res) {
       userStore.updateUser(res.data)
     }
+    return res
+  }
+
+  async signOut() {
+    const res = await httpDelete('/auth/sign_out')
     return res
   }
 }

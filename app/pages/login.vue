@@ -41,7 +41,9 @@
 import { Component, Ref, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 
-@Component
+@Component({
+  head: { title: 'ログイン' }
+})
 export default class PageLogin extends Vue {
   valid: boolean = false
   name: string = ''
@@ -55,8 +57,7 @@ export default class PageLogin extends Vue {
   rules = {
     name: [
       (v: string) => !!v || 'このフィールドは必須です。',
-      (v: string) =>
-        (v && /^[a-zA-Z\d]+$/.test(v)) || 'ユーザ名の形式が無効です。'
+      (v: string) => (v && /^\w+$/.test(v)) || 'ユーザ名の形式が無効です。'
     ],
     password: [(v: string) => !!v || 'このフィールドは必須です。']
   }
@@ -78,8 +79,9 @@ export default class PageLogin extends Vue {
   }
 
   redirect() {
-    // TODO: redirect先を持つ
-    this.$router.push('/')
+    let s: string | (string | null)[] | null = this.$route.query.redirect
+    if (typeof s !== 'string') s = null
+    this.$router.push(s || '/')
   }
 }
 </script>

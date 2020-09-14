@@ -25,7 +25,9 @@ export default class UserModule extends VuexModule implements UserState {
       const res = await httpGet<{
         success: boolean
         data?: AuthUser
-      }>('/auth/validate_token')
+      }>('/auth/validate_token', {
+        accept: '*/*'
+      })
       if (!res.success) return null
       return res.data
     } catch {

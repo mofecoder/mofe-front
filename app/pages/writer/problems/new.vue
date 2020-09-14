@@ -14,7 +14,11 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 import CreateProblemCard from '~/components/CreateProblemCard.vue'
 
-@Component({ components: { CreateProblemCard } })
+@Component({
+  components: { CreateProblemCard },
+  middleware: 'authenticated',
+  head: { title: '問題の作成' }
+})
 export default class PageWriterProblemNew extends Vue {}
 </script>
 

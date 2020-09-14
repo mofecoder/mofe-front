@@ -24,7 +24,7 @@
         <!-- 問題文 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-3"
             text
             width="auto"
             color="purple"
@@ -52,7 +52,7 @@
         <!-- 制約 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -80,7 +80,7 @@
         <!-- 入力 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -108,7 +108,7 @@
         <!-- 出力 -->
         <v-row justify="end">
           <v-btn
-            style="margin-right:12px"
+            class="mr-4"
             text
             width="auto"
             color="purple"
@@ -190,7 +190,9 @@ export default class CreateProblemCard extends Vue {
   valid = false
 
   async onSubmit() {
-    await this.$api.Problems.create(this.content)
+    await this.$api.Problems.create(this.content).then(() => {
+      this.$router.push('/writer/problems')
+    })
   }
 }
 </script>
