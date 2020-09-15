@@ -3,8 +3,8 @@
     <v-card-title class="headline edit-problem-card">
       <p>問題の編集</p>
       <v-btn color="purple white--text" @click="testcase"
-        >テストケースの設定</v-btn
-      >
+        >テストケースの設定
+      </v-btn>
     </v-card-title>
     <v-card-text>
       <v-form v-model="valid" @submit.prevent="onSubmit">
@@ -34,8 +34,8 @@
             width="auto"
             color="purple"
             @click="modals.problemStatement = true"
-            >プレビュー</v-btn
-          >
+            >プレビュー
+          </v-btn>
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
@@ -62,8 +62,8 @@
             width="auto"
             color="purple"
             @click="modals.constraints = true"
-            >プレビュー</v-btn
-          >
+            >プレビュー
+          </v-btn>
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
@@ -90,8 +90,8 @@
             width="auto"
             color="purple"
             @click="modals.input = true"
-            >プレビュー</v-btn
-          >
+            >プレビュー
+          </v-btn>
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
@@ -118,8 +118,8 @@
             width="auto"
             color="purple"
             @click="modals.output = true"
-            >プレビュー</v-btn
-          >
+            >プレビュー
+          </v-btn>
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
@@ -138,7 +138,29 @@
           :value="modals.output"
           @close="modals.output = false"
         />
-        <!-- サンプル -->
+        <v-row>
+          <v-col cols="12">
+            <h4>テスターの管理</h4>
+            <ul v-if="testers.length" class="text-body-1 black--text">
+              <li v-for="tester in testers" :key="`tester-${tester}`">
+                {{ tester }}
+                <v-icon small @click="removeTester(tester)">mdi-delete</v-icon>
+              </li>
+            </ul>
+            <p v-else class="text-body-2">
+              テスターは登録されていません。
+            </p>
+            <v-text-field
+              v-model="testerName"
+              class="edit-problem-card__add-tester"
+              placeholder="テスターを追加"
+              hide-details
+              @keydown.enter="addTester"
+            />
+            <v-btn small color="primary" @click="addTester">追加</v-btn>
+            <p class="red--text" v-text="testerError" />
+          </v-col>
+        </v-row>
         <!-- 登録ボタン -->
         <v-row>
           <v-col cols="12">
@@ -159,6 +181,7 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { Difficulty } from '~/types/task'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { ProblemParams } from '~/types/problems'
+import { HttpError } from '~/utils/axios'
 
 @Component({
   components: { MarkdownPreviewModal }
@@ -198,6 +221,10 @@ export default class CreateProblemCard extends Vue {
   valid = false
   updated = false
 
+  testerName = ''
+  testers: string[] = []
+  testerError = ''
+
   @Prop({ required: true })
   problemId!: number
 
@@ -211,12 +238,39 @@ export default class CreateProblemCard extends Vue {
       inputFormat: tmp.inputFormat,
       outputFormat: tmp.outputFormat
     }
+    this.testers = tmp.testers
   }
 
   async onSubmit() {
     await this.$api.Problems.update(this.problemId, this.content)
     this.updated = true
     await this.$fetch()
+  }
+
+  async addTester() {
+    await this.$api.Problems.addTester(this.problemId, this.testerName)
+      .then(async () => {
+        this.testerName = ''
+        this.testerError = ''
+        await this.$fetch()
+      })
+      .catch((err) => {
+        if (err instanceof HttpError) {
+          this.testerError = err.response.data.error
+        } else {
+          this.testerError = 'テスターの追加に失敗しました'
+        }
+      })
+  }
+
+  async removeTester(name: string) {
+    await this.$api.Problems.removeTester(this.problemId, name)
+      .then(async () => {
+        await this.$fetch()
+      })
+      .catch(() => {
+        alert('テスターの削除に失敗しました')
+      })
   }
 
   testcase() {
@@ -231,5 +285,10 @@ export default class CreateProblemCard extends Vue {
 .edit-problem-card {
   display: flex;
   justify-content: space-between;
+
+  &__add-tester {
+    display: inline-block;
+    max-width: 8em;
+  }
 }
 </style>

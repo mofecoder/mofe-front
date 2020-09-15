@@ -207,8 +207,12 @@ async function httpPatch<T>(
   return ret
 }
 
-async function httpDelete<T>(url: string, header: any = {}): Promise<T> {
-  const ret = await http<T>(client.delete, 'DELETE', url, header)
+async function httpDelete<T>(
+  url: string,
+  header: any = {},
+  body: any = {}
+): Promise<T> {
+  const ret = await http<T>(client.delete, 'DELETE', url, header, body)
   return ret
 }
 

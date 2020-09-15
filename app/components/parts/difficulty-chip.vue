@@ -13,7 +13,7 @@ import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { Difficulty } from '~/types/task'
 
 @Component
-export default class UiTest extends Vue {
+export default class DifficultyChip extends Vue {
   @Prop({ required: true })
   difficulty!: Difficulty
 
