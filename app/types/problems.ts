@@ -30,6 +30,7 @@ export interface ProblemDetail {
   inputFormat: string
   outputFormat: string
   samples: Sample[] | null
+  testers: string[]
 }
 
 export interface TestcaseSet {

@@ -1,4 +1,4 @@
-import { httpGet, httpPost, httpPut } from '~/utils/axios'
+import { httpDelete, httpGet, httpPost, httpPut } from '~/utils/axios'
 import { ProblemParams, Problem, ProblemDetail } from '~/types/problems'
 import { Problem as AdminProblem } from '~/types/contestAdmin'
 
@@ -24,5 +24,25 @@ export default class {
   async unsetProblems(): Promise<AdminProblem[]> {
     const res = await httpGet<AdminProblem[]>('/manage/problems/unset_problems')
     return res
+  }
+
+  async addTester(problemId: number, name: string): Promise<void> {
+    await httpPost(
+      `/problems/${problemId}/tester_relations`,
+      {},
+      {
+        userName: name
+      }
+    )
+  }
+
+  async removeTester(problemId: number, name: string): Promise<void> {
+    await httpDelete(
+      `/problems/${problemId}/tester_relations`,
+      {},
+      {
+        userName: name
+      }
+    )
   }
 }

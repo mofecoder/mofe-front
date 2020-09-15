@@ -12,6 +12,7 @@ export interface ContestDetail extends Contest {
   tasks?: Task[]
   description: string
   penaltyTime: number
+  isWriterOrTester: boolean
 }
 
 export interface ContestDetailManage extends ContestDetail {

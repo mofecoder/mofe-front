@@ -55,7 +55,7 @@ import { Component, Vue, Watch } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { contestStore, userStore } from '~/utils/store-accessor'
 import ContestSidebar from '~/components/ContestSidebar.vue'
-import { Contest } from '~/types/contest'
+import { ContestDetail } from '~/types/contest'
 import 'dayjs/locale/ja'
 
 type Link = {
@@ -80,7 +80,6 @@ export default class LayoutContest extends Vue {
   get links(): Link[] {
     const contestEnded =
       this.contest != null && dayjs(this.contest.endAt).isBefore(Date())
-    const isAdmin = this.user != null && this.user.role === 'admin'
     return [
       {
         name: 'トップ',
@@ -93,7 +92,7 @@ export default class LayoutContest extends Vue {
       {
         name: 'すべての提出',
         path: 'submits/all',
-        disabled: !contestEnded && !isAdmin
+        disabled: !contestEnded && !this.contest?.isWriterOrTester
       },
       {
         name: '自分の提出',
@@ -111,7 +110,7 @@ export default class LayoutContest extends Vue {
     ]
   }
 
-  get contest(): Contest | null {
+  get contest(): ContestDetail | null {
     return contestStore.contest
   }
 
