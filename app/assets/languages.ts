@@ -32,11 +32,17 @@ const languages: Language[] = [
     mime: 'text/x-csharp'
   },
   { innerName: 'java11', name: 'Java11 (11.0.6)', mime: 'text/x-java' },
-  { innerName: 'go_114', name: 'Go (1.14)', mime: 'text/x-go' },
+  { innerName: 'go_115', name: 'Go (1.15)', mime: 'text/x-go' },
   {
     innerName: 'cpp17_gcc10_acl',
     name: 'C++17 (g++ 10.0.1 with AC Library v1.1)',
     mime: 'text/x-c++src'
+  },
+  {
+    innerName: 'go_114',
+    name: 'Go (1.14)',
+    mime: 'text/x-go',
+    isOutdated: true
   },
   {
     innerName: 'cpp17_gcc7',
