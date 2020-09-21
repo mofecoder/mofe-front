@@ -4,6 +4,7 @@
       <v-card-title>質問する</v-card-title>
       <v-card-text class="black--text">
         <v-select
+          v-model="problem"
           label="問題"
           :items="items"
           hint="コンテスト全体に対する質問の場合は空欄にしてください"
