@@ -8,6 +8,7 @@ import {
 import { httpGet, httpPost, httpPut } from '~/utils/axios'
 import { StandingData } from '~/types/standings'
 import { Submit, SubmitDetail } from '~/types/submits'
+import { Clarification } from '~/types/clarification'
 
 export default class {
   async index(): Promise<Contest[]> {
@@ -42,6 +43,52 @@ export default class {
       `/contests/${contestSlug}/submits/${id}`
     )
     return res
+  }
+
+  async clarifications(contestSlug: string): Promise<Clarification[]> {
+    const res = await httpGet<Clarification[]>(
+      `/contests/${contestSlug}/clarifications`
+    )
+    return res
+  }
+
+  async clarification(contestSlug: string, id: number): Promise<Clarification> {
+    const res = await httpGet<Clarification>(
+      `/contests/${contestSlug}/clarifications/${id}`
+    )
+    return res
+  }
+
+  async updateClarification(
+    contestSlug: string,
+    id: number,
+    params: {
+      answer: string
+      publish: boolean
+    }
+  ) {
+    await httpPut(
+      `/contests/${contestSlug}/clarifications/${id}`,
+      {},
+      { clarification: params }
+    )
+  }
+
+  async createClarification(
+    contestSlug: string,
+    taskSlug: string | null,
+    question: string
+  ) {
+    await httpPost(
+      `/contests/${contestSlug}/clarifications`,
+      {},
+      {
+        clarification: {
+          task: taskSlug,
+          question
+        }
+      }
+    )
   }
 
   async create(contestInfo: ContestCreateParam): Promise<void> {
