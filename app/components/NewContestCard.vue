@@ -1,8 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>
-      コンテスト情報
-    </v-card-title>
+    <v-card-title> コンテスト情報 </v-card-title>
     <v-card-text>
       <v-text-field
         v-model="contestName"

@@ -6,8 +6,8 @@
       judgeStatus && 'chip-judging'
     ]"
     v-text="text"
-  ></div
-></template>
+  ></div>
+</template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'

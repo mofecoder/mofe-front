@@ -90,6 +90,10 @@ export default class LayoutContest extends Vue {
         path: 'tasks'
       },
       {
+        name: '質問',
+        path: 'clarifications'
+      },
+      {
         name: 'すべての提出',
         path: 'submits/all',
         disabled: !contestEnded && !this.contest?.isWriterOrTester

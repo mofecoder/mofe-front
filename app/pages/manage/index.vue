@@ -25,9 +25,7 @@
               </n-link>
             </li>
           </ul>
-          <p v-else-if="problems != null">
-            該当なし
-          </p>
+          <p v-else-if="problems != null">該当なし</p>
         </v-col>
       </v-row>
     </v-container>
