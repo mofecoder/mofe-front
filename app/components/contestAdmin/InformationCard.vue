@@ -1,8 +1,6 @@
 <template>
   <v-card :loading="loading">
-    <v-card-title>
-      コンテスト情報
-    </v-card-title>
+    <v-card-title> コンテスト情報 </v-card-title>
     <v-card-text>
       <v-row>
         <v-col cols="12">

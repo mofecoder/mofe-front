@@ -147,9 +147,7 @@
                 <v-icon small @click="removeTester(tester)">mdi-delete</v-icon>
               </li>
             </ul>
-            <p v-else class="text-body-2">
-              テスターは登録されていません。
-            </p>
+            <p v-else class="text-body-2">テスターは登録されていません。</p>
             <v-text-field
               v-model="testerName"
               class="edit-problem-card__add-tester"
