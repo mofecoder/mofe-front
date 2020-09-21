@@ -61,14 +61,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Ref, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
 import { HttpError } from '~/utils/axios'
+import {} from '@nuxtjs/vuetify'
 
 @Component({
   head: { title: '新規登録' }
 })
 export default class PageLogin extends Vue {
+  @Ref('form')
+  form: any
+
   valid: boolean = false
   name: string = ''
   password: string = ''
@@ -140,7 +144,14 @@ export default class PageLogin extends Vue {
   }
 
   submit() {
-    this.$api.Auth.signUp(this.email, this.name, this.password)
+    if (!this.form.validate()) return
+
+    this.$api.Auth.signUp(
+      this.email,
+      this.name,
+      this.password,
+      this.passwordConfirm
+    )
       .then(this.redirect)
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') {

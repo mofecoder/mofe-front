@@ -28,14 +28,20 @@ export default class {
     return res
   }
 
-  async signUp(email: string, userName: string, password: string) {
+  async signUp(
+    email: string,
+    userName: string,
+    password: string,
+    passwordConfirmation: string
+  ) {
     const res = await httpPost<AuthResponse>(
       '/auth',
       {},
       {
         name: userName,
         email,
-        password
+        password,
+        passwordConfirmation
       }
     )
     if (res && 'data' in res) {
