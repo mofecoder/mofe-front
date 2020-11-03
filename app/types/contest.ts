@@ -13,6 +13,7 @@ export interface ContestDetail extends Contest {
   description: string
   penaltyTime: number
   isWriterOrTester: boolean
+  registered: boolean
 }
 
 export interface ContestDetailManage extends ContestDetail {
