@@ -133,4 +133,8 @@ export default class {
       `/contests/${contestSlug}/tasks/${problemSlug}/remove_from_contest`
     )
   }
+
+  async register(contestSlug: string): Promise<void> {
+    await httpPost(`/contests/${contestSlug}/register`)
+  }
 }

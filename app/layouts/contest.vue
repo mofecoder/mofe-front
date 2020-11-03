@@ -25,9 +25,9 @@
       </template>
       <v-spacer />
       <template v-if="user">
-        <n-link class="contest-header__user-name pr-8 white--text" to="/user">{{
-          user.name
-        }}</n-link>
+        <n-link class="contest-header__user-name pr-8 white--text" to="/user"
+          >{{ user.name }}
+        </n-link>
       </template>
       <template v-else>
         <v-btn class="white--text" to="/sign_up" text>新規登録</v-btn>
@@ -209,10 +209,12 @@ export default class LayoutContest extends Vue {
     align-self: center;
     text-decoration: none;
   }
+
   &__info {
     margin-left: 2rem;
     font-size: 0.9rem;
     color: #eaeaea;
+
     &__title {
       font-size: 0.7rem;
     }
