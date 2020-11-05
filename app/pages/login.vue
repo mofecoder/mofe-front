@@ -23,12 +23,13 @@
           label="パスワード"
           required
         />
+        <n-link to="/sign_up">アカウントを作成する</n-link>
         <v-btn
           type="submit"
           :disabled="!valid"
           color="primary"
           width="100%"
-          class="mt-2"
+          class="mt-3"
         >
           ログインする
         </v-btn>
