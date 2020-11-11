@@ -108,13 +108,13 @@ async function http<T>(
   name: string,
   url: string,
   header: any = {},
-  body: any = {}
+  body: object = {}
 ): Promise<T> {
   setToken(header)
   if (!header.accept) header.accept = 'application/json'
   const res = await method(url, {
     headers: toSnakeCase(header, true),
-    data: toSnakeCase(body)
+    params: toSnakeCase(body)
   })
   log(name, url, res)
 
@@ -162,7 +162,7 @@ async function httpWithData<T>(
 async function httpGet<T>(
   url: string,
   header: any = {},
-  body: any = {}
+  body: object = {}
 ): Promise<T> {
   const ret = await http<T>(client.get, 'GET', url, header, body)
   return ret
@@ -210,7 +210,7 @@ async function httpPatch<T>(
 async function httpDelete<T>(
   url: string,
   header: any = {},
-  body: any = {}
+  body: object = {}
 ): Promise<T> {
   const ret = await http<T>(client.delete, 'DELETE', url, header, body)
   return ret
