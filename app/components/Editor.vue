@@ -13,6 +13,13 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/mode/clike/clike.js'
 import 'codemirror/mode/python/python.js'
 import 'codemirror/mode/go/go.js'
+import 'codemirror/mode/rust/rust.js'
+import 'codemirror/mode/ruby/ruby.js'
+import 'codemirror/mode/fortran/fortran.js'
+import 'codemirror/mode/crystal/crystal.js'
+import 'codemirror/mode/perl/perl.js'
+import 'codemirror/mode/shell/shell.js'
+
 import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
 import { Language } from '~/types/language'
 
