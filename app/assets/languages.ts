@@ -27,7 +27,7 @@ const languages: Language[] = [
     mime: 'text/x-java'
   },
   {
-    innerName: 'python:3.9',
+    innerName: 'python:3.9.0',
     name: 'Python (3.9.0)',
     mime: 'text/x-python'
   },
@@ -47,8 +47,8 @@ const languages: Language[] = [
     mime: 'text/x-csharp'
   },
   {
-    innerName: 'rust:1.47.0',
-    name: 'Rust (1.47.0)',
+    innerName: 'rust:1.48.0',
+    name: 'Rust (1.48.0)',
     mime: 'text/x-rustsrc'
   },
   {
