@@ -7,6 +7,11 @@ const languages: Language[] = [
     mime: 'text/x-c++src'
   },
   {
+    innerName: 'cpp17-acl_gcc:10.2.0',
+    name: 'C++17 ACL (g++ 10.2.0 with AC Library v1.1)',
+    mime: 'text/x-c++src'
+  },
+  {
     innerName: 'cpp20_gcc:10.2.0',
     name: 'C++20 (g++ 10.2.0)',
     mime: 'text/x-c++src'
@@ -17,8 +22,18 @@ const languages: Language[] = [
     mime: 'text/x-csrc'
   },
   {
+    innerName: 'java:11.0.9',
+    name: 'Java11 (11.0.9)',
+    mime: 'text/x-java'
+  },
+  {
     innerName: 'python:3.9',
     name: 'Python (3.9.0)',
+    mime: 'text/x-python'
+  },
+  {
+    innerName: 'pypy3:7.3.3',
+    name: 'PyPy3 (7.3.3)',
     mime: 'text/x-python'
   },
   {
@@ -32,26 +47,6 @@ const languages: Language[] = [
     mime: 'text/x-csharp'
   },
   {
-    innerName: 'java:11.0.9',
-    name: 'Java11 (11.0.9)',
-    mime: 'text/x-java'
-  },
-  {
-    innerName: 'go:1.15.5',
-    name: 'Go (1.15)',
-    mime: 'text/x-go'
-  },
-  {
-    innerName: 'cpp17-acl_gcc:10.2.0',
-    name: 'C++17 (g++ 10.2.0 with AC Library v1.1)',
-    mime: 'text/x-c++src'
-  },
-  {
-    innerName: 'nim:1.4.0',
-    name: 'Nim (1.4.0)',
-    mime: 'text/plain'
-  },
-  {
     innerName: 'rust:1.47.0',
     name: 'Rust (1.47.0)',
     mime: 'text/x-rustsrc'
@@ -62,12 +57,22 @@ const languages: Language[] = [
     mime: 'text/x-ruby'
   },
   {
-    innerName: 'kotlin:1.14.10',
+    innerName: 'kotlin:1.4.10',
     name: 'Kotlin (1.4.10)',
     mime: 'text/x-kotlin'
   },
   {
-    innerName: 'fortran:10.22.0',
+    innerName: 'go:1.15.5',
+    name: 'Go (1.15)',
+    mime: 'text/x-go'
+  },
+  {
+    innerName: 'nim:1.4.0',
+    name: 'Nim (1.4.0)',
+    mime: 'text/plain'
+  },
+  {
+    innerName: 'fortran:10.2.0',
     name: 'Fortran (GNU Fortran 10.2.0)',
     mime: 'text/x-fortran'
   },
@@ -82,24 +87,19 @@ const languages: Language[] = [
     mime: 'text/plain'
   },
   {
-    innerName: 'perl:5.30.3',
-    name: 'Perl (5.30.3)',
+    innerName: 'perl:5.30.0',
+    name: 'Perl (5.30.0)',
     mime: 'text/x-perl'
   },
   {
-    innerName: 'raku:2020.09',
-    name: 'Raku (2020.09)',
+    innerName: 'raku:2020.10',
+    name: 'Raku (2020.10)',
     mime: 'text/plain'
   },
   {
     innerName: 'bash:5.0.17',
     name: 'Bash (5.0.17)',
     mime: 'text/x-sh'
-  },
-  {
-    innerName: 'pypy3:3.7.7',
-    name: 'PyPy3 (3.7.7)',
-    mime: 'text/x-python'
   },
   {
     innerName: 'cpp17_gcc10',
