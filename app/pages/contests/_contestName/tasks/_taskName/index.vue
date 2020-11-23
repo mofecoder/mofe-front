@@ -18,8 +18,6 @@ import ContestHeader from '~/components/ContestHeader.vue'
 import { TaskDetail } from '~/types/task'
 import MathJax from '~/mixins/mathjax'
 import MixinContest from '~/mixins/contest'
-import languages from '~/assets/languages'
-import { Language } from '~/types/language'
 import { HttpError } from '~/utils/axios'
 import ViewProblemCard from '~/components/ViewProblemCard.vue'
 
@@ -40,7 +38,6 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   }
 
   problem: TaskDetail | null = null
-  language: Language | undefined = languages[0]
   submitted = false
   errorMessage: string | null = null
 
