@@ -6,4 +6,5 @@ export interface AuthUser {
   uid: string
   allowPasswordChange: boolean
   role: string
+  atcoderId: string | null
 }

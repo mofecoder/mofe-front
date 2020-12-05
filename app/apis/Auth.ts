@@ -1,4 +1,4 @@
-import { httpDelete, httpPost } from '~/utils/axios'
+import { httpDelete, httpPost, httpPut } from '~/utils/axios'
 import { AuthUser } from '~/types/AuthUser'
 import { userStore } from '~/utils/store-accessor'
 
@@ -48,6 +48,13 @@ export default class {
       userStore.updateUser(res.data)
     }
     return res
+  }
+
+  async updateUser(
+    userId: number,
+    { atcoderId }: { atcoderId: string | null }
+  ) {
+    await httpPut(`/users/${userId}`, {}, { user: { atcoderId } })
   }
 
   async signOut() {

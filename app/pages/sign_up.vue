@@ -19,7 +19,7 @@
           counter="12"
           :rules="rules.name"
           label="ユーザ名"
-          hint="半角英数3文字以上12文字以下 英字必須 大小文字区別なし"
+          hint="半角英数3文字以上16文字以下 英字必須 大小文字区別なし"
           error-count="2"
           persistent-hint
           required
@@ -97,7 +97,7 @@ export default class PageLogin extends Vue {
         'ユーザ名の形式が無効です。',
       (v: string) =>
         !v ||
-        (v.length >= 3 && v.length <= 12) ||
+        (v.length >= 3 && v.length <= 16) ||
         'ユーザ名が短すぎるか長すぎます。'
     ],
     password: [
