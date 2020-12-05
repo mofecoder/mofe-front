@@ -11,7 +11,11 @@ export interface StandingData {
 
 export interface Standing {
   rank: number
-  userName: string
+  user: {
+    name: string
+    atcoderName: string | null
+    atcoderRating: number | null
+  }
   result: ProblemScore
   problems: ProblemScore[]
 }

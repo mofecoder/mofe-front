@@ -3,17 +3,10 @@
     <v-container>
       <v-row>
         <v-col>
-          <h2>コンテスト（閲覧）</h2>
-          <ul v-if="contests != null">
-            <li v-for="contest in contests" :key="contest.slug">
-              <n-link :to="`/contests/${contest.slug}`" v-text="contest.name" />
-            </li>
-          </ul>
-        </v-col>
-        <v-col>
-          <h2>コンテスト（管理）</h2>
-          <n-link to="/manage/contests">一覧</n-link>
-          <n-link to="/manage/contests/new">作成</n-link>
+          <v-btn link to="/manage/contests" color="primary"
+            >コンテスト管理画面へ</v-btn
+          >
+          <v-btn color="yellow" @click="updateRating">レーティング更新</v-btn>
         </v-col>
         <v-col>
           <h2>問題（未所属）</h2>
@@ -36,6 +29,7 @@
 import { Vue, Component } from 'nuxt-property-decorator'
 import { Contest } from '~/types/contest'
 import { Problem } from '~/types/contestAdmin'
+import { httpPost } from '~/utils/axios'
 
 @Component({
   middleware: 'authenticated',
@@ -51,6 +45,10 @@ export default class PageManageIndex extends Vue {
       this.$api.Contests.index(),
       this.$api.Problems.unsetProblems()
     ])
+  }
+
+  updateRating() {
+    httpPost('/users/update_rating')
   }
 }
 </script>
