@@ -1,0 +1,12 @@
+[
+  {
+    "id": "atcoder-id",
+    "content": "AtCoder ID が登録できるようになりました．画面右上のユーザ名をクリックし，ユーザ設定画面から登録することができます．AtCoder ID を登録すると，順位表に AtCoder のレーティングに応じた色付けがされます，ご登録をお願いいたします．",
+    "update": "2020-12-11"
+  },
+  {
+    "id": "github",
+    "content": "CafeCoder では，Web 開発に協力していただける方を募集しています．興味のある方は，CafeCoder の Twitter までお問い合わせください．（<a href=\"https://github.com/cafecoder-dev\" target=\"_blank\">GitHub はこちら</a>）",
+    "update": "2020-12-11"
+  }
+]

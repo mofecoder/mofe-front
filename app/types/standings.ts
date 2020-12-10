@@ -13,7 +13,7 @@ export interface Standing {
   rank: number
   user: {
     name: string
-    atcoderName: string | null
+    atcoderId: string | null
     atcoderRating: number | null
   }
   result: ProblemScore

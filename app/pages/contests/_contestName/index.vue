@@ -3,7 +3,7 @@
     <template v-if="contest">
       <v-card-title v-text="contest.name" />
       <v-card-subtitle>ペナルティ: {{ penaltyTime }}</v-card-subtitle>
-      <v-card-text>
+      <v-card-text class="contest-card">
         <template v-if="contestEnded" />
         <v-btn
           v-else-if="contest.registered"
@@ -15,7 +15,10 @@
         <v-btn v-else color="primary" class="mb-4" @click="register"
           >参加登録</v-btn
         >
-        <div v-html="$md.render(contest.description)" />
+        <div
+          class="contest-card__description"
+          v-html="$md.render(contest.description)"
+        />
       </v-card-text>
     </template>
   </v-card>
@@ -68,4 +71,34 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.contest-card {
+  @include card-text-reset();
+
+  &__description ::v-deep {
+    h1,
+    h2 {
+      margin-top: 1.5em;
+    }
+    h3,
+    h4 {
+      margin-top: 1em;
+    }
+    h5,
+    h6 {
+      margin-top: 0.5em;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    tr,
+    td,
+    th {
+      border: solid 1px #666666;
+      padding: 0.3em 1em;
+    }
+  }
+}
+</style>
