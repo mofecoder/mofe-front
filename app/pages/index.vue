@@ -35,9 +35,11 @@
             <v-card-title>お知らせ</v-card-title>
             <v-card-text>
               <ul>
-                <li v-for="notice in notices" :key="notice.id">
-                  {{ notice.content }} ({{ notice.update }})
-                </li>
+                <li
+                  v-for="notice in notices"
+                  :key="notice.id"
+                  v-html="`${notice.content} (${notice.update})`"
+                />
               </ul>
             </v-card-text>
           </v-card>

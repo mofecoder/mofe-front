@@ -3,10 +3,12 @@
     <v-container>
       <v-row>
         <v-col>
-          <v-btn link to="/manage/contests" color="primary"
+          <v-btn link to="/manage/contests" color="primary" block
             >コンテスト管理画面へ</v-btn
           >
-          <v-btn color="yellow" @click="updateRating">レーティング更新</v-btn>
+          <v-btn color="yellow" class="mt-2" @click="updateRating"
+            >レーティング更新</v-btn
+          >
         </v-col>
         <v-col>
           <h2>問題（未所属）</h2>
