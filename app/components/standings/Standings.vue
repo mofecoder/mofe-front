@@ -2,6 +2,7 @@
   <v-card>
     <v-card-title>順位表</v-card-title>
     <v-card-text class="standings">
+      <v-btn color="primary" @click="$emit('reload')">更新する</v-btn>
       <div class="standings__wrap">
         <table class="standings__table">
           <thead>
@@ -23,8 +24,15 @@
           <tbody>
             <tr v-for="user in standings" :key="user.userName" class="row-user">
               <td>{{ user.rank }}</td>
-              <th :style="{ color: atcoderColor(user.user.atcoderRating) }">
-                {{ user.user.name }}
+              <th class="user-name">
+                <a
+                  v-if="user.user.atcoderId"
+                  :href="`https://atcoder.jp/users/${user.user.atcoderId}`"
+                  target="_blank"
+                  :style="{ color: atcoderColor(user.user.atcoderRating) }"
+                  v-text="user.user.name"
+                />
+                <template v-else>{{ user.user.name }}</template>
               </th>
               <td class="col-result">
                 <div class="score score--sum">
@@ -162,6 +170,14 @@ export default class Standings extends Vue {
     }
 
     .row-user {
+      .user-name {
+        color: #5200ab;
+
+        > a {
+          text-decoration: none;
+        }
+      }
+
       .score {
         .point {
           color: green;
@@ -185,6 +201,10 @@ export default class Standings extends Vue {
       .time {
         color: gray;
         font-size: 0.9rem;
+      }
+
+      &__no-rating {
+        color: #5200ab;
       }
     }
 

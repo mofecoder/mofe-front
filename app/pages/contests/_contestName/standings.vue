@@ -6,6 +6,7 @@
           v-if="standingData"
           :problems="standingData.problems"
           :standings="standingData.standings"
+          @reload="$fetch"
         />
         <div v-else>Loading...</div>
       </v-container>
