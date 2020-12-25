@@ -16,7 +16,7 @@
         />
         <v-text-field
           v-model="name"
-          counter="12"
+          counter="16"
           :rules="rules.name"
           label="ユーザ名"
           hint="半角英数3文字以上16文字以下 英字必須 大小文字区別なし"
