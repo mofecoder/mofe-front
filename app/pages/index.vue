@@ -1,40 +1,60 @@
 <template>
   <div>
-    <v-card>
-      <v-card-title>コンテストの一覧</v-card-title>
-      <v-card-text>
-        <v-simple-table v-if="contests">
-          <thead>
-            <tr>
-              <th />
-              <th>開始日時</th>
-              <th>コンテスト名</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="contest in contests" :key="contest.slug">
-              <td v-text="checkStatus(contest)" />
-              <td v-text="formatDate(contest.startAt)" />
-              <td>
-                <nuxt-link
-                  :to="`contests/${contest.slug}`"
-                  v-text="contest.name"
+    <v-container>
+      <v-row>
+        <v-col cols="12" lg="7">
+          <v-card>
+            <v-card-title>コンテストの一覧</v-card-title>
+            <v-card-text>
+              <v-simple-table v-if="contests">
+                <thead>
+                  <tr>
+                    <th />
+                    <th>開始日時</th>
+                    <th>コンテスト名</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="contest in contests" :key="contest.slug">
+                    <td v-text="checkStatus(contest)" />
+                    <td v-text="formatDate(contest.startAt)" />
+                    <td>
+                      <nuxt-link
+                        :to="`contests/${contest.slug}`"
+                        v-text="contest.name"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="12" lg="5">
+          <v-card>
+            <v-card-title>お知らせ</v-card-title>
+            <v-card-text>
+              <ul>
+                <li
+                  v-for="notice in notices"
+                  :key="notice.id"
+                  v-html="`${notice.content} (${notice.update})`"
                 />
-              </td>
-            </tr>
-          </tbody>
-        </v-simple-table>
-        <nuxt-link v-if="loggedIn" to="manage">管理ページへ</nuxt-link>
-      </v-card-text>
-    </v-card>
-    <v-btn
-      v-if="isWriter"
-      class="mt-4"
-      color="primary"
-      nuxt
-      to="/writer/problems"
-      >問題の管理画面へ</v-btn
-    >
+              </ul>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <div class="mt-4">
+      <v-btn v-if="loggedIn" color="orange" nuxt to="/manage"
+        >管理ページへ</v-btn
+      >
+      <v-btn v-if="isWriter" color="primary" nuxt to="/writer/problems"
+        >問題の管理画面へ</v-btn
+      >
+    </div>
     <!-- CafeCoder Twitter -->
     <div class="mt-4">
       <p>解説や障害情報等のお知らせは Twitter で発信しています</p>
@@ -59,12 +79,15 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { Contest } from '~/types/contest'
 import { userStore } from '~/utils/store-accessor'
+import noticeData from '~/assets/notice.json'
 
 @Component({
   head: { title: 'トップ' }
 })
 export default class PageMainPage extends Vue {
   contests: Contest[] | null = null
+  notices = noticeData
+
   async created() {
     this.contests = await this.$api.Contests.index()
   }
