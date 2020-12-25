@@ -78,7 +78,7 @@
                   dense
                   :disabled="testcaseLoading"
                   @click="viewTestcase(testcase.id)"
-                  >mdi-eye</v-icon
+                  >mdi-pencil</v-icon
                 >
                 <v-icon
                   small
@@ -139,10 +139,10 @@
       :value="testcaseDialog"
       :problem-id="problemId"
       :testcase-id="testcaseId"
-      :readonly="!!testcaseId"
       :testcase-names="testcaseNames"
       @close="closeModal"
       @create="createTestcase"
+      @update="updateTestcase"
     />
     <EditTestcaseSetModal
       :id.sync="editingTestcaseSetId"
@@ -241,6 +241,24 @@ export default class PagePageWriterTaskTestcases extends Vue {
       })
   }
 
+  async updateTestcase(params: {
+    name: string
+    input: string
+    output: string
+    explanation: string
+  }) {
+    try {
+      await this.$api.Testcases.update(this.problemId, this.testcaseId!, params)
+    } catch (error) {
+      if (error.response.status === 400) {
+        alert('テストケースの更新に失敗しました: ' + error.response.data.error)
+        return
+      }
+    }
+    await this.update()
+    this.testcaseDialog = false
+  }
+
   async deleteTestcase(id: number) {
     this.testcaseLoading = true
     await this.$api.Testcases.delete(this.problemId, id)
@@ -255,7 +273,7 @@ export default class PagePageWriterTaskTestcases extends Vue {
     explanation: string
   }) {
     try {
-      await this.$api.Testcases.destroy(this.problemId, params)
+      await this.$api.Testcases.create(this.problemId, params)
     } catch (error) {
       if (error.response.status === 400) {
         alert('テストケースの追加に失敗しました: ' + error.response.data.error)

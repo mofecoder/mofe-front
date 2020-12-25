@@ -38,7 +38,7 @@ export default class {
     await httpDelete(`/problems/${problemId}/testcases/${testcaseId}`)
   }
 
-  async destroy(
+  async create(
     problemId: number,
     params: {
       name: string
@@ -48,6 +48,23 @@ export default class {
     }
   ) {
     await httpPost(`/problems/${problemId}/testcases`, {}, { testcase: params })
+  }
+
+  async update(
+    problemId: number,
+    testcaseId: number,
+    params: {
+      name: string
+      input: string
+      output: string
+      explanation: string
+    }
+  ) {
+    await httpPut(
+      `/problems/${problemId}/testcases/${testcaseId}`,
+      {},
+      { testcase: params }
+    )
   }
 
   async showTestcaseSet(problemId: number, testcaseSetId: number) {

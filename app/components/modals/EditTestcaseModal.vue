@@ -53,7 +53,7 @@
           text
           color="primary"
           :disabled="!ok"
-          @click="submitCreate"
+          @click="submit"
           >保存</v-btn
         >
       </v-card-actions>
@@ -121,16 +121,41 @@ export default class EditTestcaseModal extends Vue {
   @Emit('close')
   close() {}
 
-  submitCreate() {
-    this.$emit('create', this.params)
+  submit() {
+    this.params = {
+      ...this.params,
+      input: this.formatTestcase(this.params.input),
+      output: this.formatTestcase(this.params.output)
+    }
+    this.$emit(this.testcaseId ? 'update' : 'create', this.params)
   }
 
   check(v: string) {
+    const max = this.testcaseId ? 1 : 0
     return (
-      this.readonly ||
-      !this.testcaseNames.includes(v) ||
+      this.testcaseNames.filter((name) => name === v).length <= max ||
       'この名前のテストケースは既に存在します。'
     )
+  }
+
+  formatTestcase(s: string): string {
+    if (!s.endsWith('\n')) s += '\n'
+
+    let tmp: string[] = []
+    const res: string[] = []
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] === '\r') {
+        if (i < s.length - 1 && s[i + 1] === '\n') continue
+        res.push(tmp.join(''))
+        tmp = []
+      } else {
+        tmp.push(s[i])
+      }
+    }
+
+    if (tmp.length > 0) res.push(tmp.join(''))
+
+    return res.join('\n')
   }
 }
 </script>
