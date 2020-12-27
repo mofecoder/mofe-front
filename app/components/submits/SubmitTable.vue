@@ -1,43 +1,94 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="submitData"
-    :items-per-page="20"
-    :footer-props="footerProps"
-    multi-sort
-    mobile-breakpoint="760"
-  >
-    <template v-slot:item.task="{ item }">
-      <n-link :to="`/contests/${slug}/tasks/${item.taskSlug}`">{{
-        item.task
-      }}</n-link>
-    </template>
-    <template v-slot:item.status="{ item }">
-      <ResultChip
-        :status="item.status"
-        :judge-status="item.judgeStatus"
-        dense
-      />
-    </template>
-    <template v-slot:item.action="{ item }">
-      <v-icon small class="cursor-pointer" @click="viewDetail(item)"
-        >mdi-eye</v-icon
-      >
-    </template>
-  </v-data-table>
+  <div>
+    <v-row>
+      <v-col cols="12" md="5" xl="3">
+        <v-select
+          v-model="filterTask"
+          label="問題名"
+          :items="taskItems"
+          clearable
+        />
+      </v-col>
+      <v-col cols="12" sm="8" md="4" xl="3">
+        <v-combobox
+          v-model="filterUser"
+          label="ユーザ名"
+          :items="userItems"
+          clearable
+        />
+      </v-col>
+      <v-col cols="12" sm="4" md="3" xl="2">
+        <v-select
+          v-model="filterStatus"
+          label="結果"
+          :items="statuses"
+          clearable
+        />
+      </v-col>
+    </v-row>
+    <v-data-table
+      :headers="headers"
+      :items="submitData"
+      :items-per-page="20"
+      :footer-props="footerProps"
+      multi-sort
+      mobile-breakpoint="760"
+    >
+      <template v-slot:item.task="{ item }">
+        <n-link :to="`/contests/${slug}/tasks/${item.taskSlug}`">{{
+          item.task
+        }}</n-link>
+      </template>
+      <template v-slot:item.status="{ item }">
+        <ResultChip
+          :status="item.status"
+          :judge-status="item.judgeStatus"
+          dense
+        />
+      </template>
+      <template v-slot:item.action="{ item }">
+        <v-icon small class="cursor-pointer" @click="viewDetail(item)"
+          >mdi-eye</v-icon
+        >
+      </template>
+      <template v-slot:item.executionTime="{ item }">
+        {{ item.executionTime }} ms
+      </template>
+      <template v-slot:item.executionMemory="{ item }">
+        {{ item.executionMemory || '---' }} KB
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
-import { Submit } from '~/types/submits'
+import { Submit, SubmitResult } from '~/types/submits'
+import { Task } from '~/types/task'
 import ResultChip from '~/components/submits/ResultChip.vue'
 @Component({
   components: { ResultChip }
 })
 export default class SubmitTable extends Vue {
   @Prop({ required: true })
+  tasks!: Task[]
+
+  @Prop({ required: true })
   submits!: Submit[]
+
+  readonly statuses: SubmitResult[] = [
+    'WJ',
+    'AC',
+    'WA',
+    'TLE',
+    'RE',
+    'OLE',
+    'IE',
+    'CE',
+    'MLE',
+    'WR'
+  ]
 
   headers = [
     { text: '日時', value: 'date' },
@@ -57,28 +108,46 @@ export default class SubmitTable extends Vue {
     showFirstLastPage: true
   }
 
+  filterTask = ''
+  filterUser = ''
+  filterStatus = ''
+
   get slug(): string {
     return this.$route.params.contestName
   }
 
   get submitData() {
-    return this.submits.map((item) => ({
-      id: item.id,
-      taskSlug: item.task.slug,
-      date: this.formatDate(item.timestamp),
-      user: item.user.name,
-      task: `${item.task.position}: ${item.task.name}`,
-      lang: this.getLangName(item.lang),
-      score: item.point,
-      status: item.status,
-      executionTime:
-        item.executionTime === null ? '' : `${item.executionTime} ms`,
-      executionMemory:
-        item.executionMemory === null
-          ? ''
-          : `${item.executionMemory || '---'} KB`,
-      judgeStatus: item.judgeStatus
+    return this.submits
+      .filter(
+        (item) =>
+          item.user.name.includes(this.filterUser) &&
+          (!this.filterTask || item.task.slug === this.filterTask) &&
+          (!this.filterStatus || item.status === this.filterStatus)
+      )
+      .map((item) => ({
+        id: item.id,
+        taskSlug: item.task.slug,
+        date: this.formatDate(item.timestamp),
+        user: item.user.name,
+        task: `${item.task.position}: ${item.task.name}`,
+        lang: this.getLangName(item.lang),
+        score: item.point,
+        status: item.status,
+        executionTime: item.executionTime,
+        executionMemory: item.executionMemory,
+        judgeStatus: item.judgeStatus
+      }))
+  }
+
+  get taskItems() {
+    return this.tasks.map((task) => ({
+      value: task.slug,
+      text: `${task.position} - ${task.name}`
     }))
+  }
+
+  get userItems() {
+    return this.submits.map((submission) => submission.user.name)
   }
 
   getLangName(langId: string) {

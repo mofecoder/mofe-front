@@ -105,12 +105,12 @@ export default class LayoutContest extends Vue {
       {
         name: '順位表',
         path: 'standings'
-      },
-      {
-        name: '解説',
-        path: 'explanation',
-        disabled: true
       }
+      // {
+      //   name: '解説',
+      //   path: 'explanation',
+      //   disabled: true
+      // }
     ]
   }
 

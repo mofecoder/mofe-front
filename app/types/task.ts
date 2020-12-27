@@ -16,6 +16,7 @@ export type Sample = {
 
 export interface Task {
   slug: string
+  executionTimeLimit: number
   position: string
   name: string
   difficulty: Difficulty

@@ -22,6 +22,7 @@ export interface Problem {
 
 export interface ProblemDetail {
   id: number
+  executionTimeLimit: number
   name: string
   difficulty: Difficulty
   writerUser: string

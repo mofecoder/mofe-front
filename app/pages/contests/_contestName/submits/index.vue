@@ -5,7 +5,11 @@
         <v-card :loading="!submits">
           <v-card-title>自分の提出</v-card-title>
           <v-card-text class="submit-card">
-            <SubmitTable v-if="submits" :submits="submits" />
+            <SubmitTable
+              v-if="submits"
+              :submits="submits"
+              :tasks="contest.tasks"
+            />
           </v-card-text>
         </v-card>
       </v-container>
