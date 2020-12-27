@@ -3,6 +3,7 @@
     <template v-if="problem">
       <v-card-title class="task-card-title">
         <h2>{{ problem.position }} - {{ problem.name }}</h2>
+        <p class="task-time-limit mb-0">実行時間制限: {{ timeLimit }}</p>
         <p class="task-points">配点: {{ problem.points }}</p>
         <DifficultyChip :difficulty="problem.difficulty" />
       </v-card-title>
@@ -171,6 +172,12 @@ export default class ViewProblemCard extends mixins(MathJax) {
       })
   }
 
+  get timeLimit() {
+    const limit = this.problem.executionTimeLimit
+    if (limit % 1000) return `${limit} msec`
+    return `${limit / 1000} sec`
+  }
+
   get loggedIn() {
     return !!userStore.getUser
   }
@@ -183,6 +190,7 @@ h3 {
   font-size: 1.5rem;
 }
 
+.task-time-limit,
 .task-points {
   font-size: 1rem;
 }

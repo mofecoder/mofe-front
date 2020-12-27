@@ -12,6 +12,8 @@ type Result =
   | 'MLE'
   | 'WR'
 
+export type SubmitResult = Result
+
 export interface Submit {
   id: number
   timestamp: Date

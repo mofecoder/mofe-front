@@ -5,7 +5,11 @@
         <v-card v-if="!errorMessage" :loading="!submits && !errorMessage">
           <v-card-title>すべての提出</v-card-title>
           <v-card-text class="submit-card">
-            <SubmitTable v-if="submits" :submits="submits" />
+            <SubmitTable
+              v-if="submits"
+              :submits="submits"
+              :tasks="contest.tasks"
+            />
           </v-card-text>
         </v-card>
         <v-alert v-else type="error" icon="mdi-alert">
