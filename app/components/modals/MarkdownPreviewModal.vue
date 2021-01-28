@@ -8,12 +8,7 @@
         <div class="md" v-html="$md.render(markdown)" />
       </v-card-text>
       <v-card-actions>
-        <v-btn
-          depressed
-          class="white--text"
-          color="red"
-          width="6em"
-          @click="close"
+        <v-btn depressed class="white--text" color="red" block @click="close"
           >閉じる</v-btn
         >
       </v-card-actions>

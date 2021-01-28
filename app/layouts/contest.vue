@@ -40,7 +40,10 @@
       app
       mobile-breakpoint="960"
     >
-      <ContestSidebar :items="filteredLinks" @click="navigation" />
+      <ContestSidebar
+        :items="filteredLinks"
+        :contest-name="$route.params.contestName"
+      />
     </v-navigation-drawer>
     <v-main>
       <v-container>
@@ -169,11 +172,6 @@ export default class LayoutContest extends Vue {
     for (let i = 0; i < this.links.length; ++i)
       if (this.links[i].path === current) return i
     return null
-  }
-
-  navigation(path: string) {
-    const slug = this.$route.params.contestName
-    this.$router.push(`/contests/${slug}/${path}`)
   }
 
   @Watch('$route.fullPath')

@@ -1,13 +1,15 @@
 <template>
   <div class="contest-sidebar">
-    <div
+    <component
+      :is="item.disabled ? 'span' : 'router-link'"
       v-for="item in items"
       :key="item.name"
       class="contest-sidebar__item"
       :class="{ active: item.active, disabled: item.disabled }"
-      @click="!item.disabled && $emit('click', item.path)"
-      v-text="item.name"
-    />
+      :to="`/contests/${contestName}/${item.path}`"
+    >
+      {{ item.name }}
+    </component>
   </div>
 </template>
 
@@ -25,11 +27,16 @@ type ItemType = {
 export default class ContestSidebar extends Vue {
   @Prop({ required: true })
   items!: ItemType[]
+
+  @Prop({ required: true }) contestName!: string
 }
 </script>
 
 <style scoped lang="scss">
 .contest-sidebar__item {
+  display: block;
+  color: inherit;
+  text-decoration: inherit;
   font-size: 0.8rem;
   box-sizing: border-box;
   padding: 0.9em 1em;
