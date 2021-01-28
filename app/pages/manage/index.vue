@@ -6,6 +6,9 @@
           <v-btn link to="/manage/contests" color="primary" block
             >コンテスト管理画面へ</v-btn
           >
+          <v-btn class="mt-2" link to="/manage/posts" color="primary" block
+            >記事管理画面へ</v-btn
+          >
           <v-btn color="yellow" class="mt-2" @click="updateRating"
             >レーティング更新</v-btn
           >
@@ -34,7 +37,7 @@ import { Problem } from '~/types/contestAdmin'
 import { httpPost } from '~/utils/axios'
 
 @Component({
-  middleware: 'authenticated',
+  middleware: 'admin',
   head: { title: '管理画面' }
 })
 export default class PageManageIndex extends Vue {

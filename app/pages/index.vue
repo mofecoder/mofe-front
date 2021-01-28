@@ -2,15 +2,14 @@
   <div>
     <v-container>
       <v-row>
-        <v-col cols="12" lg="7">
-          <v-card>
-            <v-card-title>コンテストの一覧</v-card-title>
+        <v-col cols="12" lg="5">
+          <v-card outlined>
             <v-card-text>
               <v-simple-table v-if="contests">
                 <thead>
                   <tr>
-                    <th />
-                    <th>開始日時</th>
+                    <th style="width: 7em" />
+                    <th style="width: 9.5em">開始日時</th>
                     <th>コンテスト名</th>
                   </tr>
                 </thead>
@@ -27,22 +26,30 @@
                   </tr>
                 </tbody>
               </v-simple-table>
+              <div class="mt-4">
+                <p>解説や障害情報等のお知らせは Twitter で発信しています</p>
+                <a
+                  href="https://twitter.com/CafeCoder_?ref_src=twsrc%5Etfw"
+                  class="twitter-follow-button"
+                  data-lang="ja"
+                  data-show-count="true"
+                  >Follow @CafeCoder_</a
+                >
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" lg="5">
-          <v-card>
-            <v-card-title>お知らせ</v-card-title>
-            <v-card-text>
-              <ul>
-                <li
-                  v-for="notice in notices"
-                  :key="notice.id"
-                  v-html="`${notice.content} (${notice.update})`"
-                />
-              </ul>
-            </v-card-text>
-          </v-card>
+        <v-col cols="12" lg="7">
+          <ViewPost
+            v-for="post in posts"
+            :key="`post-${post.id}`"
+            :post="post"
+            enable-link
+            class="mb-3"
+          />
+          <div class="text-center">
+            <router-link to="/posts">すべての記事を見る</router-link>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -56,16 +63,6 @@
       >
     </div>
     <!-- CafeCoder Twitter -->
-    <div class="mt-4">
-      <p>解説や障害情報等のお知らせは Twitter で発信しています</p>
-      <a
-        href="https://twitter.com/CafeCoder_?ref_src=twsrc%5Etfw"
-        class="twitter-follow-button"
-        data-lang="ja"
-        data-show-count="true"
-        >Follow @CafeCoder_</a
-      >
-    </div>
     <script
       async
       src="https://platform.twitter.com/widgets.js"
@@ -80,16 +77,23 @@ import dayjs from 'dayjs'
 import { Contest } from '~/types/contest'
 import { userStore } from '~/utils/store-accessor'
 import noticeData from '~/assets/notice.json'
+import { Post } from '~/types/post'
+import ViewPost from '~/components/post/ViewPost.vue'
 
 @Component({
+  components: { ViewPost },
   head: { title: 'トップ' }
 })
 export default class PageMainPage extends Vue {
   contests: Contest[] | null = null
+  posts: Post[] | null = null
   notices = noticeData
 
-  async created() {
-    this.contests = await this.$api.Contests.index()
+  async fetch() {
+    ;[this.contests, this.posts] = await Promise.all([
+      await this.$api.Contests.index(),
+      await this.$api.Posts.index(3)
+    ])
   }
 
   get loggedIn() {
