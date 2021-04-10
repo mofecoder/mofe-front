@@ -1,5 +1,8 @@
 <template>
   <v-container class="testcase">
+    <v-btn class="mb-3" nuxt to=".." append text color="purple"
+      >問題編集に戻る</v-btn
+    >
     <template v-if="problem">
       <div class="testcase__title">{{ problem.name }} テストケース編集</div>
     </template>
