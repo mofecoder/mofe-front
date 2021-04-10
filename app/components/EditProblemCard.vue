@@ -2,6 +2,10 @@
   <v-card class="wrapper">
     <v-card-title class="headline edit-problem-card">
       <p>問題の編集</p>
+      <v-spacer />
+      <v-btn color="purple white--text mr-5" @click="judge"
+        >ジャッジの設定</v-btn
+      >
       <v-btn color="purple white--text" @click="testcase"
         >テストケースの設定
       </v-btn>
@@ -275,6 +279,10 @@ export default class CreateProblemCard extends Vue {
     this.$router.push(
       this.$router.resolve('testcases', undefined, true).location
     )
+  }
+
+  judge() {
+    this.$router.push(this.$router.resolve('judge', undefined, true).location)
   }
 }
 </script>

@@ -45,4 +45,22 @@ export default class {
       }
     )
   }
+
+  async updateChecker(
+    problemId: number,
+    type: string | undefined,
+    file: File | null
+  ) {
+    const form = new FormData()
+    if (file) form.append('file', file)
+    if (type) form.append('type', type)
+    const res = await httpPost(
+      `/problems/${problemId}/checker`,
+      {},
+      form,
+      true,
+      2 * 60 * 1000
+    )
+    return res
+  }
 }

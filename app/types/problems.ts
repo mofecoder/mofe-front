@@ -30,6 +30,7 @@ export interface ProblemDetail {
   constraints: string
   inputFormat: string
   outputFormat: string
+  checkerPath: string | null
   samples: Sample[] | null
   testers: string[]
 }

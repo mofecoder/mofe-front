@@ -16,7 +16,6 @@ declare module 'vue/types/vue' {
     readonly $api: CafeCoderApi
     readonly $md: MarkdownIt
     readonly $getLanguage: (lang: string) => Language | null
-    $fetch: () => any
     readonly $axios: NuxtAxiosInstance
   }
 }
