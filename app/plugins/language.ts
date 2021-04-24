@@ -1,5 +1,5 @@
 import { Plugin } from '@nuxt/types'
-import languages from '~/assets/languages'
+import languages from '~/constants/languages'
 import { Language } from '~/types/language'
 
 const map = new Map<string, Language>()
