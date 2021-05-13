@@ -83,7 +83,7 @@ export default class LayoutContest extends Vue {
   get links(): Link[] {
     const contestEnded =
       this.contest != null && dayjs(this.contest.endAt).isBefore(Date())
-    return [
+    const list = [
       {
         name: 'トップ',
         path: ''
@@ -109,12 +109,18 @@ export default class LayoutContest extends Vue {
         name: '順位表',
         path: 'standings'
       }
-      // {
-      //   name: '解説',
-      //   path: 'explanation',
-      //   disabled: true
-      // }
     ]
+
+    const editorial = this.contest?.editorial || null
+    if (editorial || contestEnded) {
+      list.push({
+        name: '解説',
+        path: editorial || '',
+        disabled: !editorial
+      })
+    }
+
+    return list
   }
 
   get contest(): ContestDetail | null {

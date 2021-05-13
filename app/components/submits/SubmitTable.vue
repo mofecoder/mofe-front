@@ -71,8 +71,8 @@ import ResultChip from '~/components/submits/ResultChip.vue'
   components: { ResultChip }
 })
 export default class SubmitTable extends Vue {
-  @Prop({ required: true })
-  tasks!: Task[]
+  @Prop()
+  tasks?: Task[]
 
   @Prop({ required: true })
   submits!: Submit[]
@@ -109,7 +109,7 @@ export default class SubmitTable extends Vue {
   }
 
   filterTask = ''
-  filterUser = ''
+  filterUser: string | null = ''
   filterStatus = ''
 
   get slug(): string {
@@ -120,7 +120,7 @@ export default class SubmitTable extends Vue {
     return this.submits
       .filter(
         (item) =>
-          item.user.name.includes(this.filterUser) &&
+          item.user.name.includes(this.filterUser || '') &&
           (!this.filterTask || item.task.slug === this.filterTask) &&
           (!this.filterStatus || item.status === this.filterStatus)
       )
@@ -140,10 +140,12 @@ export default class SubmitTable extends Vue {
   }
 
   get taskItems() {
-    return this.tasks.map((task) => ({
-      value: task.slug,
-      text: `${task.position} - ${task.name}`
-    }))
+    return (
+      this.tasks?.map((task) => ({
+        value: task.slug,
+        text: `${task.position} - ${task.name}`
+      })) || []
+    )
   }
 
   get userItems() {
