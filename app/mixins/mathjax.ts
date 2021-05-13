@@ -24,8 +24,11 @@ export default class MathJax extends Vue {
           processEscapes: true,
           skipTags: ['script', 'noscript', 'style', 'textarea']
         },
-        'HTML-CSS': { matchFontHeight: false },
-        displayAlign: 'center',
+        'HTML-CSS': {
+          matchFontHeight: false,
+          availableFonts: ['TeX']
+        },
+        displayAlign: 'left',
         displayIndent: '2em'
       })
       window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub])

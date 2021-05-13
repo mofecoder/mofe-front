@@ -1,12 +1,20 @@
 <template>
   <div class="contest-sidebar">
     <component
-      :is="item.disabled ? 'span' : 'router-link'"
+      :is="
+        item.disabled
+          ? 'span'
+          : item.path.startsWith('http')
+          ? 'a'
+          : 'router-link'
+      "
       v-for="item in items"
       :key="item.name"
       class="contest-sidebar__item"
       :class="{ active: item.active, disabled: item.disabled }"
       :to="`/contests/${contestName}/${item.path}`"
+      :href="item.path"
+      :target="item.path.startsWith('http') ? '_blank' : null"
     >
       {{ item.name }}
     </component>

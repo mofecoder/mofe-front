@@ -14,6 +14,7 @@ export interface ContestDetail extends Contest {
   penaltyTime: number
   isWriterOrTester: boolean
   registered: boolean
+  editorial: string | null
 }
 
 export interface ContestDetailManage extends ContestDetail {
@@ -35,4 +36,5 @@ export interface ContestEditParam {
   endAt?: string
   description?: string
   penaltyTime?: number
+  editorialUrl?: string
 }

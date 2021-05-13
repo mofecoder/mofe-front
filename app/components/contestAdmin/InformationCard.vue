@@ -59,14 +59,24 @@
       <p v-if="edit == null" class="mt-4 mb-0">
         <strong>問題の追加はコンテスト管理画面から行ってください。</strong>
       </p>
-      <v-btn
-        v-else
-        color="orange darken-3 white--text"
-        block
-        :disabled="loading"
-        @click="submit"
-        >更新する</v-btn
-      >
+      <template v-else>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-model="editorial"
+              :rules="rules.url"
+              label="解説の URL"
+            />
+          </v-col>
+        </v-row>
+        <v-btn
+          color="orange darken-3 white--text"
+          block
+          :disabled="loading"
+          @click="submit"
+          >更新する</v-btn
+        >
+      </template>
     </v-card-text>
   </v-card>
 </template>
@@ -74,6 +84,9 @@
 <script lang="ts">
 import { Vue, PropSync, Component, Prop, Emit } from 'nuxt-property-decorator'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
+
+const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
+
 @Component({
   components: { MarkdownPreviewModal }
 })
@@ -89,6 +102,9 @@ export default class ContestInformationCard extends Vue {
 
   @PropSync('description', { required: true })
   descriptionData!: string
+
+  @PropSync('editorialUrl')
+  editorial?: string
 
   @Prop()
   edit?: boolean
@@ -113,7 +129,11 @@ export default class ContestInformationCard extends Vue {
         (!isNaN(num) && num >= 0 && num <= 24 * 60) ||
         '0分以上24時間以下にしてください'
       )
-    }
+    },
+    url: [
+      (text: string) =>
+        !text || URL_REGEX.test(text) || 'URL を入力してください'
+    ]
   }
 
   @Emit()
