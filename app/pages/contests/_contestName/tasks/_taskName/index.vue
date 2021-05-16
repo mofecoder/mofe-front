@@ -65,8 +65,9 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
   }
 
   get id() {
-    const tmp = this.contest?.writtenTasks.filter(
-      (t) => t.slug === this.$route.params.taskName
+    if (!this.contest) return null
+    const tmp = this.contest.writtenTasks.filter(
+      (t) => t.slug === this.$route.params.taskName && t.role !== 'tester'
     )[0]
 
     if (tmp) return tmp.id

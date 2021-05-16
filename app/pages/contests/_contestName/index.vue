@@ -69,7 +69,8 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
   }
 
   get isWriter() {
-    return this.contest?.writtenTasks.length > 0
+    if (!this.contest) return null
+    return this.contest.writtenTasks.length > 0
   }
 
   async register() {
