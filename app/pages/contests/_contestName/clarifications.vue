@@ -2,65 +2,63 @@
   <v-card :loading="!clarifications">
     <v-card-title>質問</v-card-title>
     <v-card-text v-if="contest" class="black--text">
-      <p class="red--text">
-        質問が更新された際に通知する機能はありません。
-        定期的に質問欄を確認してください。
-      </p>
-      <table v-if="clarifications.length" class="table">
-        <thead>
-          <tr>
-            <th class="table__task">問題</th>
-            <th class="table__user">ユーザ名</th>
-            <th class="table__question">質問</th>
-            <th class="table__answer">回答</th>
-            <th class="table__publish">公開</th>
-            <th class="table__created">投稿日時</th>
-            <th class="table__updated">更新日時</th>
-            <th v-if="showAnswer" />
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="clar in clarifications" :key="`clar-${clar.id}`">
-            <td v-if="clar.task" class="table__task-data">
-              <nuxt-link :to="`../tasks/${clar.task.slug}`" append>
-                {{ clar.task.position }} - {{ clar.task.name }}
-              </nuxt-link>
-            </td>
-            <td v-else />
-            <td class="table__user-data" v-text="clar.user" />
-            <td class="table__question-data" v-text="clar.question" />
-            <td class="table__answer-data" v-text="clar.answer" />
-            <td
-              class="table__publish-data"
-              :class="`table__publish-data--${clar.publish}`"
-              v-text="clar.publish ? 'Yes' : 'No'"
-            />
-            <td>
-              <time
-                :datetime="clar.createdAt"
-                v-text="formatDate(clar.createdAt)"
+      <div class="table__wrapper">
+        <table v-if="clarifications && clarifications.length" class="table">
+          <thead>
+            <tr>
+              <th class="table__task">問題</th>
+              <th class="table__user">ユーザ名</th>
+              <th class="table__question">質問</th>
+              <th class="table__answer">回答</th>
+              <th class="table__publish">公開</th>
+              <th class="table__created">投稿日時</th>
+              <th class="table__updated">更新日時</th>
+              <th v-if="showAnswer" />
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="clar in clarifications" :key="`clar-${clar.id}`">
+              <td v-if="clar.task" class="table__task-data">
+                <nuxt-link :to="`../tasks/${clar.task.slug}`" append>
+                  {{ clar.task.position }} - {{ clar.task.name }}
+                </nuxt-link>
+              </td>
+              <td v-else />
+              <td class="table__user-data" v-text="clar.user" />
+              <td class="table__question-data" v-text="clar.question" />
+              <td class="table__answer-data" v-text="clar.answer" />
+              <td
+                class="table__publish-data"
+                :class="`table__publish-data--${clar.publish}`"
+                v-text="clar.publish ? 'Yes' : 'No'"
               />
-            </td>
-            <td>
-              <time
-                :datetime="clar.updatedAt"
-                v-text="formatDate(clar.updatedAt)"
-              />
-            </td>
-            <td v-if="showAnswer" class="table__answer-btn-data">
-              <v-btn
-                v-if="clar.canAnswer"
-                text
-                small
-                color="green"
-                @click="answer(clar.id)"
-                >{{ clar.answer ? '回答を編集' : '回答する' }}</v-btn
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p v-else>質問はありません。</p>
+              <td>
+                <time
+                  :datetime="clar.createdAt"
+                  v-text="formatDate(clar.createdAt)"
+                />
+              </td>
+              <td>
+                <time
+                  :datetime="clar.updatedAt"
+                  v-text="formatDate(clar.updatedAt)"
+                />
+              </td>
+              <td v-if="showAnswer" class="table__answer-btn-data">
+                <v-btn
+                  v-if="clar.canAnswer"
+                  text
+                  small
+                  color="green"
+                  @click="answer(clar.id)"
+                  >{{ clar.answer != null ? '回答を編集' : '回答する' }}</v-btn
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p v-else>質問はありません。</p>
+      </div>
 
       <v-btn v-if="userLoggedIn" class="mt-4" color="primary" @click="question"
         >質問する</v-btn
@@ -86,7 +84,6 @@
 import { Component, mixins } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import MixinContest from '~/mixins/contest'
-import { Clarification } from '~/types/clarification'
 import { userStore } from '~/utils/store-accessor'
 import ClarificationAnswerModal from '~/components/modals/ClarificationAnswerModal.vue'
 import ClarificationQuestionModal from '~/components/modals/ClarificationQuestionModal.vue'
@@ -103,15 +100,13 @@ export default class PageContestClarifications extends mixins(MixinContest) {
     }
   }
 
-  clarifications: Clarification[] = []
   editingId: number | null = null
   questionFlag = false
 
   async fetch() {
     await this.getContest()
-    this.clarifications = await this.$api.Contests.clarifications(
-      this.contest!.slug
-    )
+    localStorage.setItem(`${this.contestSlug}_clar`, dayjs().toISOString())
+    await this.getClarifications()
   }
 
   answer(id: number) {
@@ -120,9 +115,7 @@ export default class PageContestClarifications extends mixins(MixinContest) {
 
   async closeAnswer(reload: boolean) {
     if (reload) {
-      this.clarifications = await this.$api.Contests.clarifications(
-        this.contest!.slug
-      )
+      await this.getClarifications()
     }
     this.editingId = null
   }
@@ -138,9 +131,7 @@ export default class PageContestClarifications extends mixins(MixinContest) {
         task,
         content
       ),
-      (this.clarifications = await this.$api.Contests.clarifications(
-        this.contest!.slug
-      ))
+      this.getClarifications()
     ])
     this.questionFlag = false
   }
@@ -157,7 +148,7 @@ export default class PageContestClarifications extends mixins(MixinContest) {
   }
 
   get showAnswer() {
-    return this.clarifications.some((x) => x.canAnswer)
+    return this.clarifications!.some((x) => x.canAnswer)
   }
 
   get userLoggedIn() {
@@ -182,8 +173,31 @@ export default class PageContestClarifications extends mixins(MixinContest) {
     padding: 0.2em 0.5em;
   }
 
+  &__wrapper {
+    overflow-x: scroll;
+  }
+
+  &__task {
+    min-width: 9em;
+  }
+
   &__user {
+    min-width: 6em;
     white-space: nowrap;
+  }
+
+  &__publish {
+    width: 4em;
+  }
+
+  &__question,
+  &__answer {
+    min-width: 15em;
+  }
+
+  &__created,
+  &__updated {
+    width: 5em;
   }
 
   &__question-data,

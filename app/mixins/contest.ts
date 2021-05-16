@@ -2,10 +2,17 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { contestStore } from '~/utils/store-accessor'
 import { ContestDetail } from '~/types/contest'
 import { HttpError } from '~/utils/axios'
+import { Clarification } from '~/types/clarification'
 @Component
 export default class MixinContest extends Vue {
+  interval: number = -1
+
   async fetch() {
     await this.getContest()
+  }
+
+  destroyed() {
+    window.clearInterval(this.interval)
   }
 
   async getContest(): Promise<void> {
@@ -13,8 +20,9 @@ export default class MixinContest extends Vue {
     this.$nuxt.$loading.start()
     await contestStore
       .getContest(this.$route.params.contestName)
-      .then(() => {
-        this.$nuxt.$loading.finish()
+      .then(async () => {
+        window.setInterval(this.getClarifications, 60 * 1000)
+        await this.getClarifications()
       })
       .catch((error: HttpError) => {
         ;(this.$nuxt.$loading.fail || this.$nuxt.$loading.finish)()
@@ -29,8 +37,17 @@ export default class MixinContest extends Vue {
       })
   }
 
+  async getClarifications(): Promise<void> {
+    await this.$nextTick()
+    await contestStore.getClarifications(this.$route.params.contestName)
+  }
+
   get contest(): ContestDetail | null {
     return contestStore.contest
+  }
+
+  get clarifications(): Clarification[] | null {
+    return contestStore.clarifications
   }
 
   get contestSlug(): string {
