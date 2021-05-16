@@ -5,14 +5,14 @@ import { HttpError } from '~/utils/axios'
 import { Clarification } from '~/types/clarification'
 @Component
 export default class MixinContest extends Vue {
-  interval: number = -1
+  clarInterval: number = -1
 
   async fetch() {
     await this.getContest()
   }
 
-  destroyed() {
-    window.clearInterval(this.interval)
+  beforeDestroy() {
+    window.clearInterval(this.clarInterval)
   }
 
   async getContest(): Promise<void> {

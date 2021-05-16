@@ -5,7 +5,11 @@
         {{ errorMessage }}
       </v-alert>
       <v-container v-else class="pa-0" fluid>
-        <ViewProblemCard :problem="problem" :contest-slug="contestSlug" />
+        <ViewProblemCard
+          :id="id"
+          :problem="problem"
+          :contest-slug="contestSlug"
+        />
       </v-container>
     </template>
   </div>
@@ -58,6 +62,15 @@ export default class PageContestTasks extends mixins(MathJax, MixinContest) {
           this.errorMessage = err.response.data.error
         }
       })
+  }
+
+  get id() {
+    const tmp = this.contest?.writtenTasks.filter(
+      (t) => t.slug === this.$route.params.taskName
+    )[0]
+
+    if (tmp) return tmp.id
+    return null
   }
 }
 </script>

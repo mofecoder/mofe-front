@@ -9,7 +9,7 @@
               v-if="submits"
               :submits="submits"
               :tasks="contest.tasks"
-              :written-tasks="contest.writtenTasks"
+              :written-tasks="contest.writtenTasks.map((x) => x.slug)"
               @rejudge="rejudge"
             />
           </v-card-text>

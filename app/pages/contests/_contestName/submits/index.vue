@@ -9,7 +9,7 @@
               v-if="submits"
               :submits="submits"
               :tasks="contest.tasks"
-              :written-tasks="contest.writtenTasks"
+              :written-tasks="contest.writtenTasks.map((t) => t.slug)"
               @rejudge="rejudge"
             />
           </v-card-text>
@@ -48,6 +48,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 
   beforeDestroy() {
     if (this.timeout) window.clearTimeout(this.timeout)
+    super.beforeDestroy()
   }
 
   submits: Submit[] | null = null

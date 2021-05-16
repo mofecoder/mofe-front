@@ -2,10 +2,21 @@
   <v-card class="mx-auto" max-width="800px" :loading="!problem">
     <template v-if="problem">
       <v-card-title class="task-card-title">
-        <h2>{{ problem.position }} - {{ problem.name }}</h2>
+        <h2 class="d-flex">
+          {{ problem.position }} - {{ problem.name }}
+          <v-spacer />
+          <v-btn
+            v-if="id"
+            color="purple white--text"
+            link
+            :to="`/writer/problems/${id}`"
+            dense
+            >問題の編集画面へ</v-btn
+          >
+        </h2>
+        <DifficultyChip :difficulty="problem.difficulty" />
         <p class="task-time-limit mb-0">実行時間制限: {{ timeLimit }}</p>
         <p class="task-points">配点: {{ problem.points }}</p>
-        <DifficultyChip :difficulty="problem.difficulty" />
       </v-card-title>
       <v-card-text class="mt-3 task-card-text">
         <section>
@@ -101,6 +112,9 @@ export default class ViewProblemCard extends mixins(MathJax) {
 
   @Prop()
   contestSlug?: string
+
+  @Prop({ required: false })
+  id?: number
 
   language: Language | undefined = languages[0]
   submitted = false

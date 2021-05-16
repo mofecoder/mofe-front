@@ -4,7 +4,7 @@
       <v-card-title v-text="contest.name" />
       <v-card-subtitle>ペナルティ: {{ penaltyTime }}</v-card-subtitle>
       <v-card-text class="contest-card">
-        <template v-if="contestEnded" />
+        <template v-if="contestEnded || isWriter" />
         <v-btn
           v-else-if="contest.registered"
           color="primary"
@@ -14,6 +14,15 @@
         >
         <v-btn v-else color="primary" class="mb-4" @click="register"
           >参加登録</v-btn
+        >
+        <v-btn
+          v-if="isAdmin"
+          class="mb-4"
+          color="purple white--text"
+          link
+          :to="`/manage/contests/${contestSlug}`"
+          dense
+          >コンテストの編集画面へ</v-btn
         >
         <div
           class="contest-card__description"
@@ -53,6 +62,14 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 
   get contestEnded() {
     return dayjs(this.contest?.endAt).isBefore(dayjs())
+  }
+
+  get isAdmin() {
+    return userStore.user?.role === 'admin'
+  }
+
+  get isWriter() {
+    return this.contest?.writtenTasks.length > 0
   }
 
   async register() {
