@@ -1,5 +1,6 @@
 import { Task } from '~/types/task'
 import { Task as ManageProblem } from '~/types/contestAdmin'
+import { User } from '~/types/adminUser'
 
 export interface Contest {
   slug: string
@@ -15,7 +16,7 @@ export interface ContestDetail extends Contest {
   isWriterOrTester: boolean
   registered: boolean
   editorial: string | null
-  writtenTasks: { slug: string; id: number }[]
+  writtenTasks: { slug: string; id: number; role: User['role'] }[]
 }
 
 export interface ContestDetailManage extends ContestDetail {
