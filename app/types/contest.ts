@@ -15,6 +15,7 @@ export interface ContestDetail extends Contest {
   isWriterOrTester: boolean
   registered: boolean
   editorial: string | null
+  writtenTasks: { slug: string; id: number }[]
 }
 
 export interface ContestDetailManage extends ContestDetail {

@@ -43,6 +43,7 @@
       <ContestSidebar
         :items="filteredLinks"
         :contest-name="$route.params.contestName"
+        :unread-clarifications="unreadClarifications"
       />
     </v-navigation-drawer>
     <v-main>
@@ -170,6 +171,19 @@ export default class LayoutContest extends Vue {
         end.format('YYYY/MM/DD (dd) HH:mm')
       ]
     }
+  }
+
+  get unreadClarifications() {
+    if (!contestStore.clarifications) return 0
+    const key = `${this.contest!.slug}_clar`
+    let read = localStorage.getItem(key)
+    if (read == null) {
+      read = dayjs().toISOString()
+      localStorage.setItem(key, read)
+    }
+    return contestStore.clarifications.filter((clar) =>
+      dayjs(clar.updatedAt).isAfter(read!)
+    ).length
   }
 
   getCurrentIndex(): number | null {

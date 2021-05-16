@@ -34,6 +34,13 @@
       multi-sort
       mobile-breakpoint="760"
     >
+      <template v-slot:item.rejudge="{ item }">
+        <v-simple-checkbox
+          v-if="writtenTasks.includes(item.taskSlug)"
+          :value="rejudgeIds.includes(item.id)"
+          @input="(e) => changeRejudgeStatus(e, item)"
+        />
+      </template>
       <template v-slot:item.task="{ item }">
         <n-link :to="`/contests/${slug}/tasks/${item.taskSlug}`">{{
           item.task
@@ -58,12 +65,18 @@
         {{ item.executionMemory || '---' }} KB
       </template>
     </v-data-table>
+    <div v-if="rejudgeIds.length">
+      <v-btn color="orange lighten-3" @click="rejudge"
+        >選択した提出 ({{ rejudgeIds.length }} 件) をリジャッジする</v-btn
+      >
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
+import { DataTableHeader } from 'vuetify'
 import { Submit, SubmitResult } from '~/types/submits'
 import { Task } from '~/types/task'
 import ResultChip from '~/components/submits/ResultChip.vue'
@@ -76,6 +89,9 @@ export default class SubmitTable extends Vue {
 
   @Prop({ required: true })
   submits!: Submit[]
+
+  @Prop({ default: [] })
+  writtenTasks!: string[]
 
   readonly statuses: SubmitResult[] = [
     'WJ',
@@ -90,18 +106,6 @@ export default class SubmitTable extends Vue {
     'WR'
   ]
 
-  headers = [
-    { text: '日時', value: 'date' },
-    { text: 'ユーザ', value: 'user' },
-    { text: '問題', value: 'task' },
-    { text: '言語', value: 'lang' },
-    { text: '得点', value: 'score', align: 'right' },
-    { text: '結果', value: 'status', align: 'center' },
-    { text: '実行時間', value: 'executionTime', align: 'right' },
-    { text: 'メモリ', value: 'executionMemory', align: 'right' },
-    { text: '', value: 'action' }
-  ]
-
   footerProps = {
     itemsPerPageOptions: [10, 20, 50, 100, -1],
     showCurrentPage: true,
@@ -111,9 +115,33 @@ export default class SubmitTable extends Vue {
   filterTask = ''
   filterUser: string | null = ''
   filterStatus = ''
+  rejudgeIds: number[] = []
 
   get slug(): string {
     return this.$route.params.contestName
+  }
+
+  get headers() {
+    const ret: DataTableHeader[] = [
+      { text: '日時', value: 'date' },
+      { text: 'ユーザ', value: 'user' },
+      { text: '問題', value: 'task' },
+      { text: '言語', value: 'lang' },
+      { text: '得点', value: 'score', align: 'end' },
+      { text: '結果', value: 'status', align: 'center' },
+      { text: '実行時間', value: 'executionTime', align: 'end' },
+      { text: 'メモリ', value: 'executionMemory', align: 'end' },
+      { text: '', value: 'action' }
+    ]
+    if (this.writtenTasks.length) {
+      ret.unshift({
+        text: '',
+        value: 'rejudge',
+        sortable: false,
+        divider: true
+      })
+    }
+    return ret
   }
 
   get submitData() {
@@ -169,6 +197,16 @@ export default class SubmitTable extends Vue {
     this.$router.push({
       path: `/contests/${this.slug}/submits/${id}`
     })
+  }
+
+  changeRejudgeStatus(value: boolean, item: { id: number }) {
+    if (value) this.rejudgeIds.splice(this.rejudgeIds.length, 0, item.id)
+    else this.rejudgeIds = this.rejudgeIds.filter((x) => x !== item.id)
+  }
+
+  rejudge() {
+    this.$emit('rejudge', this.rejudgeIds)
+    this.rejudgeIds.splice(0, this.rejudgeIds.length)
   }
 }
 </script>

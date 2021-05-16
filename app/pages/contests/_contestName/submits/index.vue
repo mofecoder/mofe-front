@@ -9,6 +9,8 @@
               v-if="submits"
               :submits="submits"
               :tasks="contest.tasks"
+              :written-tasks="contest.writtenTasks.map((t) => t.slug)"
+              @rejudge="rejudge"
             />
           </v-card-text>
         </v-card>
@@ -25,6 +27,7 @@ import MathJax from '~/mixins/mathjax'
 import MixinContest from '~/mixins/contest'
 import SubmitTable from '~/components/submits/SubmitTable.vue'
 import { Submit } from '~/types/submits'
+import { HttpError } from '~/utils/axios'
 @Component({
   components: { SubmitTable, ContestHeaderTab, ContestHeader },
   layout: 'contest',
@@ -45,6 +48,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 
   beforeDestroy() {
     if (this.timeout) window.clearTimeout(this.timeout)
+    super.beforeDestroy()
   }
 
   submits: Submit[] | null = null
@@ -59,6 +63,16 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
       })
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') this.$router.replace('/login')
+      })
+  }
+
+  async rejudge(submitIds: number[]) {
+    await this.$api.Contests.rejudge(this.contest!.slug, submitIds)
+      .then(this.reload)
+      .catch((err: HttpError) => {
+        alert(
+          err.response?.data.error || 'リジャッジのリクエストに失敗しました'
+        )
       })
   }
 }

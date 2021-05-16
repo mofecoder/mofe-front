@@ -16,13 +16,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text color="red" @click="cancel">キャンセル</v-btn>
-          <v-btn
-            text
-            color="primary"
-            :disabled="!clarification.answer"
-            @click="answer"
-            >回答する</v-btn
-          >
+          <v-btn text color="primary" @click="answer">回答する</v-btn>
         </v-card-actions>
       </template>
     </v-card>
