@@ -9,6 +9,9 @@
           <v-btn class="mt-2" link to="/manage/posts" color="primary" block
             >記事管理画面へ</v-btn
           >
+          <v-btn class="mt-2" link to="/manage/users" color="primary" block
+            >ユーザ管理画面へ</v-btn
+          >
           <v-btn color="yellow" class="mt-2" @click="updateRating"
             >レーティング更新</v-btn
           >
