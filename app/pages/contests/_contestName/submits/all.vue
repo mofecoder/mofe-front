@@ -9,6 +9,8 @@
               v-if="submits"
               :submits="submits"
               :tasks="contest.tasks"
+              :written-tasks="contest.writtenTasks"
+              @rejudge="rejudge"
             />
           </v-card-text>
         </v-card>
@@ -71,6 +73,16 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
           this.errorMessage = err.response.data.error
         }
         if (this.timeout) window.clearInterval(this.timeout)
+      })
+  }
+
+  async rejudge(submitIds: number[]) {
+    await this.$api.Contests.rejudge(this.contest!.slug, submitIds)
+      .then(this.reload)
+      .catch((err: HttpError) => {
+        alert(
+          err.response?.data.error || 'リジャッジのリクエストに失敗しました'
+        )
       })
   }
 }

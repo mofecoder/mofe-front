@@ -137,4 +137,8 @@ export default class {
   async register(contestSlug: string): Promise<void> {
     await httpPost(`/contests/${contestSlug}/register`)
   }
+
+  async rejudge(contestSlug: string, id: number[]): Promise<void> {
+    await httpPost(`/contests/${contestSlug}/rejudge`, {}, { submitIds: id })
+  }
 }
