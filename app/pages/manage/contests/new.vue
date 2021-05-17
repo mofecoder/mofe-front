@@ -9,6 +9,7 @@
           :slug.sync="slug"
           :description.sync="description"
           :penalty.sync="penalty"
+          :kind.sync="kind"
         />
         <TimeCard is-new class="my-2" @change="onTimeChange" />
         <v-btn :disabled="disabled" block color="primary" large @click="submit">
@@ -24,6 +25,7 @@ import { Vue, Component } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import TimeCard from '~/components/contestAdmin/TimeCard.vue'
 import ContestInformationCard from '~/components/contestAdmin/InformationCard.vue'
+import { Contest } from '~/types/contest'
 
 @Component({
   components: { ContestInformationCard, TimeCard },
@@ -35,6 +37,7 @@ export default class PageNewContest extends Vue {
   slug = ''
   description = ''
   penalty = '0'
+  kind: Contest['kind'] = 'normal'
   dateTimes: {
     startDate: Date | null
     startTime: Date | null
@@ -80,6 +83,7 @@ export default class PageNewContest extends Vue {
     await this.$api.Contests.create({
       name: this.name,
       slug: this.slug,
+      kind: this.kind,
       startAt: start.format(),
       endAt: end.format(),
       description: this.description,
@@ -91,7 +95,4 @@ export default class PageNewContest extends Vue {
 }
 </script>
 
-<style scoped>
-.wrapper {
-}
-</style>
+<style scoped></style>

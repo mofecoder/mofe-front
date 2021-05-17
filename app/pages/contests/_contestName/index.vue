@@ -2,7 +2,7 @@
   <v-card :loading="!contest">
     <template v-if="contest">
       <v-card-title v-text="contest.name" />
-      <v-card-subtitle>ペナルティ: {{ penaltyTime }}</v-card-subtitle>
+      <v-card-subtitle>{{ subtitle }}</v-card-subtitle>
       <v-card-text class="contest-card">
         <template v-if="contestEnded || isWriter" />
         <v-btn
@@ -50,6 +50,13 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     return {
       title: this.contest?.name
     }
+  }
+
+  get subtitle() {
+    const pena = `ペナルティ: ${this.penaltyTime}`
+    if (this.contest?.kind === 'private')
+      return `プライベートコンテスト / ${pena}`
+    return pena
   }
 
   get penaltyTime(): string {

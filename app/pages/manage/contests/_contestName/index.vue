@@ -11,6 +11,7 @@
           :penalty.sync="contest.penaltyTime"
           :description.sync="contest.description"
           :editorial-url.sync="contest.editorial"
+          :kind.sync="contest.kind"
           :slug="contest.slug"
           :loading="loading.information"
           edit
@@ -108,6 +109,7 @@ export default class PageContestAdmin extends Vue {
     this.loading.information = true
     await this.$api.Contests.update(this.contest.slug, {
       name: this.contest.name,
+      kind: this.contest.kind,
       penaltyTime: this.contest.penaltyTime,
       description: this.contest.description,
       editorialUrl: this.contest.editorial || undefined
