@@ -23,7 +23,8 @@
           label="パスワード"
           required
         />
-        <n-link to="/sign_up">アカウントを作成する</n-link>
+        <n-link to="/sign_up">アカウントを作成する</n-link><br />
+        <n-link to="/reset_password">パスワードを忘れた方はこちら</n-link>
         <v-btn
           type="submit"
           :disabled="!valid"

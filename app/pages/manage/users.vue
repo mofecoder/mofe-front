@@ -33,7 +33,7 @@ import { User } from '~/types/adminUser'
 
 @Component({
   middleware: 'admin',
-  head: { title: 'ユーザ管理' }
+  head: { title: 'パスワードのリセット' }
 })
 export default class PageManageIndex extends Vue {
   users: User[] | null = null

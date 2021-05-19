@@ -3,7 +3,8 @@
     <v-card-title>ユーザ情報</v-card-title>
     <v-card-text v-if="user">
       <p>ログイン中のユーザ: {{ user.name }}</p>
-      <template v-if="user.writerRequestCode">
+      <template v-if="user.role !== 'member'"></template>
+      <template v-else-if="user.writerRequestCode">
         <v-text-field
           label="Writer リクエストコマンド"
           :value="command"
