@@ -2,25 +2,31 @@
   <v-simple-table>
     <thead>
       <tr>
-        <th />
+        <th v-if="!problemMode" />
         <th>問題名</th>
         <th>writer</th>
         <th>難易度</th>
-        <th>配点</th>
-        <th />
+        <th v-if="!problemMode">配点</th>
+        <th v-if="!problemMode" />
       </tr>
     </thead>
     <tbody>
       <tr v-for="item in items" :key="item.name">
-        <td>{{ item.position }}</td>
+        <td v-if="!problemMode">{{ item.position }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.writerUser }}</td>
         <td>{{ item.difficulty }}</td>
-        <td>{{ item.points }}</td>
-        <td>
-          <div class="cursor-pointer" @click="remove(item.slug)">
+        <td v-if="!problemMode">{{ item.points }}</td>
+        <td v-if="!problemMode">
+          <nuxt-link
+            class="link"
+            :to="`/contests/${contestSlug}/tasks/${item.slug}`"
+          >
+            <v-icon small>mdi-eye</v-icon>
+          </nuxt-link>
+          <span class="cursor-pointer" @click="remove(item.slug)">
             <v-icon small color="red">mdi-delete</v-icon>
-          </div>
+          </span>
         </td>
       </tr>
     </tbody>
@@ -32,18 +38,24 @@ import { Component, Emit, Prop, Vue } from 'nuxt-property-decorator'
 import { Task } from '~/types/contestAdmin'
 
 type ItemType = {
-  position: string
+  position?: string
   name: string
   difficulty: string
-  points: string
+  points?: string
   writerUser: string
-  slug: string
+  slug?: string
 }
 
 @Component
 export default class ProblemsCardTable extends Vue {
   @Prop()
   tasks?: Task[]
+
+  @Prop()
+  contestSlug?: string
+
+  @Prop({ type: Boolean, default: false })
+  problemMode!: boolean
 
   get items(): ItemType[] {
     if (!this.tasks) return []
@@ -52,7 +64,7 @@ export default class ProblemsCardTable extends Vue {
       name: task.name,
       difficulty: task.difficulty,
       writerUser: task.writerUser,
-      points: task.points.toString(),
+      points: task.points?.toString(),
       slug: task.slug
     }))
   }
@@ -67,5 +79,8 @@ export default class ProblemsCardTable extends Vue {
 <style scoped lang="scss">
 .cursor-pointer {
   cursor: pointer;
+}
+.link {
+  text-decoration: none;
 }
 </style>
