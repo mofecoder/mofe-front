@@ -50,11 +50,46 @@ export default class {
     return res
   }
 
+  async resetPasswordRequest(email: string) {
+    const res = await httpPost<{ message: string }>(
+      '/auth/password',
+      {},
+      {
+        email,
+        redirectUrl: '/reset_password'
+      }
+    )
+    return res
+  }
+
+  async resetPassword(
+    token: string,
+    password: string,
+    passwordConfirmation: string
+  ) {
+    const res = await httpPut<{ message: string }>(
+      '/auth/password',
+      {},
+      {
+        user: {
+          resetPasswordToken: token,
+          password,
+          passwordConfirmation
+        }
+      }
+    )
+    return res
+  }
+
   async updateUser(
     userId: number,
-    { atcoderId }: { atcoderId: string | null }
+    { atcoderId, name: userName }: { atcoderId: string | null; name: string }
   ) {
-    await httpPut(`/users/${userId}`, {}, { user: { atcoderId } })
+    await httpPut(
+      `/users/${userId}`,
+      {},
+      { user: { atcoderId, name: userName } }
+    )
   }
 
   async signOut() {

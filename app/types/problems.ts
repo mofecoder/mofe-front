@@ -1,4 +1,5 @@
 import { Difficulty, Sample } from '~/types/task'
+import { Contest } from '~/types/contest'
 
 export interface ProblemParams {
   name: string
@@ -22,6 +23,7 @@ export interface Problem {
 
 export interface ProblemDetail {
   id: number
+  slug: string | null
   executionTimeLimit: number
   name: string
   difficulty: Difficulty
@@ -33,6 +35,7 @@ export interface ProblemDetail {
   checkerPath: string | null
   samples: Sample[] | null
   testers: string[]
+  contest: Contest | null
 }
 
 export interface TestcaseSet {

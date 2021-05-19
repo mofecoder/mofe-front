@@ -25,6 +25,7 @@ module.exports = {
     ],
     curly: 'off',
     'arrow-parens': 'off',
+    indent: 'off',
     'vue/html-self-closing': 'off',
     'vue/html-closing-bracket-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',

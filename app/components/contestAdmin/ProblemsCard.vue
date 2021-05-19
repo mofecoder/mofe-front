@@ -1,14 +1,14 @@
 <template>
   <v-card>
-    <v-card-title>
-      <v-row class="px-4" justify="space-between">
-        <div>問題一覧</div>
-        <v-btn color="primary" :disabled="tasks.length >= 10" @click="add"
-          >問題を追加</v-btn
-        >
-      </v-row>
-    </v-card-title>
-    <ProblemsCardTable :tasks="tasks" @remove="remove" />
+    <v-card-title>問題一覧</v-card-title>
+    <v-card-text>
+      <ProblemsCardTable
+        :contest-slug="contestSlug"
+        :tasks="tasks"
+        @remove="remove"
+        @show="show"
+      />
+    </v-card-text>
   </v-card>
 </template>
 
@@ -22,6 +22,9 @@ import ProblemsCardTable from '~/components/contestAdmin/ProblemsCardTable.vue'
 export default class ProblemsCard extends Vue {
   @Prop()
   tasks?: Task[]
+
+  @Prop()
+  contestSlug?: string
 
   @Emit()
   add() {}

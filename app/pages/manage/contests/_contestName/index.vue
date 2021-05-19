@@ -20,9 +20,16 @@
         <ProblemsCard
           :tasks="contest.tasks"
           :loading="loading.tasks"
+          :contest-slug="contest.slug"
           class="my-4"
           @add="openModal"
           @remove="remove"
+        />
+        <AddProblemCard
+          :loading="loading.add"
+          :used-positions="usedPositions"
+          :unset-problems="unsetProblems || []"
+          @add="addProblem"
         />
         <TimeCardEdit
           class="my-4"
@@ -34,14 +41,6 @@
         <SettingsCard class="my-4" />
       </v-flex>
     </v-layout>
-    <v-dialog v-model="modal">
-      <AddProblemCard
-        ref="addProblemCard"
-        :items="unsetProblems || []"
-        @close="modal = false"
-        @add="addProblem"
-      />
-    </v-dialog>
     <v-snackbar v-model="updated" :timeout="4000">
       コンテスト情報を更新しました。
     </v-snackbar>
@@ -57,10 +56,12 @@ import SettingsCard from '~/components/contestAdmin/SettingsCard.vue'
 import InformationCard from '~/components/contestAdmin/InformationCard.vue'
 import { ContestDetailManage } from '~/types/contest'
 import AddProblemCard from '~/components/contestAdmin/AddProblemCard.vue'
+import ProblemListCard from '~/components/contestAdmin/ProblemListCard.vue'
 import { Problem } from '~/types/contestAdmin'
 @Component({
   components: {
     AddProblemCard,
+    ProblemListCard,
     InformationCard,
     ProblemsCard,
     TimeCardEdit,
@@ -69,15 +70,16 @@ import { Problem } from '~/types/contestAdmin'
   middleware: 'authenticated'
 })
 export default class PageContestAdmin extends Vue {
-  @Ref('addProblemCard')
-  addProblemCard!: AddProblemCard
+  @Ref('problemListCard')
+  problemListCard!: ProblemListCard
 
   contest: ContestDetailManage | null = null
   unsetProblems: Problem[] | null = null
   loading = {
     information: false,
     time: false,
-    tasks: false
+    tasks: false,
+    add: false
   }
 
   updated: boolean = false
@@ -93,6 +95,10 @@ export default class PageContestAdmin extends Vue {
     return this.$route.params.contestName
   }
 
+  get usedPositions() {
+    return new Set(this.contest!.tasks.map((x) => x.position))
+  }
+
   async created() {
     await this.reload()
   }
@@ -106,57 +112,48 @@ export default class PageContestAdmin extends Vue {
 
   async editInformation() {
     if (!this.contest) return
-    this.loading.information = true
+    this.$set(this.loading, 'information', true)
     await this.$api.Contests.update(this.contest.slug, {
       name: this.contest.name,
       kind: this.contest.kind,
       penaltyTime: this.contest.penaltyTime,
       description: this.contest.description,
       editorialUrl: this.contest.editorial || undefined
-    }).catch(() => (this.loading.information = false))
+    }).catch(() => this.$set(this.loading, 'information', false))
     this.updated = true
     await this.reload()
-    this.loading.information = false
+    this.$set(this.loading, 'information', false)
   }
 
   async editTime() {
     if (!this.contest) return
-    this.loading.time = true
+    this.$set(this.loading, 'time', true)
     await this.$api.Contests.update(this.contest.slug, {
       startAt: dayjs(this.contest.startAt).format(),
       endAt: dayjs(this.contest.endAt).format()
-    }).catch(() => (this.loading.time = false))
+    }).catch(() => this.$set(this.loading, 'time', false))
     this.updated = true
     await this.reload()
-    this.loading.time = false
+    this.$set(this.loading, 'time', false)
   }
 
-  async addProblem(problem: Problem) {
-    this.modal = false
-    this.loading.tasks = true
-    let pos = ''
-    const used = new Set(this.contest!.tasks.map((x) => x.position))
-    for (let c = 'A'; c !== 'Z'; c = String.fromCharCode(c.charCodeAt(0) + 1)) {
-      if (!used.has(c)) {
-        pos = c
-        break
-      }
-    }
+  async addProblem(problemId: number, pos: string) {
+    this.$set(this.loading, 'add', true)
     await this.$api.Contests.addTask(
       this.contestName,
-      problem.id,
+      problemId,
       `${this.contestName}_${pos.toLowerCase()}`,
       pos
     )
     await this.reload()
-    this.loading.tasks = false
+    this.$set(this.loading, 'add', false)
   }
 
   async remove(slug: string) {
-    this.loading.tasks = true
+    this.$set(this.loading, 'tasks', true)
     await this.$api.Contests.removeTask(this.contestName, slug)
     await this.reload()
-    this.loading.tasks = false
+    this.$set(this.loading, 'tasks', false)
   }
 
   async openModal() {
