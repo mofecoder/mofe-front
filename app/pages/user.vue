@@ -2,7 +2,22 @@
   <v-card>
     <v-card-title>ユーザ情報</v-card-title>
     <v-card-text v-if="user">
-      <v-row class="ml-0">ログイン中のユーザ: {{ user.name }}</v-row>
+      <p>ログイン中のユーザ: {{ user.name }}</p>
+      <template v-if="user.writerRequestCode">
+        <v-text-field
+          label="Writer リクエストコマンド"
+          :value="command"
+          readonly
+        />
+        <p>Writer Slack で上記のコマンドを実行してください。</p>
+      </template>
+      <v-btn
+        v-else
+        class="user-form__writer-request"
+        color="secondary"
+        @click="request"
+        >Writer リクエストを発行</v-btn
+      >
       <v-form ref="user" v-model="ok" @submit.prevent="submit">
         <v-text-field
           v-model="params.atcoderId"
@@ -12,9 +27,9 @@
         />
         <v-btn color="primary" type="submit">更新する</v-btn>
       </v-form>
-      <v-row class="ml-0 mt-6">
+      <div class="ml-0 mt-6">
         <v-btn color="red white--text" @click="logout">ログアウトする</v-btn>
-      </v-row>
+      </div>
     </v-card-text>
     <v-snackbar v-model="showSnack" :timeout="4000">
       {{ message }}
@@ -25,6 +40,7 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { userStore } from '~/utils/store-accessor'
+import { HttpError } from '~/utils/axios'
 
 @Component({
   middleware: 'authenticated',
@@ -50,6 +66,11 @@ export default class PageUser extends Vue {
     return !!this.message
   }
 
+  get command() {
+    if (!this.user) return ''
+    return `/register_writer ${this.user.name} ${this.user.writerRequestCode}`
+  }
+
   set showSnack(v: boolean) {
     if (v) return
     this.message = ''
@@ -71,6 +92,15 @@ export default class PageUser extends Vue {
       })
   }
 
+  async request() {
+    await this.$api.Users.generateWriterRequestCode(this.user!.id)
+      .then(userStore.fetchUser)
+      .catch((err: HttpError) => {
+        this.message =
+          err.response?.data?.error || 'Writer リクエストが発行できませんでした'
+      })
+  }
+
   logout() {
     this.$api.Auth.signOut()
     userStore.updateUser(null)
@@ -86,6 +116,9 @@ export default class PageUser extends Vue {
 .user-form {
   &__atcoder-id {
     width: 10em;
+  }
+  &__writer-request {
+    text-transform: none;
   }
 }
 </style>
