@@ -10,12 +10,13 @@ require('dotenv').config({
 })
 
 const nuxtConfig: NuxtConfig = {
-  mode: 'spa',
+  ssr: false,
   srcDir: 'app/',
   /*
    ** Headers of the page
    */
   head: {
+    title: 'CafeCoder',
     titleTemplate: '%s | CafeCoder',
     meta: [
       { charset: 'utf-8' },
@@ -23,7 +24,7 @@ const nuxtConfig: NuxtConfig = {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
+        content: 'プログラミングコンテストサイト CafeCoder'
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
