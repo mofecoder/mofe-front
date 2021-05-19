@@ -23,9 +23,19 @@
           v-model="params.atcoderId"
           class="user-form__atcoder-id"
           label="AtCoder ID"
-          :rules="rules"
+          :rules="rules.atcoderId"
         />
-        <v-btn color="primary" type="submit">更新する</v-btn>
+        <v-text-field
+          v-model="params.name"
+          :disabled="!nameChangeable"
+          class="user-form__name"
+          label="名前"
+          :rules="nameRules"
+        />
+        <p>
+          名前の大文字・小文字の変更ができます。名前の変更は1度のみ可能です。
+        </p>
+        <v-btn class="mt-3" color="primary" type="submit">更新する</v-btn>
       </v-form>
       <div class="ml-0 mt-6">
         <v-btn color="red white--text" @click="logout">ログアウトする</v-btn>
@@ -49,14 +59,17 @@ import { HttpError } from '~/utils/axios'
 export default class PageUser extends Vue {
   ok = false
   params = {
-    atcoderId: '' as string | null
+    atcoderId: '' as string | null,
+    name: ''
   }
 
   message = ''
 
-  readonly rules = [
-    (v: string) => /^\w{1,16}$/.test(v) || 'AtCoder ID が無効です。'
-  ]
+  readonly rules = {
+    atcoderId: [
+      (v: string) => /^\w{1,16}$/.test(v) || 'AtCoder ID が無効です。'
+    ]
+  }
 
   get user() {
     return userStore.getUser
@@ -71,6 +84,18 @@ export default class PageUser extends Vue {
     return `/register_writer ${this.user.name} ${this.user.writerRequestCode}`
   }
 
+  get nameChangeable() {
+    return this.user!.name === this.user!.name.toLowerCase()
+  }
+
+  get nameRules() {
+    return [
+      (v: string) =>
+        v.toLowerCase() === this.user!.name.toLowerCase() ||
+        '大文字・小文字の変更のみ可能です。'
+    ]
+  }
+
   set showSnack(v: boolean) {
     if (v) return
     this.message = ''
@@ -78,17 +103,20 @@ export default class PageUser extends Vue {
 
   mounted() {
     this.params = {
-      atcoderId: this.user!.atcoderId
+      atcoderId: this.user!.atcoderId,
+      name: this.user!.name
     }
   }
 
   async submit() {
     await this.$api.Auth.updateUser(this.user!.id, this.params)
-      .then(() => {
+      .then(async () => {
+        await userStore.fetchUser()
         this.message = 'ユーザ情報を更新しました'
       })
-      .catch(() => {
-        this.message = 'ユーザ情報の更新に失敗しました'
+      .catch((err: HttpError) => {
+        this.message =
+          err.response?.data?.error || 'ユーザ情報の更新に失敗しました'
       })
   }
 
@@ -116,6 +144,9 @@ export default class PageUser extends Vue {
 .user-form {
   &__atcoder-id {
     width: 10em;
+  }
+  &__name {
+    width: 14em;
   }
   &__writer-request {
     text-transform: none;

@@ -52,9 +52,13 @@ export default class {
 
   async updateUser(
     userId: number,
-    { atcoderId }: { atcoderId: string | null }
+    { atcoderId, name: userName }: { atcoderId: string | null; name: string }
   ) {
-    await httpPut(`/users/${userId}`, {}, { user: { atcoderId } })
+    await httpPut(
+      `/users/${userId}`,
+      {},
+      { user: { atcoderId, name: userName } }
+    )
   }
 
   async signOut() {
