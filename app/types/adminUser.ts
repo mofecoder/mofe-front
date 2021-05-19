@@ -3,4 +3,5 @@ export interface User {
   name: string
   role: 'admin' | 'writer' | 'member'
   createdAt: string
+  writerRequestCode: string | null
 }

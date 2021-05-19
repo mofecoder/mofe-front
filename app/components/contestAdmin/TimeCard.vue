@@ -151,6 +151,7 @@ export default class TimeCard extends Vue {
   @Watch('startDate')
   onChangeStartDate() {
     this.change()
+    if (!this.endDate) this.endDate = this.startDate
   }
 
   @Watch('startTime')

@@ -12,7 +12,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="6" lg="5">
           <v-text-field
             v-model="contestSlug"
             class=""
@@ -21,7 +21,7 @@
             :disabled="edit"
           />
         </v-col>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" sm="6" lg="3">
           <v-text-field
             v-model="penaltyTime"
             type="number"
@@ -29,6 +29,9 @@
             label="ペナルティ"
             :suffix="edit == null ? '分' : '秒'"
           />
+        </v-col>
+        <v-col cols="12" lg="4">
+          <v-select v-model="kindData" :items="kinds" label="種類" />
         </v-col>
       </v-row>
       <v-row justify="end">
@@ -84,6 +87,7 @@
 <script lang="ts">
 import { Vue, PropSync, Component, Prop, Emit } from 'nuxt-property-decorator'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
+import { Contest, KIND_TABLE } from '~/types/contest'
 
 const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
 
@@ -102,6 +106,9 @@ export default class ContestInformationCard extends Vue {
 
   @PropSync('description', { required: true })
   descriptionData!: string
+
+  @PropSync('kind', { required: true })
+  kindData!: Contest['kind']
 
   @PropSync('editorialUrl')
   editorial?: string
@@ -134,6 +141,13 @@ export default class ContestInformationCard extends Vue {
       (text: string) =>
         !text || URL_REGEX.test(text) || 'URL を入力してください'
     ]
+  }
+
+  get kinds() {
+    return Object.entries(KIND_TABLE).map((kv) => ({
+      value: kv[0],
+      text: kv[1]
+    }))
   }
 
   @Emit()

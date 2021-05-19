@@ -1,10 +1,10 @@
 import { Task } from '~/types/task'
 import { Task as ManageProblem } from '~/types/contestAdmin'
-import { User } from '~/types/adminUser'
 
 export interface Contest {
   slug: string
   name: string
+  kind: 'normal' | 'private'
   startAt: string
   endAt: string
 }
@@ -16,27 +16,33 @@ export interface ContestDetail extends Contest {
   isWriterOrTester: boolean
   registered: boolean
   editorial: string | null
-  writtenTasks: { slug: string; id: number; role: User['role'] }[]
+  writtenTasks: {
+    slug: string
+    id: number
+    role: 'admin' | 'writer' | 'tester'
+  }[]
 }
 
 export interface ContestDetailManage extends ContestDetail {
   tasks: ManageProblem[]
 }
 
-export interface ContestCreateParam {
-  name: string
-  slug: string
-  startAt: string
-  endAt: string
+export interface ContestCreateParam extends Contest {
   description: string
   penaltyTime: number
 }
 
 export interface ContestEditParam {
   name?: string
+  kind?: Contest['kind']
   startAt?: string
   endAt?: string
   description?: string
   penaltyTime?: number
   editorialUrl?: string
+}
+
+export const KIND_TABLE = {
+  normal: '通常',
+  private: 'プライベート'
 }

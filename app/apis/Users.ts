@@ -1,4 +1,4 @@
-import { httpGet, httpPatch } from '../utils/axios'
+import { httpGet, httpPatch, httpPost } from '../utils/axios'
 import { User } from '../types/adminUser'
 
 export default class {
@@ -8,5 +8,9 @@ export default class {
 
   async update(userId: number, payload: Pick<User, 'role'>) {
     return await httpPatch(`/users/${userId}/update_admin`, {}, payload)
+  }
+
+  async generateWriterRequestCode(userId: number) {
+    return await httpPost(`/users/${userId}/generate_writer_request_code`)
   }
 }

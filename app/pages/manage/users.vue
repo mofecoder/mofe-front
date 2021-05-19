@@ -17,6 +17,10 @@
         >
         <template v-else>{{ item.role }}</template>
       </template>
+      <template v-slot:item.writerRequestCode="{ item }">
+        {{ item.writerRequestCode || '未発行' }}
+        <v-icon small @click="generate(item.id)">mdi-refresh</v-icon>
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -36,7 +40,8 @@ export default class PageManageIndex extends Vue {
   headers = [
     { text: 'ユーザ名', value: 'name' },
     { text: '権限', value: 'role' },
-    { text: '登録日時', value: 'createdAt' }
+    { text: '登録日時', value: 'createdAt' },
+    { text: 'writer リクエストコード', value: 'writerRequestCode' }
   ] as DataTableHeader[]
 
   async fetch() {
@@ -49,13 +54,18 @@ export default class PageManageIndex extends Vue {
         id: user.id,
         name: user.name,
         role: user.role,
-        createdAt: dayjs(user.createdAt).format('YYYY/MM/DD')
+        createdAt: dayjs(user.createdAt).format('YYYY/MM/DD'),
+        writerRequestCode: user.writerRequestCode
       })) || []
     )
   }
 
   update(userId: number, role: User['role']) {
     this.$api.Users.update(userId, { role }).then(this.$fetch)
+  }
+
+  generate(userId: number) {
+    this.$api.Users.generateWriterRequestCode(userId).then(this.$fetch)
   }
 }
 </script>

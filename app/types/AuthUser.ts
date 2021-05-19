@@ -7,4 +7,5 @@ export interface AuthUser {
   allowPasswordChange: boolean
   role: string
   atcoderId: string | null
+  writerRequestCode: string | null
 }
