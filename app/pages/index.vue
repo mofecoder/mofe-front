@@ -101,7 +101,7 @@ export default class PageMainPage extends Vue {
 
   get registerAtCoder() {
     const user = userStore.getUser
-    return user && user.role === 'admin' && user.atcoderId == null
+    return user && user.role !== 'admin' && user.atcoderId == null
   }
 
   get loggedIn() {
