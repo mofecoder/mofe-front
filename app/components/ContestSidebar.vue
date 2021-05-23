@@ -1,35 +1,84 @@
 <template>
-  <div class="contest-sidebar">
-    <component
-      :is="
-        item.disabled
-          ? 'span'
-          : item.path.startsWith('http')
-          ? 'a'
-          : 'router-link'
-      "
-      v-for="item in items"
-      :key="item.name"
-      class="contest-sidebar__item"
-      :class="[
-        `contest-sidebar__item--${item.path.split('/')[0]}`,
-        {
-          active: item.active,
-          disabled: item.disabled
-        }
-      ]"
-      :to="`/contests/${contestName}/${item.path}`"
-      :href="item.path"
-      :target="item.path.startsWith('http') ? '_blank' : null"
-      :data-unread="unreadAttr(item)"
-    >
-      {{ item.name }}
-    </component>
-  </div>
+  <v-list nav>
+    <v-list-item-group color="primary">
+      <v-list-item :to="`/contests/${contestName}`" exact>
+        <v-list-item-icon><v-icon>mdi-home</v-icon></v-list-item-icon>
+        <v-list-item-title>トップ</v-list-item-title>
+      </v-list-item>
+      <v-list-item :to="`/contests/${contestName}/tasks`" exact>
+        <v-list-item-icon>
+          <v-icon>mdi-format-list-bulleted</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>問題</v-list-item-title>
+      </v-list-item>
+      <v-list-group v-if="contest && contest.tasks && contest.tasks.length">
+        <template v-slot:activator>
+          <v-list-item-icon>
+            <v-icon>mdi-magnify</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>（問題一覧）</v-list-item-title>
+        </template>
+        <v-list-item
+          v-for="task in contest.tasks"
+          :key="task.slug"
+          :to="`/contests/${contestName}/tasks/${task.slug}`"
+          dense
+        >
+          <v-list-item-title
+            >{{ task.position }} [{{ task.difficulty }}]</v-list-item-title
+          >
+          <v-list-item-subtitle>{{ task.name }}</v-list-item-subtitle>
+        </v-list-item>
+      </v-list-group>
+      <v-list-item :to="`/contests/${contestName}/clarifications`">
+        <v-list-item-icon>
+          <v-icon>mdi-help-circle</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>質問</v-list-item-title>
+        <v-list-item-icon
+          v-if="unreadClarifications"
+          class="clarifications-unread"
+        >
+          {{ unreadClarifications }}
+        </v-list-item-icon>
+      </v-list-item>
+      <v-list-item :to="`/contests/${contestName}/submits/all`">
+        <v-list-item-icon>
+          <v-icon>mdi-list-status</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>すべての提出</v-list-item-title>
+      </v-list-item>
+      <v-list-item :to="`/contests/${contestName}/submits`" exact>
+        <v-list-item-icon>
+          <v-icon>mdi-account-details</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>自分の提出</v-list-item-title>
+      </v-list-item>
+      <v-list-item :to="`/contests/${contestName}/standings`">
+        <v-list-item-icon>
+          <v-icon>mdi-sort-variant</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>順位表</v-list-item-title>
+      </v-list-item>
+      <v-list-item
+        v-if="afterContest || (contest && contest.editorial)"
+        :href="contest.editorial"
+        :disabled="contest.editorial == null"
+        target="_blank"
+      >
+        <v-list-item-icon>
+          <v-icon>mdi-file-document-outline</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>解説</v-list-item-title>
+      </v-list-item>
+    </v-list-item-group>
+  </v-list>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import dayjs from 'dayjs'
+import { ContestDetail } from '~/types/contest'
 
 type ItemType = {
   name: string
@@ -41,57 +90,27 @@ type ItemType = {
 @Component
 export default class ContestSidebar extends Vue {
   @Prop({ required: true })
-  items!: ItemType[]
+  contest!: ContestDetail | null
 
   @Prop({ required: true }) contestName!: string
 
   @Prop({ default: 0 })
   unreadClarifications!: number
 
-  unreadAttr(item: ItemType) {
-    return item.name === '質問' && this.unreadClarifications
-      ? this.unreadClarifications
-      : null
+  get afterContest() {
+    return this.contest && dayjs(this.contest.endAt).isBefore(Date())
   }
 }
 </script>
 
 <style scoped lang="scss">
-.contest-sidebar__item {
-  display: block;
-  color: inherit;
-  text-decoration: inherit;
-  font-size: 0.8rem;
-  box-sizing: border-box;
-  padding: 0.9em 1em;
-
-  &.active {
-    background: #daeefc;
-    color: #0c385f;
-    border-right: 12px solid #237aff;
-    border-radius: 2px;
-  }
-
-  &:not(.active):not(.disabled) {
-    cursor: pointer;
-    &:hover:not(.active) {
-      background: #f0f0f0;
-    }
-  }
-
-  &.disabled {
-    background: #999999;
-  }
-
-  &--clarifications:after {
-    display: inline-block;
-    content: attr(data-unread);
-    background: mediumblue;
-    color: white;
-    border-radius: 8px;
-    width: 2em;
-    text-align: center;
-    margin-left: 0.4em;
-  }
+.clarifications-unread {
+  display: inline-block;
+  background: mediumblue;
+  color: white;
+  border-radius: 8px;
+  width: 2em;
+  text-align: center;
+  margin-left: 0.4em;
 }
 </style>

@@ -14,7 +14,7 @@
             solo
           />
         </v-col>
-        <v-col cols="5" sm="4" md="2" lg="1">
+        <v-col cols="5" sm="4" md="2">
           <v-btn
             color="primary"
             block
@@ -97,7 +97,7 @@ export default class AddProblemCard extends Vue {
   loading?: boolean
 
   @Prop({ required: true })
-  unsetProblems: Problem[]
+  unsetProblems!: Problem[]
 
   problemId: number | null = null
   status = ''

@@ -21,7 +21,10 @@ export default class MixinContest extends Vue {
     await contestStore
       .getContest(this.$route.params.contestName)
       .then(async () => {
-        window.setInterval(this.getClarifications, 60 * 1000)
+        this.clarInterval = window.setInterval(
+          this.getClarifications,
+          60 * 1000
+        )
         await this.getClarifications()
       })
       .catch((error: HttpError) => {

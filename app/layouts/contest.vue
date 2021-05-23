@@ -41,7 +41,7 @@
       mobile-breakpoint="960"
     >
       <ContestSidebar
-        :items="filteredLinks"
+        :contest="contest"
         :contest-name="$route.params.contestName"
         :unread-clarifications="unreadClarifications"
       />
@@ -55,18 +55,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import { Component, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { contestStore, userStore } from '~/utils/store-accessor'
 import ContestSidebar from '~/components/ContestSidebar.vue'
 import { ContestDetail } from '~/types/contest'
 import 'dayjs/locale/ja'
-
-type Link = {
-  path: string
-  name: string
-  disabled?: boolean
-}
 
 type ItemType = {
   path: string
@@ -78,58 +72,10 @@ type ItemType = {
   components: { ContestSidebar }
 })
 export default class LayoutContest extends Vue {
-  currentIndex: number | null = null
   drawer: boolean | null = null
-
-  get links(): Link[] {
-    const contestEnded =
-      this.contest != null && dayjs(this.contest.endAt).isBefore(Date())
-    const list = [
-      {
-        name: 'トップ',
-        path: ''
-      },
-      {
-        name: '問題',
-        path: 'tasks'
-      },
-      {
-        name: '質問',
-        path: 'clarifications'
-      },
-      {
-        name: 'すべての提出',
-        path: 'submits/all',
-        disabled: !contestEnded && !this.contest?.isWriterOrTester
-      },
-      {
-        name: '自分の提出',
-        path: 'submits'
-      },
-      {
-        name: '順位表',
-        path: 'standings'
-      }
-    ]
-
-    const editorial = this.contest?.editorial || null
-    if (editorial || contestEnded) {
-      list.push({
-        name: '解説',
-        path: editorial || '',
-        disabled: !editorial
-      })
-    }
-
-    return list
-  }
 
   get contest(): ContestDetail | null {
     return contestStore.contest
-  }
-
-  created() {
-    this.currentIndex = this.getCurrentIndex()
   }
 
   get current(): string | null {
@@ -141,18 +87,6 @@ export default class LayoutContest extends Vue {
 
   get user() {
     return userStore.getUser
-  }
-
-  get filteredLinks() {
-    return this.links.map((x) => {
-      const ret: ItemType = {
-        path: x.path,
-        name: x.name,
-        active: x.path === this.current,
-        disabled: x.disabled
-      }
-      return ret
-    })
   }
 
   get contestTime(): string[] {
@@ -184,19 +118,6 @@ export default class LayoutContest extends Vue {
     return contestStore.clarifications.filter((clar) =>
       dayjs(clar.updatedAt).isAfter(read!)
     ).length
-  }
-
-  getCurrentIndex(): number | null {
-    const current = this.current
-    if (current == null) return null
-    for (let i = 0; i < this.links.length; ++i)
-      if (this.links[i].path === current) return i
-    return null
-  }
-
-  @Watch('$route.fullPath')
-  change() {
-    this.currentIndex = this.getCurrentIndex()
   }
 }
 </script>

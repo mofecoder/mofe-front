@@ -1,16 +1,36 @@
 <template>
-  <div
-    :class="[
-      `result-${status}`,
-      isDense && 'chip-dense',
-      judgeStatus && 'chip-judging'
-    ]"
-    v-text="text"
-  ></div>
+  <v-tooltip top>
+    <template v-slot:activator="{ on, attrs }">
+      <div
+        :class="[
+          `result-${status}`,
+          isDense && 'chip-dense',
+          judgeStatus && 'chip-judging'
+        ]"
+        v-bind="attrs"
+        v-on="on"
+        v-text="text"
+      />
+    </template>
+    <span v-text="tooltipText" />
+  </v-tooltip>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+
+const TOOLTIP_TEXT = {
+  AC: '正解 (Accepted)',
+  TLE: '実行時間制限を超過 (Time Limit Exceeded)',
+  WA: '不正解 (Wrong Answer)',
+  RE: '実行時エラー (Runtime Error)',
+  OLE: '出力制限超過 (Output Limit Exceeded)',
+  IE: '内部エラー (Internal Error)',
+  CE: 'コンパイルエラー (Compilation Error)',
+  WJ: 'ジャッジ待ち (Waiting Judge)',
+  WR: 'リジャッジ待ち (Waiting Rejudge)',
+  IC: 'コンパイル中 (In Compile)'
+}
 
 @Component
 export default class ResultChip extends Vue {
@@ -22,6 +42,11 @@ export default class ResultChip extends Vue {
 
   @Prop({ default: null })
   judgeStatus!: { completed: number; all: number } | null
+
+  get tooltipText() {
+    if (this.judgeStatus && this.status === 'WJ') return 'ジャッジ中'
+    return TOOLTIP_TEXT[this.status]
+  }
 
   get text() {
     if (!this.judgeStatus) {
@@ -82,7 +107,8 @@ $color-ce: #cc44ff;
   background-color: $color-ce;
 }
 .result-WJ,
-.result-WR {
+.result-WR,
+.result-IC {
   background-color: $color-wj;
 }
 </style>
