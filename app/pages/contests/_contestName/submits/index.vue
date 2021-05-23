@@ -48,7 +48,6 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 
   beforeDestroy() {
     if (this.timeout) window.clearTimeout(this.timeout)
-    super.beforeDestroy()
   }
 
   submits: Submit[] | null = null

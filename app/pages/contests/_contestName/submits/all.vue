@@ -5,6 +5,12 @@
         <v-card v-if="!errorMessage" :loading="!submits && !errorMessage">
           <v-card-title>すべての提出</v-card-title>
           <v-card-text class="submit-card">
+            <v-switch
+              v-if="allowAdminMode"
+              v-model="adminMode"
+              color="orange"
+              label="高頻度更新を有効にする"
+            />
             <SubmitTable
               v-if="submits"
               :submits="submits"
@@ -23,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { Component, mixins } from 'nuxt-property-decorator'
+import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import ContestHeader from '~/components/ContestHeader.vue'
 import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import MathJax from '~/mixins/mathjax'
@@ -57,12 +63,16 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 
   beforeDestroy() {
     if (this.timeout) window.clearInterval(this.timeout)
-    super.beforeDestroy()
   }
 
+  adminMode = false
   submits: Submit[] | null = null
   timeout: number | null = null
   errorMessage: string | null = null
+
+  get allowAdminMode() {
+    return !!this.contest?.writtenTasks.length
+  }
 
   reload() {
     this.$api.Contests.allSubmits(this.$route.params.contestName)
@@ -85,6 +95,16 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
           err.response?.data.error || 'リジャッジのリクエストに失敗しました'
         )
       })
+  }
+
+  @Watch('adminMode')
+  onChangeAdminMode(value: boolean) {
+    if (this.timeout) window.clearInterval(this.timeout)
+    const callback = () => {
+      this.reload()
+    }
+    this.timeout = window.setInterval(callback, value ? 2000 : 30000)
+    if (value) this.reload()
   }
 }
 </script>
