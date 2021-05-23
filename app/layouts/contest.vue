@@ -62,12 +62,6 @@ import ContestSidebar from '~/components/ContestSidebar.vue'
 import { ContestDetail } from '~/types/contest'
 import 'dayjs/locale/ja'
 
-type Link = {
-  path: string
-  name: string
-  disabled?: boolean
-}
-
 type ItemType = {
   path: string
   name: string

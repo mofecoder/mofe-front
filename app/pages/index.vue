@@ -27,7 +27,7 @@
                 </tbody>
               </v-simple-table>
               <div class="mt-4">
-                <p>解説や障害情報等のお知らせは Twitter で発信しています</p>
+                <p>障害情報等のお知らせは Twitter で発信しています</p>
                 <a
                   href="https://twitter.com/CafeCoder_?ref_src=twsrc%5Etfw"
                   class="twitter-follow-button"
@@ -40,6 +40,9 @@
           </v-card>
         </v-col>
         <v-col cols="12" lg="7">
+          <v-alert v-if="registerAtCoder" dense type="info">
+            ユーザページから AtCoder ID が登録可能です。ぜひご登録ください。
+          </v-alert>
           <ViewPost
             v-for="post in posts"
             :key="`post-${post.id}`"
@@ -94,6 +97,11 @@ export default class PageMainPage extends Vue {
       await this.$api.Contests.index(),
       await this.$api.Posts.index(3)
     ])
+  }
+
+  get registerAtCoder() {
+    const user = userStore.getUser
+    return user && user.role === 'admin' && user.atcoderId == null
   }
 
   get loggedIn() {
