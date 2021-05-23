@@ -42,7 +42,10 @@
           {{ unreadClarifications }}
         </v-list-item-icon>
       </v-list-item>
-      <v-list-item :to="`/contests/${contestName}/submits/all`">
+      <v-list-item
+        :to="`/contests/${contestName}/submits/all`"
+        :disabled="!contest || (!afterContest && !contest.writtenTasks.length)"
+      >
         <v-list-item-icon>
           <v-icon>mdi-list-status</v-icon>
         </v-list-item-icon>
