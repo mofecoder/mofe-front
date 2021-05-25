@@ -130,7 +130,7 @@ export default class SubmitTable extends Vue {
   ]
 
   footerProps = {
-    itemsPerPageOptions: [10, 20, 50, 100, -1],
+    itemsPerPageOptions: [10, 20, 50, 100],
     showCurrentPage: true,
     showFirstLastPage: true
   }
