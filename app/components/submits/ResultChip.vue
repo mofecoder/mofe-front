@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
-const TOOLTIP_TEXT = {
+const TOOLTIP_TEXT: { [_: string]: string } = {
   AC: '正解 (Accepted)',
   TLE: '実行時間制限を超過 (Time Limit Exceeded)',
   WA: '不正解 (Wrong Answer)',
