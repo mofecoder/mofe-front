@@ -103,7 +103,8 @@ export default class SubmitTable extends Vue {
     'IE',
     'CE',
     'MLE',
-    'WR'
+    'WR',
+    'IC'
   ]
 
   footerProps = {
