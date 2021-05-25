@@ -3,15 +3,16 @@
     <v-row>
       <v-col cols="12" md="5" xl="3">
         <v-select
-          v-model="filterTask"
+          v-model="filter.task"
           label="問題名"
           :items="taskItems"
           clearable
+          multiple
         />
       </v-col>
       <v-col cols="12" sm="8" md="4" xl="3">
         <v-combobox
-          v-model="filterUser"
+          v-model="filter.user"
           label="ユーザ名"
           :items="userItems"
           clearable
@@ -19,10 +20,11 @@
       </v-col>
       <v-col cols="12" sm="4" md="3" xl="2">
         <v-select
-          v-model="filterStatus"
+          v-model="filter.status"
           label="結果"
           :items="statuses"
           clearable
+          multiple
         />
       </v-col>
     </v-row>
@@ -31,6 +33,11 @@
       :items="submitData"
       :items-per-page="20"
       :footer-props="footerProps"
+      :options.sync="options"
+      :loading="loading"
+      :server-items-length="
+        (submissions && submissions.meta.pagination.count) || 0
+      "
       multi-sort
       dense
       mobile-breakpoint="760"
@@ -75,23 +82,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue, Watch } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
-import { DataTableHeader as DataTableHeaderRaw } from 'vuetify'
-import { Submit, SubmitResult } from '~/types/submits'
+import { DataOptions, DataTableHeader as DataTableHeaderRaw } from 'vuetify'
+import { SubmitResult } from '~/types/submits'
 import { Task } from '~/types/task'
 import ResultChip from '~/components/submits/ResultChip.vue'
+import { SubmissionResponse } from '~/apis/Contests'
 
 type DataTableHeader = Omit<DataTableHeaderRaw, 'align'> & { align?: string }
 @Component({
   components: { ResultChip }
 })
 export default class SubmitTable extends Vue {
+  @Prop({ required: true })
+  apiCall: (
+    page: number,
+    count: number,
+    sortBy: string[],
+    sortDesc: boolean[],
+    filter: [string, string | string[]][]
+  ) => Promise<SubmissionResponse>
+
+  @Prop({ required: true })
+  interval: number
+
   @Prop()
   tasks?: Task[]
 
-  @Prop({ required: true })
-  submits!: Submit[]
+  submissions: SubmissionResponse | null = null
 
   @Prop({ default: [] })
   writtenTasks!: string[]
@@ -116,10 +135,46 @@ export default class SubmitTable extends Vue {
     showFirstLastPage: true
   }
 
-  filterTask = ''
-  filterUser: string | null = ''
-  filterStatus = ''
   rejudgeIds: number[] = []
+  options: DataOptions = {
+    itemsPerPage: 20
+  }
+
+  filter = {
+    task: [],
+    user: '',
+    status: []
+  }
+
+  loading = true
+
+  timeout = -1
+
+  async fetch() {
+    await this.reload()
+  }
+
+  @Watch('options', { deep: true })
+  async onChangeOptions() {
+    await this.reload()
+  }
+
+  @Watch('filter', { deep: true })
+  async onChangeFilter() {
+    await this.reload()
+  }
+
+  @Watch('interval', { immediate: true })
+  setReloading() {
+    window.clearInterval(this.timeout)
+    this.timeout = window.setInterval(() => {
+      this.reload(false)
+    }, this.interval)
+  }
+
+  beforeDestroy() {
+    window.clearInterval(this.timeout)
+  }
 
   get slug(): string {
     return this.$route.params.contestName
@@ -149,14 +204,8 @@ export default class SubmitTable extends Vue {
   }
 
   get submitData() {
-    return this.submits
-      .filter(
-        (item) =>
-          item.user.name.includes(this.filterUser || '') &&
-          (!this.filterTask || item.task.slug === this.filterTask) &&
-          (!this.filterStatus || item.status === this.filterStatus)
-      )
-      .map((item) => ({
+    return (
+      this.submissions?.data.map((item) => ({
         id: item.id,
         taskSlug: item.task.slug,
         date: this.formatDate(item.timestamp),
@@ -168,7 +217,8 @@ export default class SubmitTable extends Vue {
         executionTime: item.executionTime,
         executionMemory: item.executionMemory,
         judgeStatus: item.judgeStatus
-      }))
+      })) || []
+    )
   }
 
   get taskItems() {
@@ -181,7 +231,28 @@ export default class SubmitTable extends Vue {
   }
 
   get userItems() {
-    return this.submits.map((submission) => submission.user.name)
+    return (
+      this.submissions?.data.map((submission) => submission.user.name) || []
+    )
+  }
+
+  async reload(isReload: boolean = false) {
+    this.loading = !isReload
+    const { page, itemsPerPage, sortBy, sortDesc } = this.options
+    this.submissions = await this.apiCall(
+      page,
+      itemsPerPage,
+      sortBy,
+      sortDesc,
+      [
+        ['task', this.filter.task],
+        ['user', this.filter.user],
+        ['status', this.filter.status]
+      ]
+    ).then((res) => {
+      this.loading = false
+      return res
+    })
   }
 
   getLangName(langId: string) {

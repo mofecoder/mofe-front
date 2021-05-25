@@ -2,11 +2,12 @@
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card :loading="!submits">
+        <v-card>
           <v-card-title>自分の提出</v-card-title>
           <v-card-text class="submit-card">
             <SubmitTable
-              v-if="submits"
+              :api-call="apiCall"
+              :interval="timeout"
               :submits="submits"
               :tasks="contest.tasks"
               :written-tasks="contest.writtenTasks.map((t) => t.slug)"
@@ -26,8 +27,8 @@ import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import MathJax from '~/mixins/mathjax'
 import MixinContest from '~/mixins/contest'
 import SubmitTable from '~/components/submits/SubmitTable.vue'
-import { Submit } from '~/types/submits'
 import { HttpError } from '~/utils/axios'
+import { SubmissionResponse } from '~/apis/Contests'
 @Component({
   components: { SubmitTable, ContestHeaderTab, ContestHeader },
   layout: 'contest',
@@ -41,24 +42,31 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     }
   }
 
-  async fetch() {
-    await this.getContest()
-    this.reload()
-  }
+  submits: SubmissionResponse | null = null
+  timeout: number = 15000
 
-  beforeDestroy() {
-    if (this.timeout) window.clearTimeout(this.timeout)
-  }
-
-  submits: Submit[] | null = null
-  timeout: number | null = null
-
-  reload() {
-    this.$api.Contests.mySubmits(this.$route.params.contestName)
-      .then((res: Submit[]) => {
-        this.submits = res
-        const timeout = this.submits.some((s) => s.point == null) ? 2000 : 15000
-        this.timeout = window.setTimeout(this.reload, timeout)
+  async apiCall(
+    page: number,
+    count: number,
+    sortBy: string[],
+    sortDesc: boolean[],
+    filter: [string, string | string[]][]
+  ) {
+    return await this.$api.Contests.mySubmits(
+      this.$route.params.contestName,
+      page,
+      count,
+      sortBy,
+      sortDesc,
+      filter
+    )
+      .then((res) => {
+        this.timeout = res.data.some(
+          (s) => s.judgeStatus || ['WJ', 'WR', 'IC'].includes(s.status)
+        )
+          ? 2000
+          : 15000
+        return res
       })
       .catch((err: Error) => {
         if (err.message === 'Not logged in.') this.$router.replace('/login')

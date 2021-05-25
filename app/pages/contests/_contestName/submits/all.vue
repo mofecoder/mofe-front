@@ -2,7 +2,7 @@
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card v-if="!errorMessage" :loading="!submits && !errorMessage">
+        <v-card v-if="!errorMessage">
           <v-card-title>すべての提出</v-card-title>
           <v-card-text class="submit-card">
             <v-switch
@@ -12,7 +12,8 @@
               label="高頻度更新を有効にする"
             />
             <SubmitTable
-              v-if="submits"
+              :api-call="apiCall"
+              :interval="timeout"
               :submits="submits"
               :tasks="contest.tasks"
               :written-tasks="contest.writtenTasks.map((x) => x.slug)"
@@ -35,8 +36,8 @@ import ContestHeaderTab from '~/components/ContestHeaderTab.vue'
 import MathJax from '~/mixins/mathjax'
 import MixinContest from '~/mixins/contest'
 import SubmitTable from '~/components/submits/SubmitTable.vue'
-import { Submit } from '~/types/submits'
 import { HttpError } from '~/utils/axios'
+import { SubmissionResponse } from '~/apis/Contests'
 @Component({
   components: { SubmitTable, ContestHeaderTab, ContestHeader },
   layout: 'contest'
@@ -49,42 +50,30 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
     }
   }
 
-  async fetch() {
-    await this.getContest()
-    this.reload()
-  }
-
-  created() {
-    const callback = () => {
-      this.reload()
-    }
-    this.timeout = window.setInterval(callback, 30000)
-  }
-
-  beforeDestroy() {
-    if (this.timeout) window.clearInterval(this.timeout)
-  }
-
   adminMode = false
-  submits: Submit[] | null = null
-  timeout: number | null = null
+  submits: SubmissionResponse | null = null
+  timeout: number = 30000
   errorMessage: string | null = null
 
   get allowAdminMode() {
     return !!this.contest?.writtenTasks.length
   }
 
-  reload() {
-    this.$api.Contests.allSubmits(this.$route.params.contestName)
-      .then((res: Submit[]) => {
-        this.submits = res
-      })
-      .catch((err: Error) => {
-        if (err instanceof HttpError) {
-          this.errorMessage = err.response.data.error
-        }
-        if (this.timeout) window.clearInterval(this.timeout)
-      })
+  async apiCall(
+    page: number,
+    count: number,
+    sortBy: string[],
+    sortDesc: boolean[],
+    filter: [string, string | string[]][]
+  ) {
+    return await this.$api.Contests.allSubmits(
+      this.$route.params.contestName,
+      page,
+      count,
+      sortBy,
+      sortDesc,
+      filter
+    )
   }
 
   async rejudge(submitIds: number[]) {
@@ -99,12 +88,7 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
 
   @Watch('adminMode')
   onChangeAdminMode(value: boolean) {
-    if (this.timeout) window.clearInterval(this.timeout)
-    const callback = () => {
-      this.reload()
-    }
-    this.timeout = window.setInterval(callback, value ? 2000 : 30000)
-    if (value) this.reload()
+    this.timeout = value ? 2000 : 30000
   }
 }
 </script>

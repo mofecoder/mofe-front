@@ -9,6 +9,46 @@ import { httpGet, httpPost, httpPut } from '~/utils/axios'
 import { StandingData } from '~/types/standings'
 import { Submit, SubmitDetail } from '~/types/submits'
 import { Clarification } from '~/types/clarification'
+import { Pagination } from '~/types/ApiMeta'
+
+export type SubmissionResponse = {
+  data: Submit[]
+  meta: { pagination: Pagination }
+}
+
+function formatSubmissionsUrl(
+  url: string,
+  page?: number,
+  count?: number,
+  sortBy?: string[],
+  sortDesc?: boolean[],
+  filter?: [string, string | string[]][]
+) {
+  const data = []
+  if (page != null) data.push(['page', page])
+  if (count != null) data.push(['count', count])
+  if (filter || (sortBy && sortDesc)) {
+    const options: {
+      sort?: { target: string; desc: boolean }[]
+      filter?: { target: string; value: string[] }[]
+    } = {}
+    if (sortBy && sortBy.length && sortDesc) {
+      options.sort = sortBy.map((by, i) => ({ target: by, desc: sortDesc[i] }))
+    }
+    if (filter && filter.length) {
+      options.filter = filter
+        .map((f) => ({
+          target: f[0],
+          value: Array.isArray(f[1]) ? f[1] : [f[1]]
+        }))
+        .filter((f) => f.value.filter((x) => x).length)
+    }
+    data.push(['options', JSON.stringify(options)])
+  }
+  const query = data.map((a) => `${a[0]}=${a[1]}`).join('&')
+  if (query) url += `?${query}`
+  return url
+}
 
 export default class {
   async index(): Promise<Contest[]> {
@@ -28,13 +68,45 @@ export default class {
     return res
   }
 
-  async allSubmits(contestSlug: string): Promise<Submit[]> {
-    const res = await httpGet<Submit[]>(`/contests/${contestSlug}/submits/all`)
+  async allSubmits(
+    contestSlug: string,
+    page?: number,
+    count?: number,
+    sortBy?: string[],
+    sortDesc?: boolean[],
+    filter?: [string, string | string[]][]
+  ): Promise<SubmissionResponse> {
+    const res = await httpGet<SubmissionResponse>(
+      formatSubmissionsUrl(
+        `/contests/${contestSlug}/submits/all`,
+        page,
+        count,
+        sortBy,
+        sortDesc,
+        filter
+      )
+    )
     return res
   }
 
-  async mySubmits(contestSlug: string): Promise<Submit[]> {
-    const res = await httpGet<Submit[]>(`/contests/${contestSlug}/submits`)
+  async mySubmits(
+    contestSlug: string,
+    page?: number,
+    count?: number,
+    sortBy?: string[],
+    sortDesc?: boolean[],
+    filter?: [string, string | string[]][]
+  ): Promise<SubmissionResponse> {
+    const res = await httpGet<SubmissionResponse>(
+      formatSubmissionsUrl(
+        `/contests/${contestSlug}/submits`,
+        page,
+        count,
+        sortBy,
+        sortDesc,
+        filter
+      )
+    )
     return res
   }
 
