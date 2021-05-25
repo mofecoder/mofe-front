@@ -1,12 +1,6 @@
 <template>
   <v-container class="testcase">
-    <v-btn class="mb-3" nuxt to=".." append text color="purple"
-      >問題編集に戻る</v-btn
-    >
-    <template v-if="problem">
-      <div class="testcase__title">{{ problem.name }} テストケース編集</div>
-    </template>
-    <v-card class="mb-8" :loading="!testcaseSets">
+    <v-card class="mb-8" outlined :loading="!testcaseSets">
       <v-card-title>テストケースセット一覧</v-card-title>
       <v-card-text class="set-list">
         <v-simple-table v-if="testcaseSets">
@@ -43,7 +37,7 @@
         >
       </v-card-text>
     </v-card>
-    <v-card class="mb-8" :loading="!testcases || testcaseLoading">
+    <v-card class="mb-8" outlined :loading="!testcases || testcaseLoading">
       <v-card-title>テストケース一覧</v-card-title>
       <v-card-text class="testcase-list">
         <v-simple-table v-if="testcases" dense>
@@ -104,7 +98,7 @@
         </v-btn>
       </v-card-text>
     </v-card>
-    <v-card :loading="uploadLoading">
+    <v-card outlined :loading="uploadLoading">
       <v-card-title>テストケースをアップロードする</v-card-title>
       <v-card-text>
         <v-expansion-panels class="mb-8">
@@ -159,7 +153,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { ProblemDetail, Testcase, TestcaseSet } from '~/types/problems'
 import { HttpError } from '~/utils/axios'
 import TestcaseUploadExpansionPanel from '~/components/writer/TestcaseUploadExpansionPanel.vue'
@@ -170,15 +164,11 @@ import EditTestcaseSetModal from '~/components/modals/EditTestcaseSetModal.vue'
     EditTestcaseSetModal,
     EditTestcaseModal,
     TestcaseUploadExpansionPanel
-  },
-  middleware: 'authenticated'
-})
-export default class PagePageWriterTaskTestcases extends Vue {
-  head() {
-    return {
-      title: `[${this.problemId}] テストケースの設定`
-    }
   }
+})
+export default class WriterTaskTestcases extends Vue {
+  @Prop({ required: true })
+  problemId!: number
 
   validate({ params }: { params: { [_: string]: string } }): boolean {
     return /^[1-9]\d*$/.test(params.problemId)
@@ -196,10 +186,6 @@ export default class PagePageWriterTaskTestcases extends Vue {
   testcaseLoading = false
   editingTestcaseSetId: number | null = null
   uploadLoading = false
-
-  get problemId(): number {
-    return Number(this.$route.params.problemId)
-  }
 
   get testcaseNames() {
     return this.testcases?.map((x) => x.name) || []

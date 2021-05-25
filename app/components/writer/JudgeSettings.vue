@@ -1,9 +1,5 @@
 <template>
   <v-container>
-    <v-btn class="mb-3" nuxt to=".." append text color="purple"
-      >問題編集に戻る</v-btn
-    >
-    <h2 class="heading3 mb-4">ジャッジの設定</h2>
     <details class="description mb-4">
       <summary>用語の説明</summary>
       <p class="body2">
@@ -50,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import checkers from '~/constants/checkers'
 import { ProblemDetail } from '~/types/problems'
 
@@ -60,18 +56,15 @@ const checkersList = checkers.map((c) => ({
 }))
 checkersList.push({ text: 'カスタムチェッカー', value: 'custom' })
 
-@Component({ middleware: 'authenticated' })
-export default class PageWriterTaskJudge extends Vue {
+@Component
+export default class WriterTaskJudge extends Vue {
   problem: ProblemDetail | null = null
   items = checkersList
   file: File | null = null
   checker: string = ''
 
-  head() {
-    return {
-      title: `[${this.problemId}] ジャッジの設定`
-    }
-  }
+  @Prop({ required: true })
+  problemId!: number
 
   validate({ params }: { params: { [_: string]: string } }): boolean {
     return /^[1-9]\d*$/.test(params.problemId)
@@ -89,10 +82,6 @@ export default class PageWriterTaskJudge extends Vue {
       (c) => c.fileName === problem.checkerPath!.split('/')[1]
     )[0]
     this.checker = checker ? checker.value : 'custom'
-  }
-
-  get problemId(): number {
-    return Number(this.$route.params.problemId)
   }
 
   async submit() {
