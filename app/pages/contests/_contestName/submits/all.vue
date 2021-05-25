@@ -77,13 +77,13 @@ export default class PageContest extends mixins(MathJax, MixinContest) {
   }
 
   async rejudge(submitIds: number[]) {
-    await this.$api.Contests.rejudge(this.contest!.slug, submitIds)
-      .then(this.reload)
-      .catch((err: HttpError) => {
+    await this.$api.Contests.rejudge(this.contest!.slug, submitIds).catch(
+      (err: HttpError) => {
         alert(
           err.response?.data.error || 'リジャッジのリクエストに失敗しました'
         )
-      })
+      }
+    )
   }
 
   @Watch('adminMode')

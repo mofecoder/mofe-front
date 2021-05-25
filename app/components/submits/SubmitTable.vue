@@ -96,16 +96,16 @@ type DataTableHeader = Omit<DataTableHeaderRaw, 'align'> & { align?: string }
 })
 export default class SubmitTable extends Vue {
   @Prop({ required: true })
-  apiCall: (
+  apiCall!: (
     page: number,
-    count: number,
-    sortBy: string[],
-    sortDesc: boolean[],
-    filter: [string, string | string[]][]
+    count?: number,
+    sortBy?: string[],
+    sortDesc?: boolean[],
+    filter?: [string, string | string[]][]
   ) => Promise<SubmissionResponse>
 
   @Prop({ required: true })
-  interval: number
+  interval!: number
 
   @Prop()
   tasks?: Task[]
@@ -136,7 +136,7 @@ export default class SubmitTable extends Vue {
   }
 
   rejudgeIds: number[] = []
-  options: DataOptions = {
+  options: Partial<DataOptions> = {
     itemsPerPage: 20
   }
 
@@ -240,7 +240,7 @@ export default class SubmitTable extends Vue {
     this.loading = !isReload
     const { page, itemsPerPage, sortBy, sortDesc } = this.options
     this.submissions = await this.apiCall(
-      page,
+      page!,
       itemsPerPage,
       sortBy,
       sortDesc,
