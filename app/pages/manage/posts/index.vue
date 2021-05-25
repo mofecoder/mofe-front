@@ -6,7 +6,7 @@
         >新規記事作成</v-btn
       >
       <v-data-table :headers="tableHeader" :items="items" :loading="!posts">
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-icon small @click="edit(item.id)">mdi-pencil</v-icon>
         </template>
       </v-data-table>

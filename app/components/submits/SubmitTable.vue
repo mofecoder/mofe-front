@@ -32,37 +32,38 @@
       :items-per-page="20"
       :footer-props="footerProps"
       multi-sort
+      dense
       mobile-breakpoint="760"
     >
-      <template v-slot:item.rejudge="{ item }">
+      <template #item.rejudge="{ item }">
         <v-simple-checkbox
           v-if="writtenTasks.includes(item.taskSlug)"
           :value="rejudgeIds.includes(item.id)"
           @input="(e) => changeRejudgeStatus(e, item)"
         />
       </template>
-      <template v-slot:item.task="{ item }">
+      <template #item.task="{ item }">
         <n-link :to="`/contests/${slug}/tasks/${item.taskSlug}`">{{
           item.task
         }}</n-link>
       </template>
-      <template v-slot:item.status="{ item }">
+      <template #item.status="{ item }">
         <ResultChip
           :status="item.status"
           :judge-status="item.judgeStatus"
           dense
         />
       </template>
-      <template v-slot:item.action="{ item }">
+      <template #item.action="{ item }">
         <v-icon small class="cursor-pointer" @click="viewDetail(item)"
           >mdi-eye</v-icon
         >
       </template>
-      <template v-slot:item.executionTime="{ item }">
-        {{ item.executionTime }} ms
+      <template #item.executionTime="{ item }">
+        {{ item.executionTime == null ? '' : `${item.executionTime} ms` }}
       </template>
-      <template v-slot:item.executionMemory="{ item }">
-        {{ item.executionMemory || '---' }} KB
+      <template #item.executionMemory="{ item }">
+        {{ item.executionMemory == null ? '' : `${item.executionMemory} KB` }}
       </template>
     </v-data-table>
     <div v-if="rejudgeIds.length">
@@ -76,10 +77,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
-import { DataTableHeader } from 'vuetify'
+import { DataTableHeader as DataTableHeaderRaw } from 'vuetify'
 import { Submit, SubmitResult } from '~/types/submits'
 import { Task } from '~/types/task'
 import ResultChip from '~/components/submits/ResultChip.vue'
+
+type DataTableHeader = Omit<DataTableHeaderRaw, 'align'> & { align?: string }
 @Component({
   components: { ResultChip }
 })
@@ -128,10 +131,10 @@ export default class SubmitTable extends Vue {
       { text: 'ユーザ', value: 'user' },
       { text: '問題', value: 'task' },
       { text: '言語', value: 'lang' },
-      { text: '得点', value: 'score', align: 'end' },
+      { text: '得点', value: 'score', align: 'right' },
       { text: '結果', value: 'status', align: 'center' },
-      { text: '実行時間', value: 'executionTime', align: 'end' },
-      { text: 'メモリ', value: 'executionMemory', align: 'end' },
+      { text: '実行時間', value: 'executionTime', align: 'right' },
+      { text: 'メモリ', value: 'executionMemory', align: 'right' },
       { text: '', value: 'action' }
     ]
     if (this.writtenTasks.length) {

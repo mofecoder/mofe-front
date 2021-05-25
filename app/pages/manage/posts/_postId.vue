@@ -117,7 +117,7 @@ export default class PagePostEdit extends Vue {
   }
 
   submit() {
-    const payload = { ...this.post }
+    const payload = { ...this.post, id: undefined }
     delete payload.id
     const res: Promise<any> =
       this.postId === null

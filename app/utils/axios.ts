@@ -1,10 +1,12 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
-import isArray from 'lodash.isarray'
-import isObject from 'lodash.isobject'
-import camelCase from 'lodash.camelcase'
-import snakeCase from 'lodash.snakecase'
-import mapValues from 'lodash.mapvalues'
-import mapKeys from 'lodash.mapkeys'
+import {
+  isArray,
+  isObject,
+  camelCase,
+  snakeCase,
+  mapValues,
+  mapKeys
+} from 'lodash'
 
 export class HttpError extends Error {
   constructor(message: string, response: AxiosResponse) {

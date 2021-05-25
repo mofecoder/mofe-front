@@ -2,7 +2,7 @@
   <div>
     <h2>ユーザの管理</h2>
     <v-data-table :headers="headers" :items="items">
-      <template v-slot:item.role="{ item }">
+      <template #item.role="{ item }">
         <template v-if="item.role === 'member'"
           >member
           <v-icon small @click="update(item.id, 'writer')"
@@ -17,7 +17,7 @@
         >
         <template v-else>{{ item.role }}</template>
       </template>
-      <template v-slot:item.writerRequestCode="{ item }">
+      <template #item.writerRequestCode="{ item }">
         {{ item.writerRequestCode || '未発行' }}
         <v-icon small @click="generate(item.id)">mdi-refresh</v-icon>
       </template>

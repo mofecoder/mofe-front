@@ -35,13 +35,8 @@
     "./app/types/plugins.d.ts"
   ],
   "include": [
-    "./app/components/**/*.ts",
-    "./app/components/**/*.vue",
-    "./app/layouts/**/*.ts",
-    "./app/layouts/**/*.vue",
-    "./app/pages/**/*.ts",
-    "./app/pages/**/*.vue",
-    "./app/types/**/*.ts"
+    "./app/**/*.ts",
+    "./app/**/*.vue",
   ],
   "exclude": [
     "node_modules"

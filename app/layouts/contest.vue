@@ -62,12 +62,6 @@ import ContestSidebar from '~/components/ContestSidebar.vue'
 import { ContestDetail } from '~/types/contest'
 import 'dayjs/locale/ja'
 
-type ItemType = {
-  path: string
-  name: string
-  active: boolean
-  disabled?: boolean
-}
 @Component({
   components: { ContestSidebar }
 })

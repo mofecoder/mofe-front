@@ -12,7 +12,7 @@
         <v-list-item-title>問題</v-list-item-title>
       </v-list-item>
       <v-list-group v-if="contest && contest.tasks && contest.tasks.length">
-        <template v-slot:activator>
+        <template #activator>
           <v-list-item-icon>
             <v-icon>mdi-magnify</v-icon>
           </v-list-item-icon>
@@ -82,13 +82,6 @@
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { ContestDetail } from '~/types/contest'
-
-type ItemType = {
-  name: string
-  active: boolean
-  disabled?: boolean
-  path: string
-}
 
 @Component
 export default class ContestSidebar extends Vue {
