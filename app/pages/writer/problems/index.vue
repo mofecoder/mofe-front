@@ -1,6 +1,6 @@
 <template>
   <v-data-table :headers="headers" :items="items" locale="ja">
-    <template v-slot:top>
+    <template #top>
       <v-toolbar flat color="white">
         <v-toolbar-title>問題一覧</v-toolbar-title>
         <v-spacer />
@@ -9,12 +9,12 @@
         >
       </v-toolbar>
     </template>
-    <template v-slot:item.contestName="{ item }">
+    <template #item.contestName="{ item }">
       <n-link v-if="item" :to="`/contests/${item.contestSlug}`">
         {{ item.contestName }}
       </n-link>
     </template>
-    <template v-slot:item.edit="{ item }">
+    <template #item.edit="{ item }">
       <v-icon small @click="edit(item.id)">mdi-pencil</v-icon>
     </template>
   </v-data-table>

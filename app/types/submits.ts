@@ -11,6 +11,7 @@ type Result =
   | 'CE'
   | 'MLE'
   | 'WR'
+  | 'IC'
 
 export type SubmitResult = Result
 

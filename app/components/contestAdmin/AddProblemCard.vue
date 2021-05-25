@@ -41,7 +41,7 @@
         </v-col>
       </v-row>
       <v-row v-if="problem && !problemMessage">
-        <v-col cols="4" sm="3" lg="2" xl="1">
+        <v-col cols="4" sm="3" lg="2">
           <v-select
             v-model="position"
             outlined

@@ -1,30 +1,21 @@
 <template>
   <v-card class="wrapper">
-    <v-card-title class="headline edit-problem-card">
-      <p>問題の編集</p>
-      <v-spacer />
-      <v-btn color="purple white--text mr-5" @click="judge"
-        >ジャッジの設定</v-btn
-      >
-      <v-btn color="purple white--text" @click="testcase"
-        >テストケースの設定
-      </v-btn>
-    </v-card-title>
     <v-card-text>
       <v-form v-model="valid" @submit.prevent="onSubmit">
         <v-row>
-          <v-col cols="12" class="py-1">
+          <v-col cols="12" md="4" lg="2" class="py-1">
+            <v-text-field v-model="problemId" disabled label="問題 ID" />
+          </v-col>
+          <v-col cols="12" md="8" lg="7" class="py-1">
             <v-text-field
-              v-model="content.name"
+              v-model="problem.name"
               :rules="rules.required"
               label="問題名"
             />
           </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" class="py-1">
+          <v-col cols="12" lg="3" class="py-1">
             <v-select
-              v-model="content.difficulty"
+              v-model="problem.difficulty"
               :items="difficulties"
               label="難易度"
             />
@@ -44,7 +35,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.statement"
+              v-model="problem.statement"
               :rules="rules.required"
               label="問題文"
               outlined
@@ -54,7 +45,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 問題文"
-          :markdown="content.statement"
+          :markdown="problem.statement"
           :value="modals.problemStatement"
           @close="modals.problemStatement = false"
         />
@@ -72,7 +63,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.constraints"
+              v-model="problem.constraints"
               :rules="rules.required"
               label="制約"
               outlined
@@ -82,7 +73,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 制約"
-          :markdown="content.constraints"
+          :markdown="problem.constraints"
           :value="modals.constraints"
           @close="modals.constraints = false"
         />
@@ -100,7 +91,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.inputFormat"
+              v-model="problem.inputFormat"
               :rules="rules.required"
               label="入力"
               outlined
@@ -110,7 +101,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 入力"
-          :markdown="content.inputFormat"
+          :markdown="problem.inputFormat"
           :value="modals.input"
           @close="modals.input = false"
         />
@@ -128,7 +119,7 @@
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
-              v-model="content.outputFormat"
+              v-model="problem.outputFormat"
               :rules="rules.required"
               label="出力"
               outlined
@@ -138,7 +129,7 @@
         </v-row>
         <markdown-preview-modal
           title="プレビュー - 出力"
-          :markdown="content.outputFormat"
+          :markdown="problem.outputFormat"
           :value="modals.output"
           @close="modals.output = false"
         />
@@ -204,7 +195,7 @@ export default class CreateProblemCard extends Vue {
     'ผักชี'
   ]
 
-  content: ProblemParams = {
+  problem: ProblemParams = {
     name: '',
     difficulty: 'Milk',
     statement: '',
@@ -232,7 +223,7 @@ export default class CreateProblemCard extends Vue {
 
   async fetch() {
     const tmp = await this.$api.Problems.show(this.problemId)
-    this.content = {
+    this.problem = {
       name: tmp.name,
       difficulty: tmp.difficulty,
       statement: tmp.statement,
@@ -244,7 +235,7 @@ export default class CreateProblemCard extends Vue {
   }
 
   async onSubmit() {
-    await this.$api.Problems.update(this.problemId, this.content)
+    await this.$api.Problems.update(this.problemId, this.problem)
     this.updated = true
     await this.$fetch()
   }

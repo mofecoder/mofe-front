@@ -3,7 +3,11 @@
     <template v-if="problem">
       <v-card-title class="task-card-title">
         <h2 class="d-flex">
-          {{ problem.position }} - {{ problem.name }}
+          {{
+            problem.position
+              ? `${problem.position} - ${problem.name}`
+              : problem.name
+          }}
           <v-spacer />
           <v-btn
             v-if="id"
@@ -16,7 +20,9 @@
         </h2>
         <DifficultyChip :difficulty="problem.difficulty" />
         <p class="task-time-limit mb-0">実行時間制限: {{ timeLimit }}</p>
-        <p class="task-points">配点: {{ problem.points }}</p>
+        <p v-if="problem.points != null" class="task-points">
+          配点: {{ problem.points }}
+        </p>
       </v-card-title>
       <v-card-text class="mt-3 task-card-text">
         <section>

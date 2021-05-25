@@ -1,6 +1,6 @@
 <template>
   <v-tooltip top>
-    <template v-slot:activator="{ on, attrs }">
+    <template #activator="{ on, attrs }">
       <div
         :class="[
           `result-${status}`,
@@ -18,13 +18,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { SubmitResult } from '~/types/submits'
 
-const TOOLTIP_TEXT: { [_: string]: string } = {
+const TOOLTIP_TEXT = {
   AC: '正解 (Accepted)',
   TLE: '実行時間制限を超過 (Time Limit Exceeded)',
   WA: '不正解 (Wrong Answer)',
   RE: '実行時エラー (Runtime Error)',
   OLE: '出力制限超過 (Output Limit Exceeded)',
+  MLE: 'メモリ制限超過 (Memory Limit Exceeded)',
   IE: '内部エラー (Internal Error)',
   CE: 'コンパイルエラー (Compilation Error)',
   WJ: 'ジャッジ待ち (Waiting Judge)',
@@ -35,7 +37,7 @@ const TOOLTIP_TEXT: { [_: string]: string } = {
 @Component
 export default class ResultChip extends Vue {
   @Prop({ required: true })
-  status!: string
+  status!: SubmitResult
 
   @Prop({ default: false })
   dense!: string | boolean

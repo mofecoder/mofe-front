@@ -19,7 +19,7 @@
                 offset-y
                 min-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                   <v-text-field
                     v-model="startDate"
                     :rules="[rules.required]"
@@ -41,7 +41,7 @@
                 offset-y
                 min-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                   <v-text-field
                     v-model="startTime"
                     :disabled="!startDate"
@@ -70,7 +70,7 @@
                 offset-y
                 min-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                   <v-text-field
                     v-model="endDate"
                     :disabled="!startDate || !startTime"
@@ -91,7 +91,7 @@
                 offset-y
                 min-width="290px"
               >
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                   <v-text-field
                     v-model="endTime"
                     :rules="[rules.required]"

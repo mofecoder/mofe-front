@@ -7,7 +7,6 @@ module.exports = {
   extends: [
     '@nuxtjs',
     'prettier',
-    'prettier/vue',
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended',
     '@nuxtjs/eslint-config-typescript'
@@ -33,6 +32,7 @@ module.exports = {
     'vue/max-attributes-per-line': 'off',
     'vue/html-indent': 'off',
     'vue/no-v-html': 'off',
+    'vue/valid-v-slot': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

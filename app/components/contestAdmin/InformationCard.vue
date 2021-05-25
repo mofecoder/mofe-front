@@ -89,7 +89,8 @@ import { Vue, PropSync, Component, Prop, Emit } from 'nuxt-property-decorator'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { Contest, KIND_TABLE } from '~/types/contest'
 
-const URL_REGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
+const URL_REGEX =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
 
 @Component({
   components: { MarkdownPreviewModal }

@@ -3,9 +3,9 @@
     <v-container>
       <v-row>
         <v-col cols="12" lg="5">
-          <v-card outlined>
+          <v-card outlined :loading="!contests">
             <v-card-text>
-              <v-simple-table v-if="contests">
+              <v-simple-table>
                 <thead>
                   <tr>
                     <th style="width: 7em" />
@@ -14,7 +14,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="contest in contests" :key="contest.slug">
+                  <tr v-for="contest in contests || []" :key="contest.slug">
                     <td v-text="checkStatus(contest)" />
                     <td v-text="formatDate(contest.startAt)" />
                     <td>
@@ -34,6 +34,18 @@
                   data-lang="ja"
                   data-show-count="true"
                   >Follow @CafeCoder_</a
+                >
+              </div>
+              <div class="mt-4">
+                <v-btn v-if="loggedIn" color="orange" nuxt to="/manage"
+                  >管理ページへ</v-btn
+                >
+                <v-btn
+                  v-if="isWriter"
+                  color="primary"
+                  nuxt
+                  to="/writer/problems"
+                  >問題の管理画面へ</v-btn
                 >
               </div>
             </v-card-text>
@@ -56,15 +68,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <div class="mt-4">
-      <v-btn v-if="loggedIn" color="orange" nuxt to="/manage"
-        >管理ページへ</v-btn
-      >
-      <v-btn v-if="isWriter" color="primary" nuxt to="/writer/problems"
-        >問題の管理画面へ</v-btn
-      >
-    </div>
     <!-- CafeCoder Twitter -->
     <script
       async
@@ -79,7 +82,6 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 import { Contest } from '~/types/contest'
 import { userStore } from '~/utils/store-accessor'
-import noticeData from '~/assets/notice.json'
 import { Post } from '~/types/post'
 import ViewPost from '~/components/post/ViewPost.vue'
 
@@ -90,7 +92,6 @@ import ViewPost from '~/components/post/ViewPost.vue'
 export default class PageMainPage extends Vue {
   contests: Contest[] | null = null
   posts: Post[] | null = null
-  notices = noticeData
 
   async fetch() {
     ;[this.contests, this.posts] = await Promise.all([
