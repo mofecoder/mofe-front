@@ -168,7 +168,7 @@ export default class SubmitTable extends Vue {
   setReloading() {
     window.clearInterval(this.timeout)
     this.timeout = window.setInterval(() => {
-      this.reload(false)
+      this.reload(true)
     }, this.interval)
   }
 
