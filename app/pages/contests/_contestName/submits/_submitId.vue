@@ -123,13 +123,16 @@ import { copy } from '~/utils/clipboard'
 })
 export default class PageSubmitDetail extends mixins(MixinContest) {
   head() {
+    const title = this.submit
+      ? `提出 #${this.submit?.id}`
+      : '提出 (読み込み中...)'
     return {
-      title: `提出 #${this.submit?.id} - ${this.contest?.name}`,
+      title: `${title} - ${this.contest?.name}`,
       titleTemplate: null
     }
   }
 
-  validate({ params }: { params: { [key: string]: string } }): boolean {
+  validate({ params }: { params: { [_: string]: string } }): boolean {
     return /^[1-9]\d*$/.test(params.submitId)
   }
 

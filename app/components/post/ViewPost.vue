@@ -7,6 +7,14 @@
       <template v-else>{{ post.title }}</template>
     </v-card-title>
     <v-card-text class="post-card-text mt-2">
+      <v-btn
+        v-if="showEdit"
+        class="mb-3"
+        color="purple white--text"
+        nuxt
+        :to="`/manage/posts/${post.id}`"
+        >この記事を編集する</v-btn
+      >
       <div v-html="$md.render(post.content)" />
     </v-card-text>
     <div class="grey darken-2 white--text text-right py-1 pr-2">
@@ -24,7 +32,7 @@ import { Post } from '~/types/post'
 @Component
 export default class ViewPost extends Vue {
   @Prop({ required: true }) post!: Post
-  @Prop() loading?: boolean
+  @Prop() showEdit?: boolean
   @Prop({ type: Boolean }) enableLink!: boolean
 
   formatDate(date: Date): string {

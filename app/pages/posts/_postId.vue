@@ -2,7 +2,7 @@
   <v-card v-if="!post" loading>
     <v-card-text>読み込み中... </v-card-text>
   </v-card>
-  <ViewPost v-else :post="post" />
+  <ViewPost v-else :post="post" :show-edit="isAdmin" />
 </template>
 
 <script lang="ts">
@@ -10,6 +10,7 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { Post } from '~/types/post'
 import ViewPost from '~/components/post/ViewPost.vue'
+import { userStore } from '~/utils/store-accessor'
 
 @Component({
   components: { ViewPost, MarkdownPreviewModal },
@@ -26,6 +27,10 @@ export default class PageViewPost extends Vue {
 
   get postId() {
     return parseInt(this.$route.params.postId)
+  }
+
+  get isAdmin() {
+    return userStore.isAdmin
   }
 }
 </script>
