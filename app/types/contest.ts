@@ -31,7 +31,6 @@ export interface ContestDetailManage extends ContestDetail {
 export interface ContestCreateParam extends Contest {
   description: string
   penaltyTime: number
-  officialMode: boolean
 }
 
 export interface ContestEditParam {
