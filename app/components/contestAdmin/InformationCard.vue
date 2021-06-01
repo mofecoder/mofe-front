@@ -59,6 +59,15 @@
           />
         </v-col>
       </v-row>
+      <v-row>
+        <v-col cols="12">
+          <v-checkbox
+            v-model="official"
+            label="公式コンテストモード"
+            hint="コンテスト開始前でも writer / tester がすべての問題を閲覧できるようになります。"
+          />
+        </v-col>
+      </v-row>
       <p v-if="edit == null" class="mt-4 mb-0">
         <strong>問題の追加はコンテスト管理画面から行ってください。</strong>
       </p>
@@ -113,6 +122,9 @@ export default class ContestInformationCard extends Vue {
 
   @PropSync('editorialUrl')
   editorial?: string
+
+  @PropSync('officialMode', { required: true })
+  official!: boolean
 
   @Prop()
   edit?: boolean

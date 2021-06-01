@@ -6,7 +6,6 @@
         :contest-slug="contestSlug"
         :tasks="tasks"
         @remove="remove"
-        @show="show"
       />
     </v-card-text>
   </v-card>
