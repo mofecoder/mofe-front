@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import CreateProblemCard from '~/components/CreateProblemCard.vue'
+import CreateProblemCard from '~/components/writer/CreateProblemCard.vue'
 
 @Component({
   components: { CreateProblemCard },

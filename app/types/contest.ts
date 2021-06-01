@@ -25,11 +25,13 @@ export interface ContestDetail extends Contest {
 
 export interface ContestDetailManage extends ContestDetail {
   tasks: ManageProblem[]
+  officialMode: boolean
 }
 
 export interface ContestCreateParam extends Contest {
   description: string
   penaltyTime: number
+  officialMode: boolean
 }
 
 export interface ContestEditParam {
@@ -40,6 +42,7 @@ export interface ContestEditParam {
   description?: string
   penaltyTime?: number
   editorialUrl?: string
+  officialMode?: boolean
 }
 
 export const KIND_TABLE = {

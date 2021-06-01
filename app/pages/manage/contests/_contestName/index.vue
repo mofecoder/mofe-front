@@ -5,17 +5,24 @@
         <v-btn class="mb-3" nuxt to=".." append text color="purple"
           >コンテスト一覧に戻る</v-btn
         >
-
         <InformationCard
           :name.sync="contest.name"
           :penalty.sync="contest.penaltyTime"
           :description.sync="contest.description"
           :editorial-url.sync="contest.editorial"
           :kind.sync="contest.kind"
+          :official-mode.sync="contest.officialMode"
           :slug="contest.slug"
           :loading="loading.information"
           edit
           @submit="editInformation"
+        />
+        <TimeCardEdit
+          class="my-4"
+          :loading="loading.time"
+          :start.sync="contest.startAt"
+          :end.sync="contest.endAt"
+          @submit="editTime"
         />
         <ProblemsCard
           :tasks="contest.tasks"
@@ -31,14 +38,6 @@
           :unset-problems="unsetProblems || []"
           @add="addProblem"
         />
-        <TimeCardEdit
-          class="my-4"
-          :loading="loading.time"
-          :start.sync="contest.startAt"
-          :end.sync="contest.endAt"
-          @submit="editTime"
-        />
-        <SettingsCard class="my-4" />
       </v-flex>
     </v-layout>
     <v-snackbar v-model="updated" :timeout="4000">
@@ -118,7 +117,8 @@ export default class PageContestAdmin extends Vue {
       kind: this.contest.kind,
       penaltyTime: this.contest.penaltyTime,
       description: this.contest.description,
-      editorialUrl: this.contest.editorial || undefined
+      editorialUrl: this.contest.editorial || undefined,
+      officialMode: this.contest.officialMode
     }).catch(() => this.$set(this.loading, 'information', false))
     this.updated = true
     await this.reload()

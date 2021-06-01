@@ -37,7 +37,7 @@
             <v-textarea
               v-model="problem.statement"
               :rules="rules.required"
-              label="問題文"
+              label="問題文 (Markdown)"
               outlined
               auto-grow
             />
@@ -65,7 +65,7 @@
             <v-textarea
               v-model="problem.constraints"
               :rules="rules.required"
-              label="制約"
+              label="制約 (Markdown)"
               outlined
               auto-grow
             />
@@ -93,7 +93,7 @@
             <v-textarea
               v-model="problem.inputFormat"
               :rules="rules.required"
-              label="入力"
+              label="入力 (Markdown)"
               outlined
               auto-grow
             />
@@ -121,7 +121,7 @@
             <v-textarea
               v-model="problem.outputFormat"
               :rules="rules.required"
-              label="出力"
+              label="出力 (Markdown)"
               outlined
               auto-grow
             />
@@ -135,11 +135,18 @@
         />
         <v-row>
           <v-col cols="12">
+            <HtmlTagExpansionPanel />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
             <h4>テスターの管理</h4>
             <ul v-if="testers.length" class="text-body-1 black--text">
               <li v-for="tester in testers" :key="`tester-${tester}`">
                 {{ tester }}
-                <v-icon small @click="removeTester(tester)">mdi-delete</v-icon>
+                <v-icon class="ml-2" small @click="removeTester(tester)"
+                  >mdi-close-circle-outline</v-icon
+                >
               </li>
             </ul>
             <p v-else class="text-body-2">テスターは登録されていません。</p>
@@ -147,10 +154,17 @@
               v-model="testerName"
               class="edit-problem-card__add-tester"
               placeholder="テスターを追加"
+              :loading="testerLoading"
               hide-details
               @keydown.enter="addTester"
             />
-            <v-btn small color="primary" @click="addTester">追加</v-btn>
+            <v-btn
+              small
+              color="primary"
+              :loading="testerLoading"
+              @click="addTester"
+              >追加</v-btn
+            >
             <p class="red--text" v-text="testerError" />
           </v-col>
         </v-row>
@@ -175,9 +189,10 @@ import { Difficulty } from '~/types/task'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { ProblemParams } from '~/types/problems'
 import { HttpError } from '~/utils/axios'
+import HtmlTagExpansionPanel from '~/components/writer/HtmlTagExpansionPanel.vue'
 
 @Component({
-  components: { MarkdownPreviewModal }
+  components: { HtmlTagExpansionPanel, MarkdownPreviewModal }
 })
 export default class CreateProblemCard extends Vue {
   rules = {
@@ -217,6 +232,7 @@ export default class CreateProblemCard extends Vue {
   testerName = ''
   testers: string[] = []
   testerError = ''
+  testerLoading = false
 
   @Prop({ required: true })
   problemId!: number
@@ -241,13 +257,16 @@ export default class CreateProblemCard extends Vue {
   }
 
   async addTester() {
+    this.testerLoading = true
     await this.$api.Problems.addTester(this.problemId, this.testerName)
       .then(async () => {
+        this.testerLoading = false
         this.testerName = ''
         this.testerError = ''
         await this.$fetch()
       })
       .catch((err) => {
+        this.testerLoading = false
         if (err instanceof HttpError) {
           this.testerError = err.response.data.error
         } else {

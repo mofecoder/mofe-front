@@ -133,7 +133,7 @@
 import { Vue, Component, Watch, Emit, Prop } from 'nuxt-property-decorator'
 import dayjs from 'dayjs'
 @Component
-export default class TimeCard extends Vue {
+export default class TimeCardEdit extends Vue {
   startDateOpen = false
   startTimeOpen = false
   endDateOpen = false

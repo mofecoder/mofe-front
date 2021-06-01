@@ -3,4 +3,7 @@ export interface Language {
   name: string
   mime: string
   isOutdated?: true
+  libraries?: string | null
+  compilationCommand?: string
+  runCommand?: string
 }

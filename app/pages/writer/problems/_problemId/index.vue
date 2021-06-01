@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
-import EditProblemCard from '~/components/EditProblemCard.vue'
+import EditProblemCard from '~/components/writer/EditProblemCard.vue'
 import Testcases from '~/components/writer/Testcases.vue'
 import JudgeSettings from '~/components/writer/JudgeSettings.vue'
 import ViewProblem from '~/components/writer/ViewProblem.vue'
@@ -36,7 +36,7 @@ export default class PageWriterTaskEdit extends Vue {
     }
   }
 
-  validate({ params }: { params: { [key: string]: string } }): boolean {
+  validate({ params }: { params: { [_: string]: string } }): boolean {
     return /^[1-9]\d*$/.test(params.problemId)
   }
 

@@ -37,7 +37,7 @@
             <v-textarea
               v-model="content.statement"
               :rules="rules.required"
-              label="問題文"
+              label="問題文 (Markdown)"
               outlined
               auto-grow
             />
@@ -65,7 +65,7 @@
             <v-textarea
               v-model="content.constraints"
               :rules="rules.required"
-              label="制約"
+              label="制約 (Markdown)"
               outlined
               auto-grow
             />
@@ -93,7 +93,8 @@
             <v-textarea
               v-model="content.inputFormat"
               :rules="rules.required"
-              label="入力"
+              label="入力 (Markdown)"
+              hint="空白の前後で TeX の数式を分けてください"
               outlined
               auto-grow
             />
@@ -121,7 +122,7 @@
             <v-textarea
               v-model="content.outputFormat"
               :rules="rules.required"
-              label="出力"
+              label="出力 (Markdown)"
               outlined
               auto-grow
             />
@@ -133,7 +134,11 @@
           :value="modals.output"
           @close="modals.output = false"
         />
-        <!-- サンプル -->
+        <v-row>
+          <v-col cols="12">
+            <HtmlTagExpansionPanel />
+          </v-col>
+        </v-row>
         <!-- 登録ボタン -->
         <v-row>
           <v-col cols="12">
@@ -151,9 +156,10 @@ import { Component, Vue } from 'nuxt-property-decorator'
 import { Difficulty } from '~/types/task'
 import MarkdownPreviewModal from '~/components/modals/MarkdownPreviewModal.vue'
 import { ProblemParams } from '~/types/problems'
+import HtmlTagExpansionPanel from '~/components/writer/HtmlTagExpansionPanel.vue'
 
 @Component({
-  components: { MarkdownPreviewModal }
+  components: { HtmlTagExpansionPanel, MarkdownPreviewModal }
 })
 export default class CreateProblemCard extends Vue {
   rules = {

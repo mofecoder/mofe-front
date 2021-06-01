@@ -171,6 +171,7 @@ export default class {
     contestSlug: string,
     contestInfo: ContestEditParam
   ): Promise<void> {
+    console.log(contestInfo)
     await httpPut(`/contests/${contestSlug}`, {}, contestInfo)
   }
 

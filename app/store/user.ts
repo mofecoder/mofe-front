@@ -19,6 +19,10 @@ export default class UserModule extends VuexModule implements UserState {
     return this.user || (json && JSON.parse(json))
   }
 
+  get isAdmin() {
+    return this.getUser?.role === 'admin'
+  }
+
   @Action({ commit: 'updateUser' })
   async fetchUser() {
     try {
