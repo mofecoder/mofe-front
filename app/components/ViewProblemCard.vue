@@ -79,6 +79,24 @@
               hide-details
               outlined
             />
+            <v-tooltip top>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  color="secondary"
+                  icon
+                  nuxt
+                  target="_blank"
+                  :to="`/languages?lang=${language.innerName}`"
+                  v-on="on"
+                >
+                  <v-icon>mdi-information-outline</v-icon>
+                </v-btn>
+              </template>
+              <span
+                >"{{ language.name }}" のコンパイル・実行コマンド等の情報</span
+              >
+            </v-tooltip>
           </div>
           <Editor ref="editor" class="submit__editor" :language="language" />
           <v-btn
@@ -122,7 +140,7 @@ export default class ViewProblemCard extends mixins(MathJax) {
   @Prop({ required: false })
   id?: number
 
-  language: Language | undefined = languages[0]
+  language: Language = languages[0]
   submitted = false
 
   mounted() {
