@@ -22,17 +22,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in standings" :key="user.userName" class="row-user">
+            <tr
+              v-for="user in standings"
+              :key="user.user.name"
+              class="row-user"
+            >
               <td>{{ user.rank }}</td>
               <th class="user-name">
-                <a
-                  v-if="user.user.atcoderId"
-                  :href="`https://atcoder.jp/users/${user.user.atcoderId}`"
-                  target="_blank"
-                  :style="{ color: atcoderColor(user.user.atcoderRating) }"
-                  v-text="user.user.name"
-                />
-                <template v-else>{{ user.user.name }}</template>
+                <StandingsUserName :user="user.user" />
               </th>
               <td class="col-result">
                 <div class="score score--sum">
@@ -45,7 +42,7 @@
               </td>
               <td
                 v-for="(problem, index) in user.problems"
-                :key="`${problems[index].slug}-${user.userName}`"
+                :key="`${problems[index].slug}-${user.user.name}`"
               >
                 <div class="score">
                   <span class="point">{{ problem.score }}</span>
@@ -65,12 +62,29 @@
           </tbody>
           <tfoot>
             <tr class="row-footer">
-              <td />
-              <th />
-              <td class="col-result" />
+              <td colspan="3">
+                <span class="solved">正解者数</span>
+                <span class="tried">/ 提出者数</span>
+              </td>
               <td v-for="problem in problems" :key="`foot-${problem.slug}`">
                 <span class="solved">{{ problem.solved }}</span>
                 <span class="tried">/ {{ problem.tried }}</span>
+              </td>
+            </tr>
+            <tr class="row-fa">
+              <td colspan="3">
+                <span class="head">最速正解者</span>
+              </td>
+              <td v-for="problem in problems" :key="`foot-${problem.slug}`">
+                <template v-if="problem.firstAccept">
+                  <p class="user">
+                    <StandingsUserName :user="problem.firstAccept.user" />
+                  </p>
+                  <p
+                    class="time"
+                    v-text="formatTime(problem.firstAccept.time)"
+                  />
+                </template>
               </td>
             </tr>
           </tfoot>
@@ -83,8 +97,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { StandingProblem, Standing } from '~/types/standings'
-
-@Component
+import StandingsUserName from '~/components/standings/StandingsUserName.vue'
+@Component({
+  components: { StandingsUserName }
+})
 export default class Standings extends Vue {
   @Prop({ required: true })
   problems!: StandingProblem[]
@@ -104,29 +120,6 @@ export default class Standings extends Vue {
 
   get contestName() {
     return this.$route.params.contestName
-  }
-
-  atcoderColor(rating: number | null) {
-    if (rating === null) return '#5200ab'
-    if (rating === 0) return '#000000'
-    switch (Math.floor(rating / 400)) {
-      case 0:
-        return '#808080'
-      case 1:
-        return '#804000'
-      case 2:
-        return '#008000'
-      case 3:
-        return '#00c0c0'
-      case 4:
-        return '#0000ff'
-      case 5:
-        return '#c0c000'
-      case 6:
-        return '#ff8000'
-      default:
-        return '#ff0000'
-    }
   }
 }
 </script>
@@ -209,8 +202,9 @@ export default class Standings extends Vue {
     }
 
     .row-footer {
-      border-top-width: 2px;
-      font-size: 0.9rem;
+      border: solid #e0e0e0;
+      border-width: 1px 0 1px;
+      font-size: 0.8rem;
 
       .solved {
         color: green;
@@ -219,6 +213,31 @@ export default class Standings extends Vue {
 
       .tried {
         color: #666666;
+      }
+    }
+
+    .row-fa {
+      .user {
+        color: #5200ab;
+        font-size: 0.9em;
+        font-weight: bold;
+
+        > a {
+          text-decoration: none;
+        }
+      }
+
+      .time {
+        color: gray;
+        font-size: 0.8rem;
+      }
+
+      .head {
+        color: #666666;
+      }
+
+      p {
+        margin: 2px 0 2px;
       }
     }
 
@@ -236,8 +255,9 @@ export default class Standings extends Vue {
       background-color: #eff4ff;
     }
 
+    .row-fa,
     .row-footer {
-      background-color: #f3fff5;
+      background-color: #faf5fd !important;
     }
   }
 }
