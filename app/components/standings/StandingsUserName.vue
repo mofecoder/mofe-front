@@ -16,7 +16,7 @@ import { Standing } from '~/types/standings'
 @Component
 export default class StandingsUserName extends Vue {
   @Prop({ required: true })
-  user: Standing['user']
+  user!: Standing['user']
 
   atcoderColor(rating: number | null) {
     if (rating === null) return '#5200ab'
