@@ -99,6 +99,7 @@
             </v-tooltip>
           </div>
           <Editor ref="editor" class="submit__editor" :language="language" />
+          <v-file-input label="ソースファイルを選択" @change="change" />
           <v-btn
             color="primary"
             class="mt-2"
@@ -142,6 +143,7 @@ export default class ViewProblemCard extends mixins(MathJax) {
 
   language: Language = languages[0]
   submitted = false
+  sourceFileText: string | null = null
 
   mounted() {
     this.$nextTick(() => this.renderMathJax())
@@ -154,11 +156,21 @@ export default class ViewProblemCard extends mixins(MathJax) {
       )[0] || languages[0]
   }
 
+  change(file: File) {
+    const vm = this
+    const reader = new FileReader()
+    reader.onload = () => {
+      const sourceFileText = reader.result?.toString() || null
+      vm.sourceFileText = sourceFileText
+    }
+    reader.readAsText(file)
+  }
+
   get source(): string {
     const editor = this.$refs.editor as Vue & {
       value: string
     }
-    return editor.value
+    return editor.value !== '' ? editor.value : this.sourceFileText || ''
   }
 
   get selectableLanguages() {
