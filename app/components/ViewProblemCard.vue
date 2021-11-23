@@ -99,7 +99,10 @@
             </v-tooltip>
           </div>
           <Editor ref="editor" class="submit__editor" :language="language" />
-          <v-file-input label="ソースファイルを選択" @change="change" />
+          <v-file-input
+            label="ソースファイルを選択"
+            @change="onFileInputChange"
+          />
           <v-btn
             color="primary"
             class="mt-2"
@@ -156,7 +159,7 @@ export default class ViewProblemCard extends mixins(MathJax) {
       )[0] || languages[0]
   }
 
-  change(file: File) {
+  onFileInputChange(file: File) {
     const vm = this
     const reader = new FileReader()
     reader.onload = () => {
