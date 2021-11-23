@@ -1,3 +1,5 @@
+import JSZip from 'jszip'
+
 // a fork of yos1up/scratch2cpp
 // see https://github.com/yos1up/scratch2cpp/blob/master/web/crx/sb3_to_cpp.js
 export class Sb3ToCppConverter {
@@ -19,6 +21,23 @@ export class Sb3ToCppConverter {
     this.usedListSet = new Set()
     this.loopCounterIndex = 0
     this.nameOfAnswerVariable = 'buf_answer'
+  }
+
+  async convertFromZip(zipFile: File): Promise<string> {
+    const jszip = new JSZip()
+    const expanded = await jszip.loadAsync(zipFile)
+    if (expanded.files['project.json'] === undefined) {
+      throw new Error(`${zipFile.name} に project.json が含まれていません．`)
+    }
+    const fileData = await expanded.files['project.json'].async('string')
+
+    const converter = new Sb3ToCppConverter()
+    const result = converter.convert(fileData)
+    if (typeof result[0] !== 'string') {
+      throw new TypeError('Scratch3 プロジェクトの変換に失敗しました．')
+    }
+
+    return result[0]
   }
 
   convert(projectJsonString: any, compiler = 'GCC', fp = 128) {
@@ -341,26 +360,22 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
 
     let mainCnt = 0
     for (const blockID in blocks) {
-      switch (blocks[blockID].opcode) {
-        case 'event_whenflagclicked':
-          mainCnt++
-          break
-        case 'procedures_definition': {
-          const rslt = this.convertFrom(blockID, blocks)
-          const snippet = rslt[0]
-          const funcSignature = rslt[1]
-          const args = funcSignature
-            .slice(1)
-            .map((v: any) => 'const Var ' + v)
-            .join(', ')
-          funcPrototypeSource += 'int ' + funcSignature[0] + '(' + args + ');\n'
-          funcContentSource += 'int ' + funcSignature[0] + '(' + args + '){\n'
-          funcContentSource += Sb3ToCppConverter.indent(snippet, 4)
-          funcContentSource += Sb3ToCppConverter.indent('return 0;\n', 4)
-          funcContentSource += '}\n\n'
-          break
-        }
+      if (blocks[blockID].opcode !== 'event_whenflagclicked') {
+        continue
       }
+      mainCnt++
+      const rslt = this.convertFrom(blockID, blocks)
+      const snippet = rslt[0]
+      const funcSignature = rslt[1]
+      const args = funcSignature
+        .slice(1)
+        .map((v: any) => 'const Var ' + v)
+        .join(', ')
+      funcPrototypeSource += 'int ' + funcSignature[0] + '(' + args + ');\n'
+      funcContentSource += 'int ' + funcSignature[0] + '(' + args + '){\n'
+      funcContentSource += Sb3ToCppConverter.indent(snippet, 4)
+      funcContentSource += Sb3ToCppConverter.indent('return 0;\n', 4)
+      funcContentSource += '}\n\n'
     }
 
     // declare variables (Var)
