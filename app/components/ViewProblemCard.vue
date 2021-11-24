@@ -119,7 +119,6 @@
 
 <script lang="ts">
 import { Component, mixins, Prop, Vue } from 'nuxt-property-decorator'
-
 import { ProblemDetail } from '~/types/problems'
 import { TaskDetail } from '~/types/task'
 import { Language } from '~/types/language'
