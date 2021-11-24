@@ -33,6 +33,7 @@ module.exports = {
     'vue/html-indent': 'off',
     'vue/no-v-html': 'off',
     'vue/valid-v-slot': 'off',
+    'unicorn/number-literal-case': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

@@ -128,6 +128,7 @@ import DifficultyChip from '~/components/parts/difficulty-chip.vue'
 import { userStore } from '~/utils/store-accessor'
 import { copy } from '~/utils/clipboard'
 import Editor from '~/components/Editor.vue'
+import { Sb3ToCppConverter } from '~/utils/scratch2cpp'
 @Component({
   components: {
     Editor,
@@ -163,9 +164,21 @@ export default class ViewProblemCard extends mixins(MathJax) {
     const vm = this
     const reader = new FileReader()
     reader.onload = () => {
-      const sourceFileText = reader.result?.toString() || null
-      vm.sourceFileText = sourceFileText
+      if (file.name.endsWith('.sb3')) {
+        const converter = new Sb3ToCppConverter()
+        converter
+          .convertFromZip(file)
+          .then((text) => {
+            vm.sourceFileText = text
+          })
+          .catch((e) => {
+            alert(`Scratch3 プロジェクトを変換中にエラーが発生しました\n${e}`)
+          })
+      } else {
+        vm.sourceFileText = reader.result?.toString() || null
+      }
     }
+
     reader.readAsText(file)
   }
 
