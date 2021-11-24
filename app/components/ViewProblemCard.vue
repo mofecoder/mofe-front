@@ -164,8 +164,7 @@ export default class ViewProblemCard extends mixins(MathJax) {
     const vm = this
     const reader = new FileReader()
     reader.onload = () => {
-      const ext = file.name.slice(file.name.indexOf('.') + 1)
-      if (ext === 'sb3') {
+      if (file.name.endsWith('.sb3')) {
         const converter = new Sb3ToCppConverter()
         converter
           .convertFromZip(file)
