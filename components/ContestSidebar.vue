@@ -53,9 +53,9 @@ const afterContest = computed(() => {
       </v-list-item>
     </v-list-group>
     <v-list-item :to="`/contests/${contestName}/clarifications`">
-      <template #prepend><v-icon icon="mdi-help-circle" /></template>
       <v-list-item-title>質問</v-list-item-title>
       <template #prepend>
+        <v-icon icon="mdi-help-circle" />
         <v-icon v-if="unreadClarifications" class="clarifications-unread">
           {{ unreadClarifications }}
         </v-icon>

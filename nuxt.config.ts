@@ -1,15 +1,20 @@
 // @ts-ignore
 // import colors from 'vuetify/es5/util/colors'
 import { defineNuxtConfig } from 'nuxt/config'
+import vuetify from 'vite-plugin-vuetify'
 
 const nuxtConfig = defineNuxtConfig({
   devServer: {
     port: 8000
   },
-  /*
-   ** Customize the progress-bar color
-   */
-  // loading: { color: '#fff' },
+  build: {
+    transpile: ['vuetify']
+  },
+  hooks: {
+    'vite:extendConfig': (config) => {
+      config.plugins!.push(vuetify())
+    }
+  },
   /*
    ** Global CSS
    */
@@ -18,16 +23,6 @@ const nuxtConfig = defineNuxtConfig({
    ** Plugins to load before mounting the App
    */
   plugins: ['~/plugins/api.ts', '~/plugins/language.ts'],
-  /*
-   ** Nuxt.js dev-modules
-   */
-  // buildModules: [
-  //   // Doc: https://github.com/nuxt-community/eslint-module
-  //   '@nuxtjs/eslint-module',
-  //   // Doc: https://github.com/nuxt-community/stylelint-module
-  //   '@nuxtjs/stylelint-module',
-  //   '@nuxtjs/vuetify',
-  // ],
   /*
    ** Nuxt.js modules
    */
@@ -53,10 +48,23 @@ const nuxtConfig = defineNuxtConfig({
     //     id: process.env.GA_TRACKING_ID
     //   }
     // ]
-  ]
+  ],
   // env: {
   //   API_BASE: process.env.API_BASE!
   // },
+  vite: {
+    ssr: {
+      noExternal: ['vuetify']
+    },
+    define: {
+      'process.env.DEBUG': false
+    }
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://localhost:3000/api/'
+    }
+  }
 })
 // nuxtConfig.vuetify = {
 //   customVariables: ['~/assets/variables.scss'],

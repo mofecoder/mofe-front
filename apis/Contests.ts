@@ -10,6 +10,7 @@ import { StandingData } from '~~/types/standings'
 import { Submit, SubmitDetail } from '~~/types/submits'
 import { Clarification } from '~~/types/clarification'
 import { Pagination } from '~~/types/ApiMeta'
+import { Api } from '~/types/api'
 
 export type SubmissionResponse = {
   data: Submit[]

@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import dayjs from 'dayjs'
 import { Contest } from '~~/types/contest'
 import { Post } from '~~/types/post'
-import ViewPost from '~/.output/comp/post/ViewPost.vue'
+import ViewPost from '~/components/post/ViewPost.vue'
 import { useUserStore } from '~/store/user'
+import useApi from '~/composables/useApi'
+import Contests from '~/utils/apis/Contests'
+import Posts from '~/utils/apis/Posts'
 
-const contests = ref<Contest[] | null>(null)
-const posts = ref<Post[] | null>(null)
+const { data: contestsData } = await useApi(Contests.getContests, [])
+const { data: postsData } = await useApi(Posts.getPosts, [])
+
+const contests = ref<Contest[] | null>(contestsData.value ?? null)
+const posts = ref<Post[] | null>(postsData.value ?? null)
 
 const userStore = useUserStore()
 
@@ -18,17 +24,6 @@ useHead({
       async: true
     }
   ]
-})
-
-const fetchContestsAndPosts = async () => {
-  ;[contests.value, posts.value] = await Promise.all([
-    $api.Contests.index(),
-    $api.Posts.index(3)
-  ])
-}
-
-onMounted(() => {
-  fetchContestsAndPosts()
 })
 
 const formatDate = (date: string) => dayjs(date).format('MM/DD HH:mm')
@@ -111,7 +106,7 @@ const isWriter = computed(() => {
             ユーザページから AtCoder ID が登録可能です。ぜひご登録ください。
           </v-alert>
           <ViewPost
-            v-for="post in posts"
+            v-for="post in posts || []"
             :key="`post-${post.id}`"
             :post="post"
             enable-link

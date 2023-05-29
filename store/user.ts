@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { httpGet } from '~~/utils/axios'
+// import { httpGet } from '~~/utils/axios'
 import { AuthUser } from '~~/types/AuthUser'
 
 interface UserState {
@@ -13,8 +13,9 @@ export const useUserStore = defineStore({
   }),
   getters: {
     getUser: (state) => {
-      const json = localStorage.getItem('user')
-      return state.user || (json && JSON.parse(json))
+      // const json = localStorage.getItem('user')
+      // return state.user || (json && JSON.parse(json))
+      return state.user
     },
     isAdmin: (state) => {
       return state.user?.role === 'admin'
@@ -22,23 +23,23 @@ export const useUserStore = defineStore({
   },
   actions: {
     async fetchUser() {
-      try {
-        const res = await httpGet<{
-          success: boolean
-          data?: AuthUser
-        }>('/auth/validate_token', {
-          accept: '*/*'
-        })
-        if (!res.success) return null
-        this.updateUser(res.data ?? null)
-        return res.data
-      } catch {
-        return null
-      }
+      // try {
+      //   const res = await httpGet<{
+      //     success: boolean
+      //     data?: AuthUser
+      //   }>('/auth/validate_token', {
+      //     accept: '*/*'
+      //   })
+      //   if (!res.success) return null
+      //   this.updateUser(res.data ?? null)
+      //   return res.data
+      // } catch {
+      //   return null
+      // }
     },
     updateUser(user: AuthUser | null) {
-      if (user) localStorage.setItem('user', JSON.stringify(user))
-      else localStorage.removeItem('user')
+      // if (user) localStorage.setItem('user', JSON.stringify(user))
+      // else localStorage.removeItem('user')
       this.user = user
     }
   }
