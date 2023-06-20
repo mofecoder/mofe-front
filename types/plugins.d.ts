@@ -1,4 +1,4 @@
-import { CafeCoderApi } from '~~/apis'
+import { CafeCoderApi } from '.old/apis'
 import { Language } from '~~/types/language'
 
 interface Utils {

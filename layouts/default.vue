@@ -2,30 +2,57 @@
 import { useUserStore } from '~/store/user'
 
 const userStore = useUserStore()
-const user = computed(() => userStore.getUser)
+const user = computed(() => userStore.user)
 
 const title = 'CafeCoder'
+const route = useRoute()
+const createLink = (path: string) => ({
+  path,
+  query: {
+    ...route.query,
+    redirect: route.path.startsWith('/auth') ? undefined : route.path
+  }
+})
 </script>
 <template>
   <v-app>
     <v-app-bar flat color="brown-darken-1" class="header">
-      <v-row class="pl-8">
-        <NuxtLink class="header__link" to="/">
-          <v-toolbar-title class="header__link-text" :text="title" />
-        </NuxtLink>
-        <v-spacer />
+      <template #title>
+        <v-btn :active="false" icon="mdi-home" to="/" />
+        CafeCoder
+      </template>
+      <v-spacer />
+      <ClientOnly>
         <template v-if="user">
-          <NuxtLink class="header__user-name pr-8 text-white" to="/user">{{
-            user.name
-          }}</NuxtLink>
+          <v-btn
+            variant="text"
+            prepend-icon="mdi-account"
+            class="text-none"
+            :active="false"
+            to="/user"
+          >
+            {{ user.name }}
+          </v-btn>
         </template>
         <template v-else>
-          <v-btn class="text-white" to="/sign_up" variant="text">
-            新規登録
-          </v-btn>
-          <v-btn class="text-white" to="/login" variant="text">ログイン</v-btn>
+          <v-btn
+            class="text-white"
+            :active="false"
+            :to="createLink('/auth/signup')"
+            prepend-icon="mdi-account-plus"
+            variant="text"
+            >新規登録</v-btn
+          >
+          <v-btn
+            class="text-white"
+            :active="false"
+            :to="createLink('/auth/signin')"
+            variant="text"
+            prepend-icon="mdi-login-variant"
+            >ログイン</v-btn
+          >
         </template>
-      </v-row>
+      </ClientOnly>
     </v-app-bar>
     <v-main>
       <v-container>

@@ -1,12 +1,12 @@
 import { useUserStore } from '~/store/user'
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const userStore = useUserStore()
   await userStore.fetchUser()
-  if (!userStore.getUser) {
-    navigateTo({
-      path: '/login',
-      query: { redirect: to.fullPath }
+  if (!userStore.user) {
+    return navigateTo({
+      path: '/auth/signin',
+      query: { ...to.query, redirect: to.path }
     })
   }
 })

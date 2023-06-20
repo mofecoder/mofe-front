@@ -1,22 +1,24 @@
+@import 'styles/variables';
+
 @mixin markdown() {
-  .MathJax {
+  :deep(.MathJax) {
     font-size: 110%;
   }
-  table {
+  :deep(table) {
     border-collapse: collapse;
   }
-  th {
+  :deep(th) {
     padding: 0.2em 1em;
   }
-  td {
+  :deep(td) {
     padding: 0.5em 1em;
   }
-  th,
-  td {
+  :deep(th),
+  :deep(td) {
     border-top: #000000 solid 1px;
     border-bottom: #000000 solid 1px;
   }
-  pre code {
+  :deep(pre code) {
     @include block-code();
   }
 }

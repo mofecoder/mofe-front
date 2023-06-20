@@ -3,3 +3,15 @@
 code {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace !important;
 }
+
+ul, ol {
+  padding-left: 2em;
+}
+
+:not(pre) > code {
+  background-color: #e0e0e0;
+  padding: 0.1em 0.3em;
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+  border-radius: 0.2em;
+}

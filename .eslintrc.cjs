@@ -5,12 +5,13 @@ module.exports = {
     node: true
   },
   extends: [
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
     '@nuxt/eslint-config',
     'plugin:vuetify/base',
-    'prettier',
-    'plugin:prettier/recommended',
+    '@vue/prettier',
   ],
-  plugins: ['prettier'],
+  plugins: ['vue', '@typescript-eslint'],
   // add your custom rules here
   rules: {
     'space-before-function-paren': [

@@ -10,10 +10,13 @@ export interface ProblemParams {
   constraints: string
 }
 
-export interface Problem {
-  id: number
+export interface ProblemBase {
   name: string
   difficulty: Difficulty
+}
+
+export interface Problem extends ProblemBase {
+  id: number
   writerUser: string
   contest: null | {
     slug: string

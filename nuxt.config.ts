@@ -7,8 +7,16 @@ const nuxtConfig = defineNuxtConfig({
   devServer: {
     port: 8000
   },
+  alias: {
+    'katex/contrib/auto-render': 'katex/dist/contrib/auto-render.js',
+    'codemirror/mode': 'codemirror/mode'
+  },
   build: {
-    transpile: ['vuetify']
+    transpile: [
+      'vuetify',
+      'codemirror/lib/codemirror.css',
+      '@vuepic/vue-datepicker'
+    ]
   },
   hooks: {
     'vite:extendConfig': (config) => {
@@ -20,15 +28,12 @@ const nuxtConfig = defineNuxtConfig({
    */
   css: ['~/styles/style.scss', '~/styles/variables.scss'],
   /*
-   ** Plugins to load before mounting the App
-   */
-  plugins: ['~/plugins/api.ts', '~/plugins/language.ts'],
-  /*
    ** Nuxt.js modules
    */
   modules: [
     '@pinia/nuxt',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxtjs/eslint-module'
     //   // Doc: https://axios.nuxtjs.org/usage
     //   '@nuxtjs/axios',
     //   // Doc: https://github.com/nuxt-community/dotenv-module

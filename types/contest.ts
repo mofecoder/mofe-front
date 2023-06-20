@@ -43,8 +43,3 @@ export interface ContestEditParam {
   editorialUrl?: string
   officialMode?: boolean
 }
-
-export const KIND_TABLE = {
-  normal: '通常',
-  private: 'プライベート'
-}

@@ -1,20 +1,28 @@
-import { FetchOptions } from 'ofetch'
+import { UseFetchOptions } from '#app'
 
 export type Methods = 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE'
-export type ArgsType = Array<string | number | undefined>
+export type ArgsType = any[] | Record<string, any>
 
-export class Api<T, U extends ArgsType = []> {
+export class Api<
+  T,
+  U extends ArgsType = [],
+  V extends RequestInit['body'] | Record<string, any> = undefined
+> {
   $path: (params: U) => string
   method: Methods
-  options: FetchOptions<any>
+  options: (params: U) => UseFetchOptions<any>
   constructor(
     path: string | ((params: U) => string),
     method: Methods = 'GET',
-    options?: FetchOptions<any>
+    options?: UseFetchOptions<any> | ((params: U) => UseFetchOptions<any>)
   ) {
     this.$path = typeof path === 'string' ? () => path : (args) => path(args)
     this.method = method
-    this.options = options || {}
+    if (options) {
+      this.options = typeof options === 'function' ? options : () => options
+    } else {
+      this.options = () => ({})
+    }
   }
 
   get POST() {

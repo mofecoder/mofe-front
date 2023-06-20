@@ -1,29 +1,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import dayjs from 'dayjs'
-import ContestSidebar from '~/components/ContestSidebar.vue'
+import ContestSidebar from '~/components/contests/ContestSidebar.vue'
 import 'dayjs/locale/ja'
 import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
+import { storeToRefs } from 'pinia'
+import { useDisplay } from 'vuetify'
 
 const contestStore = useContestStore()
 const userStore = useUserStore()
-const route = useRoute()
-
 const drawer = ref<boolean | null>(null)
 
-const contest = computed(() => contestStore.contest)
+const { contest, contestName, updateContest } = useContest()
+await updateContest()
 
-const current = computed(() => {
-  const path = route.fullPath
-  const regex = /contests\/\w+(?:\/((\w*)[\w/]*?)\/?(?:\?.+)?)?$/.exec(path)
-  if (!regex) return null
-  return regex[1] || ''
-})
-
-const user = computed(() => {
-  return userStore.getUser
-})
+const { user } = storeToRefs(userStore)
 
 const contestTime = computed(() => {
   dayjs.locale('ja')
@@ -42,7 +34,7 @@ const contestTime = computed(() => {
 })
 
 const unreadClarifications = computed(() => {
-  if (!contestStore.clarifications) return 0
+  if (!contestStore.clarifications || !process.client) return 0
   const key = `${contest.value!.slug}_clar`
   let read = localStorage.getItem(key)
   if (read == null) {
@@ -53,53 +45,74 @@ const unreadClarifications = computed(() => {
     dayjs(clar.updatedAt).isAfter(read!)
   ).length
 })
-
-const routeContestName = computed(() => {
-  const contestName = route.params.contestName
-  return Array.isArray(contestName) ? contestName[0] ?? null : contestName
+const { lgAndUp: desktop } = useDisplay()
+const route = useRoute()
+const createLink = (path: string) => ({
+  path,
+  query: {
+    ...route.query,
+    redirect: route.path.startsWith('/auth') ? undefined : route.path
+  }
 })
 </script>
 
 <template>
   <v-app>
-    <v-sheet
-      app
-      flat
-      width="100%"
-      min-height="4rem"
-      height="auto"
-      color="green-darken-4"
-      class="text-white pl-8 contest-header"
-    >
-      <v-app-bar-nav-icon
-        class="d-md-none contest-header__nav-icon"
-        @click.stop="drawer = !drawer"
-      />
+    <v-app-bar color="green-darken-4" class="text-white pl-4 contest-header">
+      <template #prepend>
+        <v-app-bar-nav-icon
+          variant="text"
+          class="d-lg-none contest-header__nav-icon"
+          @click.stop="drawer = !drawer"
+        >
+          <v-icon icon="mdi-menu" />
+        </v-app-bar-nav-icon>
+      </template>
       <template v-if="contest">
-        <NuxtLink class="contest-header__contest-name-link" to="/">
+        <v-btn icon="mdi-home" to="/" />
+        <v-app-bar-title>
           {{ contest.name }}
-        </NuxtLink>
+        </v-app-bar-title>
         <div class="contest-header__info">
           <div class="contest-header__info__title">コンテスト日時</div>
           <div v-for="text in contestTime" :key="text" v-text="text" />
         </div>
       </template>
       <v-spacer />
-      <template v-if="user">
-        <NuxtLink class="contest-header__user-name pr-8 text-white" to="/user"
-          >{{ user.name }}
-        </NuxtLink>
-      </template>
-      <template v-else>
-        <v-btn class="text-white" to="/sign_up" variant="text">新規登録</v-btn>
-        <v-btn class="text-white" to="/login" variant="text">ログイン</v-btn>
-      </template>
-    </v-sheet>
-    <v-navigation-drawer v-model="drawer" class="mt-16" mobile-breakpoint="960">
+      <ClientOnly>
+        <template v-if="user">
+          <v-btn
+            variant="text"
+            prepend-icon="mdi-account"
+            class="text-none"
+            to="/user"
+          >
+            {{ user.name }}
+          </v-btn>
+        </template>
+        <template v-else>
+          <v-btn
+            class="text-white"
+            :to="createLink('/auth/signup')"
+            prepend-icon="mdi-account-plus"
+            variant="text"
+            >新規登録</v-btn
+          >
+          <v-btn
+            class="text-white"
+            :to="createLink('/auth/signin')"
+            variant="text"
+            prepend-icon="mdi-login-variant"
+            >ログイン</v-btn
+          >
+        </template>
+      </ClientOnly>
+    </v-app-bar>
+    <v-navigation-drawer v-model="drawer" :rail="desktop" expand-on-hover>
       <ContestSidebar
-        v-if="contest"
+        v-if="contest && contestName"
         :contest="contest"
-        :contest-name="routeContestName"
+        :contest-name="contestName"
         :unread-clarifications="unreadClarifications"
       />
     </v-navigation-drawer>
@@ -121,12 +134,8 @@ const routeContestName = computed(() => {
   flex-wrap: wrap;
   z-index: 9999;
 
-  &__nav-icon {
-    color: white !important;
-    margin-right: 1.5em;
-  }
-
   &__contest-name-link {
+    padding-left: 24px;
     color: inherit !important;
     text-decoration: inherit !important;
   }
