@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { StandingProblem, Standing } from '~/types/standings'
 
-const props = defineProps({
+defineProps({
   problems: {
     type: Array as () => StandingProblem[],
     required: true
@@ -11,6 +11,10 @@ const props = defineProps({
     required: true
   }
 })
+
+defineEmits<{
+  reload: []
+}>()
 
 const formatTime = (time: number | undefined): string => {
   if (!time) return ''

@@ -5,6 +5,7 @@ import { errorMessage } from 'jest-validate/build/errors'
 definePageMeta({
   layout: 'contest'
 })
+
 const { contest, contestName } = useContest()
 const route = useRoute()
 const slug = computed(() =>
@@ -14,6 +15,15 @@ const { data: problem, error } = await useApi(Tasks.getTask, [
   unref(contestName),
   unref(slug)
 ])
+
+useHead(() => ({
+  title:
+    problem.value && contest.value
+      ? `${problem.value.position}. ${problem.value.name} - ${contest.value.name}`
+      : 'Loading...',
+  titleTemplate: null
+}))
+
 const errorMessage = error.value?.message
 const id = computed(
   () =>

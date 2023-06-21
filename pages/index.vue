@@ -25,7 +25,9 @@ useHead({
       src: 'https://platform.twitter.com/widgets.js',
       async: true
     }
-  ]
+  ],
+  title: 'CafeCoder',
+  titleTemplate: null
 })
 
 const checkStatus = (contest: Contest) => {

@@ -20,10 +20,6 @@ const testcaseSetNames = computed(
   () => testcaseSets.value?.map((x) => x.name) || []
 )
 
-const { data: problem, refresh: refreshProblem } = await useApi(
-  ManageProblems.getProblem,
-  [props.problemId]
-)
 const { data, refresh: refreshTestcase } = await useApi(
   ManageProblems.getTestcases,
   [props.problemId]
@@ -74,7 +70,6 @@ const updateTestcase = async (params: {
     {},
     params
   )
-  await refreshProblem()
   await refreshTestcase()
   testcaseDialog.value = false
 }
@@ -82,7 +77,6 @@ const updateTestcase = async (params: {
 const deleteTestcase = async (id: number) => {
   testcaseLoading.value = true
   await useApi(ManageProblems.deleteTestcase, [props.problemId, id])
-  await refreshProblem()
 }
 
 const createTestcase = async (params: {
@@ -92,7 +86,6 @@ const createTestcase = async (params: {
   explanation: string
 }) => {
   await useApi(ManageProblems.createTestcase, [props.problemId], {}, params)
-  await refreshProblem()
   await refreshTestcase()
   testcaseDialog.value = false
 }
@@ -125,7 +118,6 @@ const saveSet = async (params: { name: string; points: string }) => {
       }`
     )
   }
-  await refreshProblem()
   await refreshTestcase()
   testcaseSetDialog.value = false
 }
@@ -148,7 +140,6 @@ const deleteSet = async (id: number) => {
     alert('テストケースセットの削除に失敗しました。')
     return
   }
-  await refreshProblem()
   await refreshTestcase()
 }
 

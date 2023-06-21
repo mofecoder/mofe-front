@@ -7,10 +7,10 @@ definePageMeta({
 
 const { contest, contestName } = useContest()
 
-useHead({
+useHead(() => ({
   title: `順位表 - ${contest.value?.name}`,
   titleTemplate: null
-})
+}))
 
 const {
   data: standingData,

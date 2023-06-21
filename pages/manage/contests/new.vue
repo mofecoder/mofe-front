@@ -5,6 +5,10 @@ import dayjs, { Dayjs } from 'dayjs'
 import ManageContests from '~/utils/apis/ManageContests'
 import EditContestCard from '~/components/manage/contests/EditContestCard.vue'
 
+useHead({
+  title: 'コンテストの作成'
+})
+
 const params = reactive({
   name: '',
   slug: '',

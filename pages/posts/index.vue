@@ -3,6 +3,10 @@ import Posts from '~/utils/apis/Posts'
 import ViewPostCard from '~/components/posts/ViewPostCard.vue'
 
 const { data: posts } = await useApi(Posts.getPosts, [])
+
+useHead({
+  title: '記事一覧'
+})
 </script>
 
 <template>

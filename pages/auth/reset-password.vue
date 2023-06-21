@@ -10,6 +10,11 @@ const resetToken = computed(() => {
   if (!route.query.token || Array.isArray(route.query.token)) return null
   return route.query.token
 })
+
+useHead(() => ({
+  title: 'パスワードの変更'
+}))
+
 const params = reactive({
   email: '',
   password: '',

@@ -7,6 +7,10 @@ definePageMeta({
   middleware: 'admin'
 })
 
+useHead({
+  title: 'コンテストの管理'
+})
+
 const { data: contests } = await useApi(ManageContests.getContests, [])
 
 const headers = [

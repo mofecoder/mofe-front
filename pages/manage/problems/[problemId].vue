@@ -15,6 +15,11 @@ definePageMeta({
 
 const route = useRoute()
 const problemId = computed(() => parseInt(route.params.problemId as string))
+
+useHead(() => ({
+  title: `[${problemId.value}] 問題の編集`
+}))
+
 const tabs = ['overview', 'testcases', 'judge', 'preview']
 const tabNames = ['問題概要', 'テストケース', 'ジャッジ', '表示確認']
 const components = [

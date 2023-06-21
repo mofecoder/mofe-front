@@ -1,6 +1,6 @@
-import dayjs from 'dayjs'
+import dayjs, { ConfigType } from 'dayjs'
 
-export function formatDate(date: Date, second = true): string {
+export function formatDate(date: ConfigType, second = true): string {
   const dt = dayjs(date)
   const timeFormat = second ? 'HH:mm:ss' : 'HH:mm'
   return dt.year() === dayjs().year()

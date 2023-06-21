@@ -11,6 +11,10 @@ const postId = computed(() =>
   Array.isArray(route.params.postId) ? null : parseInt(route.params.postId)
 )
 const { data: post } = await useApi(Posts.getPost, [postId.value!])
+
+useHead(() => ({
+  title: post.value ? post.value.title : 'Loading...'
+}))
 </script>
 
 <template>

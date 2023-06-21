@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Problem } from '~/types/contestAdmin'
 
-const props = defineProps<{
+defineProps<{
   items: Problem[]
   loading?: boolean
 }>()

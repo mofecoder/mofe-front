@@ -8,10 +8,10 @@ definePageMeta({
 
 const { contest, contestName } = useContest()
 
-useHead({
+useHead(() => ({
   title: `すべての提出 - ${contest.value!.name}`,
   titleTemplate: null
-})
+}))
 
 const adminMode = ref(false)
 const errorMessage = ref<string | null>(null)
@@ -40,7 +40,6 @@ const { data: submissions, refresh } = await useApi(
   args
 )
 
-// TODO: Rejudge
 async function rejudge(submissionIds: number[]) {
   await useApi(
     Contests.rejudge,

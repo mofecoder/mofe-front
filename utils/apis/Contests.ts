@@ -2,7 +2,7 @@ import { Api } from '~/types/api'
 import { Contest, ContestDetail } from '~/types/contest'
 import { StandingData } from '~/types/standings'
 import { Clarification } from '~/types/clarification'
-import { Submit } from '~/types/submissions'
+import { Submit, SubmissionDetail } from '~/types/submissions'
 import { Pagination } from '~/types/ApiMeta'
 import { SortItem } from '~/types/datatable'
 
@@ -110,6 +110,10 @@ const rejudge = new Api<Submit, [string]>(
   'POST'
 )
 
+const getSubmission = new Api<SubmissionDetail, [string, number]>(
+  ([contestSlug, id]) => `/contests/${contestSlug}/submissions/${id}`
+)
+
 export default {
   getContests,
   getContest,
@@ -120,5 +124,6 @@ export default {
   createClarification,
   getAllSubmissions,
   getMySubmissions,
+  getSubmission,
   rejudge
 }

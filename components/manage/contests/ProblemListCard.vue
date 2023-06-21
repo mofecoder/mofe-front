@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
 
-const props = defineProps<{
+defineProps<{
   tasks?: ProblemType[]
   contestSlug: string
 }>()
-const emits = defineEmits<{
+defineEmits<{
   remove: [string]
 }>()
 </script>

@@ -1,6 +1,5 @@
 import { storeToRefs } from 'pinia'
 import { useContestStore } from '~/store/contest'
-import dayjs from 'dayjs'
 
 export function useContest() {
   const route = useRoute()

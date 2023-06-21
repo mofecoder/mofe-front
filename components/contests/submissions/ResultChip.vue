@@ -128,6 +128,7 @@ $color-ce: #a544ff;
 }
 .chip-dense {
   font-size: 100%;
+  min-width: 56px;
 }
 .chip-subtext {
   padding-left: 0.15em;

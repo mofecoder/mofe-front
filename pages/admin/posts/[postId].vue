@@ -14,6 +14,11 @@ const postId = computed(() => {
   return parseInt(pid)
 })
 const isCreating = computed(() => postId.value === null)
+
+useHead(() => ({
+  title: isCreating ? '記事の新規投稿' : `[${postId.value}] 記事の編集`
+}))
+
 const valid = ref(false)
 const preview = ref(false)
 

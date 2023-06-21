@@ -4,7 +4,7 @@ import { useUserStore } from '~/store/user'
 const userStore = useUserStore()
 const user = computed(() => userStore.user)
 
-const title = 'CafeCoder'
+const title = 'CafeCoder 3.0 Beta'
 const route = useRoute()
 const createLink = (path: string) => ({
   path,
@@ -19,7 +19,7 @@ const createLink = (path: string) => ({
     <v-app-bar flat color="brown-darken-1" class="header">
       <template #title>
         <v-btn :active="false" icon="mdi-home" to="/" />
-        CafeCoder
+        {{ title }}
       </template>
       <v-spacer />
       <ClientOnly>

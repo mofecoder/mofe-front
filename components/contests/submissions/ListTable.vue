@@ -1,4 +1,3 @@
-<!--suppress JSUnusedLocalSymbols -->
 <script setup lang="ts">
 import { VDataTableServer } from 'vuetify/labs/components'
 import { SubmissionResult } from '~/types/submissions'

@@ -12,9 +12,9 @@ definePageMeta({
 
 const { contest } = useContest()
 
-useHead({
+useHead(() => ({
   title: contest.value?.name
-})
+}))
 
 const userStore = useUserStore()
 

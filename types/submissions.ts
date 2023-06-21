@@ -37,7 +37,7 @@ export interface TestcaseResult {
   executionMemory: number
 }
 
-export interface SubmitDetail extends Submit {
+export interface SubmissionDetail extends Submit {
   source: string
   sampleCount: number | null
   compileError: string | null

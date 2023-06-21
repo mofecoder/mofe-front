@@ -4,6 +4,10 @@ import { useUserStore } from '~/store/user'
 import { passwordRules } from '~/constants/password'
 import { checkPasswordFormat } from '~/utils/validation'
 
+useHead({
+  title: '新規登録'
+})
+
 const form = ref<VForm>()
 const valid = ref(false)
 const params = reactive({

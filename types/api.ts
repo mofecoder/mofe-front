@@ -6,6 +6,7 @@ export type ArgsType = any[] | Record<string, any>
 export class Api<
   T,
   U extends ArgsType = [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   V extends RequestInit['body'] | Record<string, any> = undefined
 > {
   $path: (params: U) => string

@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { useUserStore } from '~/store/user'
 
+useHead({
+  title: 'ログイン'
+})
+
 const rules = {
   name: [
     (v: string) => !!v || 'このフィールドは必須です。',

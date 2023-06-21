@@ -10,9 +10,9 @@ definePageMeta({
 const { contest, contestName, clarifications, updateClarifications } =
   useContest()
 
-useHead({
+useHead(() => ({
   title: `質問 - ${contest.value?.name}`
-})
+}))
 
 const editingId = ref<number | null>(null)
 const questionFlag = ref(false)
@@ -46,10 +46,6 @@ const submitQuestion = async (task: string | null, content: string) => {
 const closeQuestion = () => {
   questionFlag.value = false
 }
-
-const showAnswer = computed(
-  () => clarifications.value && clarifications.value.some((x) => x.canAnswer)
-)
 
 const user = useUserStore().user
 </script>

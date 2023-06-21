@@ -60,9 +60,9 @@ const loading = reactive({
 
 const updated = ref(false)
 
-useHead({
+useHead(() => ({
   title: `[${contest.name}] コンテストの編集`
-})
+}))
 
 const reload = async () =>
   await Promise.all([refreshContest(), refreshUnsetProblems()])

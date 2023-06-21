@@ -1,3 +1,21 @@
+<script lang="ts" setup>
+import { PropType } from 'vue'
+import { Post } from '~/types/post'
+import { formatDate } from '~/utils/formatting'
+
+defineProps({
+  post: {
+    type: Object as PropType<Post>,
+    required: true
+  },
+  showEdit: {
+    type: Boolean,
+    default: false
+  }
+})
+const app = useNuxtApp()
+</script>
+
 <template>
   <v-card rounded :title="post.title">
     <v-card-text class="post-card-text mt-2">
@@ -23,24 +41,6 @@
     </template>
   </v-card>
 </template>
-
-<script lang="ts" setup>
-import { PropType } from 'vue'
-import { Post } from '~/types/post'
-import { formatDate } from '~/utils/formatting'
-
-const props = defineProps({
-  post: {
-    type: Object as PropType<Post>,
-    required: true
-  },
-  showEdit: {
-    type: Boolean,
-    default: false
-  }
-})
-const app = useNuxtApp()
-</script>
 
 <style scoped lang="scss">
 .post-card-text {

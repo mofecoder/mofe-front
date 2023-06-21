@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import languagesRaw from '~/constants/languages'
 
+useHead({
+  title: '提出できる言語についての情報'
+})
+
 const languages = languagesRaw.filter((lang) => !lang.isOutdated)
 
 const getIndex = () => {

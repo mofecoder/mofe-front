@@ -83,8 +83,6 @@ function log<T>(method: string, url: string, res: FetchResponse<T>) {
   )
 }
 
-const isErrorCode = (statusCode: number) => statusCode >= 400
-
 const useHttp = async <T>(
   url: MaybeRef<string>,
   options: UseFetchOptions<T> = {}

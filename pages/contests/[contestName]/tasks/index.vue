@@ -5,10 +5,10 @@ definePageMeta({
 
 const { contest, contestName } = useContest()
 
-useHead({
+useHead(() => ({
   title: `問題 - ${contest.value?.name}`,
   titleTemplate: null
-})
+}))
 </script>
 
 <template>
@@ -18,7 +18,7 @@ useHead({
         <v-alert type="warning">問題はまだ公開されていません。</v-alert>
       </v-alert>
       <v-container v-else class="pa-0" fluid>
-        <v-card max-width="600px">
+        <v-card max-width="600px" class="mx-auto">
           <v-list rounded>
             <v-list-subheader>問題一覧</v-list-subheader>
             <v-list-item

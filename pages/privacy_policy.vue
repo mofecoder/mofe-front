@@ -1,3 +1,9 @@
+<script setup lang="ts">
+useHead({
+  title: 'プライバシーポリシー'
+})
+</script>
+
 <template>
   <v-card flat>
     <h3>Google Analytics について</h3>

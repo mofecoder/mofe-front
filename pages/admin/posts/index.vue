@@ -9,6 +9,10 @@ definePageMeta({
   middleware: 'admin'
 })
 
+useHead({
+  title: '記事の管理'
+})
+
 const tableHeader = [
   { title: 'ID', key: 'id' },
   { title: 'タイトル', key: 'title' },
@@ -38,7 +42,7 @@ const items = computed(() => {
   <v-card flat>
     <v-card-title>記事一覧（編集）</v-card-title>
     <v-card-text>
-      <v-btn color="purple white--text" to="/manage/posts/new"
+      <v-btn color="purple white--text" to="/admin/posts/new"
         >新規記事作成</v-btn
       >
       <v-data-table :headers="tableHeader" :items="items" :loading="!posts">
