@@ -1,18 +1,11 @@
-import {
-  camelCase,
-  isArray,
-  isObject,
-  mapKeys,
-  mapValues,
-  snakeCase
-} from 'lodash'
+import lodash from 'lodash'
 import defu from 'defu'
 import { FetchResponse } from 'ofetch'
 import { UseFetchOptions } from '#app'
 import AuthTokens from '~/types/AuthTokens'
 import { MaybeRef } from 'vue'
 import { useUserStore } from '~/store/user'
-
+const { camelCase, isArray, isObject, mapKeys, mapValues, snakeCase } = lodash
 export class HttpError extends Error {
   constructor(message: string, response: FetchResponse<unknown>) {
     super(message)

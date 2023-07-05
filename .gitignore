@@ -96,3 +96,5 @@ firebase.json
 .firebaserc
 
 config/.env.prod
+
+.output
