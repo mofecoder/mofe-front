@@ -12,6 +12,9 @@ import sup from 'markdown-it-sup'
 import mark from 'markdown-it-mark'
 // リンクに target="_blank" を追加
 import mila from 'markdown-it-link-attributes'
+import tm from 'markdown-it-texmath'
+import katex from 'katex'
+import 'katex/dist/katex.min.css'
 
 const mdit: MarkdownIt = new MarkdownIt({
   html: true,
@@ -38,6 +41,7 @@ const mdit: MarkdownIt = new MarkdownIt({
       rel: 'noopener noreferrer'
     }
   })
+  .use(tm, { engine: katex, delimiters: 'dollars' })
 
 mdit.renderer.rules.fence = function (tokens, idx, options, _, slf) {
   const token = tokens[idx]

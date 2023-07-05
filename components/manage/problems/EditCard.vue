@@ -31,12 +31,20 @@ const { data: problem, refresh } = await useApi(ManageProblems.getProblem, [
 const testers = computed(() => problem.value?.testers ?? [])
 
 const onSubmit = async () => {
+  if (!problem.value) return
   await useApi(
     ManageProblems.updateProblem,
     [props.problemId],
     {},
     {
-      problem
+      problem: {
+        name: problem.value.name,
+        difficulty: problem.value.difficulty,
+        constraints: problem.value.constraints,
+        inputFormat: problem.value.inputFormat,
+        outputFormat: problem.value.outputFormat,
+        statement: problem.value.statement
+      }
     }
   )
   updated.value = true
@@ -88,7 +96,7 @@ const removeTester = async (name: string) => {
 <template>
   <v-card class="wrapper" :loading="!problem">
     <v-card-text>
-      <v-form v-if="problem" v-model="valid" @submit.prevent="onSubmit">
+      <v-form v-if="problem != null" v-model="valid" @submit.prevent="onSubmit">
         <v-row>
           <v-col cols="12" md="4" lg="2" class="py-1">
             <v-text-field :model-value="problemId" readonly label="問題 ID" />

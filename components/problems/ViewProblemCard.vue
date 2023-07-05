@@ -3,8 +3,6 @@ import languages from '~/constants/languages'
 import { TaskDetail } from '~/types/task'
 import { useUserStore } from '~/store/user'
 import { MarkdownIt } from '~/types/plugins'
-import renderMathInElement from 'katex/contrib/auto-render'
-import { RenderMathOptions } from '~/plugins/katex'
 import Tasks from '~/utils/apis/Tasks'
 import { ProblemDetail } from '~/types/problems'
 
@@ -114,16 +112,6 @@ async function submit() {
       submitted.value = false
     })
 }
-
-const renderMath = () => {
-  if (!process.client) return
-  for (const el of document.getElementsByClassName('statement')) {
-    renderMathInElement(el as HTMLElement, RenderMathOptions)
-  }
-}
-
-onMounted(() => renderMath())
-onUpdated(() => renderMath())
 
 const title = computed(() => {
   if ('position' in props.problem) {

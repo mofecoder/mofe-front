@@ -1,5 +1,11 @@
 import { Api } from '~/types/api'
-import { Problem, ProblemDetail, Testcase, TestcaseSet } from '~/types/problems'
+import {
+  Problem,
+  ProblemDetail,
+  ProblemParams,
+  Testcase,
+  TestcaseSet
+} from '~/types/problems'
 type UploadResponseType = { messages: string[] }
 type TestcasesResponseType = {
   testcaseSets: TestcaseSet[]
@@ -16,10 +22,11 @@ type TestcaseResponseType = {
 const getProblems = new Api<Problem[]>('/problems')
 
 const getProblem = new Api<ProblemDetail, [number]>(([id]) => `/problems/${id}`)
-const updateProblem = new Api<ProblemDetail, [number]>(
-  ([id]) => `/problems/${id}`,
-  'PUT'
-)
+const updateProblem = new Api<
+  ProblemDetail,
+  [number],
+  { problem: ProblemParams }
+>(([id]) => `/problems/${id}`, 'PUT')
 const addTester = new Api<void, [number]>(
   ([id]) => `/problems/${id}/tester_relations`,
   'POST'

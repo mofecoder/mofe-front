@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import renderMathInElement from 'katex/contrib/auto-render'
-import { RenderMathOptions } from '~/plugins/katex'
-
 const props = defineProps<{
   markdown: string
   value: boolean
@@ -15,12 +12,6 @@ const show = ref(false)
 watch(
   () => props.value,
   (value) => {
-    if (props.value && process.client) {
-      nextTick(() => {
-        const el = document.getElementsByClassName('modal-content')[0]
-        renderMathInElement(el as HTMLElement, RenderMathOptions)
-      })
-    }
     show.value = value
   }
 )

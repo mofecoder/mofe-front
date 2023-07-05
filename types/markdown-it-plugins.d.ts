@@ -14,3 +14,8 @@ declare module 'markdown-it-mark' {
   const mark: MarkdownIt.PluginSimple
   export default mark
 }
+declare module 'markdown-it-texmath' {
+  import MarkdownIt from 'markdown-it'
+  const texmath: MarkdownIt.PluginSimple
+  export default texmath
+}
