@@ -26,7 +26,6 @@
     "@hsorby/vue3-katex": "^0.6.0-rc.5",
     "@nuxtjs/axios": "^5.12.1",
     "@nuxtjs/dotenv": "^1.4.0",
-    "@nuxtjs/google-analytics": "^2.4.0",
     "@pinia/nuxt": "^0.4.11",
     "@types/highlight.js": "^10.1.0",
     "@types/markdown-it": "^12.2.3",
