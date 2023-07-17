@@ -27,6 +27,12 @@ const updateProblem = new Api<
   [number],
   { problem: ProblemParams }
 >(([id]) => `/problems/${id}`, 'PUT')
+
+const createProblem = new Api<ProblemDetail, [], { problem: ProblemParams }>(
+  '/problems',
+  'POST'
+)
+
 const addTester = new Api<void, [number]>(
   ([id]) => `/problems/${id}/tester_relations`,
   'POST'
@@ -99,6 +105,7 @@ export default {
   getProblems,
   getProblem,
   updateProblem,
+  createProblem,
   addTester,
   removeTester,
   getTestcases,

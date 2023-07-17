@@ -39,7 +39,9 @@ const items = computed(() =>
       <v-toolbar flat color="white">
         <v-toolbar-title>問題一覧</v-toolbar-title>
         <v-spacer />
-        <v-btn color="primary" class="mb-2" to="new">問題を作成</v-btn>
+        <v-btn color="primary" class="mb-2" to="/manage/problems/new"
+          >問題を作成</v-btn
+        >
       </v-toolbar>
     </template>
     <template #item.contestName="{ item: { columns: item } }">
