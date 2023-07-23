@@ -99,13 +99,13 @@ async function submit() {
       lang: language.value!.innerName
     },
     {},
-    { source: sourceCode }
+    sourceCode
   )
     .then((res) => {
       if (res.error.value) {
         throw res.error
       }
-      router.push(`/contests/${contestName.value}/submissions`)
+      router.push(`/contests/${contestName.value}/submissions/me`)
     })
     .catch(() => {
       alert(`提出に失敗しました。`)
