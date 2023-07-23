@@ -2,11 +2,19 @@ import { Language } from '~~/types/language'
 
 const languages: Language[] = [
   {
+    innerName: 'cpp20_gcc:12.2.0',
+    name: 'C++20 (g++ 12.2.0)',
+    mime: 'text/x-c++src',
+    compilationCommand: 'g++-12 ./Main.cpp -O2 -lm -std=gnu++17 -o ./Main.out',
+    runCommand: './Main.out'
+  },
+  {
     innerName: 'cpp17_gcc:10.2.0',
     name: 'C++17 (g++ 10.2.0)',
     mime: 'text/x-c++src',
     compilationCommand: 'g++-10 ./Main.cpp -O2 -lm -std=gnu++17 -o ./Main.out',
-    runCommand: './Main.out'
+    runCommand: './Main.out',
+    isOutdated: true
   },
   {
     innerName: 'cpp17-acl_gcc:10.2.0',
@@ -16,42 +24,48 @@ const languages: Language[] = [
       'g++-10 ./Main.cpp -O2 -lm -std=gnu++17 -I/ -o ./Main.out',
     runCommand: './Main.out',
     libraries:
-      '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.1" target="_blank">AtCoder Library v1.1</a>'
+      '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.1" target="_blank">AtCoder Library v1.1</a>',
+    isOutdated: true
   },
   {
     innerName: 'cpp20_gcc:10.2.0',
     name: 'C++20 (g++ 10.2.0)',
     mime: 'text/x-c++src',
     compilationCommand: 'g++-10 ./Main.cpp -O2 -lm -std=gnu++2a -o ./Main.out',
-    runCommand: './Main.out'
+    runCommand: './Main.out',
+    isOutdated: true
   },
   {
     innerName: 'c17_gcc:10.2.0',
     name: 'C17 (gcc 10.2.0)',
     mime: 'text/x-csrc',
     compilationCommand: 'gcc-10 ./Main.c -O2 -lm -std=gnu17 -o ./Main.out',
-    runCommand: './Main.out'
+    runCommand: './Main.out',
+    isOutdated: true
   },
   {
     innerName: 'java:11.0.9',
     name: 'Java11 (11.0.9)',
     mime: 'text/x-java',
     compilationCommand: 'javac -encoding UTF-8 ./Main.java',
-    runCommand: 'java Main'
+    runCommand: 'java Main',
+    isOutdated: true
   },
   {
     innerName: 'python:3.9.0',
     name: 'Python (3.9.0)',
     mime: 'text/x-python',
     compilationCommand: 'python3.9 -m py_compile ./Main.py',
-    runCommand: 'python3.9 ./Main.py'
+    runCommand: 'python3.9 ./Main.py',
+    isOutdated: true
   },
   {
     innerName: 'pypy3:7.3.3',
     name: 'PyPy3 (7.3.3)',
     mime: 'text/x-python',
     compilationCommand: 'pypy3 -m py_compile ./Main.py',
-    runCommand: 'pypy3 ./Main.py'
+    runCommand: 'pypy3 ./Main.py',
+    isOutdated: true
   },
   {
     innerName: 'cs_dotnet:5.0',
@@ -59,14 +73,16 @@ const languages: Language[] = [
     mime: 'text/x-csharp',
     compilationCommand:
       'export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 && cd ./Main &&  dotnet new console && mv ./Main.cs ./Main/Program.cs && dotnet publish -c Release --nologo -v q -o .',
-    runCommand: 'dotnet ./Main/Main.dll'
+    runCommand: 'dotnet ./Main/Main.dll',
+    isOutdated: true
   },
   {
     innerName: 'cs_mono:6.12.0.90',
     name: 'C# Mono (6.12.0)',
     mime: 'text/x-csharp',
     compilationCommand: 'mcs ./Main.cs -out:./Main.exe',
-    runCommand: 'mono ./Main.exe'
+    runCommand: 'mono ./Main.exe',
+    isOutdated: true
   },
   {
     innerName: 'rust:1.48.0',
@@ -76,21 +92,24 @@ const languages: Language[] = [
       'cd ./rust_workspace && mv ./Main.rs ./rust_workspace/src/main.rs && cargo build --release',
     runCommand: './rust_workspace/target/release/Rust',
     libraries:
-      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">Cargo.toml</a> を参照'
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">Cargo.toml</a> を参照',
+    isOutdated: true
   },
   {
     innerName: 'ruby:2.7.2',
     name: 'Ruby (2.7.2)',
     mime: 'text/x-ruby',
     compilationCommand: 'ruby -w -c ./Main.rb',
-    runCommand: 'ruby ./Main.rb'
+    runCommand: 'ruby ./Main.rb',
+    isOutdated: true
   },
   {
     innerName: 'kotlin:1.4.10',
     name: 'Kotlin (1.4.10)',
     mime: 'text/x-kotlin',
     compilationCommand: 'kotlinc ./Main.kt -include-runtime -d Main.jar',
-    runCommand: 'kotlin ./Main.jar'
+    runCommand: 'kotlin ./Main.jar',
+    isOutdated: true
   },
   {
     innerName: 'go:1.15.5',
@@ -98,7 +117,8 @@ const languages: Language[] = [
     mime: 'text/x-go',
     compilationCommand:
       'mv ./Main.go ./Main && cd ./Main && go build -o Main.out Main.go',
-    runCommand: './Main/Main.out'
+    runCommand: './Main/Main.out',
+    isOutdated: true
   },
   {
     innerName: 'nim:1.4.0',
@@ -106,49 +126,56 @@ const languages: Language[] = [
     mime: 'text/plain',
     compilationCommand:
       'nim cpp -d:release --opt:speed --multimethods:on -o:./Main.out ./Main.nim',
-    runCommand: './Main.out'
+    runCommand: './Main.out',
+    isOutdated: true
   },
   {
     innerName: 'fortran:10.2.0',
     name: 'Fortran (GNU Fortran 10.2.0)',
     mime: 'text/x-fortran',
     compilationCommand: 'gfortran-10 -O2 ./Main.f90 -o ./Main.out',
-    runCommand: './Main.out'
+    runCommand: './Main.out',
+    isOutdated: true
   },
   {
     innerName: 'crystal:0.35.1',
     name: 'Crystal (0.35.1)',
     mime: 'text/x-crystal',
     compilationCommand: 'crystal build ./Main.cr -o ./Main.out',
-    runCommand: './Main.out'
+    runCommand: './Main.out',
+    isOutdated: true
   },
   {
     innerName: 'text_cat:8.30',
     name: 'Text (cat)',
     mime: 'text/plain',
     compilationCommand: ':',
-    runCommand: 'cat ./Main.txt > ./userStdout.txt'
+    runCommand: 'cat ./Main.txt > ./userStdout.txt',
+    isOutdated: true
   },
   {
     innerName: 'perl:5.30.0',
     name: 'Perl (5.30.0)',
     mime: 'text/x-perl',
     compilationCommand: 'perl -c ./Main.pl',
-    runCommand: 'perl ./Main.pl'
+    runCommand: 'perl ./Main.pl',
+    isOutdated: true
   },
   {
     innerName: 'raku:2020.10',
     name: 'Raku (2020.10)',
     mime: 'text/plain',
     compilationCommand: 'perl6 -c ./Main.p6',
-    runCommand: 'perl6 ./Main.p6'
+    runCommand: 'perl6 ./Main.p6',
+    isOutdated: true
   },
   {
     innerName: 'bash:5.0.17',
     name: 'Bash (5.0.17)',
     mime: 'text/x-sh',
     compilationCommand: 'bash -n ./Main.sh',
-    runCommand: 'bash ./Main.sh'
+    runCommand: 'bash ./Main.sh',
+    isOutdated: true
   },
   {
     innerName: 'cpp17_gcc10',
