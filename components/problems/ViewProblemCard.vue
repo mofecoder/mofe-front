@@ -98,7 +98,11 @@ async function submit() {
       taskSlug: props.problem.slug,
       lang: language.value!.innerName
     },
-    {},
+    {
+      headers: {
+        'Content-Type': 'text/plain'
+      }
+    },
     sourceCode
   )
     .then((res) => {
