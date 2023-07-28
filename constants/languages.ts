@@ -2,11 +2,159 @@ import { Language } from '~~/types/language'
 
 const languages: Language[] = [
   {
-    innerName: 'cpp20_gcc:12.2.0',
-    name: 'C++20 (g++ 12.2.0)',
-    mime: 'text/x-c++src',
-    compilationCommand: 'g++-12 ./Main.cpp -O2 -lm -std=gnu++17 -o ./Main.out',
+    innerName: 'c17_gcc:12.2.0',
+    name: 'C17',
+    mime: 'text/x-c-src',
+    compilationCommand:
+      'gcc-12 ./Main.c -O2 -lm -std=gnu17 -o Main.out -DONLINE_JUDGE -Wall -Wextra',
     runCommand: './Main.out'
+  },
+  {
+    innerName: 'cpp20_gcc:12.2.0',
+    name: 'C++20',
+    mime: 'text/x-c++-src',
+    compilationCommand:
+      'g++-12 ./Main.cpp -O2 -lm -std=gnu++20 -I/opt/ac-library -o Main.out -DONLINE_JUDGE -Wall -Wextra',
+    runCommand: './Main.out',
+    libraries:
+      '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
+  },
+  {
+    innerName: 'cpp23_gcc:12.2.0',
+    name: 'C++23',
+    mime: 'text/x-c++-src',
+    compilationCommand:
+      'g++-12 ./Main.cpp -O2 -lm -std=gnu++2b -I/opt/ac-library -o Main.out -DONLINE_JUDGE -Wall -Wextra',
+    runCommand: './Main.out',
+    libraries:
+      '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
+  },
+  {
+    innerName: 'java:17.0.7',
+    name: 'Java',
+    mime: 'text/x-java',
+    compilationCommand: 'javac ./Main.java',
+    runCommand: 'java ./Main'
+  },
+  {
+    innerName: 'python:3.11.4',
+    name: 'Python',
+    mime: 'text/x-python',
+    compilationCommand:
+      'python3.11 -m py_compile ./Main.py && python3.11 ./Main.py 2> /dev/null',
+    runCommand: 'python3.11 ./Main.py',
+    libraries:
+      'ac-library-python, numpy, scipy, networkx, ' +
+      'sympy, sortedcontainers, bitarray'
+  },
+  {
+    innerName: 'go:1.20.6',
+    name: 'Go',
+    mime: 'text/x-go',
+    compilationCommand: 'go build ./Main.go -o Main.out',
+    runCommand: './Main.out'
+  },
+  {
+    innerName: 'cs_dotnet:7.0',
+    name: 'C#',
+    mime: 'text/x-csharp',
+    compilationCommand: 'dotnet publish -o . -c Release -v q --nolog 1>&2',
+    runCommand: './Main',
+    libraries: 'ac-library-csharp@3.0.0-pre8'
+  },
+  {
+    innerName: 'nim:1.6.14',
+    name: 'Nim',
+    mime: 'text/plain',
+    compilationCommand:
+      'nim cpp -d:release --opt:speed --multimethods:on -o:Main.out Main.nim',
+    runCommand: './Main.out',
+    libraries: 'Nim-ACL'
+  },
+  {
+    innerName: 'rust:1.71.0',
+    name: 'Rust',
+    mime: 'text/x-rustsrc',
+    compilationCommand: 'cargo build --release',
+    runCommand: './Main.out',
+    libraries:
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">' +
+      'Cargo.toml</a> を参照'
+  },
+  {
+    innerName: 'ruby:3.2.2',
+    name: 'Ruby',
+    mime: 'text/x-ruby',
+    compilationCommand: 'ruby -w -c ./Main.rb',
+    runCommand: 'ruby ./Main.rb',
+    libraries: 'rbtree, ac-library-rb, sorted_set'
+  },
+  {
+    innerName: 'kotlin:1.9.0',
+    name: 'kotlin',
+    mime: 'text/plain',
+    compilationCommand: 'kotlinc ./Main.kt -include-runtime -d Main.jar',
+    runCommand: 'kotlin Main.jar'
+  },
+  {
+    innerName: 'fortran:12.2.0',
+    name: 'Fortran',
+    mime: 'text/x-fortran',
+    compilationCommand: 'gfortran -O2 Main.f90 -o Main.out',
+    runCommand: './Main.out'
+  },
+  {
+    innerName: 'crystal:1.8.2',
+    name: 'Crystal',
+    mime: 'text/x-crystal',
+    compilationCommand:
+      'crystal build --release --no-debug --no-color -o Main.out ./Main.cr',
+    runCommand: './Main.out'
+  },
+  {
+    innerName: 'text_cat:8.32',
+    name: 'Text',
+    mime: 'text/plain',
+    compilationCommand: '',
+    runCommand: 'cat Main.txt'
+  },
+  {
+    innerName: 'perl:5.36.0',
+    name: 'Perl',
+    mime: 'text/x-perl',
+    compilationCommand: 'perl -W -c ./Main.pl',
+    runCommand: 'perl -X ./Main.pl'
+  },
+  {
+    innerName: 'raku:2022.12',
+    name: 'Raku',
+    mime: 'text/plain',
+    compilationCommand: 'perl6 -c ./Main.p6',
+    runCommand: 'perl6 ./Main.p6'
+  },
+  {
+    innerName: 'bash:5.2.15',
+    name: 'Bash',
+    mime: 'text/x-sh',
+    compilationCommand: 'bash -n ./Main.sh',
+    runCommand: 'bash ./Main.sh'
+  },
+  {
+    innerName: 'pypy310:7.3.12',
+    name: 'PyPy3',
+    mime: 'text/x-python',
+    compilationCommand: 'pypy3 -m py_compile ./Main.py',
+    runCommand: 'pypy3 ./Main.py',
+    libraries:
+      'ac-library-python, numpy, networkx, ' +
+      'sympy, sortedcontainers, bitarray'
+  },
+  {
+    innerName: 'dc:1.4.1',
+    name: 'dc',
+    mime: 'text/plain',
+    compilationCommand: '',
+    runCommand: 'dc Main.dc'
   },
   {
     innerName: 'cpp17_gcc:10.2.0',
