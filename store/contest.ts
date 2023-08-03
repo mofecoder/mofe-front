@@ -24,7 +24,7 @@ export const useContestStore = defineStore({
         onRequest() {
           const s = unref(slug)
           if (s != _this.contest?.slug) {
-            console.log(`clear ${_this.contest?.slug} -> ${s}`)
+            // console.log(`clear ${_this.contest?.slug} -> ${s}`)
             _this.contest = null
           }
         }

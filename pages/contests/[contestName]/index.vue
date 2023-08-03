@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useUserStore } from '~/store/user'
 import { MarkdownIt } from '~/types/plugins'
+import Contests from '~/utils/apis/Contests'
 
 const route = useRoute()
 
@@ -50,14 +51,14 @@ const contestSlug = computed(() => contest.value?.slug)
 const router = useRouter()
 
 const register = async () => {
-  if (!storeToRefs(userStore).user) {
+  if (!storeToRefs(userStore).user.value) {
     await router.push({
-      path: '/login',
+      path: '/auth/signin',
       query: { redirect: route.path }
     })
     return
   }
-  console.error('TODO: 参加登録')
+  await useApi(Contests.register, [contestSlug.value!])
 }
 
 const nuxtApp = useNuxtApp()

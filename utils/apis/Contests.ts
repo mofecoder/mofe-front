@@ -114,6 +114,11 @@ const getSubmission = new Api<SubmissionDetail, [string, number]>(
   ([contestSlug, id]) => `/contests/${contestSlug}/submissions/${id}`
 )
 
+const register = new Api<void, [string]>(
+  ([slug]) => `/contests/${slug}/register`,
+  'POST'
+)
+
 export default {
   getContests,
   getContest,
@@ -125,5 +130,6 @@ export default {
   getAllSubmissions,
   getMySubmissions,
   getSubmission,
-  rejudge
+  rejudge,
+  register
 }

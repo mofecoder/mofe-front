@@ -4,6 +4,11 @@ import TimeRangePickerCard from '~/components/manage/contests/TimeRangePickerCar
 import dayjs, { Dayjs } from 'dayjs'
 import ManageContests from '~/utils/apis/ManageContests'
 import EditContestCard from '~/components/manage/contests/EditContestCard.vue'
+import { definePageMeta } from '#imports'
+
+definePageMeta({
+  middleware: 'admin'
+})
 
 useHead({
   title: 'コンテストの作成'

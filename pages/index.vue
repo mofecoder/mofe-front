@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import dayjs from 'dayjs'
-import { Contest } from '~~/types/contest'
 import { Post } from '~~/types/post'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
-import Contests from '~/utils/apis/Contests'
 import Posts from '~/utils/apis/Posts'
 import ViewPostCard from '~/components/posts/ViewPostCard.vue'
-import { formatDate } from '~/utils/formatting'
+import ContestList from '~/components/ContestList.vue'
 
-const { data: contestsData } = await useApi(Contests.getContests, [])
 const { data: postsData } = await useApi(Posts.getPosts, [])
 
-const contests = ref<Contest[] | null>(contestsData.value ?? null)
 const posts = ref<Post[] | null>(postsData.value ?? null)
 
 const userStore = useUserStore()
@@ -29,15 +24,6 @@ useHead({
   title: 'CafeCoder',
   titleTemplate: null
 })
-
-const checkStatus = (contest: Contest) => {
-  const startAt = dayjs(contest.startAt)
-  const endAt = dayjs(contest.endAt)
-
-  if (startAt.isAfter(Date())) return '予　定'
-  if (endAt.isBefore(Date())) return '終　了'
-  return '開催中'
-}
 
 const registerAtCoder = computed(() => {
   return user.value && user.value.atcoderId == null
@@ -68,29 +54,10 @@ const isWriter = computed(() =>
       </v-alert>
       <v-row>
         <v-col cols="12" lg="5">
-          <v-card variant="outlined" :loading="!contests">
+          <v-card variant="outlined">
             <v-card-text>
-              <v-table>
-                <thead>
-                  <tr>
-                    <th style="width: 7em" />
-                    <th style="width: 9.5em">開始日時</th>
-                    <th>コンテスト名</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="contest in contests || []" :key="contest.slug">
-                    <td v-text="checkStatus(contest)" />
-                    <td v-text="formatDate(contest.startAt, false)" />
-                    <td>
-                      <NuxtLink :to="`contests/${contest.slug}`">
-                        {{ contest.name }}
-                      </NuxtLink>
-                    </td>
-                  </tr>
-                </tbody>
-              </v-table>
               <ClientOnly>
+                <ContestList />
                 <div class="mt-4">
                   <p>障害情報等のお知らせは Twitter で発信しています</p>
                   <a

@@ -23,11 +23,13 @@ export function useContest() {
     return contestStore.getClarifications(contestName)
   }
 
-  watch(contestName, async (name) => {
-    if (name) {
+  watch(
+    contestName,
+    async () => {
       await updateContest()
-    }
-  })
+    },
+    { immediate: true }
+  )
 
   return {
     contestName,

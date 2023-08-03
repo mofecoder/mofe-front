@@ -13,7 +13,7 @@ const TOOLTIP_TEXT: Record<SubmissionResult, string> = {
   CE: 'コンパイルエラー (Compilation Error)',
   WJ: 'ジャッジ待ち (Waiting Judge)',
   WR: 'リジャッジ待ち (Waiting Rejudge)',
-  IC: 'コンパイル中 (In Compile)'
+  CP: 'コンパイル中 (Compiling)'
 }
 
 const icon = computed(
@@ -29,7 +29,7 @@ const icon = computed(
       IE: 'mdi-skull',
       WJ: '',
       WR: '',
-      IC: ''
+      CP: ''
     }[props.status])
 )
 const props = defineProps({

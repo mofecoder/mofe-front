@@ -14,7 +14,7 @@ const languages: Language[] = [
     name: 'C++20 (g++ 12.2.0)',
     mime: 'text/x-c++-src',
     compilationCommand:
-      'g++-12 ./Main.cpp -O2 -lm -std=gnu++20 -I/opt/ac-library -o Main.out -DONLINE_JUDGE -Wall -Wextra',
+      'g++-12 ./Main.cpp -O2 -lm -std=gnu++20 -I/opt/ac-library -I/opt/testlib -o Main.out -DONLINE_JUDGE -Wall -Wextra',
     runCommand: './Main.out',
     libraries:
       '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
@@ -24,7 +24,7 @@ const languages: Language[] = [
     name: 'C++23 (g++ 12.2.0)',
     mime: 'text/x-c++-src',
     compilationCommand:
-      'g++-12 ./Main.cpp -O2 -lm -std=gnu++2b -I/opt/ac-library -o Main.out -DONLINE_JUDGE -Wall -Wextra',
+      'g++-12 ./Main.cpp -O2 -lm -std=gnu++2b -I/opt/ac-library -I/opt/testlib -o Main.out -DONLINE_JUDGE -Wall -Wextra',
     runCommand: './Main.out',
     libraries:
       '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
@@ -58,7 +58,7 @@ const languages: Language[] = [
     innerName: 'cs_dotnet:7.0',
     name: 'C# (.NET 7.0.305)',
     mime: 'text/x-csharp',
-    compilationCommand: 'dotnet publish -o . -c Release -v q --nolog 1>&2',
+    compilationCommand: 'dotnet publish -o . -c Release -v q --nologo 1>&2',
     runCommand: './Main',
     libraries: 'ac-library-csharp@3.0.0-pre8'
   },
@@ -410,5 +410,4 @@ const languages: Language[] = [
     isOutdated: true
   }
 ]
-
 export default languages
