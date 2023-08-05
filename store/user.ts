@@ -82,7 +82,9 @@ export const useUserStore = defineStore({
       const res = await useApi(
         Auth.signUp,
         [],
-        {},
+        {
+          onResponse
+        },
         {
           email,
           name: userName,
