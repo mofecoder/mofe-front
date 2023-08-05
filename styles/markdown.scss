@@ -21,4 +21,24 @@
   :deep(pre code) {
     @include block-code();
   }
+
+  :deep(div.code-math) {
+    width: 100%;
+    background: #eeeeee;
+    color: black;
+    padding: 0.5em;
+    margin: 0.5rem 0;
+    font-size: 1em;
+    font-weight: normal;
+    overflow: auto;
+
+    eq {
+      margin-right: 4px;
+    }
+
+    &:before,
+    &:after {
+      content: none;
+    }
+  }
 }

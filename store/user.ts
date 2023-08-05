@@ -24,8 +24,7 @@ const onResponse: UseFetchOptions<any>['onResponse'] = ({ response }) => {
   const authHeader = getAuthHeader(headers)
   if (!authHeader) return
   const cookie = useCookie<AuthTokens>('auth', {
-    expires: dayjs.unix(authHeader.expiry).toDate(),
-    domain: 'mofecoder.com'
+    expires: dayjs.unix(authHeader.expiry).toDate()
   })
   cookie.value = authHeader
 }

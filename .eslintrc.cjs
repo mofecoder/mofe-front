@@ -34,6 +34,7 @@ module.exports = {
     'vue/no-v-html': 'off',
     'vue/valid-v-slot': 'off',
     'unicorn/number-literal-case': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'vuetify/no-deprecated-props': 'off'
   }
 }
