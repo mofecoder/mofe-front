@@ -5,6 +5,7 @@ import Auth from '~/utils/apis/Auth'
 import dayjs from 'dayjs'
 import { UseFetchOptions } from '#app'
 import AuthTokens from '~/types/AuthTokens'
+import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 
 interface UserState {
   user: AuthUser | null
@@ -23,7 +24,7 @@ const onResponse: UseFetchOptions<any>['onResponse'] = ({ response }) => {
   const { headers } = response
   const authHeader = getAuthHeader(headers)
   if (!authHeader) return
-  const cookie = useCookie<AuthTokens>('auth', {
+  const cookie = useCookie<AuthTokens>(AUTH_COOKIE_NAME, {
     expires: dayjs.unix(authHeader.expiry).toDate()
   })
   cookie.value = authHeader
@@ -31,7 +32,7 @@ const onResponse: UseFetchOptions<any>['onResponse'] = ({ response }) => {
 
 async function fetchUser() {
   try {
-    const cookie = useCookie('auth')
+    const cookie = useCookie(AUTH_COOKIE_NAME)
     if (!cookie.value) return 'error'
     const res = await useApi(Auth.validateToken, [])
     if (!res.data.value) return 'network'
@@ -109,7 +110,7 @@ export const useUserStore = defineStore({
       if (!this.user) return
       await useApi(Auth.signOut, [])
       this.updateUser(null)
-      const cookie = useCookie('auth')
+      const cookie = useCookie(AUTH_COOKIE_NAME)
       cookie.value = null
     },
     updateUser(user: AuthUser | null) {

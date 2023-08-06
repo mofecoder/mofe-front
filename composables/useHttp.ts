@@ -5,6 +5,7 @@ import { UseFetchOptions } from '#app'
 import AuthTokens from '~/types/AuthTokens'
 import { MaybeRef } from 'vue'
 import { useUserStore } from '~/store/user'
+import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 const { camelCase, isArray, isObject, mapKeys, mapValues, snakeCase } = lodash
 export class HttpError extends Error {
   constructor(message: string, response: FetchResponse<unknown>) {
@@ -80,8 +81,12 @@ const useHttp = async <T>(
   url: MaybeRef<string>,
   options: UseFetchOptions<T> = {}
 ) => {
-  const auth = useCookie<AuthTokens>('auth')
-  const { client, accessToken, uid } = auth.value || {}
+  const oldAuth = useCookie<AuthTokens | null>('auth')
+  const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
+  const { client, accessToken, uid } = auth.value || oldAuth.value || {}
+  if (oldAuth.value) {
+    oldAuth.value = null
+  }
   const headers: HeadersInit = {
     ...(client && accessToken && uid && { accessToken, client, uid })
   }
@@ -99,7 +104,7 @@ const useHttp = async <T>(
 
     if (res.status === 401) {
       userStore.signOut()
-      useCookie('auth').value = null
+      useCookie(AUTH_COOKIE_NAME).value = null
     }
 
     // if (isErrorCode(res.status)) {
