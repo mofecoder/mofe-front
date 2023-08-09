@@ -39,7 +39,7 @@ const contestEnded = computed(() => {
 })
 
 const isAdmin = computed(() => {
-  return storeToRefs(userStore).user.value?.role === 'admin'
+  return contest.value?.isAdmin || false
 })
 
 const isWriter = computed(() =>

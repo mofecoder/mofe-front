@@ -21,6 +21,7 @@ export interface ContestDetail extends Contest {
     id: number
     role: 'admin' | 'writer' | 'tester'
   }[]
+  isAdmin: boolean
 }
 
 export interface ContestDetailManage extends ContestDetail {

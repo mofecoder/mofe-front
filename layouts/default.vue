@@ -4,7 +4,7 @@ import { useUserStore } from '~/store/user'
 const userStore = useUserStore()
 const user = computed(() => userStore.user)
 
-const title = 'CafeCoder 3.0 Beta'
+const title = 'MOFE Beta'
 const route = useRoute()
 const createLink = (path: string) => ({
   path,
@@ -60,7 +60,7 @@ const createLink = (path: string) => ({
       </v-container>
     </v-main>
     <v-footer app class="d-flex justify-center" absolute>
-      <p class="mb-0 mr-3">Copyright 2020 CafeCoder</p>
+      <p class="mb-0 mr-3">Copyright 2020 CafeCoder & MOFE</p>
       <NuxtLink to="/privacy_policy">プライバシーポリシー</NuxtLink>
     </v-footer>
   </v-app>

@@ -21,7 +21,7 @@ useHead({
       async: true
     }
   ],
-  title: 'CafeCoder',
+  title: 'MOFE (Beta)',
   titleTemplate: null
 })
 
@@ -59,7 +59,7 @@ const isWriter = computed(() =>
               <ClientOnly>
                 <ContestList />
                 <div class="mt-4">
-                  <p>障害情報等のお知らせは Twitter で発信しています</p>
+                  <p>障害情報等のお知らせは X で発信しています</p>
                   <a
                     href="https://twitter.com/CafeCoder_?ref_src=twsrc%5Etfw"
                     class="twitter-follow-button"

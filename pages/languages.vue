@@ -27,7 +27,7 @@ watch(
 
 <template>
   <div>
-    <p>CafeCoder で利用できる言語のコンパイルコマンド・導入ライブラリなど</p>
+    <p>MOFE で利用できる言語のコンパイルコマンド・導入ライブラリなど</p>
     <v-expansion-panels v-model="selected">
       <v-expansion-panel
         v-for="lang in languages"

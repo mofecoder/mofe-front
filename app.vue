@@ -1,21 +1,17 @@
 <script lang="ts" setup>
+const title = 'MOFE (Beta)'
 useHead({
-  title: 'CafeCoder',
-  titleTemplate: '%s | CafeCoder',
+  title,
+  titleTemplate: `%s | ${title}`,
   meta: [
     { charset: 'utf-8' },
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
     {
       name: 'description',
-      content: 'プログラミングコンテストサイト CafeCoder'
+      content: 'プログラミングコンテストサイト MOFE'
     }
   ],
-  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
-  script: [
-    {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML'
-    }
-  ]
+  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
 })
 </script>
 
