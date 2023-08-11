@@ -83,14 +83,14 @@ const smallText = computed(() => {
           :rotate="180"
           class="mr-1"
           bg-color="white"
-          :color="['WJ', 'WR'].includes(status) ? 'cyan' : 'orange'"
+          :color="['WJ', 'WR'].includes(status) ? 'cyan' : 'deep-orange'"
         />
         <v-progress-circular
-          v-else-if="['WJ', 'WR', 'IC'].includes(status)"
+          v-else-if="['WJ', 'WR', 'CP'].includes(status)"
           :size="dense ? 16 : 24"
           :width="2"
           :rotate="180"
-          color="white"
+          color="blue-grey-darken-2"
           class="mr-1"
           indeterminate
         />
@@ -105,14 +105,13 @@ const smallText = computed(() => {
 
 <style scoped lang="scss">
 $color-ac: #12971e;
-$color-wa: #dfa000;
-$color-wj: #888888;
+$color-wa: #df8d00;
+$color-wj: #5b5b5b;
 $color-ie: #d13232;
 $color-ce: #a544ff;
 [class^='result'] {
   display: inline-block;
   border-radius: 4px;
-  color: white;
   font-weight: bold;
   font-size: 110%;
   box-sizing: content-box;
@@ -128,7 +127,6 @@ $color-ce: #a544ff;
 }
 .chip-dense {
   font-size: 100%;
-  min-width: 56px;
 }
 .chip-subtext {
   padding-left: 0.15em;
@@ -136,24 +134,30 @@ $color-ce: #a544ff;
 }
 
 .result-AC {
-  background-color: $color-ac;
+  border-color: $color-ac;
+  color: $color-ac;
 }
 .result-TLE,
 .result-MLE,
 .result-WA,
 .result-RE,
 .result-OLE {
-  background-color: $color-wa;
+  border-color: $color-wa;
+  color: $color-wa;
 }
 .result-IE {
   background-color: $color-ie;
+  color: white;
 }
 .result-CE {
-  background-color: $color-ce;
+  border-color: $color-ce;
+  color: $color-ce;
 }
 .result-WJ,
 .result-WR,
-.result-IC {
-  background-color: $color-wj;
+.result-IC,
+.result-CP {
+  border-color: $color-wj;
+  color: $color-wj;
 }
 </style>

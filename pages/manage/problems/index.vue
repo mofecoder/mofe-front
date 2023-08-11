@@ -44,8 +44,8 @@ const items = computed(() =>
         >
       </v-toolbar>
     </template>
-    <template #item.contestName="{ item: { columns: item } }">
-      <NuxtLink v-if="item" :to="`/contests/${item.contestSlug}`">
+    <template #item.contestName="{ item: { columns: item, index } }">
+      <NuxtLink v-if="item" :to="`/contests/${items[index].contestSlug}`">
         {{ item.contestName }}
       </NuxtLink>
     </template>

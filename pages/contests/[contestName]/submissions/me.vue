@@ -37,16 +37,21 @@ const args = reactive({
 const { data: submissions, refresh } = await useApi(
   Contests.getMySubmissions,
   args
-).then((res) => {
-  if (res.data.value) {
-    timeout.value = res.data.value.data.some(
-      (s) => s.judgeStatus || ['WJ', 'WR', 'IC'].includes(s.status)
+)
+
+watch(
+  submissions,
+  (newVal) => {
+    if (!newVal?.data) return
+    console.log('watch')
+    timeout.value = newVal.data.some(
+      (s) => s.judgeStatus != null || ['WJ', 'WR', 'CP'].includes(s.status)
     )
       ? 2000
       : 15000
-  }
-  return res
-})
+  },
+  { immediate: true }
+)
 
 async function rejudge(submissionIds: number[]) {
   await useApi(

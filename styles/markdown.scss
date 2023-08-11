@@ -22,6 +22,19 @@
     @include block-code();
   }
 
+  :deep(h1) {
+    margin-top: 1.5em;
+    margin-bottom: 0.6em;
+  }
+  :deep(h2) {
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
+  }
+  :deep(h3) {
+    margin-top: 1em;
+    margin-bottom: 0.4em;
+  }
+
   :deep(div.code-math) {
     width: 100%;
     background: #eeeeee;

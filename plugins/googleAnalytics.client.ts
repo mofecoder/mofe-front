@@ -1,12 +1,12 @@
 import VueGtagPlugin from 'vue-gtag'
 
-export default defineNuxtPlugin(({ vueApp }) => {
+export default defineNuxtPlugin((nuxtApp) => {
   const router = useRouter()
 
   const runtimeConfig = useRuntimeConfig()
   const trackingId = runtimeConfig.public.gaTrackingId
   if (!trackingId) return
-  vueApp.use(
+  nuxtApp.vueApp.use(
     VueGtagPlugin,
     {
       appName: 'mofe',

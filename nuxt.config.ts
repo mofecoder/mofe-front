@@ -28,7 +28,16 @@ const nuxtConfig = defineNuxtConfig({
   /*
    ** Nuxt.js modules
    */
-  modules: ['@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/eslint-module'],
+  modules: [
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    [
+      '@nuxtjs/eslint-module',
+      {
+        lintOnStart: false
+      }
+    ]
+  ],
   vite: {
     ssr: {
       noExternal: ['vuetify']

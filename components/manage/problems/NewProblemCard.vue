@@ -18,7 +18,7 @@ const valid = ref(false)
 
 const problem = ref({
   name: '',
-  difficulty: '',
+  difficulty: 'Milk',
   constraints: '',
   inputFormat: '',
   outputFormat: '',
@@ -67,6 +67,7 @@ const onSubmit = async () => {
             <v-select
               v-model="problem.difficulty"
               :items="Difficulties"
+              :rules="rules.required"
               label="難易度"
             />
           </v-col>
@@ -86,7 +87,6 @@ const onSubmit = async () => {
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="problem.statement"
-              :rules="rules.required"
               label="問題文 (Markdown)"
               variant="outlined"
               auto-grow
@@ -114,7 +114,6 @@ const onSubmit = async () => {
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="problem.constraints"
-              :rules="rules.required"
               label="制約 (Markdown)"
               variant="outlined"
               auto-grow
@@ -142,11 +141,15 @@ const onSubmit = async () => {
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="problem.inputFormat"
-              :rules="rules.required"
               label="入力 (Markdown)"
               variant="outlined"
               auto-grow
             />
+          </v-col>
+          <v-col cols="12">
+            入力形式を示す場合は <code>&lt;div class="code-math"&gt;</code> +
+            改行 2 個と
+            <code>&lt;/div&gt;</code> で囲むと、中で数式を使うことができます。
           </v-col>
         </v-row>
         <MarkdownPreviewModal
@@ -170,7 +173,6 @@ const onSubmit = async () => {
           <v-col cols="12" class="pt-0 pb-2">
             <v-textarea
               v-model="problem.outputFormat"
-              :rules="rules.required"
               label="出力 (Markdown)"
               variant="outlined"
               auto-grow
