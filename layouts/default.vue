@@ -31,7 +31,9 @@ const createLink = (path: string) => ({
             :active="false"
             to="/user"
           >
-            {{ user.name }}
+            <span class="d-none d-sm-inline">
+              {{ user.name }}
+            </span>
           </v-btn>
         </template>
         <template v-else>
@@ -41,16 +43,18 @@ const createLink = (path: string) => ({
             :to="createLink('/auth/signup')"
             prepend-icon="mdi-account-plus"
             variant="text"
-            >新規登録</v-btn
           >
+            <span class="d-none d-sm-inline">新規登録</span>
+          </v-btn>
           <v-btn
             class="text-white"
             :active="false"
             :to="createLink('/auth/signin')"
             variant="text"
             prepend-icon="mdi-login-variant"
-            >ログイン</v-btn
           >
+            <span class="d-none d-sm-inline">ログイン</span>
+          </v-btn>
         </template>
       </ClientOnly>
     </v-app-bar>

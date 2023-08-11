@@ -182,11 +182,6 @@ const official = computed({
           @click="emits('submit')"
           >更新する</v-btn
         >
-        <v-row>
-          <v-col cols="12">
-            <h4>コンテスト管理者の管理</h4>
-          </v-col>
-        </v-row>
       </template>
     </v-card-text>
   </v-card>

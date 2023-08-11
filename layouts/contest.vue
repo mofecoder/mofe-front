@@ -70,42 +70,63 @@ const createLink = (path: string) => ({
       </template>
       <template v-if="contest">
         <v-btn icon="mdi-home" to="/" />
-        <v-app-bar-title>
+        <v-app-bar-title class="d-none d-md-inline">
           {{ contest.name }}
         </v-app-bar-title>
-        <div class="contest-header__info">
+        <div class="contest-header__info md-1 ml-md-4">
           <div class="contest-header__info__title">コンテスト日時</div>
           <div v-for="text in contestTime" :key="text" v-text="text" />
         </div>
       </template>
       <v-spacer />
       <ClientOnly>
-        <template v-if="user">
-          <v-btn
-            variant="text"
-            prepend-icon="mdi-account"
-            class="text-none"
-            to="/user"
-          >
-            {{ user.name }}
-          </v-btn>
-        </template>
-        <template v-else>
-          <v-btn
-            class="text-white"
-            :to="createLink('/auth/signup')"
-            prepend-icon="mdi-account-plus"
-            variant="text"
-            >新規登録</v-btn
-          >
-          <v-btn
-            class="text-white"
-            :to="createLink('/auth/signin')"
-            variant="text"
-            prepend-icon="mdi-login-variant"
-            >ログイン</v-btn
-          >
-        </template>
+        <div class="d-md-none">
+          <template v-if="user">
+            <v-btn variant="text" icon="mdi-account" to="/user" />
+          </template>
+          <template v-else>
+            <v-btn
+              variant="text"
+              icon="mdi-account-plus"
+              :to="createLink('/auth/signup')"
+              density="compact"
+            />
+            <v-btn
+              variant="text"
+              icon="mdi-login-variant"
+              :to="createLink('/auth/signin')"
+              density="compact"
+            />
+          </template>
+        </div>
+        <div class="d-none d-md-block">
+          <template v-if="user">
+            <v-btn
+              variant="text"
+              prepend-icon="mdi-account"
+              class="text-none"
+              to="/user"
+            >
+              {{ user.name }}
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn
+              class="text-white"
+              :to="createLink('/auth/signup')"
+              prepend-icon="mdi-account-plus"
+              variant="text"
+              >新規登録</v-btn
+            >
+            <v-btn
+              class="text-white"
+              :to="createLink('/auth/signin')"
+              variant="text"
+              prepend-icon="mdi-login-variant"
+              >ログイン</v-btn
+            >
+          </template>
+        </div>
       </ClientOnly>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :rail="desktop" expand-on-hover>
@@ -148,7 +169,6 @@ const createLink = (path: string) => ({
   }
 
   &__info {
-    margin-left: 2rem;
     font-size: 0.9rem;
     color: #eaeaea;
 
