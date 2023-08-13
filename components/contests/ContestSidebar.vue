@@ -53,8 +53,8 @@ const afterContest = computed(() => {
             ? `mdi-alpha-${task.position.toLowerCase()}-box`
             : 'mdi-pound-box-outline'
         "
-        :title="`${task.position} [${task.difficulty}]`"
-        :subtitle="task.name"
+        :title="task.name"
+        :subtitle="task.difficulty"
       />
     </v-list-group>
     <v-list-item

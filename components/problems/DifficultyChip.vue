@@ -12,38 +12,38 @@ const difficulties: {
 }[] = [
   {
     difficulty: 'Milk',
-    color: 'grey lighten-2'
+    color: 'grey-darken-1'
   },
   {
     difficulty: 'Assam',
-    color: 'brown darken-1',
+    color: 'brown-darken-1',
     class: 'white--text'
   },
   {
     difficulty: 'Benihuki',
-    color: 'green darken-2',
+    color: 'green-darken-2',
     class: 'white--text'
   },
   {
     difficulty: 'Ceylon',
-    color: 'light-blue lighten-3'
+    color: 'light-blue-lighten-3'
   },
   {
     difficulty: 'Darjeeling',
-    color: 'indigo darken-3',
+    color: 'indigo-darken-3',
     class: 'white--text'
   },
   {
     difficulty: 'Earlgray',
-    color: 'yellow lighten-1'
+    color: 'yellow-darken-1'
   },
   {
     difficulty: 'Flavor',
-    color: 'orange darken-3'
+    color: 'deep-orange-darken-1'
   },
   {
     difficulty: 'ผักชี',
-    color: 'red darken-1',
+    color: 'red-darken-2',
     class: 'white--text'
   }
 ]
@@ -51,7 +51,7 @@ const difficulties: {
 const item = difficulties.find((x) => x.difficulty === props.difficulty)!
 </script>
 <template>
-  <v-chip :color="item.color" label class="chip" :class="item.class">{{
+  <v-chip :color="item.color" class="chip" :class="item.class">{{
     item.difficulty
   }}</v-chip>
 </template>

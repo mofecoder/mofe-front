@@ -64,8 +64,10 @@ const user = useUserStore().user
             class="mb-6"
           >
             <template #text>
-              {{ clar.question }}
-              <div class="text-grey-darken-2 mt-6">
+              <div class="text-pre-wrap text-body-1">
+                {{ clar.question }}
+              </div>
+              <div class="text-grey-darken-2 mt-4 text-body-2">
                 投稿日時：{{ formatDate(clar.createdAt) }}
                 <br />
                 更新日時：{{ formatDate(clar.updatedAt) }}
@@ -80,19 +82,11 @@ const user = useUserStore().user
               </v-btn>
             </template>
           </v-alert>
-          <v-card
-            v-else
-            :key="clar.id"
-            class="mb-6"
-            prepend-icon="mdi-chat-question"
-          >
-            <template #title>
-              {{ clar.question }}
-            </template>
-            <template v-if="clar.task" #subtitle>
+          <v-card v-else :key="clar.id" class="mb-6">
+            <template v-if="clar.task" #title>
               <NuxtLink
                 v-if="clar.task"
-                :to="`../tasks/${clar.task.slug}`"
+                :to="`/contests/${contestName}/tasks/${clar.task.slug}`"
                 class="mt-4 text-decoration-none text-grey-darken-3"
                 append
               >
@@ -100,15 +94,41 @@ const user = useUserStore().user
               </NuxtLink>
             </template>
             <template #text>
-              {{ clar.answer }}
-              <br />
-              <div class="text-grey-darken-3 mt-6">
-                質問者：{{ clar.user }}
-                <br />
-                投稿日時：{{ formatDate(clar.createdAt) }}
-                <br />
-                更新日時：{{ formatDate(clar.updatedAt) }}
-              </div>
+              <v-timeline align="start" side="end" class="clar-timeline">
+                <v-timeline-item
+                  :dot-color="clar.answer ? 'green' : 'grey'"
+                  hide-opposite
+                  width="100%"
+                >
+                  <div class="text-h5 font-weight-bold">
+                    <div>
+                      {{ clar.user }}
+                    </div>
+                    <div class="text-body-1 flex-shrink-0">
+                      {{ formatDate(clar.createdAt) }}
+                    </div>
+                  </div>
+                  <div class="text-pre-wrap text-body-1 mt-2">
+                    {{ clar.question }}
+                  </div>
+                </v-timeline-item>
+                <v-timeline-item
+                  v-if="clar.answer"
+                  dot-color="red"
+                  hide-opposite
+                  width="100%"
+                >
+                  <div class="text-h5 font-weight-bold">
+                    <div>回答</div>
+                    <div class="text-body-1 flex-shrink-0">
+                      {{ formatDate(clar.updatedAt) }}
+                    </div>
+                  </div>
+                  <div class="text-pre-wrap text-body-1 mt-2">
+                    {{ clar.answer }}
+                  </div>
+                </v-timeline-item>
+              </v-timeline>
             </template>
             <template v-if="clar.canAnswer" #actions>
               <v-btn
@@ -150,62 +170,7 @@ const user = useUserStore().user
 </template>
 
 <style scoped lang="scss">
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 90%;
-
-  tr,
-  th,
-  td {
-    border: solid 1px black;
-  }
-
-  td {
-    padding: 0.2em 0.5em;
-  }
-
-  &__wrapper {
-    overflow-x: scroll;
-  }
-
-  &__task {
-    min-width: 9em;
-  }
-
-  &__user {
-    min-width: 6em;
-    white-space: nowrap;
-  }
-
-  &__publish {
-    width: 4em;
-  }
-
-  &__question,
-  &__answer {
-    min-width: 15em;
-  }
-
-  &__created,
-  &__updated {
-    width: 5em;
-  }
-
-  &__question-data,
-  &__answer-data {
-    white-space: pre-wrap;
-  }
-
-  &__answer-btn-data {
-    text-align: center;
-  }
-
-  &__publish-data--true {
-    color: green;
-  }
-  &__publish-data--false {
-    color: gray(50);
-  }
+.clar-timeline {
+  grid-template-columns: 0 min-content auto !important;
 }
 </style>

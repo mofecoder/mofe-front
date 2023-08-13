@@ -69,7 +69,7 @@ const createLink = (path: string) => ({
       </template>
       <template v-if="contest">
         <v-btn icon="mdi-home" to="/" />
-        <v-app-bar-title class="d-none d-md-inline">
+        <v-app-bar-title class="d-none d-md-inline contest-header__title">
           {{ contest.name }}
         </v-app-bar-title>
         <div class="contest-header__info md-1 ml-md-4">
@@ -153,6 +153,11 @@ const createLink = (path: string) => ({
   top: 0;
   flex-wrap: wrap;
   z-index: 9999;
+
+  &__title {
+    flex-grow: 0;
+    min-width: auto;
+  }
 
   &__contest-name-link {
     padding-left: 24px;
