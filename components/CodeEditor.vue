@@ -39,6 +39,7 @@ function onInput(value: string) {
       class="codemirror"
       :class="autoHeight && 'codemirror-auto-height'"
       :options="options"
+      :height="autoHeight ? 'auto' : '24.1em'"
       @input="onInput"
     />
   </ClientOnly>
@@ -48,9 +49,5 @@ function onInput(value: string) {
 .codemirror :deep(.CodeMirror) {
   border: solid 1px darkgray;
   border-radius: 2px;
-  height: 24.1em !important;
-}
-.codemirror-auto-height :deep(.CodeMirror) {
-  height: auto !important;
 }
 </style>

@@ -7,6 +7,7 @@ import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
 import { storeToRefs } from 'pinia'
 import { useDisplay } from 'vuetify'
+dayjs.locale('ja')
 
 const contestStore = useContestStore()
 const userStore = useUserStore()
@@ -18,8 +19,6 @@ await updateContest()
 const { user } = storeToRefs(userStore)
 
 const contestTime = computed(() => {
-  dayjs.locale('ja')
-
   const start = dayjs(contest.value!.startAt)
   const end = dayjs(contest.value!.endAt)
 

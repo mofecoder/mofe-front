@@ -4,7 +4,7 @@ const languages: Language[] = [
   {
     innerName: 'c17_gcc:12.2.0',
     name: 'C17 (gcc 12.2.0)',
-    mime: 'text/x-c-src',
+    mime: 'text/x-csrc',
     compilationCommand:
       'gcc-12 ./Main.c -O2 -lm -std=gnu17 -o Main.out -DONLINE_JUDGE -Wall -Wextra',
     runCommand: './Main.out'
@@ -12,7 +12,7 @@ const languages: Language[] = [
   {
     innerName: 'cpp20_gcc:12.2.0',
     name: 'C++20 (g++ 12.2.0)',
-    mime: 'text/x-c++-src',
+    mime: 'text/x-c++src',
     compilationCommand:
       'g++-12 ./Main.cpp -O2 -lm -std=gnu++20 -I/opt/ac-library -I/opt/testlib -o Main.out -DONLINE_JUDGE -Wall -Wextra',
     runCommand: './Main.out',
@@ -22,7 +22,7 @@ const languages: Language[] = [
   {
     innerName: 'cpp23_gcc:12.2.0',
     name: 'C++23 (g++ 12.2.0)',
-    mime: 'text/x-c++-src',
+    mime: 'text/x-c++src',
     compilationCommand:
       'g++-12 ./Main.cpp -O2 -lm -std=gnu++2b -I/opt/ac-library -I/opt/testlib -o Main.out -DONLINE_JUDGE -Wall -Wextra',
     runCommand: './Main.out',
