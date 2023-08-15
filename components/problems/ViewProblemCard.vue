@@ -127,7 +127,7 @@ const title = computed(() => {
 </script>
 
 <template>
-  <v-card class="mx-auto" max-width="800px" :loading="!problem">
+  <v-card class="mx-auto" max-width="1200px" :loading="!problem">
     <template v-if="problem">
       <v-card-title class="task-card-title">
         <h2 class="d-flex">
@@ -167,37 +167,47 @@ const title = computed(() => {
           <h3>出力</h3>
           <div class="statement" v-html="$md.render(problem.outputFormat)" />
         </section>
-        <section v-for="(sample, index) in problem.samples" :key="index">
-          <div class="submit-head">
-            <div class="submit-head__title">入力例 {{ index + 1 }}</div>
-            <v-btn
-              color="blue-lighten-4"
-              size="small"
-              @click="copy(sample.input)"
-              >コピー</v-btn
-            >
-          </div>
-          <div class="statement">
-            <code class="sample__code" v-html="sample.input" />
-          </div>
-          <div class="submit-head">
-            <div class="submit-head__title">出力例 {{ index + 1 }}</div>
-            <v-btn
-              color="blue-lighten-4"
-              size="small"
-              @click="copy(sample.output)"
-              >コピー</v-btn
-            >
-          </div>
-          <div class="statement">
-            <code class="sample__code" v-html="sample.output" />
-          </div>
-          <div
-            v-if="sample.explanation"
-            class="statement"
-            v-html="$md.render(sample.explanation)"
-          />
-        </section>
+        <v-container class="pa-0">
+          <v-row
+            v-for="(sample, index) in problem.samples"
+            :key="index"
+            tag="section"
+          >
+            <v-col cols="12" lg="6">
+              <div class="submit-head">
+                <div class="submit-head__title">入力例 {{ index + 1 }}</div>
+                <v-btn
+                  color="blue-lighten-4"
+                  size="small"
+                  @click="copy(sample.input)"
+                  >コピー</v-btn
+                >
+              </div>
+              <div class="statement">
+                <code class="sample__code" v-html="sample.input" />
+              </div>
+            </v-col>
+            <v-col cols="12" lg="6">
+              <div class="submit-head">
+                <div class="submit-head__title">出力例 {{ index + 1 }}</div>
+                <v-btn
+                  color="blue-lighten-4"
+                  size="small"
+                  @click="copy(sample.output)"
+                  >コピー</v-btn
+                >
+              </div>
+              <div class="statement">
+                <code class="sample__code" v-html="sample.output" />
+              </div>
+              <div
+                v-if="sample.explanation"
+                class="statement"
+                v-html="$md.render(sample.explanation)"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
         <section v-if="user && contestSlug">
           <div class="submit-head">
             <div class="submit-head__title">提出</div>

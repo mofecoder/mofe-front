@@ -1,6 +1,11 @@
 @import 'styles/variables';
 
 @mixin markdown() {
+  line-height: 1.3em;
+  :deep(li) {
+    line-height: 1.4em;
+  }
+
   :deep(.MathJax) {
     font-size: 110%;
   }
@@ -20,6 +25,10 @@
   }
   :deep(pre code) {
     @include block-code();
+  }
+
+  > :deep(p), > :deep(ul), :deep(ol) {
+    margin-bottom: .6em;
   }
 
   :deep(h1) {
