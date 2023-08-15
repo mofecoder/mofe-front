@@ -49,5 +49,10 @@ function onInput(value: string) {
 .codemirror :deep(.CodeMirror) {
   border: solid 1px darkgray;
   border-radius: 2px;
+  * {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', 'NotoSans JP', Menlo, Monaco, Consolas,
+      'Courier New', monospace !important;
+  }
 }
 </style>
