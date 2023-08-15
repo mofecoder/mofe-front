@@ -39,7 +39,7 @@ const statuses: SubmissionResult[] = [
   'CE',
   'MLE',
   'WR',
-  'IC'
+  'CP'
 ]
 
 const footerProps = reactive({
