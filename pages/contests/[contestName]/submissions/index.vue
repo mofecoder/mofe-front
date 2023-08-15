@@ -26,7 +26,7 @@ const filter = ref({
   status: []
 } as FilterOptions)
 const loading = ref<Boolean>(false)
-const timeout = computed(() => (adminMode ? 30000 : 2000))
+const timeout = computed(() => (adminMode.value ? 2000 : 30000))
 
 const args = reactive({
   slug: contestName,
