@@ -34,7 +34,7 @@ const languages: Language[] = [
     name: 'Java (OpenJDK 17.0.7)',
     mime: 'text/x-java',
     compilationCommand: 'javac ./Main.java',
-    runCommand: 'java ./Main'
+    runCommand: 'java Main'
   },
   {
     innerName: 'python:3.11.4',
@@ -91,7 +91,7 @@ const languages: Language[] = [
   },
   {
     innerName: 'kotlin:1.9.0',
-    name: 'kotlin (1.9.0)',
+    name: 'Kotlin (1.9.0)',
     mime: 'text/plain',
     compilationCommand: 'kotlinc ./Main.kt -include-runtime -d Main.jar',
     runCommand: 'kotlin Main.jar'
