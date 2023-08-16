@@ -48,6 +48,10 @@
     margin-bottom: 0.4em;
   }
 
+  :deep(img) {
+    max-width: 100%;
+  }
+
   :deep(div.code-math) {
     width: 100%;
     background: #eeeeee;

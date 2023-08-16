@@ -45,8 +45,8 @@ const contestName = computed(() => route.params.contestName)
             <tr class="row-header">
               <th class="col-rank">順位</th>
               <th class="col-username">ユーザ名</th>
-              <td class="col-result">得点</td>
-              <td
+              <th class="col-result">得点</th>
+              <th
                 v-for="problem in problems"
                 :key="problem.slug"
                 class="col-problem"
@@ -56,7 +56,7 @@ const contestName = computed(() => route.params.contestName)
                 >
                   {{ problem.position }}
                 </NuxtLink>
-              </td>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -165,21 +165,24 @@ const contestName = computed(() => route.params.contestName)
   @include card-text-reset();
 
   &__wrap {
-    padding: 1em;
+    text-wrap: nowrap;
+    padding-top: 2em;
+    overflow-x: scroll;
   }
 
   &__table {
     border-collapse: collapse;
     text-align: center;
     border: #cccccc solid 1px;
+    margin: 0 auto;
 
     .row-header {
       .col-rank {
-        width: 4em;
+        min-width: 6em;
       }
 
       .col-username {
-        width: 10em;
+        min-width: 10em;
       }
 
       .col-result {

@@ -27,7 +27,10 @@ const standings = computed(() => standingData.value?.standings)
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <div v-if="pending">Loading...</div>
+        <v-card v-if="pending" loading>
+          <v-card-title>順位表</v-card-title>
+          <v-card-text>Loading...</v-card-text>
+        </v-card>
         <ContestsStandingsTable
           v-else
           :problems="problems"
