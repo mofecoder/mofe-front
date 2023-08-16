@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Contest } from '~/types/contest'
-import { KIND_TABLE } from '~/constants/contests'
+import { ContestDetail as Contest } from '~/types/contest'
+import { KIND_TABLE, STANDINGS_MODE_TABLE } from '~/constants/contests'
 
 const URL_REGEX =
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
@@ -12,6 +12,7 @@ const props = defineProps<{
   kind: Contest['kind']
   editorialUrl?: string
   officialMode: boolean
+  standingsMode: Contest['standingsMode']
   edit?: boolean
   loading?: boolean
 }>()
@@ -25,6 +26,7 @@ const emits = defineEmits<{
   'update:kind': [Contest['kind']]
   'update:editorialUrl': [string | null]
   'update:officialMode': [boolean]
+  'update:standingsMode': [Contest['standingsMode']]
 }>()
 
 const rules = {
@@ -49,6 +51,11 @@ const rules = {
 }
 
 const kinds = Object.entries(KIND_TABLE).map((kv) => ({
+  value: kv[0],
+  title: kv[1]
+}))
+
+const modes = Object.entries(STANDINGS_MODE_TABLE).map((kv) => ({
   value: kv[0],
   title: kv[1]
 }))
@@ -89,6 +96,11 @@ const official = computed({
   get: () => props.officialMode,
   set: (v) => emits('update:officialMode', v)
 })
+
+const standingsMode = computed({
+  get: () => props.standingsMode,
+  set: (v) => emits('update:standingsMode', v)
+})
 </script>
 
 <template>
@@ -105,7 +117,7 @@ const official = computed({
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="6" lg="5">
+        <v-col cols="12" sm="7" lg="3">
           <v-text-field
             v-model="contestSlug"
             class=""
@@ -114,7 +126,7 @@ const official = computed({
             :readonly="edit"
           />
         </v-col>
-        <v-col cols="12" sm="6" lg="3">
+        <v-col cols="12" sm="4" lg="2">
           <v-text-field
             v-model="penaltyTime"
             type="number"
@@ -123,7 +135,14 @@ const official = computed({
             :suffix="edit ? '秒' : '分'"
           />
         </v-col>
-        <v-col cols="12" lg="4">
+        <v-col cols="12" sm="5" lg="3">
+          <v-select
+            v-model="standingsMode"
+            :items="modes"
+            label="順位表の集計モード"
+          />
+        </v-col>
+        <v-col cols="12" sm="6" lg="4">
           <v-select v-model="contestKind" :items="kinds" label="種類" />
         </v-col>
       </v-row>
@@ -153,7 +172,7 @@ const official = computed({
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" lg="6">
           <v-checkbox
             v-model="official"
             label="公式コンテストモード"

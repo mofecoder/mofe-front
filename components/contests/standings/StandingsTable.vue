@@ -9,6 +9,10 @@ defineProps({
   standings: {
     type: Array as () => Standing[],
     required: true
+  },
+  mode: {
+    type: String,
+    required: true
   }
 })
 
@@ -65,7 +69,7 @@ const contestName = computed(() => route.params.contestName)
               <th class="user-name">
                 <ContestsStandingsUserName :user="user.user" />
               </th>
-              <td class="col-result">
+              <td v-if="mode === 'atcoder'" class="col-result">
                 <div class="score score--sum">
                   <span class="point">{{ user.result.score }}</span>
                   <span v-if="user.result.penalty" class="penalty">
@@ -74,23 +78,48 @@ const contestName = computed(() => route.params.contestName)
                 </div>
                 <div class="time">{{ formatTime(user.result.time) }}</div>
               </td>
+              <td v-else class="col-result">
+                <div class="score score--sum">
+                  <span class="point">{{ user.result.score }}</span>
+                </div>
+                <div class="time">{{ user.result.time }}</div>
+              </td>
               <td
                 v-for="(problem, index) in user.problems"
                 :key="`${problems[index].slug}-${user.user.name}`"
               >
-                <div class="score">
-                  <span class="point">{{ problem.score }}</span>
-                  <span
-                    v-if="problem.penalty != null"
-                    class="penalty"
-                    :class="{ 'no-pena': problem.penalty === 0 }"
+                <template v-if="mode === 'atcoder'">
+                  <div class="score">
+                    <span class="point">{{ problem.score }}</span>
+                    <span
+                      v-if="problem.penalty != null"
+                      class="penalty"
+                      :class="{ 'no-pena': problem.penalty === 0 }"
+                    >
+                      ({{ problem.penalty }})
+                    </span>
+                  </div>
+                  <div class="time">
+                    {{ formatTime(problem.time) }}
+                  </div>
+                </template>
+                <template v-else>
+                  <div
+                    class="icpc-score"
+                    :class="{
+                      solved: problem.score > 0,
+                      'penalty-only': !problem.score && problem.penalty > 0
+                    }"
                   >
-                    ({{ problem.penalty }})
-                  </span>
-                </div>
-                <div class="time">
-                  {{ formatTime(problem.time) }}
-                </div>
+                    <div class="time">
+                      {{ formatTime(problem.time) || '-' }}
+                    </div>
+                    <div v-if="problem.penalty" class="penalty">
+                      (+{{ problem.penalty }})
+                    </div>
+                    <div v-else class="no-penalty">-</div>
+                  </div>
+                </template>
               </td>
             </tr>
           </tbody>
@@ -178,7 +207,13 @@ const contestName = computed(() => route.params.contestName)
         }
       }
 
+      td {
+        padding: 0.4em 0;
+      }
+
       .score {
+        flex-direction: column;
+        justify-content: space-between;
         .point {
           color: green;
           font-size: 1.2rem;
@@ -191,16 +226,45 @@ const contestName = computed(() => route.params.contestName)
             color: #666666;
           }
         }
+        .time {
+          color: gray;
+          font-size: 0.9rem;
+        }
+      }
+      .icpc-score {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &.solved {
+          background: #86ea86;
+        }
+        &.penalty-only {
+          background: #ffbbdf;
+        }
+
+        margin: 2px 4px;
+        padding: 6px;
+
+        .time {
+          font-size: 19px;
+        }
+
+        .penalty {
+          color: #ab0a0a;
+          font-weight: bold;
+          font-size: 16px;
+        }
+
+        .icpc-no-penalty {
+          color: #666666;
+          font-size: 16px;
+        }
       }
 
       .score--sum .point {
         color: darkblue;
         font-weight: bold;
-      }
-
-      .time {
-        color: gray;
-        font-size: 0.9rem;
       }
 
       &__no-rating {
@@ -248,8 +312,7 @@ const contestName = computed(() => route.params.contestName)
       }
     }
 
-    th,
-    td {
+    th {
       padding: 0.3rem 0;
     }
 

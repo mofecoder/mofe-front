@@ -2,6 +2,11 @@ export const KIND_TABLE = {
   normal: '通常',
   private: 'プライベート'
 }
+
+export const STANDINGS_MODE_TABLE = {
+  atcoder: 'AtCoder',
+  icpc: 'ICPC'
+}
 export const Positions = [
   'A',
   'B',

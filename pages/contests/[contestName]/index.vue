@@ -100,3 +100,10 @@ const $md: MarkdownIt = nuxtApp.$md
     </template>
   </v-card>
 </template>
+
+<style scoped lang="scss">
+@import 'styles/markdown';
+.contest-card__description {
+  @include markdown();
+}
+</style>

@@ -22,6 +22,7 @@ export interface ContestDetail extends Contest {
     role: 'admin' | 'writer' | 'tester'
   }[]
   isAdmin: boolean
+  standingsMode: 'icpc' | 'atcoder'
 }
 
 export interface ContestDetailManage extends ContestDetail {
@@ -43,4 +44,5 @@ export interface ContestEditParam {
   penaltyTime?: number
   editorialUrl?: string
   officialMode?: boolean
+  standingsMode?: 'icpc' | 'atcoder'
 }

@@ -80,7 +80,8 @@ const editInformation = async () => {
       penaltyTime: Number(contest.penaltyTime),
       description: contest.description,
       editorialUrl: contest.editorial || undefined,
-      officialMode: contest.officialMode
+      officialMode: contest.officialMode,
+      standingsMode: contest.standingsMode
     }
   )
   updated.value = true
@@ -150,6 +151,7 @@ const openModal = async () => {
       v-model:editorial-url="contest.editorial"
       v-model:kind="contest.kind"
       v-model:official-mode="contest.officialMode"
+      v-model:standings-mode="contest.standingsMode"
       :slug="contest.slug"
       :loading="loading.information"
       edit

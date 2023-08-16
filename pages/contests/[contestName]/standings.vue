@@ -19,8 +19,8 @@ const {
 } = await useApi(Contests.getStandings, [contestName.value], {
   lazy: true
 })
-// const standingData = null
-// const refresh = () => ({})
+const problems = computed(() => standingData.value?.problems)
+const standings = computed(() => standingData.value?.standings)
 </script>
 
 <template>
@@ -30,8 +30,9 @@ const {
         <div v-if="pending">Loading...</div>
         <ContestsStandingsTable
           v-else
-          :problems="standingData!.problems"
-          :standings="standingData!.standings"
+          :problems="problems"
+          :standings="standings"
+          :mode="contest.standingsMode"
           @reload="refresh"
         />
       </v-container>

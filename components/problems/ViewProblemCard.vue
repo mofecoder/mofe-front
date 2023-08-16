@@ -132,15 +132,14 @@ const title = computed(() => {
       <v-card-title class="task-card-title">
         <h2 class="d-flex">
           {{ title }}
-          <v-spacer />
-          <v-btn
-            v-if="id"
-            color="purple white--text"
-            :to="`/manage/problems/${id}`"
-            density="compact"
-            >問題の編集画面へ</v-btn
-          >
         </h2>
+        <v-btn
+          v-if="id"
+          color="purple white--text"
+          :to="`/manage/problems/${id}`"
+          density="compact"
+          >問題の編集画面へ</v-btn
+        >
         <ProblemsDifficultyChip :difficulty="problem.difficulty" />
         <p class="task-time-limit mb-0">実行時間制限: {{ timeLimit }}</p>
         <p
