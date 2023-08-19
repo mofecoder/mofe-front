@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { StandingProblem, Standing } from '~/types/standings'
 
-defineProps({
+const props = defineProps({
   problems: {
     type: Array as () => StandingProblem[],
     required: true
@@ -13,6 +13,15 @@ defineProps({
   mode: {
     type: String,
     required: true
+  },
+  teamPrefix: {
+    type: String,
+    required: false,
+    default: null
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -32,13 +41,45 @@ const formatTime = (time: number | undefined): string => {
 
 const route = useRoute()
 const contestName = computed(() => route.params.contestName)
+const teamMode = ref(false)
+
+type FilteredStanding = Standing & { rank: string | number }
+
+const filteredStandings = computed((): FilteredStanding[] => {
+  if (!props.standings) return []
+  if (!teamMode.value || !props.teamPrefix) return props.standings
+
+  const ranks = new Map<number, number>()
+  const filtered: FilteredStanding[] = props.standings.filter((s) =>
+    s.user.name.startsWith(props.teamPrefix)
+  )
+  for (let i = 0; i < filtered.length; ++i) {
+    if (ranks.has(filtered[i].rank)) {
+      filtered[i].rank = ranks.get(filtered[i].rank)!
+    } else {
+      ranks.set(filtered[i].rank, i + 1)
+      filtered[i].rank = i + 1
+    }
+  }
+  return filtered
+})
 </script>
 
 <template>
-  <v-card>
+  <v-card :loading="loading">
     <v-card-title>順位表</v-card-title>
     <v-card-text class="standings">
-      <v-btn color="primary" @click="$emit('reload')">更新する</v-btn>
+      <div class="mb-4">
+        <v-btn color="primary" @click="$emit('reload')">更新する</v-btn>
+        <v-switch
+          v-if="teamPrefix"
+          v-model="teamMode"
+          label="チーム参加のみ表示"
+          class="mt-4"
+          density="compact"
+          hide-details
+        />
+      </div>
       <div class="standings__wrap">
         <table class="standings__table">
           <thead>
@@ -61,7 +102,7 @@ const contestName = computed(() => route.params.contestName)
           </thead>
           <tbody>
             <tr
-              v-for="user in standings"
+              v-for="user in filteredStandings"
               :key="user.user.name"
               class="row-user"
             >
