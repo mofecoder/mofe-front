@@ -86,7 +86,6 @@ const $md: MarkdownIt = nuxtApp.$md
         >
         <v-btn
           v-if="isAdmin"
-          class="mb-4"
           color="purple white--text"
           :to="`/manage/contests/${contestSlug}`"
           density="compact"

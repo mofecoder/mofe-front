@@ -69,19 +69,11 @@ const isWriter = computed(() =>
                   >
                 </div>
               </ClientOnly>
-              <div class="mt-4">
-                <v-btn
-                  v-if="isAdmin"
-                  color="orange-lighten-1"
-                  class="mb-2 mr-4"
-                  to="/admin"
+              <div class="mt-4 manage-buttons">
+                <v-btn v-if="isAdmin" color="orange-lighten-1" to="/admin"
                   >管理ページへ</v-btn
                 >
-                <v-btn
-                  v-if="isAdmin"
-                  color="primary"
-                  class="mr-4 mb-2"
-                  to="/manage/contests"
+                <v-btn v-if="isAdmin" color="primary" to="/manage/contests"
                   >コンテストの管理画面へ</v-btn
                 >
                 <v-btn v-if="isWriter" color="primary" to="/manage/problems"
@@ -108,3 +100,11 @@ const isWriter = computed(() =>
     </v-container>
   </div>
 </template>
+
+<style scoped lang="scss">
+.manage-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+</style>

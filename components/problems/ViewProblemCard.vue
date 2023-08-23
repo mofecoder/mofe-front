@@ -136,10 +136,12 @@ const title = computed(() => {
         <v-btn
           v-if="id"
           color="purple white--text"
+          class="mb-4"
           :to="`/manage/problems/${id}`"
           density="compact"
-          >問題の編集画面へ</v-btn
         >
+          問題の編集画面へ
+        </v-btn>
         <ProblemsDifficultyChip :difficulty="problem.difficulty" />
         <p class="task-time-limit mb-0">実行時間制限: {{ timeLimit }}</p>
         <p
