@@ -43,7 +43,7 @@ const contestsData = computed(() => {
             mdi-timer-play-outline
           </v-icon>
           <v-icon v-else-if="checkStatus(contest) === 'future'" color="cyan">
-            mdi-timer-sand-complete
+            mdi-timer-sand
           </v-icon>
           <v-icon v-else color="gray">mdi-clock-end</v-icon>
         </template>
