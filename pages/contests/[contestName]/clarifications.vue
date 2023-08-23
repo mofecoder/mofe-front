@@ -37,7 +37,7 @@ const submitQuestion = async (task: string | null, content: string) => {
     Contests.createClarification,
     [contestName.value],
     {},
-    { task, question: content }
+    { clarification: { task, question: content } }
   )
   await updateClarifications()
   questionFlag.value = false

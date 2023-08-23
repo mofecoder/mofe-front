@@ -72,7 +72,7 @@ const updateClarification = new Api<
 const createClarification = new Api<
   Clarification,
   [string],
-  { task: string | null; question: string }
+  { clarification: { task: string | null; question: string } }
 >(([slug]) => `/contests/${slug}/clarifications`, 'POST')
 
 type GetSubmissionParams = {
