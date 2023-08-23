@@ -77,6 +77,8 @@ const updateTestcase = async (params: {
 const deleteTestcase = async (id: number) => {
   testcaseLoading.value = true
   await useApi(ManageProblems.deleteTestcase, [props.problemId, id])
+  await refreshTestcase()
+  testcaseLoading.value = false
 }
 
 const createTestcase = async (params: {
@@ -120,6 +122,29 @@ const saveSet = async (params: { name: string; points: string }) => {
   }
   await refreshTestcase()
   testcaseSetDialog.value = false
+}
+
+const selecting = reactive(new Set<number>())
+
+const selectingHeader = (value: boolean) => {
+  if (value) {
+    testcases.value.forEach((x) => selecting.add(x.id))
+  } else {
+    selecting.clear()
+  }
+}
+
+const deleteAll = async () => {
+  testcaseLoading.value = true
+  await useApi(
+    ManageProblems.deleteMultipleTestcases,
+    [props.problemId],
+    {},
+    { testcases: Array.from(selecting) }
+  )
+  selecting.clear()
+  await refreshTestcase()
+  testcaseLoading.value = false
 }
 
 const addSet = () => {
@@ -176,6 +201,17 @@ const closeSetModal = () => {
 
 <template>
   <v-container class="testcase">
+    <v-alert
+      title="採点の仕組み"
+      type="info"
+      variant="outlined"
+      class="mb-8"
+      closable
+    >
+      「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
+      そのテストケースセットの配点が加算されます。<br />
+      満点はすべてのテストケースセットの配点の合計です。
+    </v-alert>
     <v-card class="mb-8" variant="outlined" :loading="!testcaseSets">
       <v-card-title>テストケースセット一覧</v-card-title>
       <v-card-text class="set-list">
@@ -196,15 +232,19 @@ const closeSetModal = () => {
                 {{ set.isSample ? 'Yes' : 'No' }}
               </td>
               <td>
-                <v-icon size="small" @click="editSet(set.id)"
-                  >mdi-pencil</v-icon
-                >
-                <v-icon
-                  v-if="!['all', 'sample'].includes(set.name)"
+                <v-btn
+                  icon="mdi-pencil"
                   size="small"
+                  variant="text"
+                  @click="editSet(set.id)"
+                />
+                <v-btn
+                  v-if="!['all', 'sample'].includes(set.name)"
+                  icon="mdi-delete"
+                  size="small"
+                  variant="text"
                   @click="deleteSet(set.id)"
-                  >mdi-delete</v-icon
-                >
+                />
               </td>
             </tr>
           </tbody>
@@ -224,6 +264,17 @@ const closeSetModal = () => {
         <v-table v-if="testcases" density="compact">
           <thead>
             <tr>
+              <th>
+                <v-checkbox
+                  :model-value="selecting.size === testcases.length"
+                  :indeterminate="
+                    selecting.size > 0 && selecting.size < testcases.length
+                  "
+                  color="red"
+                  hide-details
+                  @update:model-value="selectingHeader"
+                />
+              </th>
               <th class="testcase-list__row-testcase-name">テストケース名</th>
               <th
                 v-for="set in testcaseSets"
@@ -236,6 +287,18 @@ const closeSetModal = () => {
           </thead>
           <tbody>
             <tr v-for="(testcase, i) in testcases" :key="testcase.name">
+              <td>
+                <v-checkbox
+                  :model-value="selecting.has(testcase.id)"
+                  hide-details
+                  color="red"
+                  @update:model-value="
+                    $event
+                      ? selecting.add(testcase.id)
+                      : selecting.delete(testcase.id)
+                  "
+                />
+              </td>
               <td v-text="testcase.name" />
               <td
                 v-for="(_, j) in testcase.testcaseSets"
@@ -252,30 +315,43 @@ const closeSetModal = () => {
               <td>
                 <v-btn
                   icon="mdi-pencil"
-                  size="small"
+                  density="compact"
                   :disabled="testcaseLoading"
                   variant="text"
+                  size="small"
                   @click="viewTestcase(testcase.id)"
                 />
                 <v-btn
                   icon="mdi-delete"
-                  size="small"
+                  density="compact"
                   :disabled="testcaseLoading"
                   variant="text"
+                  size="small"
                   @click="deleteTestcase(testcase.id)"
                 />
               </td>
             </tr>
           </tbody>
         </v-table>
-        <v-btn
-          class="mt-2"
-          color="primary"
-          prepend-icon="mdi-plus"
-          @click.stop="testcaseDialog = true"
-        >
-          テストケースを追加
-        </v-btn>
+        <v-container>
+          <v-btn
+            color="primary"
+            prepend-icon="mdi-plus"
+            @click.stop="testcaseDialog = true"
+          >
+            テストケースを追加
+          </v-btn>
+          <v-btn
+            color="red"
+            variant="tonal"
+            :disabled="selecting.size == 0"
+            prepend-icon="mdi-delete-alert"
+            class="ms-4"
+            @click="deleteAll"
+          >
+            選択したテストケース ({{ selecting.size }} 件) をすべて削除
+          </v-btn>
+        </v-container>
       </v-card-text>
     </v-card>
     <v-card variant="outlined" :loading="uploadLoading">
@@ -295,6 +371,7 @@ const closeSetModal = () => {
           <v-btn
             type="submit"
             color="primary"
+            prepend-icon="mdi-folder-upload"
             block
             :disabled="!file || uploadLoading"
             >アップロードする</v-btn

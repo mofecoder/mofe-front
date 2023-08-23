@@ -34,7 +34,13 @@ nextTick(() => (selected.value = tabs[0]))
 
 <template>
   <v-container>
-    <v-btn class="mb-3" to="/manage/problems" variant="text" color="purple">
+    <v-btn
+      class="mb-3"
+      to="/manage/problems"
+      variant="tonal"
+      color="purple"
+      prepend-icon="mdi-arrow-left"
+    >
       問題一覧に戻る
     </v-btn>
     <v-card>

@@ -12,7 +12,13 @@ useHead(() => ({
 
 <template>
   <v-container>
-    <v-btn class="mb-3" to="/manage/problems" variant="text" color="purple">
+    <v-btn
+      class="mb-3"
+      to="/manage/problems"
+      variant="tonal"
+      prepend-icon="mdi-arrow-left"
+      color="purple"
+    >
       問題一覧に戻る
     </v-btn>
     <v-card>

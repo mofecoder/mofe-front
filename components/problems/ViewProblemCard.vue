@@ -138,7 +138,9 @@ const title = computed(() => {
           color="purple white--text"
           class="mb-4"
           :to="`/manage/problems/${id}`"
-          density="compact"
+          variant="tonal"
+          density="comfortable"
+          prepend-icon="mdi-note-edit-outline"
         >
           問題の編集画面へ
         </v-btn>

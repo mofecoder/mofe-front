@@ -39,7 +39,12 @@ const items = computed(() =>
       <v-toolbar flat color="white">
         <v-toolbar-title>問題一覧</v-toolbar-title>
         <v-spacer />
-        <v-btn color="primary" class="mb-2" to="/manage/problems/new"
+        <v-btn
+          color="primary"
+          class="mb-2"
+          to="/manage/problems/new"
+          variant="tonal"
+          prepend-icon="mdi-plus-box"
           >問題を作成</v-btn
         >
       </v-toolbar>

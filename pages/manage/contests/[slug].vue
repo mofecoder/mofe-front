@@ -141,7 +141,12 @@ const openModal = async () => {
 
 <template>
   <v-container v-if="contestData" fluid>
-    <v-btn class="mb-3" to="/manage/contests" variant="text" color="purple"
+    <v-btn
+      class="mb-3"
+      to="/manage/contests"
+      variant="tonal"
+      color="purple"
+      prepend-icon="mdi-arrow-left"
       >コンテスト一覧に戻る</v-btn
     >
     <ManageContestsEditContestCard

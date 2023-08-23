@@ -69,6 +69,12 @@ const getTestcaseSet = new Api<TestcaseSet, [number, number]>(
   ([id, testcaseSetId]) => `/problems/${id}/testcase_sets/${testcaseSetId}`
 )
 
+const deleteMultipleTestcases = new Api<
+  void,
+  [number],
+  { testcases: number[] }
+>(([id]) => `/problems/${id}/testcases/delete_multiple`, 'DELETE')
+
 const createTestcaseSet = new Api<void, [number]>(
   ([id]) => `/problems/${id}/testcase_sets`,
   'POST'
@@ -113,6 +119,7 @@ export default {
   deleteTestcase,
   createTestcase,
   updateTestcase,
+  deleteMultipleTestcases,
   getTestcaseSet,
   createTestcaseSet,
   updateTestcaseSet,

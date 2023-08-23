@@ -17,6 +17,7 @@ const emits = defineEmits<{
   remove: [string]
 }>()
 type ItemType = {
+  id: number
   position?: string
   name: string
   difficulty: string
@@ -27,6 +28,7 @@ type ItemType = {
 const items = computed(() => {
   return (
     props.tasks?.map<ItemType>((task) => ({
+      id: task.id,
       position: task.position,
       name: task.name,
       difficulty: task.difficulty,
@@ -43,6 +45,7 @@ const items = computed(() => {
     <thead>
       <tr>
         <th v-if="!problemMode" />
+        <th>ID</th>
         <th>問題名</th>
         <th>writer</th>
         <th>難易度</th>
@@ -53,6 +56,7 @@ const items = computed(() => {
     <tbody>
       <tr v-for="item in items" :key="item.name">
         <td v-if="!problemMode">{{ item.position }}</td>
+        <td>{{ item.id }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.writerUser }}</td>
         <td>{{ item.difficulty }}</td>
