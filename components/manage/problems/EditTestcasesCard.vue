@@ -55,6 +55,9 @@ const uploadZip = async () => {
     messages.value = data.value.messages
     ok.value = true
     file.value = null
+    testcaseLoading.value = true
+    await refreshTestcase()
+    testcaseLoading.value = false
   }
 }
 
@@ -168,10 +171,10 @@ const deleteSet = async (id: number) => {
   await refreshTestcase()
 }
 
-const changeTestcaseState = (i: number, j: number, v: boolean) => {
+const changeTestcaseState = async (i: number, j: number, v: boolean) => {
   if (!testcaseSets.value) return
   testcaseLoading.value = true
-  useApi(
+  await useApi(
     ManageProblems.changeTestcaseState,
     [props.problemId, testcases.value![i].id],
     {},
@@ -180,6 +183,7 @@ const changeTestcaseState = (i: number, j: number, v: boolean) => {
       state: v
     }
   )
+  await refreshTestcase()
   testcaseLoading.value = false
 }
 
