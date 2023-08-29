@@ -7,7 +7,7 @@ const environments: Record<string, VChip['$props']> = {
   },
   production: {}
 }
-let text = ''
+let text = 'production'
 let environment = {}
 if (process.env.NODE_ENV === 'development') {
   text = 'Dev'

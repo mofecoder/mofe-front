@@ -10,7 +10,8 @@ definePageMeta({
   validate: (route) => {
     if (Array.isArray(route.params.problemId)) return false
     return /^[1-9]\d*$/.test(route.params.problemId)
-  }
+  },
+  layout: 'default'
 })
 
 const route = useRoute()
@@ -49,8 +50,8 @@ nextTick(() => (selected.value = tabs[0]))
           {{ tabNames[i] }}
         </v-tab>
       </v-tabs>
-      <v-window v-model="selected">
-        <v-window-item v-for="(tab, i) in tabs" :key="i" :value="tab">
+      <v-window v-model="selected" :continuous="false">
+        <v-window-item v-for="(tab, i) in tabs" :key="i" :value="tab" eager>
           <component :is="components[i]" :problem-id="problemId" />
         </v-window-item>
       </v-window>
