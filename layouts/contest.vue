@@ -72,6 +72,7 @@ const createLink = (path: string) => ({
         <v-app-bar-title class="d-none d-md-inline contest-header__title">
           {{ contest.name }}
         </v-app-bar-title>
+        <EnvironmentChip class="ml-4 mr-2" />
         <div class="contest-header__info md-1 ml-md-4">
           <div class="contest-header__info__title">コンテスト日時</div>
           <div v-for="text in contestTime" :key="text" v-text="text" />

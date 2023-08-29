@@ -20,6 +20,7 @@ const createLink = (path: string) => ({
       <template #title>
         <v-btn :active="false" icon="mdi-home" to="/" />
         {{ title }}
+        <EnvironmentChip />
       </template>
       <v-spacer />
       <ClientOnly>
