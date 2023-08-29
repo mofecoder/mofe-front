@@ -77,6 +77,7 @@ const handleError = (
 
 const submit = async () => {
   if (!form.value?.validate) return
+  loading.value = true
 
   if (resetToken.value) {
     const { data, error } = await useApi(
@@ -110,6 +111,7 @@ const submit = async () => {
       handleError(error.value)
       return
     }
+    loading.value = false
     message.value = data.value.message
   }
 }
@@ -135,6 +137,10 @@ const showMessage = computed({
     <v-card max-width="480px" class="mx-auto" :loading="loading">
       <v-card-title>パスワードリセット</v-card-title>
       <v-card-text v-if="!resetToken">
+        <div class="mb-4">
+          アカウントに登録されたメールアドレスにパスワードリセットのリンクを送信します。
+          メールが届かない場合には、メールアドレスが正しいかどうかを確認してください。
+        </div>
         <v-form ref="form" v-model="valid" @submit.prevent="submit">
           <v-text-field
             v-model="params.email"
