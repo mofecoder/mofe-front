@@ -13,11 +13,15 @@ useHead(() => ({
   titleTemplate: null
 }))
 
+const closedMode = ref(false)
+const args = computed(
+  () => [contestName.value, closedMode.value] as [string, boolean]
+)
 const {
   data: standingData,
   pending,
   refresh
-} = await useApi(Contests.getStandings, [contestName.value], {
+} = await useApi(Contests.getStandings, args, {
   lazy: true
 })
 const problems = computed(() => standingData.value?.problems)
@@ -49,11 +53,15 @@ onBeforeUnmount(() => window.clearInterval(timeout.value))
       </v-card>
       <template v-else>
         <ContestsStandingsTable
+          v-model:closed-mode="closedMode"
           :loading="pending"
           :problems="problems"
           :standings="standings"
           :mode="contest.standingsMode"
           :team-prefix="teamPrefix"
+          :exclude-open="
+            contest.allowOpenRegistration && contest.registrationRestriction
+          "
           @reload="refresh"
         />
       </template>

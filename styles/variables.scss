@@ -5,8 +5,11 @@
 
 
 @mixin block-code() {
+  &.hljs {
+    background: #fbfbfb;
+  }
+
   display: block;
-  width: 100%;
   background: #eeeeee;
   border: solid 1px lightgrey;
   color: black;

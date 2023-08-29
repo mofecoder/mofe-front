@@ -51,8 +51,9 @@ const getContests = new Api<Contest[]>('/contests')
 const getContest = new Api<ContestDetail, [string]>(
   ([slug]) => `/contests/${slug}`
 )
-const getStandings = new Api<StandingData, [string]>(
-  ([slug]) => `/contests/${slug}/standings`
+const getStandings = new Api<StandingData, [string, boolean]>(
+  ([slug, excludeOpen]) =>
+    `/contests/${slug}/standings?${excludeOpen ? 'exclude_open' : ''}`
 )
 
 const getClarifications = new Api<Clarification[], [string]>(
@@ -114,9 +115,14 @@ const getSubmission = new Api<SubmissionDetail, [string, number]>(
   ([contestSlug, id]) => `/contests/${contestSlug}/submissions/${id}`
 )
 
-const register = new Api<void, [string]>(
+const register = new Api<void, [string], { password?: string; open?: boolean }>(
   ([slug]) => `/contests/${slug}/register`,
   'POST'
+)
+
+const unregister = new Api<void, [string]>(
+  ([slug]) => `/contests/${slug}/unregister`,
+  'DELETE'
 )
 
 export default {
@@ -131,5 +137,6 @@ export default {
   getMySubmissions,
   getSubmission,
   rejudge,
-  register
+  register,
+  unregister
 }

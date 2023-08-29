@@ -31,7 +31,7 @@
     @include block-code();
   }
 
-  > :deep(p), > :deep(ul), :deep(ol) {
+  :deep(p), > :deep(ul), :deep(ol) {
     margin-bottom: .6em;
   }
 
@@ -62,6 +62,10 @@
     font-weight: normal;
     overflow: auto;
 
+    p {
+      margin-bottom: unset;
+    }
+
     eq {
       margin-right: 4px;
     }
@@ -70,5 +74,34 @@
     &:after {
       content: none;
     }
+  }
+
+  :deep(details) {
+    summary {
+      display: block;
+      cursor: pointer;
+      margin: -12px;
+      padding: 12px;
+
+      &::after {
+        position: absolute;
+        right: 24px;
+        display: inline-block;
+        font-family: "Material Design Icons";
+        font-size: 30px;
+        content: "\F035D";
+      }
+    }
+    &[open] summary {
+      border-bottom: solid 1px #000000;
+      margin-bottom: 12px;
+      &::after {
+        content: "\F0360";
+      }
+    }
+
+    border: solid 1px #000000;
+    border-radius: 4px;
+    padding: 12px;
   }
 }

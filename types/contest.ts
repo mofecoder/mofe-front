@@ -14,7 +14,7 @@ export interface ContestDetail extends Contest {
   description: string
   penaltyTime: number
   isWriterOrTester: boolean
-  registered: boolean
+  registered: string | null
   editorial: string | null
   writtenTasks: {
     slug: string
@@ -23,6 +23,8 @@ export interface ContestDetail extends Contest {
   }[]
   isAdmin: boolean
   standingsMode: 'icpc' | 'atcoder'
+  registrationRestriction: boolean
+  allowOpenRegistration: boolean
 }
 
 export interface ContestDetailManage extends ContestDetail {

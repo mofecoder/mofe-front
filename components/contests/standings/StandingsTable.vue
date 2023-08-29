@@ -22,11 +22,20 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: false
+  },
+  excludeOpen: {
+    type: Boolean,
+    default: false
+  },
+  closedMode: {
+    type: Boolean,
+    default: false
   }
 })
 
-defineEmits<{
+const emit = defineEmits<{
   reload: []
+  'update:closedMode': [boolean]
 }>()
 
 const formatTime = (time: number | undefined): string => {
@@ -42,6 +51,11 @@ const formatTime = (time: number | undefined): string => {
 const route = useRoute()
 const contestName = computed(() => route.params.contestName)
 const teamMode = ref(false)
+
+const closedModeComputed = computed({
+  get: () => props.closedMode,
+  set: (value) => emit('update:closedMode', value)
+})
 
 type FilteredStanding = Standing & { rank: string | number }
 
@@ -75,7 +89,16 @@ const filteredStandings = computed((): FilteredStanding[] => {
           v-if="teamPrefix"
           v-model="teamMode"
           label="チーム参加のみ表示"
+          class="mt-4 mr-6"
+          density="compact"
+          hide-details
+        />
+        <v-switch
+          v-if="excludeOpen"
+          v-model="closedModeComputed"
+          label="オープン参加を非表示"
           class="mt-4"
+          color="indigo"
           density="compact"
           hide-details
         />

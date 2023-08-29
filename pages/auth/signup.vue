@@ -62,7 +62,7 @@ const rules = {
       'ユーザ名の形式が無効です。',
     (v: string) =>
       !v ||
-      (v.length >= 3 && v.length <= 16) ||
+      (v.length >= 3 && v.length <= 20) ||
       'ユーザ名が短すぎるか長すぎます。'
   ],
   password: [
@@ -143,6 +143,10 @@ const submit = async () => {
             required
             autocomplete="username"
           />
+          <p>
+            ※チームアカウントを登録する場合は、prefix を含め 20
+            文字まで登録可能です
+          </p>
           <v-text-field
             v-model="params.password"
             type="password"
