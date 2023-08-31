@@ -12,6 +12,7 @@ useHead(() => ({
   title: `順位表 - ${contest.value?.name}`,
   titleTemplate: null
 }))
+onBeforeUnmount(() => window.clearInterval(timeout.value))
 
 const closedMode = ref(false)
 const args = computed(
@@ -41,7 +42,6 @@ function resetInterval(value: number) {
   }
 }
 watch(refreshInterval, (interval) => resetInterval(interval))
-onBeforeUnmount(() => window.clearInterval(timeout.value))
 </script>
 
 <template>

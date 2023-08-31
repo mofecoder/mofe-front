@@ -41,6 +41,14 @@ const props = defineProps({
   judgeStatus: {
     type: Object as PropType<{ completed: number; all: number } | null>,
     default: null
+  },
+  hideIcon: {
+    type: Boolean,
+    default: false
+  },
+  noMinWidth: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -71,30 +79,33 @@ const smallText = computed(() => {
         :class="[
           `result-${status}`,
           dense && 'chip-dense',
-          judgeStatus && 'chip-judging'
+          judgeStatus && 'chip-judging',
+          noMinWidth && 'chip-no-min-width'
         ]"
         v-bind="p"
       >
-        <v-progress-circular
-          v-if="judgeStatus"
-          :size="dense ? 16 : 24"
-          :width="dense ? 4 : 5"
-          :model-value="(judgeStatus.completed / judgeStatus.all) * 100"
-          :rotate="180"
-          class="mr-1"
-          bg-color="white"
-          :color="['WJ', 'WR'].includes(status) ? 'cyan' : 'deep-orange'"
-        />
-        <v-progress-circular
-          v-else-if="['WJ', 'WR', 'CP'].includes(status)"
-          :size="dense ? 16 : 24"
-          :width="2"
-          :rotate="180"
-          color="blue-grey-darken-2"
-          class="mr-1"
-          indeterminate
-        />
-        <v-icon v-else class="mr-1 icon" size="small">{{ icon }}</v-icon>
+        <template v-if="!hideIcon">
+          <v-progress-circular
+            v-if="judgeStatus"
+            :size="dense ? 16 : 24"
+            :width="dense ? 4 : 5"
+            :model-value="(judgeStatus.completed / judgeStatus.all) * 100"
+            :rotate="180"
+            class="mr-1"
+            bg-color="white"
+            :color="['WJ', 'WR'].includes(status) ? 'cyan' : 'deep-orange'"
+          />
+          <v-progress-circular
+            v-else-if="['WJ', 'WR', 'CP'].includes(status)"
+            :size="dense ? 16 : 24"
+            :width="2"
+            :rotate="180"
+            color="blue-grey-darken-2"
+            class="mr-1"
+            indeterminate
+          />
+          <v-icon v-else class="mr-1 icon" size="small">{{ icon }}</v-icon>
+        </template>
         {{ text }}
         <span v-if="smallText" class="chip-subtext">{{ smallText }}</span>
       </div>
@@ -131,6 +142,9 @@ $color-ce: #a544ff;
 .chip-subtext {
   padding-left: 0.15em;
   font-size: 0.9em;
+}
+.chip-no-min-width {
+  min-width: unset;
 }
 
 .result-AC {

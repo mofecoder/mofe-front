@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Contests from '~/utils/apis/Contests'
+import { SubmissionDetail } from '~/types/submissions'
+import TestcaseSetsTable from '~/components/contests/submissions/TestcaseSetsTable.vue'
 
 definePageMeta({
   layout: 'contest',
@@ -49,7 +51,8 @@ const copySource = () => {
   }
 }
 
-const showTable = computed(() => submission.value?.testcaseResults?.length)
+const showResults = computed(() => submission.value?.testcaseResults?.length)
+const showSets = computed(() => submission.value?.testcaseSets != null)
 </script>
 
 <template>
@@ -95,8 +98,8 @@ const showTable = computed(() => submission.value?.testcaseResults?.length)
         <v-row>
           <v-col
             cols="12"
-            :lg="showTable ? 4 : 12"
-            :xl="showTable || submission.compileError ? 3 : 12"
+            :lg="showSets && !showResults ? 5 : 12"
+            :xl="showResults || submission.compileError ? 3 : 12"
           >
             <v-table dense>
               <tbody>
@@ -147,7 +150,12 @@ const showTable = computed(() => submission.value?.testcaseResults?.length)
             </v-table>
           </v-col>
           <v-spacer />
-          <v-col v-if="showTable" cols="12" lg="7" xl="8">
+          <v-col v-if="showSets" cols="12" lg="7" xl="5">
+            <h4>セットごとの結果</h4>
+            <TestcaseSetsTable :results="submission.testcaseSets" />
+          </v-col>
+          <v-col v-if="showResults" cols="12" lg="5" xl="4">
+            <h4>ジャッジ結果</h4>
             <ContestsSubmissionsTestcaseResultsTable
               :testcase-results="submission.testcaseResults"
               :sample-count="submission.sampleCount"

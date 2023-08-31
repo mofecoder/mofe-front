@@ -37,9 +37,18 @@ export interface TestcaseResult {
   executionMemory: number
 }
 
+export interface TestcaseSetResult {
+  name: string
+  score: number
+  point: number
+  testcases: string[] | null
+  results: Record<'ac' | 'wa' | 'tle' | 'mle' | 'ole' | 're', number>
+}
+
 export interface SubmissionDetail extends Submit {
   source: string
   sampleCount: number | null
   compileError: string | null
   testcaseResults: TestcaseResult[]
+  testcaseSets: TestcaseSetResult[]
 }
