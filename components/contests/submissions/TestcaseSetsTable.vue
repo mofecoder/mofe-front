@@ -124,6 +124,11 @@ const TESTCASE_SHOW_MAX = 10
       border-bottom: none;
     }
   }
+  tr:nth-last-child(2) {
+    td:nth-child(3) {
+      border-bottom: none;
+    }
+  }
 }
 .row-name {
   min-width: 90px;
