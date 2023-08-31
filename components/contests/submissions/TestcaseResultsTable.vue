@@ -21,7 +21,7 @@ const getTestcaseName = (index: number): string => {
 </script>
 
 <template>
-  <v-table>
+  <v-table class="table">
     <thead>
       <tr>
         <th>テストケース名</th>
@@ -34,13 +34,31 @@ const getTestcaseName = (index: number): string => {
       <tr v-for="(result, i) in testcaseResults" :key="`testcase-result-${i}`">
         <td v-text="getTestcaseName(i)" />
         <td>
-          <ContestsSubmissionsResultChip :status="result.status" dense />
+          <ContestsSubmissionsResultChip
+            :status="result.status"
+            dense
+            no-min-width
+          />
         </td>
-        <td>{{ result.executionTime }} ms</td>
-        <td>{{ result.executionMemory || '---' }} KB</td>
+        <td class="row-time">{{ result.executionTime }} ms</td>
+        <td class="row-memory">{{ result.executionMemory || '---' }} KB</td>
       </tr>
     </tbody>
   </v-table>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.table th {
+  text-align: center !important;
+}
+.row-memory,
+.row-time {
+  text-align: end;
+}
+.row-time {
+  min-width: 90px;
+}
+.row-memory {
+  min-width: 120px;
+}
+</style>
