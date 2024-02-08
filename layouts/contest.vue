@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import dayjs from 'dayjs'
+import { storeToRefs } from 'pinia'
+import { useDisplay } from 'vuetify'
 import ContestSidebar from '~/components/contests/ContestSidebar.vue'
 import 'dayjs/locale/ja'
 import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
-import { storeToRefs } from 'pinia'
-import { useDisplay } from 'vuetify'
 dayjs.locale('ja')
 
 const contestStore = useContestStore()

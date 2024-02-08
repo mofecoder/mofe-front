@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import ManageContests from '~/utils/apis/ManageContests'
 import dayjs from 'dayjs'
-import { VDataTable } from 'vuetify/labs/components'
+import ManageContests from '~/utils/apis/ManageContests'
 
 definePageMeta({
   middleware: 'admin'
@@ -46,11 +45,11 @@ const items = computed(
         >
       </v-toolbar>
     </template>
-    <template #item.edit="{ item: { index } }">
+    <template #item.edit="{ item }">
       <v-btn
         size="small"
         density="compact"
-        :to="`/contests/${items[index].slug}`"
+        :to="`/contests/${item.slug}`"
         icon
         variant="text"
       >
@@ -59,7 +58,7 @@ const items = computed(
       <v-btn
         size="small"
         density="compact"
-        :to="`/manage/contests/${items[index].slug}`"
+        :to="`/manage/contests/${item.slug}`"
         icon
         variant="text"
       >

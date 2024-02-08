@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { VForm } from 'vuetify/components'
+import type { FetchError } from 'ofetch'
 import { checkPasswordFormat } from '~/utils/validation'
 import { useUserStore } from '~/store/user'
-import { VForm } from 'vuetify/components'
 import Auth from '~/utils/apis/Auth'
-import type { FetchError } from 'ofetch'
 
 const route = useRoute()
 const resetToken = computed(() => {

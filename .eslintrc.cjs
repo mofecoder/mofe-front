@@ -11,7 +11,7 @@ module.exports = {
     'plugin:vuetify/base',
     '@vue/prettier',
   ],
-  plugins: ['vue', '@typescript-eslint'],
+  plugins: ['vue', '@typescript-eslint', 'import'],
   // add your custom rules here
   rules: {
     'space-before-function-paren': [
@@ -36,6 +36,7 @@ module.exports = {
     'unicorn/number-literal-case': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'vuetify/no-deprecated-props': 'off',
-    '@typescript-eslint/consistent-type-imports': 'warn'
+    '@typescript-eslint/consistent-type-imports': 'warn',
+    'import/order': 'warn'
   }
 }

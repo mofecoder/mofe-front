@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { ContestDetail } from '~/types/contest'
-import TimeRangePickerCard from '~/components/manage/contests/TimeRangePickerCard.vue'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
+import type { ContestDetail } from '~/types/contest'
+import TimeRangePickerCard from '~/components/manage/contests/TimeRangePickerCard.vue'
 import ManageContests from '~/utils/apis/ManageContests'
 import EditContestCard from '~/components/manage/contests/EditContestCard.vue'
 import { definePageMeta } from '#imports'

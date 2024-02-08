@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Admin from '~/utils/apis/Admin'
 import type { User } from '~/types/adminUser'
-import { VDataTable } from 'vuetify/labs/components'
 import { formatDate } from '~/utils/formatting'
 
 definePageMeta({
@@ -48,7 +47,7 @@ const search = ref('')
       hide-details
     />
     <v-data-table :headers="headers" :items="items" :search="search">
-      <template #item.role="{ item: { columns: item, index } }">
+      <template #item.role="{ item }">
         <template v-if="item.role === 'member'">
           member
           <v-btn
@@ -56,7 +55,7 @@ const search = ref('')
             density="compact"
             icon
             variant="text"
-            @click="update(items[index].id, 'writer')"
+            @click="update(item.id, 'writer')"
           >
             <v-icon>mdi-arrow-up-circle</v-icon>
           </v-btn>
@@ -68,7 +67,7 @@ const search = ref('')
             density="compact"
             icon
             variant="text"
-            @click="update(items[index].id, 'member')"
+            @click="update(item.id, 'member')"
           >
             <v-icon>mdi-arrow-down-circle</v-icon>
           </v-btn>

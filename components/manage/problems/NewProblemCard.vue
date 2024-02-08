@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Difficulties } from '~/constants/difficulty'
 import { ref } from 'vue'
+import { Difficulties } from '~/constants/difficulty'
 import ManageProblems from '~/utils/apis/ManageProblems'
 
 const rules = {

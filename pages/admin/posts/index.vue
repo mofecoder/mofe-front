@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Posts from '~/utils/apis/Posts'
 import { formatDate } from '~/utils/formatting'
-import { VDataTable } from 'vuetify/labs/components'
 import { STATUS_TABLE } from '~/constants/posts'
 import { definePageMeta } from '#imports'
 
@@ -46,12 +45,12 @@ const items = computed(() => {
         >新規記事作成</v-btn
       >
       <v-data-table :headers="tableHeader" :items="items" :loading="!posts">
-        <template #item.actions="{ item: { index } }">
+        <template #item.actions="{ item }">
           <v-btn
             size="small"
             icon
             variant="text"
-            :to="`/admin/posts/${items[index].id}`"
+            :to="`/admin/posts/${item.id}`"
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>

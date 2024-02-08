@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { VDataTableServer } from 'vuetify/labs/components'
 import type { SubmissionResult } from '~/types/submissions'
 import type { Task } from '~/types/task'
 import type { FilterOptions, SubmissionResponse } from '~/utils/apis'
@@ -199,20 +198,20 @@ const filterStatus = computed({
     @update:items-per-page="(cnt) => emits('update:count', cnt)"
     @update:page="(p) => emits('update:page', p)"
   >
-    <template #item.task="{ item: { index, columns: item } }">
+    <template #item.task="{ item, index }">
       <NuxtLink
         :to="`/contests/${contestSlug}/tasks/${submissionsData[index].taskSlug}`"
         >{{ item.task }}</NuxtLink
       >
     </template>
-    <template #item.status="{ item: { columns: item, index } }">
+    <template #item.status="{ item, index }">
       <ContestsSubmissionsResultChip
         :status="item.status"
         :judge-status="submissionsData[index].judgeStatus"
         dense
       />
     </template>
-    <template #item.action="{ item: { index } }">
+    <template #item.action="{ index }">
       <v-btn
         density="compact"
         icon="mdi-eye"
@@ -226,7 +225,7 @@ const filterStatus = computed({
     <template #item.executionMemory="{ item: { columns: item } }">
       {{ item.executionMemory == null ? '' : `${item.executionMemory} KB` }}
     </template>
-    <template #item.rejudge="{ item: { index } }">
+    <template #item.rejudge="{ index }">
       <v-checkbox-btn
         :model-value="rejudgeIds.has(submissionsData[index].id)"
         @update:model-value="setRejudgeStatus($event, submissionsData[index])"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { SubmissionResult } from '~/types/submissions'
 import type { PropType } from 'vue'
+import type { SubmissionResult } from '~/types/submissions'
 
 const TOOLTIP_TEXT: Record<SubmissionResult, string> = {
   AC: '正解 (Accepted)',

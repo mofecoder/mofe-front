@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { VDataTable } from 'vuetify/labs/components'
 import ManageProblems from '~/utils/apis/ManageProblems'
 
 definePageMeta({
@@ -49,18 +48,18 @@ const items = computed(() =>
         >
       </v-toolbar>
     </template>
-    <template #item.contestName="{ item: { columns: item, index } }">
+    <template #item.contestName="{ item, index }">
       <NuxtLink v-if="item" :to="`/contests/${items[index].contestSlug}`">
         {{ item.contestName }}
       </NuxtLink>
     </template>
-    <template #item.edit="{ item: { index } }">
+    <template #item.edit="{ item }">
       <v-btn
         icon
         variant="text"
         size="small"
         density="compact"
-        :to="`/manage/problems/${items[index].id}`"
+        :to="`/manage/problems/${item.id}`"
       >
         <v-icon>mdi-pencil</v-icon>
       </v-btn>

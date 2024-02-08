@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
+import type { MaybeRef } from 'vue'
+import dayjs from 'dayjs'
 import type { ContestDetail } from '~~/types/contest'
 import type { Clarification } from '~~/types/clarification'
 import Contests from '~/utils/apis/Contests'
-import type { MaybeRef } from 'vue'
-import dayjs from 'dayjs'
 
 interface ContestState {
   contest: ContestDetail | null
@@ -20,7 +20,7 @@ export const useContestStore = defineStore({
     async getContest(slug: MaybeRef<string>) {
       if (slug == null) return
       const _this = this
-      await useApi(Contests.getContest, () => [unref(slug)] as [string], {
+      await http<ContestDetail>(Contests.getContest.$path([unref(slug)]), {
         onRequest() {
           const s = unref(slug)
           if (s != _this.contest?.slug) {
@@ -29,22 +29,21 @@ export const useContestStore = defineStore({
           }
         }
       }).then((res) => {
-        if (res.data.value) {
-          this.updateContest(res.data.value)
+        if (res) {
+          this.updateContest(res)
         }
       })
     },
 
     async getClarifications(slug: MaybeRef<string>) {
-      await useApi(
-        Contests.getClarifications,
-        () => [unref(slug)] as [string]
+      await http<Clarification[]>(
+        Contests.getClarifications.$path([unref(slug)])
       ).then((res) => {
         if (process.client) {
           localStorage.setItem(`${unref(slug)}_clar`, dayjs().toISOString())
         }
-        if (res.data.value) {
-          this.updateClarifications(res.data.value)
+        if (res) {
+          this.updateClarifications(res)
         }
       })
     },

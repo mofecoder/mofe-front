@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Standing } from '~/types/standings'
 import type { PropType } from 'vue'
+import type { Standing } from '~/types/standings'
 
 defineProps({
   user: {

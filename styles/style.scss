@@ -1,7 +1,11 @@
 @use "vuetify/styles";
 
+html {
+  font-family: sans-serif;
+}
+
 code {
-  font-family: Menlo,  Monaco, Consolas, "NotoSans JP","Courier New", monospace !important;
+  font-family: Menlo, Monaco, Consolas, "NotoSans JP", "Courier New", monospace !important;
 }
 
 ul, ol {

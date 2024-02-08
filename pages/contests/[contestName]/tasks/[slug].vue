@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Tasks from '~/utils/apis/Tasks'
-import { errorMessage } from 'jest-validate/build/errors'
 
 definePageMeta({
   layout: 'contest'

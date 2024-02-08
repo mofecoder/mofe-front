@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
-import type { ContestDetail } from '~/types/contest'
 import type { PropType } from 'vue'
+import type { ContestDetail } from '~/types/contest'
 
 const props = defineProps({
   contest: {
