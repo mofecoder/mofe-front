@@ -1,4 +1,4 @@
-import { TaskDetail } from '~/types/task'
+import type { TaskDetail } from '~/types/task'
 import { Api } from '~/types/api'
 
 const getTask = new Api<TaskDetail, [string, string]>(

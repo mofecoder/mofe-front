@@ -1,5 +1,5 @@
 import { Api } from '~/types/api'
-import {
+import type {
   Problem,
   ProblemDetail,
   ProblemParams,

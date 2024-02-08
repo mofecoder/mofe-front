@@ -1,4 +1,4 @@
-import { UseFetchOptions } from '#app'
+import type { UseFetchOptions } from '#app'
 
 export type Methods = 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE'
 export type ArgsType = any[] | Record<string, any>

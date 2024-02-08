@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VueCodemirror } from 'codemirror-editor-vue3'
 import type { EditorConfiguration } from 'codemirror'
-import { Language } from '~/types/language'
+import type { Language } from '~/types/language'
 
 const props = defineProps<{
   modelValue: string

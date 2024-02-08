@@ -1,11 +1,11 @@
 import { Api } from '~/types/api'
-import {
+import type {
   Contest,
   ContestCreateParam,
   ContestDetailManage,
   ContestEditParam
 } from '~/types/contest'
-import { Problem as AdminProblem } from '~/types/contestAdmin'
+import type { Problem as AdminProblem } from '~/types/contestAdmin'
 
 const getContest = new Api<ContestDetailManage, [string]>(
   ([slug]) => `/manage/contests/${slug}`

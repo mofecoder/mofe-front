@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 // import { httpGet } from '~~/utils/axios'
-import { AuthUser } from '~~/types/AuthUser'
+import type { AuthUser } from '~~/types/AuthUser'
 import Auth from '~/utils/apis/Auth'
 import dayjs from 'dayjs'
-import { UseFetchOptions } from '#app'
-import AuthTokens from '~/types/AuthTokens'
+import type { UseFetchOptions } from '#app'
+import type AuthTokens from '~/types/AuthTokens'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 
 interface UserState {

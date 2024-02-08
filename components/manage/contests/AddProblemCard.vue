@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Problem } from '~/types/contestAdmin'
-import { ProblemDetail } from '~/types/problems'
+import type { Problem } from '~/types/contestAdmin'
+import type { ProblemDetail } from '~/types/problems'
 import ManageProblems from '~/utils/apis/ManageProblems'
 
 import { Positions } from '~/constants/contests'
-import { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
+import type { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
 
 const props = defineProps<{
   usedPositions: Set<string>

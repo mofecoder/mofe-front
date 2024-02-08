@@ -1,5 +1,5 @@
 import 'katex/dist/katex.min.css'
-import { RenderMathInElementOptions } from 'katex/contrib/auto-render'
+import type { RenderMathInElementOptions } from 'katex/contrib/auto-render'
 
 export default defineNuxtPlugin(async () => {})
 export const RenderMathOptions: RenderMathInElementOptions = {

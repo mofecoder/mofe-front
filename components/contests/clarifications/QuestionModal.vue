@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Task } from '~/types/task'
+import type { Task } from '~/types/task'
 
 const props = defineProps<{
   value: boolean

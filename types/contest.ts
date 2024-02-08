@@ -1,5 +1,5 @@
-import { Task } from '~~/types/task'
-import { Task as ManageProblem } from '~~/types/contestAdmin'
+import type { Task } from '~~/types/task'
+import type { Task as ManageProblem } from '~~/types/contestAdmin'
 
 export interface Contest {
   slug: string
@@ -35,6 +35,7 @@ export interface ContestDetailManage extends ContestDetail {
 export interface ContestCreateParam extends Contest {
   description: string
   penaltyTime: number
+  standingsMode: 'icpc' | 'atcoder'
 }
 
 export interface ContestEditParam {

@@ -1,5 +1,5 @@
-import { CafeCoderApi } from '.old/apis'
-import { Language } from '~~/types/language'
+import type { CafeCoderApi } from '.old/apis'
+import type { Language } from '~~/types/language'
 
 interface Utils {
   escapeHtml(s: string): string

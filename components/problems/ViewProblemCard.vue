@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import languages from '~/constants/languages'
-import { TaskDetail } from '~/types/task'
+import type { TaskDetail } from '~/types/task'
 import { useUserStore } from '~/store/user'
-import { MarkdownIt } from '~/types/plugins'
+import type { MarkdownIt } from '~/types/plugins'
 import Tasks from '~/utils/apis/Tasks'
-import { ProblemDetail } from '~/types/problems'
+import type { ProblemDetail } from '~/types/problems'
 
 const props = defineProps<{
   contestSlug?: string

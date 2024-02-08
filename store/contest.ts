@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { ContestDetail } from '~~/types/contest'
-import { Clarification } from '~~/types/clarification'
+import type { ContestDetail } from '~~/types/contest'
+import type { Clarification } from '~~/types/clarification'
 import Contests from '~/utils/apis/Contests'
-import { MaybeRef } from 'vue'
+import type { MaybeRef } from 'vue'
 import dayjs from 'dayjs'
 
 interface ContestState {

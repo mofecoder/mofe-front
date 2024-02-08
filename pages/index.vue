@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Post } from '~~/types/post'
+import type { Post } from '~~/types/post'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
 import Posts from '~/utils/apis/Posts'

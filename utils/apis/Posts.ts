@@ -1,4 +1,4 @@
-import { Post } from '~/types/post'
+import type { Post } from '~/types/post'
 import { Api } from '~/types/api'
 
 const getPosts = new Api<Post[], [number?]>(([cnt]) => {

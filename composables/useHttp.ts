@@ -1,9 +1,9 @@
 import lodash from 'lodash'
 import defu from 'defu'
-import { FetchResponse } from 'ofetch'
-import { UseFetchOptions } from '#app'
-import AuthTokens from '~/types/AuthTokens'
-import { MaybeRef } from 'vue'
+import type { FetchResponse } from 'ofetch'
+import type { UseFetchOptions } from '#app'
+import type AuthTokens from '~/types/AuthTokens'
+import type { MaybeRef } from 'vue'
 import { useUserStore } from '~/store/user'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 const { camelCase, isArray, isObject, mapKeys, mapValues, snakeCase } = lodash

@@ -1,5 +1,5 @@
 import languages from '~~/constants/languages'
-import { Language } from '~~/types/language'
+import type { Language } from '~~/types/language'
 
 const map = new Map<string, Language>()
 languages.forEach((lang) => {

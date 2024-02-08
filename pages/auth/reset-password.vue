@@ -3,7 +3,7 @@ import { checkPasswordFormat } from '~/utils/validation'
 import { useUserStore } from '~/store/user'
 import { VForm } from 'vuetify/components'
 import Auth from '~/utils/apis/Auth'
-import { FetchError } from 'ofetch'
+import type { FetchError } from 'ofetch'
 
 const route = useRoute()
 const resetToken = computed(() => {

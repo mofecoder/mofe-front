@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { VDataTableServer } from 'vuetify/labs/components'
-import { SubmissionResult } from '~/types/submissions'
-import { Task } from '~/types/task'
-import { FilterOptions, SubmissionResponse } from '~/utils/apis'
-import { DataTableHeader, SortItem } from '~/types/datatable'
+import type { SubmissionResult } from '~/types/submissions'
+import type { Task } from '~/types/task'
+import type { FilterOptions, SubmissionResponse } from '~/utils/apis'
+import type { DataTableHeader, SortItem } from '~/types/datatable'
 
 const emits = defineEmits<{
   refresh: [load: boolean]

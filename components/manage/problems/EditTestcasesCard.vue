@@ -313,7 +313,9 @@ const closeSetModal = () => {
                   :model-value="testcases[i].testcaseSets[j]"
                   color="orange"
                   hide-details
-                  @update:model-value="(v) => changeTestcaseState(i as number, j as number, v)"
+                  @update:model-value="
+                    (v) => changeTestcaseState(i as number, j as number, v)
+                  "
                 />
               </td>
               <td>

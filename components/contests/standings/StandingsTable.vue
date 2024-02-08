@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { StandingProblem, Standing } from '~/types/standings'
+import type { StandingProblem, Standing } from '~/types/standings'
 
 const props = defineProps({
   problems: {

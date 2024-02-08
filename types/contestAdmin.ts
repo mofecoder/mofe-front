@@ -1,4 +1,4 @@
-import { Difficulty, Task as BaseProblem } from '~~/types/task'
+import type { Difficulty, Task as BaseProblem } from '~~/types/task'
 
 export interface Task extends BaseProblem {
   writerUser: string

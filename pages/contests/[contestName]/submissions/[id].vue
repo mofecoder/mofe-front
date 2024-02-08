@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Contests from '~/utils/apis/Contests'
-import { SubmissionDetail } from '~/types/submissions'
 import TestcaseSetsTable from '~/components/contests/submissions/TestcaseSetsTable.vue'
 
 definePageMeta({

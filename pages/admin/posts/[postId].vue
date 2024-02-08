@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
 import Posts from '~/utils/apis/Posts'
-import { Post } from '~/types/post'
+import type { Post } from '~/types/post'
 import { STATUS_TABLE } from '~/constants/posts'
 
 definePageMeta({

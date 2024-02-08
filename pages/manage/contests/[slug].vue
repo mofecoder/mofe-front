@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import ManageContests from '~/utils/apis/ManageContests'
-import dayjs, { Dayjs } from 'dayjs'
-import { ContestDetailManage } from '~/types/contest'
+import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import type { ContestDetailManage } from '~/types/contest'
 
 definePageMeta({
   middleware: 'admin'

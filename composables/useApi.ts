@@ -1,7 +1,7 @@
-import { Api, ArgsType } from '~/types/api'
+import type { Api, ArgsType } from '~/types/api'
 import useHttp from '~/composables/useHttp'
-import { UseFetchOptions } from '#app'
-import { MaybeRef } from 'vue'
+import type { UseFetchOptions } from '#app'
+import type { MaybeRef } from 'vue'
 
 function useApi<
   T,

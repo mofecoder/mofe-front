@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ContestDetail } from '~/types/contest'
+import type { ContestDetail } from '~/types/contest'
 import TimeRangePickerCard from '~/components/manage/contests/TimeRangePickerCard.vue'
-import dayjs, { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import ManageContests from '~/utils/apis/ManageContests'
 import EditContestCard from '~/components/manage/contests/EditContestCard.vue'
 import { definePageMeta } from '#imports'
@@ -21,7 +22,8 @@ const params = reactive({
   penalty: '0',
   officialMode: false,
   kind: 'normal' as ContestDetail['kind'],
-  dateRange: [dayjs(), dayjs().add(1, 'h')] as [Dayjs, Dayjs]
+  dateRange: [dayjs(), dayjs().add(1, 'h')] as [Dayjs, Dayjs],
+  standingsMode: 'atcoder'
 })
 
 const disabled = computed(() => {
@@ -46,7 +48,8 @@ const submit = async () => {
       startAt: params.dateRange[0].format(),
       endAt: params.dateRange[1].format(),
       description: params.description,
-      penaltyTime: parseInt(params.penalty) * 60
+      penaltyTime: parseInt(params.penalty) * 60,
+      standingsMode: params.standingsMode
     }
   ).then(({ error }) => {
     if (error.value) alert('コンテストの作成に失敗しました')
@@ -65,6 +68,7 @@ const submit = async () => {
       v-model:penalty="params.penalty"
       v-model:kind="params.kind"
       v-model:official-mode="params.officialMode"
+      v-model:standings-mode="params.standingsMode"
       class="my-2"
     />
     <TimeRangePickerCard v-model="params.dateRange" class="my-2" />

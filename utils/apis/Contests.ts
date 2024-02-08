@@ -1,10 +1,10 @@
 import { Api } from '~/types/api'
-import { Contest, ContestDetail } from '~/types/contest'
-import { StandingData } from '~/types/standings'
-import { Clarification } from '~/types/clarification'
-import { Submit, SubmissionDetail } from '~/types/submissions'
-import { Pagination } from '~/types/ApiMeta'
-import { SortItem } from '~/types/datatable'
+import type { Contest, ContestDetail } from '~/types/contest'
+import type { StandingData } from '~/types/standings'
+import type { Clarification } from '~/types/clarification'
+import type { Submit, SubmissionDetail } from '~/types/submissions'
+import type { Pagination } from '~/types/ApiMeta'
+import type { SortItem } from '~/types/datatable'
 
 export type SubmissionResponse = {
   data: Submit[]

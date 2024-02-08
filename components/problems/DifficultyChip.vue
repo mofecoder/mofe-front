@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Difficulty } from '~/types/task'
+import type { Difficulty } from '~/types/task'
 
 const props = defineProps<{
   difficulty: Difficulty

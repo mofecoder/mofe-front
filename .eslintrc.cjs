@@ -35,6 +35,7 @@ module.exports = {
     'vue/valid-v-slot': 'off',
     'unicorn/number-literal-case': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'vuetify/no-deprecated-props': 'off'
+    'vuetify/no-deprecated-props': 'off',
+    '@typescript-eslint/consistent-type-imports': 'warn'
   }
 }

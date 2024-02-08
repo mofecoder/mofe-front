@@ -1,5 +1,5 @@
 import { Api } from '~/types/api'
-import { User } from '~/types/adminUser'
+import type { User } from '~/types/adminUser'
 
 const getUsers = new Api<User[], []>('/users')
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Task } from '~/types/contestAdmin'
+import type { Task } from '~/types/contestAdmin'
 export type ProblemType = Task & {
   id: number
   writerUser?: string

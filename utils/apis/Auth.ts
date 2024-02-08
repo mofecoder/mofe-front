@@ -1,5 +1,5 @@
 import { Api } from '~/types/api'
-import { AuthUser } from '~/types/AuthUser'
+import type { AuthUser } from '~/types/AuthUser'
 
 type AuthResponse<
   SuccessType extends true | undefined = undefined,

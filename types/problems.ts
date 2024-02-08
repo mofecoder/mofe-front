@@ -1,5 +1,5 @@
-import { Difficulty, Sample } from '~~/types/task'
-import { Contest } from '~~/types/contest'
+import type { Difficulty, Sample } from '~~/types/task'
+import type { Contest } from '~~/types/contest'
 
 export interface ProblemParams {
   name: string

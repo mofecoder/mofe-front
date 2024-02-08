@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatDate } from '~/utils/formatting'
-import { Contest } from '~/types/contest'
+import type { Contest } from '~/types/contest'
 import dayjs from 'dayjs'
 import useApi from '~/composables/useApi'
 import Contests from '~/utils/apis/Contests'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SubmissionResult } from '~/types/submissions'
-import { PropType } from 'vue'
+import type { SubmissionResult } from '~/types/submissions'
+import type { PropType } from 'vue'
 
 const TOOLTIP_TEXT: Record<SubmissionResult, string> = {
   AC: '正解 (Accepted)',
@@ -30,7 +30,7 @@ const icon = computed(
       WJ: '',
       WR: '',
       CP: ''
-    }[props.status])
+    })[props.status]
 )
 const props = defineProps({
   status: {

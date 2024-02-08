@@ -2,7 +2,7 @@
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { useUserStore } from '~/store/user'
-import { MarkdownIt } from '~/types/plugins'
+import type { MarkdownIt } from '~/types/plugins'
 import Contests from '~/utils/apis/Contests'
 
 const route = useRoute()

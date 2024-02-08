@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Admin from '~/utils/apis/Admin'
-import { User } from '~/types/adminUser'
+import type { User } from '~/types/adminUser'
 import { VDataTable } from 'vuetify/labs/components'
 import { formatDate } from '~/utils/formatting'
 

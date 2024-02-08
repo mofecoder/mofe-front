@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { PropType } from 'vue'
-import { Post } from '~/types/post'
+import type { PropType } from 'vue'
+import type { Post } from '~/types/post'
 import { formatDate } from '~/utils/formatting'
 
 defineProps({

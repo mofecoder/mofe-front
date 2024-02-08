@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TestcaseSetResult } from '~/types/submissions'
+import type { TestcaseSetResult } from '~/types/submissions'
 
 const props = defineProps<{
   results: TestcaseSetResult[]
@@ -72,7 +72,10 @@ const TESTCASE_SHOW_MAX = 10
                 </v-btn>
               </template>
               <div
-                v-show="set.testcases!.length <= TESTCASE_SHOW_MAX || showNameList.has(set.name)"
+                v-show="
+                  set.testcases!.length <= TESTCASE_SHOW_MAX ||
+                  showNameList.has(set.name)
+                "
                 class="testcases"
               >
                 {{ set.testcases.join(', ') }}

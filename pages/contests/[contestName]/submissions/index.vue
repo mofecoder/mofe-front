@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import Contests, { FilterOptions } from '~/utils/apis/Contests'
-import { SortItem } from '~/types/datatable'
+import type { FilterOptions } from '~/utils/apis/Contests'
+import Contests from '~/utils/apis/Contests'
+import type { SortItem } from '~/types/datatable'
 
 definePageMeta({
   layout: 'contest'

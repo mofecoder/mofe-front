@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Problem } from '~/types/contestAdmin'
+import type { Problem } from '~/types/contestAdmin'
 
 defineProps<{
   items: Problem[]

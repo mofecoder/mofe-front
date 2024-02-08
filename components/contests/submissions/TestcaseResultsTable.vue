@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TestcaseResult } from '~/types/submissions'
+import type { TestcaseResult } from '~/types/submissions'
 
 const props = defineProps<{
   testcaseResults: TestcaseResult[]

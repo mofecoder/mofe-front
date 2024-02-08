@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ContestDetail as Contest } from '~/types/contest'
+import type { ContestDetail as Contest } from '~/types/contest'
 import { KIND_TABLE, STANDINGS_MODE_TABLE } from '~/constants/contests'
 
 const URL_REGEX =

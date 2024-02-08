@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
+import type { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
 
 defineProps<{
   tasks?: ProblemType[]
