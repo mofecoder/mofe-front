@@ -11,15 +11,11 @@
     "generate": "nuxt generate",
     "lint:nofix": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
     "lint": "eslint --fix --ext .js,.ts,.vue --ignore-path .gitignore .",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,vue}": "eslint"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "*.{js,ts,vue}": "eslint --fix --ext .js,.ts,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
     "@date-io/dayjs": "^3.0.0",
