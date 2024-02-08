@@ -28,20 +28,11 @@ const {
 const problems = computed(() => standingData.value?.problems)
 const standings = computed(() => standingData.value?.standings)
 const teamPrefix = TEAM_CONTEST_LIST[contestName.value]
-const timeout = ref(-1)
 const refreshInterval = ref(-1)
 
-function resetInterval(value: number) {
-  if (!process.client) return
-
-  window.clearInterval(timeout.value)
-  if (value != -1) {
-    timeout.value = window.setInterval(async () => {
-      await refresh()
-    }, value * 1000)
-  }
-}
-watch(refreshInterval, (interval) => resetInterval(interval))
+useIntervalFn(async () => {
+  await refresh()
+}, refreshInterval)
 </script>
 
 <template>

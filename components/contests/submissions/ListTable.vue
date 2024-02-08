@@ -49,23 +49,13 @@ const footerProps = reactive({
 const rejudgeIds: Set<number> = reactive(new Set())
 
 const loadingInner = ref(false)
-const timeout = ref(-1)
 
-function resetInterval(value: number) {
-  if (!process.client) return
-
-  window.clearInterval(timeout.value)
-  timeout.value = window.setInterval(async () => {
+useIntervalFn(
+  async () => {
     await reload()
-  }, value)
-}
-watch(
-  () => props.interval,
-  (interval) => resetInterval(interval)
+  },
+  () => props.interval
 )
-
-onMounted(() => resetInterval(props.interval))
-onBeforeUnmount(() => window.clearInterval(timeout.value))
 
 const headers = computed(() => {
   const ret: DataTableHeader[] = [
