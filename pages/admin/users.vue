@@ -74,7 +74,7 @@ const search = ref('')
         </template>
         <template v-else>{{ item.role }}</template>
       </template>
-      <template #item.writerRequestCode="{ item: { columns: item } }">
+      <template #item.writerRequestCode="{ item }">
         {{ item.writerRequestCode || '未発行' }}
       </template>
     </v-data-table>

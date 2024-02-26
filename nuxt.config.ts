@@ -44,6 +44,11 @@ const nuxtConfig = defineNuxtConfig({
     },
     define: {
       'process.env.DEBUG': false
+    },
+    vue: {
+      script: {
+        defineModel: true
+      }
     }
   },
   runtimeConfig: {

@@ -1,3 +1,23 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: false
+})
+const props = defineProps<{
+  error?: any
+}>()
+
+const pageNotFound = ref('404 Not Found')
+const otherError = ref('An error occurred')
+
+useHead({
+  title() {
+    return props.error?.statusCode === 404
+      ? pageNotFound.value
+      : otherError.value
+  }
+})
+</script>
+
 <template>
   <v-app dark>
     <div v-if="error.message">{{ error.message }}</div>
@@ -11,33 +31,6 @@
     <NuxtLink to="/">Home page</NuxtLink>
   </v-app>
 </template>
-
-<script lang="ts">
-import type { PropType } from 'vue'
-
-export default {
-  layout: 'empty',
-  props: {
-    error: {
-      type: Object as PropType<any>,
-      default: null
-    }
-  },
-  data() {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
-  },
-  head() {
-    const title =
-      this.error?.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title
-    }
-  }
-}
-</script>
 
 <style scoped>
 h1 {

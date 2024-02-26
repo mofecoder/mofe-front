@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { Difficulties } from '~/constants/difficulty'
 import ManageProblems from '~/utils/apis/ManageProblems'
+import type { Difficulty } from '~/types/task'
 
 const rules = {
   required: [(text: string) => /\S+/.test(text) || 'このフィールドは必須です']
@@ -35,7 +36,8 @@ const onSubmit = async () => {
     {
       problem: {
         name: problem.value.name,
-        difficulty: problem.value.difficulty,
+        difficulty: problem.value.difficulty as Difficulty,
+        executionTimeLimit: 2000,
         constraints: problem.value.constraints,
         inputFormat: problem.value.inputFormat,
         outputFormat: problem.value.outputFormat,

@@ -209,10 +209,10 @@ const filterStatus = computed({
         :to="`/contests/${contestSlug}/submissions/${submissionsData[index].id}`"
       />
     </template>
-    <template #item.executionTime="{ item: { columns: item } }">
+    <template #item.executionTime="{ item }">
       {{ item.executionTime == null ? '' : `${item.executionTime} ms` }}
     </template>
-    <template #item.executionMemory="{ item: { columns: item } }">
+    <template #item.executionMemory="{ item }">
       {{ item.executionMemory == null ? '' : `${item.executionMemory} KB` }}
     </template>
     <template #item.rejudge="{ index }">

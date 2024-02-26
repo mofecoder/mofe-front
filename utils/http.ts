@@ -82,12 +82,8 @@ export function http<T>(
   url: MaybeRef<string>,
   options: UseFetchOptions<T> = {}
 ) {
-  const oldAuth = useCookie<AuthTokens | null>('auth')
   const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
-  const { client, accessToken, uid } = auth.value || oldAuth.value || {}
-  if (oldAuth.value) {
-    oldAuth.value = null
-  }
+  const { client, accessToken, uid } = auth.value || {}
   const headers: HeadersInit = {
     ...(client && accessToken && uid && { accessToken, client, uid })
   }

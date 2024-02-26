@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ManageProblems from '~/utils/apis/ManageProblems'
+import type { TestcaseSet } from '~/types/problems'
 
 const props = defineProps<{
   problemId: number
@@ -25,7 +26,9 @@ const { data, refresh: refreshTestcase } = await useApi(
   [props.problemId]
 )
 const testcases = computed(() => data.value?.testcases || [])
-const testcaseSets = computed(() => data.value?.testcaseSets || [])
+const testcaseSets = computed<TestcaseSet[]>(
+  () => data.value?.testcaseSets || []
+)
 
 const change = (f: File) => {
   file.value = f || null
@@ -139,12 +142,10 @@ const selectingHeader = (value: boolean) => {
 
 const deleteAll = async () => {
   testcaseLoading.value = true
-  await useApi(
-    ManageProblems.deleteMultipleTestcases,
-    [props.problemId],
-    {},
-    { testcases: Array.from(selecting) }
-  )
+  await http(ManageProblems.deleteMultipleTestcases.$path([props.problemId]), {
+    method: 'DELETE',
+    body: { testcases: Array.from(selecting) }
+  })
   selecting.clear()
   await refreshTestcase()
   testcaseLoading.value = false
@@ -160,11 +161,9 @@ const editSet = (id: number | null) => {
 }
 
 const deleteSet = async (id: number) => {
-  const { error } = await useApi(ManageProblems.deleteTestcaseSet, [
-    props.problemId,
-    id
-  ])
-  if (error.value) {
+  try {
+    await http(ManageProblems.deleteTestcaseSet.$path([props.problemId, id]))
+  } catch (error) {
     alert('テストケースセットの削除に失敗しました。')
     return
   }
@@ -174,13 +173,17 @@ const deleteSet = async (id: number) => {
 const changeTestcaseState = async (i: number, j: number, v: boolean) => {
   if (!testcaseSets.value) return
   testcaseLoading.value = true
-  await useApi(
-    ManageProblems.changeTestcaseState,
-    [props.problemId, testcases.value![i].id],
-    {},
+  await http(
+    ManageProblems.changeTestcaseState.$path([
+      props.problemId,
+      testcases.value![i].id
+    ]),
     {
-      testcaseSetId: testcaseSets.value[j].id,
-      state: v
+      method: 'PATCH',
+      body: {
+        testcaseSetId: testcaseSets.value[j].id,
+        state: v
+      }
     }
   )
   await refreshTestcase()
@@ -214,7 +217,8 @@ const closeSetModal = () => {
     >
       「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
       そのテストケースセットの配点が加算されます。<br />
-      満点はすべてのテストケースセットの配点の合計です。
+      満点はすべてのテストケースセットの配点の合計となります。<br />
+      採点順・表示順はテストケース名の辞書順です。
     </v-alert>
     <v-card class="mb-8" variant="outlined" :loading="!testcaseSets">
       <v-card-title>テストケースセット一覧</v-card-title>
@@ -269,7 +273,7 @@ const closeSetModal = () => {
           <thead>
             <tr>
               <th>
-                <v-checkbox
+                <v-checkbox-btn
                   :model-value="selecting.size === testcases.length"
                   :indeterminate="
                     selecting.size > 0 && selecting.size < testcases.length
@@ -292,7 +296,7 @@ const closeSetModal = () => {
           <tbody>
             <tr v-for="(testcase, i) in testcases" :key="testcase.name">
               <td>
-                <v-checkbox
+                <v-checkbox-btn
                   :model-value="selecting.has(testcase.id)"
                   hide-details
                   color="red"
@@ -308,7 +312,7 @@ const closeSetModal = () => {
                 v-for="(_, j) in testcase.testcaseSets"
                 :key="`${testcase.name}_${j}`"
               >
-                <v-checkbox
+                <v-checkbox-btn
                   class="mt-0"
                   :model-value="testcases[i].testcaseSets[j]"
                   color="orange"

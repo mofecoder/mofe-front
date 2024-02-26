@@ -8,6 +8,7 @@ export interface ProblemParams {
   inputFormat: string
   outputFormat: string
   constraints: string
+  executionTimeLimit: number
 }
 
 export interface ProblemBase {

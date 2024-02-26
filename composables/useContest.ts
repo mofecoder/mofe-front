@@ -13,9 +13,9 @@ export function useContest() {
 
   const updateContest = async (loadClarifications: boolean = true) => {
     if (!contestName.value) return
-    return contestStore.getContest(contestName).then(async () => {
-      if (loadClarifications) await updateClarifications()
-    })
+    const res = contestStore.getContest(contestName)
+    if (loadClarifications) await updateClarifications()
+    return res
   }
 
   const updateClarifications = async () => {
@@ -23,13 +23,7 @@ export function useContest() {
     return contestStore.getClarifications(contestName)
   }
 
-  watch(
-    contestName,
-    async () => {
-      await updateContest()
-    },
-    { immediate: true }
-  )
+  watch(contestName, async () => await updateContest(), { immediate: true })
 
   return {
     contestName,

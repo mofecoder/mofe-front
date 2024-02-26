@@ -56,8 +56,8 @@ const isWriter = computed(() =>
         <v-col cols="12" lg="5">
           <v-card variant="outlined">
             <v-card-text>
+              <ContestList />
               <ClientOnly>
-                <ContestList />
                 <div class="mt-4">
                   <p>障害情報等のお知らせは X で発信しています</p>
                   <a

@@ -52,7 +52,7 @@
     "vite-plugin-vuetify": "^2.0.1",
     "vue-gtag": "^2.0.1",
     "vue-router": "^4.2.1",
-    "vuetify": "^3.3.4"
+    "vuetify": "^3.5.3"
   },
   "devDependencies": {
     "@mdi/font": "^7.2.96",
@@ -60,7 +60,6 @@
     "@nuxt/types": "^2.17.0",
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/stylelint-module": "^5.1.0",
-    "@nuxtjs/vuetify": "^1.11.2",
     "@types/codemirror": "^5.60.8",
     "@types/highlight.js": "^10.1.0",
     "@types/katex": "^0.16.0",
@@ -101,6 +100,6 @@
     "@nuxtjs/vuetify/**/sass": "1.32.12"
   },
   "overrides": {
-    "vue": "latest"
+    "vue": "~3.3"
   }
 }

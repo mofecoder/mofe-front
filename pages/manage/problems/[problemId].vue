@@ -4,6 +4,7 @@ import EditCard from '~/components/manage/problems/EditCard.vue'
 import EditTestcasesCard from '~/components/manage/problems/EditTestcasesCard.vue'
 import EditJudgeCard from '~/components/manage/problems/EditJudgeCard.vue'
 import CheckProblemCard from '~/components/manage/problems/CheckProblemCard.vue'
+import ManageProblems from '~/utils/apis/ManageProblems'
 
 definePageMeta({
   middleware: 'authenticated',
@@ -16,6 +17,9 @@ definePageMeta({
 
 const route = useRoute()
 const problemId = computed(() => parseInt(route.params.problemId as string))
+const { data: problem, refresh } = await useApi(ManageProblems.getProblem, [
+  problemId.value
+])
 
 useHead(() => ({
   title: `[${problemId.value}] 問題の編集`
@@ -29,8 +33,7 @@ const components = [
   EditJudgeCard,
   CheckProblemCard
 ]
-const selected = ref('')
-nextTick(() => (selected.value = tabs[0]))
+const selected = ref(tabs[0])
 </script>
 
 <template>
@@ -44,7 +47,8 @@ nextTick(() => (selected.value = tabs[0]))
     >
       問題一覧に戻る
     </v-btn>
-    <v-card>
+    <h3 v-if="problem">編集中: [{{ problemId }}] {{ problem.name }}</h3>
+    <v-card class="mt-2">
       <v-tabs v-model="selected" align-tabs="center">
         <v-tab v-for="(tab, i) in tabs" :key="tab" :value="tab">
           {{ tabNames[i] }}
@@ -52,7 +56,11 @@ nextTick(() => (selected.value = tabs[0]))
       </v-tabs>
       <v-window v-model="selected" :continuous="false">
         <v-window-item v-for="(tab, i) in tabs" :key="i" :value="tab" eager>
-          <component :is="components[i]" :problem-id="problemId" />
+          <component
+            :is="components[i]"
+            :problem-id="problemId"
+            @update="refresh"
+          />
         </v-window-item>
       </v-window>
     </v-card>

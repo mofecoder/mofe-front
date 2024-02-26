@@ -17,6 +17,7 @@ const props = defineProps({
     default: 0
   }
 })
+const opened = defineModel<string[]>('opened')
 
 const afterContest = computed(() => {
   return props.contest && dayjs(props.contest.endAt).isBefore(Date())
@@ -24,7 +25,7 @@ const afterContest = computed(() => {
 </script>
 
 <template>
-  <v-list color="primary">
+  <v-list v-model:opened="opened" color="primary">
     <v-list-item
       :to="`/contests/${contestName}`"
       exact
@@ -39,7 +40,11 @@ const afterContest = computed(() => {
       title="問題"
     >
     </v-list-item>
-    <v-list-group v-if="contest && contest.tasks && contest.tasks.length">
+    <v-list-group
+      v-if="contest"
+      v-show="contest.tasks && contest.tasks.length"
+      value="Problems"
+    >
       <template #activator="{ props: p }">
         <v-list-item v-bind="p" prepend-icon="mdi-magnify" title="問題一覧" />
       </template>

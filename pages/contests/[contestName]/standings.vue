@@ -12,7 +12,6 @@ useHead(() => ({
   title: `順位表 - ${contest.value?.name}`,
   titleTemplate: null
 }))
-onBeforeUnmount(() => window.clearInterval(timeout.value))
 
 const closedMode = ref(false)
 const args = computed(

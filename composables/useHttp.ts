@@ -1,6 +1,4 @@
-import lodash from 'lodash'
 import defu from 'defu'
-import type { FetchResponse } from 'ofetch'
 import type { MaybeRef } from 'vue'
 import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'

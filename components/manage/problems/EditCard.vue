@@ -11,6 +11,10 @@ const props = defineProps<{
   problemId: number
 }>()
 
+const emits = defineEmits<{
+  update: []
+}>()
+
 const modals = reactive({
   problemStatement: false,
   constraints: false,
@@ -43,12 +47,14 @@ const onSubmit = async () => {
         constraints: problem.value.constraints,
         inputFormat: problem.value.inputFormat,
         outputFormat: problem.value.outputFormat,
-        statement: problem.value.statement
+        statement: problem.value.statement,
+        executionTimeLimit: problem.value.executionTimeLimit
       }
     }
   )
   updated.value = true
   await refresh()
+  emits('update')
 }
 
 const addTester = async () => {
@@ -98,8 +104,8 @@ const removeTester = async (name: string) => {
     <v-card-text>
       <v-form v-if="problem != null" v-model="valid" @submit.prevent="onSubmit">
         <v-row>
-          <v-col cols="12" md="4" lg="2" class="py-1">
-            <v-text-field :model-value="problemId" readonly label="問題 ID" />
+          <v-col cols="12" md="4" lg="1" class="py-1">
+            <v-text-field :model-value="problemId" readonly label="ID" />
           </v-col>
           <v-col cols="12" md="8" lg="7" class="py-1">
             <v-text-field
@@ -108,11 +114,22 @@ const removeTester = async (name: string) => {
               label="問題名"
             />
           </v-col>
-          <v-col cols="12" lg="3" class="py-1">
+          <v-col cols="12" md="7" lg="2" class="py-1">
             <v-select
               v-model="problem.difficulty"
               :items="Difficulties"
               label="難易度"
+            />
+          </v-col>
+          <v-col cols="12" md="5" lg="2" class="py-1">
+            <v-text-field
+              v-model.number="problem.executionTimeLimit"
+              :rules="rules.required"
+              type="number"
+              label="実行時間制限"
+              suffix="ms"
+              min="1"
+              max="20000"
             />
           </v-col>
         </v-row>

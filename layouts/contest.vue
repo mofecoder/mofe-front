@@ -53,6 +53,14 @@ const createLink = (path: string) => ({
     redirect: route.path.startsWith('/auth') ? undefined : route.path
   }
 })
+const rail = ref(desktop.value)
+const _opened = ref([])
+const opened = computed({
+  get: () => (rail.value ? [] : _opened.value),
+  set: (val) => {
+    _opened.value = val
+  }
+})
 </script>
 
 <template>
@@ -79,65 +87,68 @@ const createLink = (path: string) => ({
         </div>
       </template>
       <v-spacer />
-      <ClientOnly>
-        <div class="d-md-none">
-          <template v-if="user">
-            <v-btn variant="text" icon="mdi-account" to="/user" />
-          </template>
-          <template v-else>
-            <v-btn
-              variant="text"
-              icon="mdi-account-plus"
-              :to="createLink('/auth/signup')"
-              density="compact"
-            />
-            <v-btn
-              variant="text"
-              icon="mdi-login-variant"
-              :to="createLink('/auth/signin')"
-              density="compact"
-            />
-          </template>
-        </div>
-        <div class="d-none d-md-block">
-          <template v-if="user">
-            <v-btn
-              variant="text"
-              prepend-icon="mdi-account"
-              class="text-none"
-              to="/user"
-            >
-              {{ user.name }}
-            </v-btn>
-          </template>
-          <template v-else>
-            <v-btn
-              class="text-white"
-              :to="createLink('/auth/signup')"
-              prepend-icon="mdi-account-plus"
-              variant="text"
-              >新規登録</v-btn
-            >
-            <v-btn
-              class="text-white"
-              :to="createLink('/auth/signin')"
-              variant="text"
-              prepend-icon="mdi-login-variant"
-              >ログイン</v-btn
-            >
-          </template>
-        </div>
-      </ClientOnly>
+      <template #append>
+        <ClientOnly>
+          <div class="d-md-none">
+            <template v-if="user">
+              <v-btn variant="text" icon="mdi-account" to="/user" />
+            </template>
+            <template v-else>
+              <v-btn
+                variant="text"
+                icon="mdi-account-plus"
+                :to="createLink('/auth/signup')"
+                density="compact"
+              />
+              <v-btn
+                variant="text"
+                icon="mdi-login-variant"
+                :to="createLink('/auth/signin')"
+                density="compact"
+              />
+            </template>
+          </div>
+          <div class="d-none d-md-block">
+            <template v-if="user">
+              <v-btn
+                variant="text"
+                prepend-icon="mdi-account"
+                class="text-none"
+                to="/user"
+              >
+                {{ user.name }}
+              </v-btn>
+            </template>
+            <template v-else>
+              <v-btn
+                class="text-white"
+                :to="createLink('/auth/signup')"
+                prepend-icon="mdi-account-plus"
+                variant="text"
+                >新規登録</v-btn
+              >
+              <v-btn
+                class="text-white"
+                :to="createLink('/auth/signin')"
+                variant="text"
+                prepend-icon="mdi-login-variant"
+                >ログイン</v-btn
+              >
+            </template>
+          </div>
+        </ClientOnly>
+      </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :rail="desktop" expand-on-hover>
       <ContestSidebar
         v-if="contest && contestName"
+        v-model:opened="opened"
         :contest="contest"
         :contest-name="contestName"
         :unread-clarifications="unreadClarifications"
       />
     </v-navigation-drawer>
-    <v-main>
+    <v-main style="--v-layout-top: 64px">
       <v-container>
         <slot />
       </v-container>

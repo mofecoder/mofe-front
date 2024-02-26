@@ -2,6 +2,10 @@
 import checkersRaw from '~/constants/checkers'
 import ManageProblems from '~/utils/apis/ManageProblems'
 
+const emits = defineEmits<{
+  update: []
+}>()
+
 const checkers = checkersRaw.map((c) => ({
   title: `${c.description} (${c.fileName})`,
   value: c.value
@@ -27,7 +31,6 @@ if (checkerPath) {
 const updateFile = (f: File | null) => (file.value = f)
 
 const submit = async () => {
-  console.log(file)
   if (checker.value === 'custom' && !file.value) {
     alert('カスタムチェッカーファイルを選択してください')
     return
@@ -37,6 +40,7 @@ const submit = async () => {
   if (type) formData.append('type', type)
   if (file.value) formData.append('file', file.value)
   await useApi(ManageProblems.updateChecker, [props.problemId], {}, formData)
+  emits('update')
 }
 </script>
 
