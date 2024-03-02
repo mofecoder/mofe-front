@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { FetchError } from 'ofetch'
 import ManageProblems from '~/utils/apis/ManageProblems'
 import { Difficulties } from '~/constants/difficulty'
 
@@ -25,7 +26,6 @@ const modals = reactive({
 const valid = ref(false)
 const updated = ref(false)
 
-const testerName = ref('')
 const testerError = ref('')
 const testerLoading = ref(false)
 
@@ -57,46 +57,43 @@ const onSubmit = async () => {
   emits('update')
 }
 
-const addTester = async () => {
+const addTester = async (name: string) => {
   testerLoading.value = true
-  await useApi(
-    ManageProblems.addTester,
-    [props.problemId],
-    {},
-    {
-      userName: testerName.value
-    }
-  ).then(async ({ error }) => {
-    if (error.value) {
-      if (error.value.data) {
-        testerError.value = error.value.data.error
-      } else {
-        alert('テスターの追加に失敗しました。')
+  try {
+    await http(ManageProblems.addTester.$path([props.problemId]), {
+      method: 'POST',
+      body: {
+        userName: name
       }
-      return
-    }
-    testerName.value = ''
+    })
     testerError.value = ''
+  } catch (error: unknown) {
+    if (error instanceof FetchError && error?.data?.error) {
+      testerError.value = error.data.error
+    } else {
+      testerError.value = 'テスターの追加に失敗しました。'
+    }
+  } finally {
     await refresh()
-  })
-  testerLoading.value = false
+    testerLoading.value = false
+  }
 }
 
 const removeTester = async (name: string) => {
-  await useApi(
-    ManageProblems.removeTester,
-    [props.problemId],
-    {},
-    {
-      userName: name
-    }
-  ).then(async ({ error }) => {
-    if (error.value) {
-      alert('テスターの削除に失敗しました。')
-      return
-    }
+  testerLoading.value = true
+  try {
+    await http(ManageProblems.removeTester.$path([props.problemId]), {
+      method: 'DELETE',
+      body: {
+        userName: name
+      }
+    })
+  } catch (err: unknown) {
+    alert('テスターの削除に失敗しました。')
+  } finally {
     await refresh()
-  })
+    testerLoading.value = false
+  }
 }
 </script>
 <template>
@@ -257,36 +254,17 @@ const removeTester = async (name: string) => {
         </v-row>
         <v-row>
           <v-col cols="12">
-            <h4>テスターの管理</h4>
-            <ul v-if="testers.length" class="text-body-1 text-black my-4">
-              <li v-for="tester in testers" :key="`tester-${tester}`">
-                {{ tester }}
-                <v-icon class="ml-2" size="small" @click="removeTester(tester)"
-                  >mdi-close-circle-outline</v-icon
-                >
-              </li>
-            </ul>
-            <p v-else class="text-body-2 my-2">
-              テスターは登録されていません。
-            </p>
-            <v-text-field
-              v-model="testerName"
-              class="edit-problem-card__add-tester"
+            <ManageUserList
+              :loading="testerLoading"
+              :users="testers"
+              :error="testerError"
               placeholder="テスターを追加"
-              :loading="testerLoading"
-              density="compact"
-              hide-details
-              @keydown.enter="addTester"
-            />
-            <v-btn
-              size="small"
-              color="primary"
-              class="mt-2"
-              :loading="testerLoading"
-              @click="addTester"
-              >追加</v-btn
+              @add="addTester"
+              @remove="removeTester"
             >
-            <p class="text-red mt-2" v-text="testerError" />
+              <template #emptyMessage>テスターは追加されていません</template>
+              <template #subheader>Testers</template>
+            </ManageUserList>
           </v-col>
         </v-row>
         <!-- 登録ボタン -->

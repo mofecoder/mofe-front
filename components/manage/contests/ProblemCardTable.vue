@@ -11,6 +11,7 @@ const props = defineProps<{
   tasks?: ProblemType[]
   contestSlug?: string
   problemMode?: boolean
+  isAdmin: boolean
 }>()
 
 const emits = defineEmits<{
@@ -66,14 +67,17 @@ const items = computed(() => {
             <v-btn
               icon
               variant="text"
+              density="compact"
               :to="`/contests/${contestSlug}/tasks/${item.slug}`"
             >
               <v-icon size="small">mdi-eye</v-icon>
             </v-btn>
             <v-btn
+              v-if="isAdmin"
               icon
               variant="text"
               color="red"
+              density="compact"
               @click="emits('remove', item.slug!)"
             >
               <v-icon size="small" color="red">mdi-delete</v-icon>

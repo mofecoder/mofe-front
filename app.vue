@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const title = 'MOFE (Beta)'
+const title = 'MOFE'
 useHead({
   title,
   titleTemplate: `%s | ${title}`,

@@ -41,6 +41,16 @@ const removeTask = new Api<void, [string, string]>(
   'PUT'
 )
 
+const addAdmin = new Api<void, [string], { userName: string }>(
+  ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
+  'POST'
+)
+
+const removeAdmin = new Api<void, [string], { userName: string }>(
+  ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
+  'DELETE'
+)
+
 export default {
   getContest,
   getContests,
@@ -48,5 +58,7 @@ export default {
   getUnsetProblems,
   updateContest,
   addTask,
-  removeTask
+  removeTask,
+  addAdmin,
+  removeAdmin
 }

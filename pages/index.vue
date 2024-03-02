@@ -21,7 +21,7 @@ useHead({
       async: true
     }
   ],
-  title: 'MOFE (Beta)',
+  title: 'MOFE',
   titleTemplate: null
 })
 

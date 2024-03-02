@@ -61,6 +61,14 @@ const opened = computed({
     _opened.value = val
   }
 })
+const role = computed(() => {
+  if (!user.value || !contest.value) return ''
+  if (user.value.role === 'admin') return 'Admin'
+  if (contest.value.isAdmin) return 'Manager'
+  if (contest.value.isWriterOrTester) return 'W/T'
+  if (contest.value.registered) return 'Contestant'
+  return ''
+})
 </script>
 
 <template>
@@ -108,7 +116,7 @@ const opened = computed({
               />
             </template>
           </div>
-          <div class="d-none d-md-block">
+          <div class="d-none d-md-flex flex-column align-center">
             <template v-if="user">
               <v-btn
                 variant="text"
@@ -118,6 +126,7 @@ const opened = computed({
               >
                 {{ user.name }}
               </v-btn>
+              <p v-if="role" class="text-caption">({{ role }})</p>
             </template>
             <template v-else>
               <v-btn

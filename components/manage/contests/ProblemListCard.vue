@@ -4,6 +4,7 @@ import type { ProblemType } from '~/components/manage/contests/ProblemCardTable.
 defineProps<{
   tasks?: ProblemType[]
   contestSlug: string
+  isAdmin: boolean
 }>()
 defineEmits<{
   remove: [string]
@@ -17,6 +18,7 @@ defineEmits<{
       <ManageContestsProblemCardTable
         :contest-slug="contestSlug"
         :tasks="tasks"
+        :is-admin="isAdmin"
         @remove="$emit('remove', $event)"
       />
     </v-card-text>

@@ -29,6 +29,7 @@ export interface ContestDetail extends Contest {
 
 export interface ContestDetailManage extends ContestDetail {
   tasks: ManageProblem[]
+  admins: string[]
   officialMode: boolean
 }
 

@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
+import { FetchError } from 'ofetch'
 import ManageContests from '~/utils/apis/ManageContests'
 import type { ContestDetailManage } from '~/types/contest'
+import { useUserStore } from '~/store/user'
 
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'authenticated'
 })
+
+const userStore = useUserStore()
 
 const route = useRoute()
 const modal = ref(false)
@@ -22,12 +26,19 @@ const { data: unsetProblems, refresh: refreshUnsetProblems } = await useApi(
   ManageContests.getUnsetProblems,
   []
 )
+
+if (error.value?.status === 403) {
+  await navigateTo('/')
+}
+
+const isAdmin = computed(() => userStore.isAdmin)
+
 const usedPositions = computed(
   () => new Set(contestData.value?.tasks.map((x) => x.position))
 )
 
 if (!contestData.value) {
-  createError({
+  throw createError({
     statusCode: error.value?.statusCode,
     message: error.value?.message
   })
@@ -47,7 +58,9 @@ watch(contestData, (value, oldValue) => {
   })
 })
 
-const contest = reactive({
+const contest: Omit<ContestDetailManage, 'penaltyTime'> & {
+  penaltyTime: string
+} = reactive({
   ...contestData.value!,
   penaltyTime: contestData.value!.penaltyTime.toString()
 })
@@ -56,7 +69,8 @@ const loading = reactive({
   information: false,
   time: false,
   tasks: false,
-  add: false
+  add: false,
+  admins: false
 })
 
 const updated = ref(false)
@@ -129,9 +143,47 @@ const addProblem = async (problemId: number, pos: string) => {
 
 const remove = async (slug: string) => {
   loading.tasks = true
-  await useApi(ManageContests.removeTask, [contest.slug, slug])
+  await http(ManageContests.removeTask.$path([contest.slug, slug]), {
+    method: 'DELETE'
+  })
   await reload()
   loading.tasks = false
+}
+
+const adminsError = ref('')
+const addAdmin = async (user: string) => {
+  loading.admins = true
+  try {
+    await http(ManageContests.addAdmin.$path([contest.slug]), {
+      method: 'POST',
+      body: { userName: user }
+    })
+    adminsError.value = ''
+  } catch (error: unknown) {
+    if (error instanceof FetchError && error?.data?.error) {
+      adminsError.value = error.data.error
+    } else {
+      adminsError.value = 'コンテスト管理者の追加に失敗しました。'
+    }
+  } finally {
+    await reload()
+    loading.admins = false
+  }
+}
+
+const removeAdmin = async (user: string) => {
+  loading.admins = true
+  try {
+    await http(ManageContests.removeAdmin.$path([contest.slug]), {
+      method: 'DELETE',
+      body: { userName: user }
+    })
+  } catch (error: unknown) {
+    alert('管理者の削除に失敗しました。')
+  } finally {
+    await reload()
+    loading.admins = false
+  }
 }
 
 const openModal = async () => {
@@ -142,14 +194,24 @@ const openModal = async () => {
 
 <template>
   <v-container v-if="contestData" fluid>
-    <v-btn
-      class="mb-3"
-      to="/manage/contests"
-      variant="tonal"
-      color="purple"
-      prepend-icon="mdi-arrow-left"
-      >コンテスト一覧に戻る</v-btn
-    >
+    <div class="mb-3">
+      <v-btn
+        class="mr-2"
+        to="/manage/contests"
+        variant="tonal"
+        color="purple"
+        prepend-icon="mdi-arrow-left"
+        >コンテスト一覧に戻る</v-btn
+      >
+      <v-btn
+        class="mr-2"
+        :to="`/contests/${contest.slug}`"
+        variant="tonal"
+        color="purple"
+        prepend-icon="mdi-arrow-left"
+        >コンテストページに戻る</v-btn
+      >
+    </div>
     <ManageContestsEditContestCard
       v-model:name="contest.name"
       v-model:penalty="contest.penaltyTime"
@@ -174,15 +236,32 @@ const openModal = async () => {
       :tasks="contest.tasks"
       :loading="loading.tasks"
       :contest-slug="contest.slug"
+      :is-admin="isAdmin"
       class="my-4"
       @add="openModal"
       @remove="remove"
     />
     <ManageContestsAddProblemCard
+      v-if="isAdmin"
+      class="my-4"
       :loading="loading.add"
       :used-positions="usedPositions"
       :unset-problems="unsetProblems || []"
       @add="addProblem"
+    />
+    <v-alert v-else type="info">
+      <template #text>
+        問題の追加・編集は管理者のみ可能ですのでお問い合わせください。
+      </template>
+    </v-alert>
+    <ManageContestsAdminsCard
+      v-if="isAdmin"
+      :loading="loading.admins"
+      :users="contest.admins"
+      :error="adminsError"
+      class="my-4"
+      @add="addAdmin"
+      @remove="removeAdmin"
     />
     <v-snackbar v-model="updated" :timeout="4000">
       コンテスト情報を更新しました。

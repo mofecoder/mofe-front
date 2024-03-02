@@ -4,7 +4,7 @@ import { useUserStore } from '~/store/user'
 const userStore = useUserStore()
 const user = computed(() => userStore.user)
 
-const title = 'MOFE Beta'
+const title = 'MOFE'
 const route = useRoute()
 const createLink = (path: string) => ({
   path,

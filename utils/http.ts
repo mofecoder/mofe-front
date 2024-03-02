@@ -6,10 +6,10 @@ import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { useUserStore } from '~/store/user'
-const { camelCase, isArray, isObject, mapKeys, mapValues, snakeCase } = lodash
+const { camelCase, isObject, mapKeys, mapValues, snakeCase } = lodash
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
-  if (isArray(data)) {
+  if (Array.isArray(data)) {
     return data.map((innerData: any) => mapKeysDeep(innerData, callback))
   } else if (isObject(data)) {
     return mapValues(mapKeys(data, callback), (val) =>
