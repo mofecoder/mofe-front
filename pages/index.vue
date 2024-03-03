@@ -7,7 +7,9 @@ import Posts from '~/utils/apis/Posts'
 import ViewPostCard from '~/components/posts/ViewPostCard.vue'
 import ContestList from '~/components/ContestList.vue'
 
-const { data: postsData } = await useApi(Posts.getPosts, [])
+const { data: postsData } = await useApi(Posts.getPosts, [], {
+  lazy: true
+})
 
 const posts = ref<Post[] | null>(postsData.value ?? null)
 
