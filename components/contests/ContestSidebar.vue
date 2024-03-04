@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import dayjs from 'dayjs'
 import type { PropType } from 'vue'
 import type { ContestDetail } from '~/types/contest'
 
@@ -18,6 +17,7 @@ const props = defineProps({
   }
 })
 const opened = defineModel<string[]>('opened')
+const dayjs = useDayjs()
 
 const afterContest = computed(() => {
   return props.contest && dayjs(props.contest.endAt).isBefore(Date())
@@ -73,7 +73,10 @@ const afterContest = computed(() => {
     </v-list-item>
     <v-list-item
       :to="`/contests/${contestName}/submissions`"
-      :disabled="!contest || (!afterContest && !contest.writtenTasks.length)"
+      :disabled="
+        !contest ||
+        (!afterContest && !contest.isWriterOrTester && !contest.isAdmin)
+      "
       prepend-icon="mdi-list-status"
       title="すべての提出"
     />

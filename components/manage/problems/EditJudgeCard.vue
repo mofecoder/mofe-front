@@ -46,32 +46,48 @@ const submit = async () => {
 
 <template>
   <v-container>
-    <details class="description mb-4">
-      <summary>用語の説明</summary>
-      <p class="body2">
-        「チェッカー」:ユーザのプログラムの出力に対して，正誤を判定するプログラムのこと.
+    <v-alert class="mb-2" variant="tonal" type="info">
+      <v-alert-title>ジャッジの設定方法</v-alert-title>
+      <p class="body1">
+        デフォルトチェッカーまたはカスタムチェッカーを利用することができます．
       </p>
-      <p class="body2">
-        「トークン」: 出力の文字列を空白区切りで分けた，それぞれの項目のこと．
+      <p class="body1">
+        デフォルトチェッカーは
+        <a
+          href="https://github.com/MikeMirzayanov/testlib/blob/master/checkers"
+          target="_blank"
+          >testlib のサンプル</a
+        >
+        を利用しています．
       </p>
-      <p class="body2">トークンに分ける際，空白の種類の違いは無視されます．</p>
-    </details>
-    <p class="body1">
-      デフォルトチェッカーまたはカスタムチェッカーを利用することができます．
-    </p>
-    <p class="body1">
-      デフォルトチェッカーは
-      <a
-        href="https://github.com/MikeMirzayanov/testlib/blob/master/checkers"
-        target="_blank"
-        >testlib のサンプル</a
-      >
-      を利用しています．
-    </p>
-    <p class="body1">
-      カスタムチェッカーを利用する場合は，testlib を使って作成してください．
-      (サンプルを参考にしてください)
-    </p>
+      <p class="body1">
+        カスタムチェッカーを利用する場合は，testlib を使って作成してください．
+        (サンプルを参考にしてください)
+      </p>
+    </v-alert>
+    <v-alert class="mb-4" variant="outlined" type="warning">
+      現時点では、チェッカーにより動的に点数やジャッジ結果（QLE,
+      OLEなど）を設定することはできません。<br />
+      チェッカーでは AC / WA の判定のみ行うことができます。
+    </v-alert>
+
+    <v-expansion-panels>
+      <v-expansion-panel class="description mb-4">
+        <v-expansion-panel-title>用語の説明</v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <p class="body2">
+            「チェッカー」:ユーザのプログラムの出力に対して，正誤を判定するプログラムのこと.
+          </p>
+          <p class="body2">
+            「トークン」:
+            出力の文字列を空白区切りで分けた，それぞれの項目のこと．
+          </p>
+          <p class="body2">
+            トークンに分ける際，空白の種類の違いは無視されます．
+          </p>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
     <v-select
       v-model="checker"
       class="select-checker"

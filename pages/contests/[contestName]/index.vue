@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import dayjs from 'dayjs'
 import { useUserStore } from '~/store/user'
 import type { MarkdownIt } from '~/types/plugins'
 import Contests from '~/utils/apis/Contests'
 
 const route = useRoute()
+const dayjs = useDayjs()
 
 definePageMeta({
   layout: 'contest'
@@ -201,7 +201,7 @@ const $md: MarkdownIt = nuxtApp.$md
           color="purple white--text"
           class="mb-4"
           :to="`/manage/contests/${contestSlug}`"
-          density="compact"
+          prepend-icon="mdi-application-edit"
           >コンテストの編集画面へ</v-btn
         >
         <div

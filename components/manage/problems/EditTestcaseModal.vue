@@ -36,6 +36,7 @@ watch(
   () => props.value,
   async () => {
     if (!props.value) {
+      loading.value = false
       return
     }
     if (props.testcaseId == null) {
@@ -85,6 +86,7 @@ const formatTestcase = (s: string): string => {
 }
 
 const submit = () => {
+  loading.value = true
   params.value = {
     ...params.value,
     input: formatTestcase(params.value.input),
@@ -155,12 +157,14 @@ const check = (v: string) => {
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="text" color="red" @click="close">閉じる</v-btn>
+        <v-btn :disabled="loading" variant="text" color="red" @click="close"
+          >閉じる</v-btn
+        >
         <v-btn
           v-if="!readonly"
           variant="text"
           color="primary"
-          :disabled="!ok"
+          :disabled="!ok || loading"
           @click="submit"
           >保存</v-btn
         >

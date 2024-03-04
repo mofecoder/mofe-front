@@ -38,18 +38,29 @@ const selected = ref(tabs[0])
 
 <template>
   <v-container>
-    <v-btn
-      class="mb-3"
-      to="/manage/problems"
-      variant="tonal"
-      color="purple"
-      prepend-icon="mdi-arrow-left"
-    >
-      問題一覧に戻る
-    </v-btn>
+    <div class="mb-3 d-flex justify-space-between">
+      <v-btn
+        to="/manage/problems"
+        variant="tonal"
+        color="purple"
+        prepend-icon="mdi-arrow-left"
+      >
+        問題一覧に戻る
+      </v-btn>
+      <v-btn
+        v-if="problem.contest"
+        variant="tonal"
+        color="orange"
+        :to="`/contests/${problem.contest.slug}/tasks/${problem.slug}`"
+        target="_blank"
+        prepend-icon="mdi-open-in-new"
+      >
+        コンテストページで表示
+      </v-btn>
+    </div>
     <h3 v-if="problem">編集中: [{{ problemId }}] {{ problem.name }}</h3>
     <v-card class="mt-2">
-      <v-tabs v-model="selected" align-tabs="center">
+      <v-tabs v-model="selected" align-tabs="center" color="secondary">
         <v-tab v-for="(tab, i) in tabs" :key="tab" :value="tab">
           {{ tabNames[i] }}
         </v-tab>

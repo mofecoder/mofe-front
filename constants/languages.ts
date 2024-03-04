@@ -2,12 +2,14 @@ import type { Language } from '~~/types/language'
 
 const languages: Language[] = [
   {
-    innerName: 'c17_gcc:12.2.0',
-    name: 'C17 (gcc 12.2.0)',
-    mime: 'text/x-csrc',
+    innerName: 'cpp23_gcc:12.2.0',
+    name: 'C++23 (g++ 12.2.0)',
+    mime: 'text/x-c++src',
     compilationCommand:
-      'gcc-12 ./Main.c -O2 -lm -std=gnu17 -o Main.out -DONLINE_JUDGE -Wall -Wextra',
-    runCommand: './Main.out'
+      'g++-12 ./Main.cpp -O2 -lm -std=gnu++2b -I/opt/ac-library -I/opt/testlib -o Main.out -DONLINE_JUDGE -Wall -Wextra',
+    runCommand: './Main.out',
+    libraries:
+      '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
   },
   {
     innerName: 'cpp20_gcc:12.2.0',
@@ -20,14 +22,12 @@ const languages: Language[] = [
       '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
   },
   {
-    innerName: 'cpp23_gcc:12.2.0',
-    name: 'C++23 (g++ 12.2.0)',
-    mime: 'text/x-c++src',
+    innerName: 'c17_gcc:12.2.0',
+    name: 'C17 (gcc 12.2.0)',
+    mime: 'text/x-csrc',
     compilationCommand:
-      'g++-12 ./Main.cpp -O2 -lm -std=gnu++2b -I/opt/ac-library -I/opt/testlib -o Main.out -DONLINE_JUDGE -Wall -Wextra',
-    runCommand: './Main.out',
-    libraries:
-      '<a href="https://github.com/atcoder/ac-library/releases/tag/v1.5.1" target="_blank">AtCoder Library v1.5.1</a>'
+      'gcc-12 ./Main.c -O2 -lm -std=gnu17 -o Main.out -DONLINE_JUDGE -Wall -Wextra',
+    runCommand: './Main.out'
   },
   {
     innerName: 'java:17.0.7',

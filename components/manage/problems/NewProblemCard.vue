@@ -196,8 +196,14 @@ const onSubmit = async () => {
         <!-- 登録ボタン -->
         <v-row>
           <v-col cols="12">
-            <v-btn :disabled="!valid" color="primary" type="submit" block>
-              登録
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              type="submit"
+              block
+              prepend-icon="mdi-check"
+            >
+              問題を作成
             </v-btn>
           </v-col>
         </v-row>

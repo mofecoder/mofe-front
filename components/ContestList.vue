@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import { formatDate } from '~/utils/formatting'
 import type { Contest } from '~/types/contest'
 import useApi from '~/composables/useApi'
 import Contests from '~/utils/apis/Contests'
+
+const dayjs = useDayjs()
 
 const { data: contests } = await useApi(Contests.getContests, [], {
   server: false

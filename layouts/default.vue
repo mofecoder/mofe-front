@@ -16,6 +16,7 @@ const createLink = (path: string) => ({
 </script>
 <template>
   <v-app>
+    <nuxt-loading-indicator />
     <v-app-bar flat color="brown-darken-1" class="header">
       <template #prepend>
         <v-btn :active="false" icon="mdi-home" to="/" />

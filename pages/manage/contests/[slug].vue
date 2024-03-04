@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
-import dayjs from 'dayjs'
 import { FetchError } from 'ofetch'
 import ManageContests from '~/utils/apis/ManageContests'
 import type { ContestDetailManage } from '~/types/contest'
@@ -11,6 +10,7 @@ definePageMeta({
 })
 
 const userStore = useUserStore()
+const dayjs = useDayjs()
 
 const route = useRoute()
 const modal = ref(false)

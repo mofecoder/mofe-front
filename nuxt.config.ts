@@ -36,7 +36,8 @@ const nuxtConfig = defineNuxtConfig({
       {
         lintOnStart: false
       }
-    ]
+    ],
+    'dayjs-nuxt'
   ],
   vite: {
     ssr: {
@@ -56,6 +57,16 @@ const nuxtConfig = defineNuxtConfig({
       apiBase: '',
       gaTrackingId: ''
     }
+  },
+  routeRules: {
+    '/privacy_policy': { prerender: true },
+    '/languages': { prerender: true },
+    '/admin/**': { ssr: false },
+    '/manage/**': { ssr: false }
+  },
+  dayjs: {
+    locales: ['ja'],
+    defaultLocale: 'ja'
   }
 })
 

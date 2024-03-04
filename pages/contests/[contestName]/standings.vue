@@ -37,7 +37,7 @@ useIntervalFn(async () => {
 <template>
   <div>
     <template v-if="contest">
-      <v-card v-if="!standings" loading>
+      <v-card v-if="!standings" loading variant="flat">
         <v-card-title>順位表</v-card-title>
         <v-card-text>Loading...</v-card-text>
       </v-card>
@@ -55,15 +55,16 @@ useIntervalFn(async () => {
           @reload="refresh"
         />
       </template>
-      <v-text-field
-        v-if="contest.isAdmin"
-        v-model.number="refreshInterval"
-        class="ma-4"
-        type="number"
-        label="リロード頻度 (秒)"
-        min="-1"
-        density="compact"
-      />
+      <div v-if="contest.isAdmin" class="d-flex">
+        <v-text-field
+          v-model.number="refreshInterval"
+          class="ma-4"
+          type="number"
+          label="リロード頻度 (秒)"
+          min="-1"
+          density="compact"
+        />
+      </div>
     </template>
   </div>
 </template>

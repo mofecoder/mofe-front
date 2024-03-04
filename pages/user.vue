@@ -86,7 +86,13 @@ const signOut = async () => {
         <v-btn class="mt-3" color="primary" type="submit">更新する</v-btn>
       </v-form>
       <div class="ml-0 mt-6">
-        <v-btn color="red white--text" @click="signOut">ログアウトする</v-btn>
+        <v-btn
+          color="red white--text"
+          variant="tonal"
+          prepend-icon="mdi-logout-variant"
+          @click="signOut"
+          >ログアウトする</v-btn
+        >
       </div>
     </v-card-text>
     <v-snackbar v-model="showSnack" :timeout="4000">

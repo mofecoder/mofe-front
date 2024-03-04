@@ -78,7 +78,11 @@ const isWriter = computed(() =>
                 <v-btn v-if="isAdmin" color="primary" to="/manage/contests"
                   >コンテストの管理画面へ</v-btn
                 >
-                <v-btn v-if="isWriter" color="primary" to="/manage/problems"
+                <v-btn
+                  v-if="isWriter"
+                  color="primary"
+                  to="/manage/problems"
+                  prepend-icon="mdi-text-box-multiple-outline"
                   >問題の管理画面へ</v-btn
                 >
               </div>

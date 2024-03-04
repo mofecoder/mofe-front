@@ -80,11 +80,17 @@ const filteredStandings = computed((): FilteredStanding[] => {
 </script>
 
 <template>
-  <v-card :loading="loading">
+  <v-card :loading="loading" variant="flat">
     <v-card-title>順位表</v-card-title>
     <v-card-text class="standings">
       <div class="mb-4">
-        <v-btn color="primary" @click="$emit('reload')">更新する</v-btn>
+        <v-btn
+          color="secondary"
+          variant="tonal"
+          prepend-icon="mdi-reload"
+          @click="$emit('reload')"
+          >更新する</v-btn
+        >
         <v-switch
           v-if="teamPrefix"
           v-model="teamMode"

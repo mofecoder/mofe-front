@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import type { MaybeRef } from 'vue'
-import dayjs from 'dayjs'
 import type { ContestDetail } from '~~/types/contest'
 import type { Clarification } from '~~/types/clarification'
 import Contests from '~/utils/apis/Contests'
+
+const dayjs = useDayjs()
 
 interface ContestState {
   contest: ContestDetail | null

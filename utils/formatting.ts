@@ -1,5 +1,5 @@
 import type { ConfigType } from 'dayjs'
-import dayjs from 'dayjs'
+const dayjs = useDayjs()
 
 export function formatDate(date: ConfigType, second = true): string {
   const dt = dayjs(date)

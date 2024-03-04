@@ -135,6 +135,9 @@ const user = useUserStore().user
                 v-if="clar.canAnswer"
                 variant="tonal"
                 color="green"
+                :prepend-icon="
+                  clar.answer != null ? 'mdi-comment-edit-outline' : 'mdi-reply'
+                "
                 @click="answer(clar.id)"
                 >{{ clar.answer != null ? '回答を編集' : '回答する' }}</v-btn
               >

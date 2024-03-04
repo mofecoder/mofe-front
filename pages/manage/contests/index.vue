@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import ManageContests from '~/utils/apis/ManageContests'
 
 definePageMeta({
@@ -11,6 +10,7 @@ useHead({
 })
 
 const { data: contests } = await useApi(ManageContests.getContests, [])
+const dayjs = useDayjs()
 
 const headers = [
   { title: 'コンテスト名', key: 'name' },

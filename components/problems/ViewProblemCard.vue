@@ -145,10 +145,12 @@ const title = computed(() => {
           問題の編集画面へ
         </v-btn>
         <ProblemsDifficultyChip :difficulty="problem.difficulty" />
-        <p class="task-time-limit mb-0">実行時間制限: {{ timeLimit }}</p>
+        <p class="task-time-limit mt-2 problem-text">
+          実行時間制限: {{ timeLimit }}
+        </p>
         <p
           v-if="'points' in problem && problem.points != null"
-          class="task-points"
+          class="task-points problem-text"
         >
           配点: {{ problem.points }}
         </p>
@@ -174,14 +176,17 @@ const title = computed(() => {
           <v-row
             v-for="(sample, index) in problem.samples"
             :key="index"
+            class="sample"
             tag="section"
           >
-            <v-col cols="12" lg="6">
-              <div class="submit-head">
+            <v-col cols="12" xl="6" class="pb-0">
+              <div class="submit-head lb">
                 <div class="submit-head__title">入力例 {{ index + 1 }}</div>
                 <v-btn
-                  color="blue-lighten-4"
+                  color="blue"
+                  variant="tonal"
                   size="small"
+                  prepend-icon="mdi-content-copy"
                   @click="copy(sample.input)"
                   >コピー</v-btn
                 >
@@ -190,12 +195,14 @@ const title = computed(() => {
                 <code class="sample__code" v-html="sample.input" />
               </div>
             </v-col>
-            <v-col cols="12" lg="6">
+            <v-col cols="12" xl="6">
               <div class="submit-head">
                 <div class="submit-head__title">出力例 {{ index + 1 }}</div>
                 <v-btn
-                  color="blue-lighten-4"
+                  color="blue"
+                  variant="tonal"
                   size="small"
+                  prepend-icon="mdi-content-copy"
                   @click="copy(sample.output)"
                   >コピー</v-btn
                 >
@@ -212,7 +219,7 @@ const title = computed(() => {
           </v-row>
         </v-container>
         <section v-if="user && contestSlug">
-          <div class="submit-head">
+          <div class="submit-head justify-start">
             <div class="submit-head__title">提出</div>
             <v-autocomplete
               v-model="language"
@@ -258,6 +265,7 @@ const title = computed(() => {
             class="mt-2"
             :loading="submitted"
             :disabled="!language"
+            prepend-icon="mdi-file-upload"
             @click="submit"
           >
             提出する
@@ -277,6 +285,11 @@ h2 {
 
 h3 {
   font-size: 1.5rem;
+}
+
+.statement,
+.problem-text {
+  color: #333333;
 }
 
 .task-time-limit,
@@ -302,6 +315,9 @@ h3 {
   @include markdown();
 }
 .sample {
+  border-top: solid 1px #e8e8e8;
+  padding-top: 8px;
+
   &__code {
     @include block-code();
   }
@@ -330,6 +346,7 @@ h3 {
 
 .submit-head {
   display: flex;
+  justify-content: space-between;
 
   &__title {
     @extend .sample-head__title;

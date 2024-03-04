@@ -211,7 +211,7 @@ const closeSetModal = () => {
     <v-alert
       title="採点の仕組み"
       type="info"
-      variant="outlined"
+      variant="tonal"
       class="mb-8"
       closable
     >
@@ -343,7 +343,7 @@ const closeSetModal = () => {
             </tr>
           </tbody>
         </v-table>
-        <v-container>
+        <div class="d-flex my-2 flex-wrap">
           <v-btn
             color="primary"
             prepend-icon="mdi-plus"
@@ -361,7 +361,7 @@ const closeSetModal = () => {
           >
             選択したテストケース ({{ selecting.size }} 件) をすべて削除
           </v-btn>
-        </v-container>
+        </div>
       </v-card-text>
     </v-card>
     <v-card variant="outlined" :loading="uploadLoading">

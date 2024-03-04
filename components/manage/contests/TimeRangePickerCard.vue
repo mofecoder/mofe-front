@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
-import dayjs from 'dayjs'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
@@ -15,6 +14,7 @@ const props = withDefaults(
     format: 'YYYY-MM-DD HH:mm:ss'
   }
 )
+const dayjs = useDayjs()
 
 const emits = defineEmits<{
   'update:modelValue': [value: [Dayjs, Dayjs]]

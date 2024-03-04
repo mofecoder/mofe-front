@@ -1,16 +1,15 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import dayjs from 'dayjs'
 import { storeToRefs } from 'pinia'
 import { useDisplay } from 'vuetify'
 import ContestSidebar from '~/components/contests/ContestSidebar.vue'
 import 'dayjs/locale/ja'
 import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
-dayjs.locale('ja')
 
 const contestStore = useContestStore()
 const userStore = useUserStore()
+const dayjs = useDayjs()
 const drawer = ref<boolean | null>(null)
 
 const { contest, contestName, updateContest } = useContest()
@@ -73,7 +72,8 @@ const role = computed(() => {
 
 <template>
   <v-app>
-    <v-app-bar color="green-darken-4" class="text-white pl-4 contest-header">
+    <nuxt-loading-indicator />
+    <v-app-bar color="green-darken-4" class="text-white contest-header">
       <template #prepend>
         <v-app-bar-nav-icon
           variant="text"
