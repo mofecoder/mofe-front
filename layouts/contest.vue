@@ -116,34 +116,32 @@ const role = computed(() => {
               />
             </template>
           </div>
-          <div class="d-none d-md-flex flex-column align-center">
-            <template v-if="user">
-              <v-btn
-                variant="text"
-                prepend-icon="mdi-account"
-                class="text-none"
-                to="/user"
-              >
-                {{ user.name }}
-              </v-btn>
-              <p v-if="role" class="text-caption">({{ role }})</p>
-            </template>
-            <template v-else>
-              <v-btn
-                class="text-white"
-                :to="createLink('/auth/signup')"
-                prepend-icon="mdi-account-plus"
-                variant="text"
-                >新規登録</v-btn
-              >
-              <v-btn
-                class="text-white"
-                :to="createLink('/auth/signin')"
-                variant="text"
-                prepend-icon="mdi-login-variant"
-                >ログイン</v-btn
-              >
-            </template>
+          <div v-if="user" class="d-none d-md-flex flex-column align-center">
+            <v-btn
+              variant="text"
+              prepend-icon="mdi-account"
+              class="text-none"
+              to="/user"
+            >
+              {{ user.name }}
+            </v-btn>
+            <p v-if="role" class="text-caption">({{ role }})</p>
+          </div>
+          <div v-else class="d-none d-md-flex align-center">
+            <v-btn
+              class="text-white"
+              :to="createLink('/auth/signup')"
+              prepend-icon="mdi-account-plus"
+              variant="text"
+              >新規登録</v-btn
+            >
+            <v-btn
+              class="text-white"
+              :to="createLink('/auth/signin')"
+              variant="text"
+              prepend-icon="mdi-login-variant"
+              >ログイン</v-btn
+            >
           </div>
         </ClientOnly>
       </template>
