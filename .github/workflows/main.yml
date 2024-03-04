@@ -1,0 +1,21 @@
+name: Yarn CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: install g++
+      run: sudo apt-get install g++ build-essential
+    - name: yarn install
+      uses: nuxt/actions-yarn@node-11
+      with:
+        args: install
+    - name: yarn lint
+      uses: nuxt/actions-yarn@node-11
+      with:
+        args: lint
