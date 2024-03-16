@@ -59,6 +59,7 @@ const useHttp = async <T>(
   })
 
   const onResponse = options.onResponse
+  const nuxtLoading = useLoadingIndicator()
   options['onResponse'] = (ctx) => {
     handleResponse(ctx)
 
@@ -69,7 +70,9 @@ const useHttp = async <T>(
         onResponse(ctx)
       }
     }
+    nuxtLoading.finish()
   }
+  nuxtLoading.start()
   return useFetch<T>(url, defu(options, defaults) as any)
 }
 
