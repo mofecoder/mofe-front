@@ -73,7 +73,7 @@ const role = computed(() => {
 <template>
   <v-app>
     <nuxt-loading-indicator />
-    <v-app-bar color="green-darken-4" class="text-white contest-header">
+    <v-app-bar color="light-green-lighten-4" class="contest-header">
       <template #prepend>
         <v-app-bar-nav-icon
           variant="text"
@@ -106,13 +106,11 @@ const role = computed(() => {
                 variant="text"
                 icon="mdi-account-plus"
                 :to="createLink('/auth/signup')"
-                density="compact"
               />
               <v-btn
                 variant="text"
                 icon="mdi-login-variant"
                 :to="createLink('/auth/signin')"
-                density="compact"
               />
             </template>
           </div>
@@ -193,7 +191,6 @@ const role = computed(() => {
 
   &__info {
     font-size: 0.9rem;
-    color: #eaeaea;
 
     &__title {
       font-size: 0.7rem;

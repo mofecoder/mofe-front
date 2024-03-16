@@ -17,7 +17,7 @@ const createLink = (path: string) => ({
 <template>
   <v-app>
     <nuxt-loading-indicator />
-    <v-app-bar flat color="brown-darken-1" class="header">
+    <v-app-bar class="header" color="deep-orange-lighten-5">
       <template #prepend>
         <v-btn :active="false" icon="mdi-home" to="/" />
       </template>
@@ -27,39 +27,49 @@ const createLink = (path: string) => ({
       </template>
       <template #append>
         <ClientOnly>
-          <template v-if="user">
+          <div class="d-md-none">
+            <template v-if="user">
+              <v-btn variant="text" icon="mdi-account" to="/user" />
+            </template>
+            <template v-else>
+              <v-btn
+                variant="text"
+                icon="mdi-account-plus"
+                :to="createLink('/auth/signup')"
+              />
+              <v-btn
+                variant="text"
+                icon="mdi-login-variant"
+                :to="createLink('/auth/signin')"
+              />
+            </template>
+          </div>
+          <div v-if="user" class="d-none d-md-flex flex-column align-center">
             <v-btn
               variant="text"
               prepend-icon="mdi-account"
               class="text-none"
-              :active="false"
               to="/user"
             >
-              <span class="d-none d-sm-inline">
-                {{ user.name }}
-              </span>
+              {{ user.name }}
             </v-btn>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="d-none d-md-flex align-center">
             <v-btn
-              class="text-white"
-              :active="false"
               :to="createLink('/auth/signup')"
               prepend-icon="mdi-account-plus"
               variant="text"
             >
-              <span class="d-none d-sm-inline">新規登録</span>
+              新規登録
             </v-btn>
             <v-btn
-              class="text-white"
-              :active="false"
               :to="createLink('/auth/signin')"
               variant="text"
               prepend-icon="mdi-login-variant"
             >
-              <span class="d-none d-sm-inline">ログイン</span>
+              ログイン
             </v-btn>
-          </template>
+          </div>
         </ClientOnly>
       </template>
     </v-app-bar>

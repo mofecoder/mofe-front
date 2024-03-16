@@ -19,7 +19,9 @@ if (process.env.NODE_ENV === 'development') {
   <v-chip
     v-show="text !== 'production'"
     v-bind="environment"
+    class="ml-1"
     variant="elevated"
+    label
   >
     {{ text }}
   </v-chip>
