@@ -75,6 +75,9 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
               variant="outlined"
               :disabled="showCopiedMessage"
               block
+              :prepend-icon="
+                showCopiedMessage ? 'mdi-check' : 'mdi-content-copy'
+              "
               @click="copySource"
               >{{
                 showCopiedMessage ? 'コピーしました!' : 'ソースコードをコピー'

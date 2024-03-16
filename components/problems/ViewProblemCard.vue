@@ -48,8 +48,8 @@ function onFileInputChange(file: File) {
 
 const timeLimit = computed(() => {
   const limit = props.problem.executionTimeLimit
-  if (limit % 100 == 0) return `${limit} ms`
-  return `${limit / 1000} s`
+  if (limit % 100 == 0) return [limit / 1000, 's', '秒']
+  return [limit, 'ms', 'ミリ秒']
 })
 const $md: MarkdownIt = useNuxtApp().$md
 
@@ -144,16 +144,65 @@ const title = computed(() => {
         >
           問題の編集画面へ
         </v-btn>
-        <ProblemsDifficultyChip :difficulty="problem.difficulty" />
-        <p class="task-time-limit mt-2 problem-text">
-          実行時間制限: {{ timeLimit }}
-        </p>
-        <p
-          v-if="'points' in problem && problem.points != null"
-          class="task-points problem-text"
-        >
-          配点: {{ problem.points }}
-        </p>
+        <div class="d-flex">
+          <ProblemsDifficultyChip :difficulty="problem.difficulty" />
+          <v-spacer />
+          <v-tooltip
+            location="bottom"
+            :text="`実行時間制限 ${timeLimit[0]} ${timeLimit[2]}`"
+          >
+            <template #activator="{ props: p }">
+              <v-chip
+                v-bind="p"
+                variant="tonal"
+                size="large"
+                color="orange"
+                prepend-icon="mdi-timer"
+              >
+                <span class="text-orange-darken-3">
+                  {{ timeLimit[0] }}
+                </span>
+                <template #append>
+                  <span class="chip-sub">{{ timeLimit[1] }}</span>
+                </template>
+              </v-chip>
+            </template>
+          </v-tooltip>
+          <v-tooltip location="bottom" :text="`メモリ制限 1024 MB`">
+            <template #activator="{ props: p }">
+              <v-chip
+                v-bind="p"
+                class="ml-3"
+                variant="tonal"
+                size="large"
+                color="teal"
+                prepend-icon="mdi-memory"
+              >
+                <span class="text-teal-darken-3">1024</span>
+                <template #append>
+                  <span class="chip-sub">MB</span>
+                </template>
+              </v-chip>
+            </template>
+          </v-tooltip>
+          <v-tooltip location="bottom" :text="`配点 ${problem.points} 点`">
+            <template #activator="{ props: p }">
+              <v-chip
+                v-bind="p"
+                class="ml-3"
+                variant="tonal"
+                size="large"
+                color="indigo"
+                prepend-icon="mdi-check-circle"
+              >
+                <span class="text-indigo-darken-3">{{ problem.points }}</span>
+                <template #append>
+                  <span class="chip-sub">点</span>
+                </template>
+              </v-chip>
+            </template>
+          </v-tooltip>
+        </div>
       </v-card-title>
       <v-card-text class="mt-3 task-card-text">
         <section>
@@ -295,6 +344,12 @@ h3 {
 .task-time-limit,
 .task-points {
   font-size: 1rem;
+}
+
+.chip-sub {
+  margin-left: 4px;
+  font-size: 0.85rem;
+  vertical-align: bottom;
 }
 
 .task-card-title {

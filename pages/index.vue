@@ -90,14 +90,19 @@ const isWriter = computed(() =>
           </v-card>
         </v-col>
         <v-col cols="12" lg="7">
-          <ViewPostCard
-            v-for="post in posts || []"
-            :key="`post-${post.id}`"
-            :show-edit="isAdmin"
-            :post="post"
-            enable-link
-            class="mb-3"
-          />
+          <v-virtual-scroll :items="posts" :max-height="1000">
+            <template #default="{ item }">
+              <div class="mx-1">
+                <ViewPostCard
+                  :show-edit="isAdmin"
+                  :post="item"
+                  enable-link
+                  class="mb-3"
+                />
+              </div>
+            </template>
+          </v-virtual-scroll>
+
           <div class="text-center">
             <router-link to="/posts">すべての記事を見る</router-link>
           </div>

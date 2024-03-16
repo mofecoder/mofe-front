@@ -17,7 +17,7 @@ const app = useNuxtApp()
 </script>
 
 <template>
-  <v-card rounded :title="post.title">
+  <v-card rounded variant="elevated" :title="post.title">
     <v-card-text class="post-card-text mt-2">
       <div v-html="app.$md.render(post.content)" />
       <div class="text-grey-darken-2 text-right py-1 pr-2">
