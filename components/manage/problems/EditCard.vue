@@ -149,6 +149,8 @@ const removeTester = async (name: string) => {
               label="問題文 (Markdown)"
               variant="outlined"
               auto-grow
+              counter
+              maxlength="4000"
             />
           </v-col>
         </v-row>
@@ -177,6 +179,8 @@ const removeTester = async (name: string) => {
               label="制約 (Markdown)"
               variant="outlined"
               auto-grow
+              counter
+              maxlength="2000"
             />
           </v-col>
         </v-row>
@@ -205,6 +209,8 @@ const removeTester = async (name: string) => {
               label="入力 (Markdown)"
               variant="outlined"
               auto-grow
+              counter
+              maxlength="1000"
             />
           </v-col>
           <v-col cols="12">
@@ -238,6 +244,8 @@ const removeTester = async (name: string) => {
               label="出力 (Markdown)"
               variant="outlined"
               auto-grow
+              counter
+              maxlength="1000"
             />
           </v-col>
         </v-row>
