@@ -52,14 +52,7 @@ const createLink = (path: string) => ({
     redirect: route.path.startsWith('/auth') ? undefined : route.path
   }
 })
-const rail = ref(desktop.value)
-const _opened = ref([])
-const opened = computed({
-  get: () => (rail.value ? [] : _opened.value),
-  set: (val) => {
-    _opened.value = val
-  }
-})
+const opened = ref(['Problems'])
 const role = computed(() => {
   if (!user.value || !contest.value) return ''
   if (user.value.role === 'admin') return 'Admin'
@@ -127,14 +120,12 @@ const role = computed(() => {
           </div>
           <div v-else class="d-none d-md-flex align-center">
             <v-btn
-              class="text-white"
               :to="createLink('/auth/signup')"
               prepend-icon="mdi-account-plus"
               variant="text"
               >新規登録</v-btn
             >
             <v-btn
-              class="text-white"
               :to="createLink('/auth/signin')"
               variant="text"
               prepend-icon="mdi-login-variant"

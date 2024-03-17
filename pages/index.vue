@@ -90,7 +90,7 @@ const isWriter = computed(() =>
           </v-card>
         </v-col>
         <v-col cols="12" lg="7">
-          <v-virtual-scroll :items="posts" :max-height="1000">
+          <v-virtual-scroll v-if="posts" :items="posts" :max-height="1000">
             <template #default="{ item }">
               <div class="mx-1">
                 <ViewPostCard
