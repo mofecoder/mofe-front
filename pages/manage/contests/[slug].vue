@@ -144,7 +144,7 @@ const addProblem = async (problemId: number, pos: string) => {
 const remove = async (slug: string) => {
   loading.tasks = true
   await http(ManageContests.removeTask.$path([contest.slug, slug]), {
-    method: 'DELETE'
+    method: 'PUT'
   })
   await reload()
   loading.tasks = false

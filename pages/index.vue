@@ -71,7 +71,7 @@ const isWriter = computed(() =>
                   >
                 </div>
               </ClientOnly>
-              <div class="mt-4 manage-buttons">
+              <div class="mt-4 d-flex flex-wrap ga-2">
                 <v-btn v-if="isAdmin" color="orange-lighten-1" to="/admin"
                   >管理ページへ</v-btn
                 >
@@ -112,10 +112,4 @@ const isWriter = computed(() =>
   </div>
 </template>
 
-<style scoped lang="scss">
-.manage-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-</style>
+<style scoped lang="scss"></style>
