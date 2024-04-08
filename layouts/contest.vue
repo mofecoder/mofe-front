@@ -31,9 +31,14 @@ const contestTime = computed(() => {
   }
 })
 
-const unreadClarifications = computed(() => {
-  if (!contestStore.clarifications || !process.client) return 0
-  const key = `${contest.value!.slug}_clar`
+const unreadClarifications = computed<number>((oldValue) => {
+  if (!contest.value) {
+    return oldValue || 0
+  }
+  if (!contestStore.clarifications || !process.client) {
+    return 0
+  }
+  const key = `${contest.value.slug}_clar`
   let read = localStorage.getItem(key)
   if (read == null) {
     read = dayjs().toISOString()
@@ -43,6 +48,18 @@ const unreadClarifications = computed(() => {
     dayjs(clar.updatedAt).isAfter(read!)
   ).length
 })
+
+const newClarifications = ref(false)
+watch(unreadClarifications, (value, oldValue) => {
+  if (oldValue < value) {
+    console.log(oldValue, value)
+    newClarifications.value = true
+  }
+  if (value === 0) {
+    newClarifications.value = false
+  }
+})
+
 const { lgAndUp: desktop } = useDisplay()
 const route = useRoute()
 const createLink = (path: string) => ({
@@ -147,6 +164,16 @@ const role = computed(() => {
     <v-main style="--v-layout-top: 64px">
       <v-container>
         <slot />
+        <v-snackbar
+          v-model="newClarifications"
+          location="bottom right"
+          color="info"
+          :timeout="-1"
+          close-on-back
+          close-on-content-click
+        >
+          質問が更新されました！
+        </v-snackbar>
       </v-container>
     </v-main>
   </v-app>

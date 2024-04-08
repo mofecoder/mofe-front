@@ -235,7 +235,7 @@ const filteredStandings = computed((): FilteredStanding[] => {
   @include card-text-reset();
 
   &__wrap {
-    text-wrap: nowrap;
+    text-wrap: avoid;
     padding-top: 2em;
     overflow-x: scroll;
   }
@@ -247,6 +247,9 @@ const filteredStandings = computed((): FilteredStanding[] => {
     margin: 0 auto;
 
     .row-header {
+      position: sticky;
+      z-index: 2;
+
       .col-rank {
         min-width: 6em;
       }

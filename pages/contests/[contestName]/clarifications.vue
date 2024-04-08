@@ -10,6 +10,7 @@ definePageMeta({
 const { contest, contestName, clarifications, updateClarifications } =
   useContest()
 
+await updateClarifications(true)
 useHead(() => ({
   title: `質問 - ${contest.value?.name}`
 }))
@@ -23,7 +24,7 @@ const answer = (id: number) => {
 
 const closeAnswer = async (reload: boolean) => {
   if (reload) {
-    await updateClarifications()
+    await updateClarifications(true)
   }
   editingId.value = null
 }
@@ -33,13 +34,11 @@ const question = () => {
 }
 
 const submitQuestion = async (task: string | null, content: string) => {
-  await useApi(
-    Contests.createClarification,
-    [contestName.value],
-    {},
-    { clarification: { task, question: content } }
-  )
-  await updateClarifications()
+  await http(Contests.createClarification.$path([contestName.value]), {
+    method: 'POST',
+    body: { clarification: { task, question: content } }
+  })
+  await updateClarifications(true)
   questionFlag.value = false
 }
 

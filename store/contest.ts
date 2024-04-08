@@ -4,30 +4,37 @@ import type { ContestDetail } from '~~/types/contest'
 import type { Clarification } from '~~/types/clarification'
 import Contests from '~/utils/apis/Contests'
 
-const dayjs = useDayjs()
-
 interface ContestState {
+  slug: string | null
   contest: ContestDetail | null
   clarifications: Clarification[] | null
+  interval: number | null
 }
 
 export const useContestStore = defineStore({
   id: 'contest',
   state: (): ContestState => ({
+    slug: null,
     contest: null,
-    clarifications: null
+    clarifications: null,
+    interval: null
   }),
   actions: {
     async getContest(slug: MaybeRef<string>) {
       if (slug == null) return
+      const updated = process.client && this.slug !== toValue(slug)
+      if (process.client) this.slug = toValue(slug)
       const _this = this
       await http<ContestDetail>(Contests.getContest.$path([unref(slug)]), {
         onRequest() {
-          const s = unref(slug)
-          if (s != _this.contest?.slug) {
-            // console.log(`clear ${_this.contest?.slug} -> ${s}`)
-            _this.contest = null
+          _this.contest = null
+          if (!updated && !process.client) return
+          if (_this.interval != null) {
+            window.clearInterval(_this.interval)
           }
+          _this.interval = window.setInterval(async () => {
+            await _this.getClarifications(slug)
+          }, 3000)
         }
       }).then((res) => {
         if (res) {
@@ -40,9 +47,6 @@ export const useContestStore = defineStore({
       await http<Clarification[]>(
         Contests.getClarifications.$path([unref(slug)])
       ).then((res) => {
-        if (process.client) {
-          localStorage.setItem(`${unref(slug)}_clar`, dayjs().toISOString())
-        }
         if (res) {
           this.updateClarifications(res)
         }
@@ -53,6 +57,14 @@ export const useContestStore = defineStore({
     },
     updateClarifications(clarifications: Clarification[]) {
       this.clarifications = clarifications
+    },
+    leave() {
+      this.contest = null
+      this.clarifications = null
+      if (this.interval && process.client) {
+        window.clearInterval(this.interval)
+        this.interval = null
+      }
     }
   }
 })

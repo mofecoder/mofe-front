@@ -29,18 +29,53 @@ const updated = ref(false)
 const testerError = ref('')
 const testerLoading = ref(false)
 
+const changed = ref(false)
 const { data: problem, refresh } = await useApi(ManageProblems.getProblem, [
   props.problemId
 ])
 const testers = computed(() => problem.value?.testers ?? [])
+watch(
+  problem,
+  (oldValue, newValue) => {
+    if (oldValue === newValue) {
+      changed.value = true
+    }
+  },
+  { deep: true }
+)
+
+onBeforeRouteLeave(() => {
+  if (changed.value && process.client) {
+    if (
+      !window.confirm('変更が保存されていませんが、移動してもよろしいですか？')
+    ) {
+      return false
+    }
+  }
+})
+
+const formCheck = (e: BeforeUnloadEvent) => {
+  if (changed.value) {
+    e.returnValue = '変更が保存されていません。'
+  }
+}
+
+onMounted(() => {
+  if (process.client) {
+    window.addEventListener('beforeunload', formCheck)
+  }
+})
+
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener('beforeunload', formCheck)
+  }
+})
 
 const onSubmit = async () => {
   if (!problem.value) return
-  await useApi(
-    ManageProblems.updateProblem,
-    [props.problemId],
-    {},
-    {
+  await http(ManageProblems.updateProblem.$path([props.problemId]), {
+    body: {
       problem: {
         name: problem.value.name,
         difficulty: problem.value.difficulty,
@@ -50,9 +85,11 @@ const onSubmit = async () => {
         statement: problem.value.statement,
         executionTimeLimit: problem.value.executionTimeLimit
       }
-    }
-  )
+    },
+    method: 'PUT'
+  })
   updated.value = true
+  changed.value = false
   await refresh()
   emits('update')
 }
@@ -99,6 +136,15 @@ const removeTester = async (name: string) => {
 <template>
   <v-card class="wrapper" :loading="!problem">
     <v-card-text>
+      <v-alert
+        density="compact"
+        color="info"
+        variant="tonal"
+        closable
+        class="mb-6"
+      >
+        テキストエリア内は Ctrl + Enter で保存できます。
+      </v-alert>
       <v-form v-if="problem != null" v-model="valid" @submit.prevent="onSubmit">
         <v-row>
           <v-col cols="12" md="4" lg="1" class="py-1">
@@ -151,6 +197,7 @@ const removeTester = async (name: string) => {
               auto-grow
               counter
               maxlength="4000"
+              @keydown.ctrl.enter="onSubmit"
             />
           </v-col>
         </v-row>
@@ -181,6 +228,7 @@ const removeTester = async (name: string) => {
               auto-grow
               counter
               maxlength="2000"
+              @keydown.ctrl.enter="onSubmit"
             />
           </v-col>
         </v-row>
@@ -211,6 +259,7 @@ const removeTester = async (name: string) => {
               auto-grow
               counter
               maxlength="1000"
+              @keydown.ctrl.enter="onSubmit"
             />
           </v-col>
           <v-col cols="12">
@@ -246,6 +295,7 @@ const removeTester = async (name: string) => {
               auto-grow
               counter
               maxlength="1000"
+              @keydown.ctrl.enter="onSubmit"
             />
           </v-col>
         </v-row>
@@ -284,7 +334,7 @@ const removeTester = async (name: string) => {
           </v-col>
         </v-row>
       </v-form>
-      <v-snackbar v-model="updated" :timeout="4000">
+      <v-snackbar v-model="updated" color="success" :timeout="4000">
         問題を更新しました。
       </v-snackbar>
     </v-card-text>

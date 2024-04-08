@@ -14,16 +14,26 @@ export function useContest() {
   const updateContest = async (loadClarifications: boolean = true) => {
     if (!contestName.value) return
     const res = contestStore.getContest(contestName)
-    if (loadClarifications) await updateClarifications()
+    if (loadClarifications) await updateClarifications(false)
     return res
   }
 
-  const updateClarifications = async () => {
+  const dayjs = useDayjs()
+  const updateClarifications = async (read = false) => {
     if (!contestName.value) return
+    if (read && process.client) {
+      localStorage.setItem(`${contestName.value}_clar`, dayjs().toISOString())
+    }
     return contestStore.getClarifications(contestName)
   }
 
   watch(contestName, async () => await updateContest(), { immediate: true })
+
+  onBeforeRouteLeave((to) => {
+    if (!to.path.startsWith(`/contests/${contestName.value}`)) {
+      contestStore.leave()
+    }
+  })
 
   return {
     contestName,

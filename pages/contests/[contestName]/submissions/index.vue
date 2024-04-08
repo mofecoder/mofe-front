@@ -10,7 +10,7 @@ definePageMeta({
 const { contest, contestName } = useContest()
 
 useHead(() => ({
-  title: `すべての提出 - ${contest.value!.name}`,
+  title: `すべての提出 - ${contest.value?.name}`,
   titleTemplate: null
 }))
 
