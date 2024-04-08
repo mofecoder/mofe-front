@@ -5,12 +5,17 @@ import type { Post } from '~/types/post'
 import { STATUS_TABLE } from '~/constants/posts'
 
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  validate(route) {
+    if (Array.isArray(route.params.postId)) return false
+    if (route.params.postId === 'new') return true
+    return /\d+/g.test(route.params.postId)
+  }
 })
 const route = useRoute()
 const postId = computed(() => {
   const pid = route.params.postId
-  if (!pid || Array.isArray(pid)) return null
+  if (!pid || pid === 'new' || Array.isArray(pid)) return null
   return parseInt(pid)
 })
 const isCreating = computed(() => postId.value === null)

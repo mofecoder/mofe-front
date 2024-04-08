@@ -41,7 +41,11 @@ const items = computed(() => {
   <v-card flat>
     <v-card-title>記事一覧（編集）</v-card-title>
     <v-card-text>
-      <v-btn color="purple white--text" to="/admin/posts/new"
+      <v-btn
+        color="purple white--text"
+        variant="tonal"
+        to="/admin/posts/new"
+        prepend-icon="mdi-note-plus"
         >新規記事作成</v-btn
       >
       <v-data-table :headers="tableHeader" :items="items" :loading="!posts">

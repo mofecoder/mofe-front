@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useDisplay } from 'vuetify'
 import type { Post } from '~~/types/post'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
@@ -36,6 +37,8 @@ const isAdmin = computed(() => user.value?.role === 'admin')
 const isWriter = computed(() =>
   ['admin', 'writer'].includes(user.value?.role || '')
 )
+
+const { lgAndUp } = useDisplay()
 </script>
 
 <template>
@@ -90,9 +93,21 @@ const isWriter = computed(() =>
           </v-card>
         </v-col>
         <v-col cols="12" lg="7">
-          <v-virtual-scroll v-if="posts" :items="posts" :max-height="1000">
-            <template #default="{ item }">
-              <div class="mx-1">
+          <template v-if="posts">
+            <v-virtual-scroll v-if="lgAndUp" :items="posts" :max-height="1000">
+              <template #default="{ item }">
+                <div class="mx-1">
+                  <ViewPostCard
+                    :show-edit="isAdmin"
+                    :post="item"
+                    enable-link
+                    class="mb-3"
+                  />
+                </div>
+              </template>
+            </v-virtual-scroll>
+            <div v-else>
+              <div v-for="item in posts" :key="`post-${item.id}`" class="mx-1">
                 <ViewPostCard
                   :show-edit="isAdmin"
                   :post="item"
@@ -100,9 +115,8 @@ const isWriter = computed(() =>
                   class="mb-3"
                 />
               </div>
-            </template>
-          </v-virtual-scroll>
-
+            </div>
+          </template>
           <div class="text-center">
             <router-link to="/posts">すべての記事を見る</router-link>
           </div>

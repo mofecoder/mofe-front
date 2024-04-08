@@ -11,6 +11,10 @@ defineProps({
   showEdit: {
     type: Boolean,
     default: false
+  },
+  enableLink: {
+    type: Boolean,
+    default: false
   }
 })
 const app = useNuxtApp()
@@ -29,7 +33,7 @@ const app = useNuxtApp()
         </p>
       </div>
     </v-card-text>
-    <template v-if="showEdit" #actions>
+    <template v-if="showEdit || enableLink" #actions>
       <v-btn
         v-if="showEdit"
         class="mt-3"
@@ -43,8 +47,8 @@ const app = useNuxtApp()
 </template>
 
 <style scoped lang="scss">
+@import 'styles/markdown';
 .post-card-text {
-  @import 'styles/card-reset';
-  //@include card-text-reset();
+  @include markdown();
 }
 </style>

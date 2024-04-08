@@ -13,6 +13,8 @@ const createLink = (path: string) => ({
     redirect: route.path.startsWith('/auth') ? undefined : route.path
   }
 })
+const dayjs = useDayjs()
+const year = dayjs().year()
 </script>
 <template>
   <v-app>
@@ -78,8 +80,12 @@ const createLink = (path: string) => ({
         <slot />
       </v-container>
     </v-main>
-    <v-footer app class="d-flex justify-center" absolute>
-      <p class="mb-0 mr-3">Copyright 2020 CafeCoder & MOFE</p>
+    <v-footer
+      app
+      class="d-flex flex-column justify-center bg-grey-lighten-3"
+      absolute
+    >
+      <p class="mb-0 mr-3">Copyright 2020 - {{ year }} CafeCoder & MOFE</p>
       <NuxtLink to="/privacy_policy">プライバシーポリシー</NuxtLink>
     </v-footer>
   </v-app>
