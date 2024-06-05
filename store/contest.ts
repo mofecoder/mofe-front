@@ -34,7 +34,7 @@ export const useContestStore = defineStore({
           }
           _this.interval = window.setInterval(async () => {
             await _this.getClarifications(slug)
-          }, 3000)
+          }, 30000)
         }
       }).then((res) => {
         if (res) {

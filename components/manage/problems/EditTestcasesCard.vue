@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ManageProblems from '~/utils/apis/ManageProblems'
-import type { TestcaseSet } from '~/types/problems'
+import type { Testcase, TestcaseSet } from '~/types/problems'
 
 const props = defineProps<{
   problemId: number
@@ -15,6 +15,7 @@ const testcaseSetDialog = ref<boolean>(false)
 const testcaseLoading = ref<boolean>(false)
 const editingTestcaseSetId = ref<number | null>(null)
 const uploadLoading = ref<boolean>(false)
+const updateCompleteSnackbar = ref<boolean>(false)
 
 const testcaseNames = computed(() => testcases.value?.map((x) => x.name) || [])
 const testcaseSetNames = computed(
@@ -68,7 +69,7 @@ const updateTestcase = async (params: {
   name: string
   input: string
   output: string
-  explanation: string
+  explanation: string | null
 }) => {
   await useApi(
     ManageProblems.updateTestcase,
@@ -78,6 +79,7 @@ const updateTestcase = async (params: {
   )
   await refreshTestcase()
   testcaseDialog.value = false
+  updateCompleteSnackbar.value = true
 }
 
 const deleteTestcase = async (id: number) => {
@@ -91,7 +93,7 @@ const createTestcase = async (params: {
   name: string
   input: string
   output: string
-  explanation: string
+  explanation: string | null
 }) => {
   await useApi(ManageProblems.createTestcase, [props.problemId], {}, params)
   await refreshTestcase()
@@ -131,6 +133,17 @@ const saveSet = async (params: { name: string; points: string }) => {
 }
 
 const selecting = reactive(new Set<number>())
+
+const addingPattern = ref<string>()
+const addingSet = ref<number>()
+const addingTarget = ref<Testcase[] | null>()
+
+const addingHint = computed<[boolean, string]>(() => {
+  if (addingTarget.value === null) return [true, '正規表現が誤っています']
+  if (addingTarget.value === undefined) return [false, '']
+  if (addingTarget.value.length === 0) return [false, '対象なし']
+  return [false, `対象: ${addingTarget.value.map((x) => x.name).join(', ')}`]
+})
 
 const selectingHeader = (value: boolean) => {
   if (value) {
@@ -204,6 +217,42 @@ const closeSetModal = () => {
   editingTestcaseSetId.value = null
   testcaseSetDialog.value = false
 }
+
+const updateAddingTarget = () => {
+  if (!addingPattern.value) {
+    addingTarget.value = undefined
+    return
+  }
+  try {
+    const regex = RegExp(addingPattern.value)
+    const res = []
+    for (const testcase of testcases.value) {
+      if (regex.test(testcase.name)) {
+        res.push(testcase)
+      }
+    }
+    addingTarget.value = res
+  } catch (ex) {
+    if (ex instanceof SyntaxError) {
+      addingTarget.value = null
+    }
+  }
+}
+
+const addSetMultiple = async () => {
+  if (addingSet.value === undefined || !addingTarget.value) return
+  await http(ManageProblems.addToTestcaseSetMultiple.$path([props.problemId]), {
+    method: 'PATCH',
+    body: {
+      testcaseIds: addingTarget.value.map((x) => x.id),
+      testcaseSetId: addingSet.value
+    }
+  })
+  addingPattern.value = undefined
+  addingSet.value = undefined
+  updateAddingTarget()
+  await refreshTestcase()
+}
 </script>
 
 <template>
@@ -269,7 +318,7 @@ const closeSetModal = () => {
     >
       <v-card-title>テストケース一覧</v-card-title>
       <v-card-text class="testcase-list">
-        <v-table v-if="testcases" density="compact">
+        <v-table v-if="testcases" density="compact" class="testcases-table">
           <thead>
             <tr>
               <th>
@@ -287,7 +336,7 @@ const closeSetModal = () => {
               <th
                 v-for="set in testcaseSets"
                 :key="set.name"
-                class="testcase-list__row-set"
+                class="testcase-list__row-set testcase-set-col"
                 v-text="set.name"
               />
               <th class="testcase-list__row-action" />
@@ -311,6 +360,7 @@ const closeSetModal = () => {
               <td
                 v-for="(_, j) in testcase.testcaseSets"
                 :key="`${testcase.name}_${j}`"
+                class="testcase-set-col"
               >
                 <v-checkbox-btn
                   class="mt-0"
@@ -361,6 +411,33 @@ const closeSetModal = () => {
           >
             選択したテストケース ({{ selecting.size }} 件) をすべて削除
           </v-btn>
+        </div>
+        <p class="mt-4">
+          正規表現を入力してテストケースセットを選択すると、
+          マッチするすべてのテストケースがテストケースセットに追加されます。
+        </p>
+        <div class="my-2 flex-wrap">
+          <v-text-field
+            v-model="addingPattern"
+            label="正規表現パターン"
+            placeholder="sample-\d+"
+            density="compact"
+            persistent-hint
+            :error-messages="addingHint[0] ? [addingHint[1]] : null"
+            :hint="addingHint[1]"
+            @update:model-value="updateAddingTarget"
+          />
+          <v-select
+            v-model="addingSet"
+            class="mt-2"
+            label="一括追加するテストケースセットを選択"
+            :disabled="addingHint[0] || !addingTarget"
+            :items="testcaseSets"
+            item-title="name"
+            item-value="id"
+            density="compact"
+            @update:model-value="addSetMultiple"
+          />
         </div>
       </v-card-text>
     </v-card>
@@ -417,7 +494,20 @@ const closeSetModal = () => {
       @save="saveSet"
       @close="closeSetModal"
     />
+    <v-snackbar v-model="updateCompleteSnackbar" color="success">
+      テストケースを更新しました
+    </v-snackbar>
   </v-container>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.testcases-table {
+  .testcase-set-col {
+    text-align: center;
+
+    > div {
+      justify-content: center;
+    }
+  }
+}
+</style>

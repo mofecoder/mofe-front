@@ -101,6 +101,12 @@ const changeTestcaseState = new Api<void, [number, number]>(
   'PATCH'
 )
 
+const addToTestcaseSetMultiple = new Api<
+  void,
+  [number],
+  { testcaseIds: number[]; testcaseSetId: number }
+>(([id]) => `/problems/${id}/testcases/change_state_multiple`, 'PATCH')
+
 const updateChecker = new Api<void, [number]>(
   ([id]) => `/problems/${id}/checker`,
   'POST',
@@ -126,5 +132,6 @@ export default {
   deleteTestcaseSet,
   uploadTestcases,
   changeTestcaseState,
-  updateChecker
+  updateChecker,
+  addToTestcaseSetMultiple
 }
