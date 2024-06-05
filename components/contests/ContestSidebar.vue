@@ -58,6 +58,7 @@ const afterContest = computed(() => {
             ? `mdi-alpha-${task.position.toLowerCase()}-box`
             : 'mdi-pound-box-outline'
         "
+        :base-color="task.accepted ? 'green-darken-4' : undefined"
         :title="task.name"
         :subtitle="task.difficulty"
       />

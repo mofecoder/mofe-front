@@ -21,6 +21,7 @@ export interface Task {
   name: string
   difficulty: Difficulty
   points: number
+  accepted: boolean
 }
 
 export interface TaskDetail extends Task {

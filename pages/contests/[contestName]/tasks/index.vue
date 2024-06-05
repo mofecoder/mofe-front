@@ -28,6 +28,7 @@ useHead(() => ({
               :prepend-icon="`mdi-alpha-${problem.position.toLowerCase()}-box`"
               :title="problem.name"
               :subtitle="problem.difficulty"
+              :base-color="problem.accepted ? 'green-darken-4' : undefined"
               density="comfortable"
             >
             </v-list-item>
