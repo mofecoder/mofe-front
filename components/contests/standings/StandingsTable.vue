@@ -14,10 +14,9 @@ const props = defineProps({
     type: String,
     required: true
   },
-  teamPrefix: {
-    type: String,
-    required: false,
-    default: null
+  team: {
+    type: Boolean,
+    default: false
   },
   loading: {
     type: Boolean,
@@ -30,12 +29,18 @@ const props = defineProps({
   closedMode: {
     type: Boolean,
     default: false
+  },
+  teamMode: {
+    type: Boolean,
+    default: false
   }
 })
 
 const emit = defineEmits<{
   reload: []
   'update:closedMode': [boolean]
+  'update:teamMode': [boolean]
+  'update:showTeamMembers': [boolean]
 }>()
 
 const formatTime = (time: number | undefined): string => {
@@ -50,33 +55,17 @@ const formatTime = (time: number | undefined): string => {
 
 const route = useRoute()
 const contestName = computed(() => route.params.contestName)
-const teamMode = ref(false)
+const teamModeComputed = computed({
+  get: () => props.teamMode,
+  set: (value) => emit('update:teamMode', value)
+})
 
 const closedModeComputed = computed({
   get: () => props.closedMode,
   set: (value) => emit('update:closedMode', value)
 })
 
-type FilteredStanding = Standing & { rank: string | number }
-
-const filteredStandings = computed((): FilteredStanding[] => {
-  if (!props.standings) return []
-  if (!teamMode.value || !props.teamPrefix) return props.standings
-
-  const ranks = new Map<number, number>()
-  const filtered: FilteredStanding[] = props.standings.filter((s) =>
-    s.user.name.startsWith(props.teamPrefix)
-  )
-  for (let i = 0; i < filtered.length; ++i) {
-    if (ranks.has(filtered[i].rank)) {
-      filtered[i].rank = ranks.get(filtered[i].rank)!
-    } else {
-      ranks.set(filtered[i].rank, i + 1)
-      filtered[i].rank = i + 1
-    }
-  }
-  return filtered
-})
+const showTeamMembers = ref(false)
 </script>
 
 <template>
@@ -89,25 +78,35 @@ const filteredStandings = computed((): FilteredStanding[] => {
           variant="tonal"
           prepend-icon="mdi-reload"
           @click="$emit('reload')"
-          >更新する</v-btn
         >
-        <v-switch
-          v-if="teamPrefix"
-          v-model="teamMode"
-          label="チーム参加のみ表示"
-          class="mt-4 mr-6"
-          density="compact"
-          hide-details
-        />
-        <v-switch
-          v-if="excludeOpen"
-          v-model="closedModeComputed"
-          label="オープン参加を非表示"
-          class="mt-4"
-          color="indigo"
-          density="compact"
-          hide-details
-        />
+          更新する
+        </v-btn>
+        <div class="d-flex ga-6">
+          <v-checkbox
+            v-if="team"
+            v-model="teamModeComputed"
+            label="チーム参加のみ表示"
+            color="primary"
+            density="compact"
+            hide-details
+          />
+          <v-checkbox
+            v-if="team"
+            v-model="showTeamMembers"
+            label="チームメンバーを常に表示"
+            color="purple"
+            density="compact"
+            hide-details
+          />
+          <v-checkbox
+            v-if="excludeOpen"
+            v-model="closedModeComputed"
+            label="オープン参加を非表示"
+            color="secondary"
+            density="compact"
+            hide-details
+          />
+        </div>
       </div>
       <div class="standings__wrap">
         <table class="standings__table">
@@ -131,12 +130,12 @@ const filteredStandings = computed((): FilteredStanding[] => {
           </thead>
           <tbody>
             <tr
-              v-for="user in filteredStandings"
+              v-for="user in standings"
               :key="user.user.name"
               class="row-user"
             >
               <td>{{ user.rank }}</td>
-              <th class="user-name">
+              <th class="user-name" :class="user.user.open && 'open'">
                 <ContestsStandingsUserName :user="user.user" />
               </th>
               <td v-if="mode === 'atcoder'" class="col-result">
@@ -177,8 +176,8 @@ const filteredStandings = computed((): FilteredStanding[] => {
                   <div
                     class="icpc-score"
                     :class="{
-                      solved: problem.score > 0,
-                      'penalty-only': !problem.score && problem.penalty > 0
+                      solved: !!problem.score,
+                      'penalty-only': !problem.score && !!problem.penalty
                     }"
                   >
                     <div class="time">
@@ -243,8 +242,18 @@ const filteredStandings = computed((): FilteredStanding[] => {
   &__table {
     border-collapse: collapse;
     text-align: center;
-    border: #cccccc solid 1px;
+    border: #a0a0a0 solid 2px;
     margin: 0 auto;
+
+    td,
+    th {
+      &:not(:last-child) {
+        border-right: #e0e0e0 solid 1px;
+      }
+    }
+    tr {
+      border-top: #e0e0e0 solid 1px;
+    }
 
     .row-header {
       position: sticky;
@@ -259,13 +268,13 @@ const filteredStandings = computed((): FilteredStanding[] => {
       }
 
       .col-result {
-        width: 8em;
         min-width: 5em;
+        width: 6em;
       }
 
       .col-problem {
-        min-width: 5em;
-        width: 7em;
+        min-width: 4.5em;
+        width: 5.5em;
       }
 
       th,
@@ -277,35 +286,42 @@ const filteredStandings = computed((): FilteredStanding[] => {
     .row-user {
       .user-name {
         color: #5200ab;
+        padding: 0 0.3em;
 
         > a {
           text-decoration: none;
         }
+
+        &.open {
+          font-style: italic;
+        }
       }
 
       td {
-        padding: 0.4em 0;
+        padding: 0.2em 0;
       }
 
       .score {
         flex-direction: column;
         justify-content: space-between;
+        font-size: 0.95rem;
         .point {
           color: green;
-          font-size: 1.2rem;
+          font-weight: 500;
         }
 
         .penalty {
           color: red;
+          font-size: 0.8em;
 
           &.no-pena {
             color: #666666;
           }
         }
-        .time {
-          color: gray;
-          font-size: 0.9rem;
-        }
+      }
+      .time {
+        color: gray;
+        font-size: 0.85rem;
       }
       .icpc-score {
         display: flex;

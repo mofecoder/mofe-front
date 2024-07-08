@@ -23,7 +23,7 @@ const params = reactive({
   officialMode: false,
   kind: 'normal' as ContestDetail['kind'],
   dateRange: [dayjs(), dayjs().add(1, 'h')] as [Dayjs, Dayjs],
-  standingsMode: 'atcoder'
+  standingsMode: 'atcoder' as ContestDetail['standingsMode']
 })
 
 const disabled = computed(() => {

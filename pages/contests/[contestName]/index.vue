@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { FetchError } from 'ofetch'
 import { useUserStore } from '~/store/user'
 import type { MarkdownIt } from '~/types/plugins'
 import Contests from '~/utils/apis/Contests'
@@ -50,35 +51,42 @@ const contestSlug = computed(() => contest.value?.slug)
 
 const router = useRouter()
 
-const password = ref('')
-const registerLoading = ref('')
+const registerLoading = ref(false)
 
 const message = ref<{
   title: string
   text: string
-  color: 'error' | 'success'
+  color: 'error' | 'success' | 'warning' | 'info'
 } | null>(null)
 
 const unregister = async () => {
-  const { error } = await useApi(Contests.unregister, [contestSlug.value!])
-
-  if (error.value) {
-    message.value = {
-      title: '参加登録の取り消しに失敗しました',
-      text: error.value?.data?.error,
-      color: 'error'
-    }
-  } else {
+  try {
+    const res = await http<{ message: string | null }>(
+      Contests.unregister.$path([contestSlug.value!]),
+      { method: 'DELETE' }
+    )
+    const messageRes = res?.message
     message.value = {
       title: '参加登録を取り消しました',
-      text: '',
-      color: 'success'
+      text: messageRes ?? '',
+      color: messageRes ? 'info' : 'success'
     }
+  } catch (error) {
+    console.error(error)
+    const text = error instanceof FetchError ? error?.data?.error : ''
+    message.value = {
+      title: '参加登録の取り消しに失敗しました',
+      text,
+      color: 'error'
+    }
+    registerLoading.value = false
+    return
   }
+
   await updateContest()
 }
 
-const register = async (open: boolean) => {
+const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
   if (!storeToRefs(userStore).user.value) {
     await router.push({
       path: '/auth/signin',
@@ -87,34 +95,51 @@ const register = async (open: boolean) => {
     return
   }
 
-  registerLoading.value = open ? 'open' : 'normal'
-
-  const { error } = await useApi(
-    Contests.register,
-    [contestSlug.value!],
-    {},
-    {
-      password: open ? undefined : password.value,
-      open
+  registerLoading.value = true
+  let response = ''
+  try {
+    if (isTeam) {
+      response = await http(Contests.teamRegister.$path([contestSlug.value!]), {
+        method: 'POST',
+        body
+      })
+    } else {
+      response = await http(Contests.register.$path([contestSlug.value!]), {
+        method: 'POST',
+        body
+      })
     }
-  )
-
-  if (error.value) {
+  } catch (error) {
+    const text = error instanceof FetchError ? error?.data?.error : ''
     message.value = {
       title: '参加登録に失敗しました',
-      text: error.value?.data?.error,
+      text,
       color: 'error'
     }
-  } else {
-    message.value = {
-      title: '参加登録しました',
-      text: '',
-      color: 'success'
-    }
-    password.value = ''
+    registerLoading.value = false
+    return
+  }
+  const messageRes = typeof response === 'object' ? response['message'] : ''
+  message.value = {
+    title: '参加登録しました',
+    text: messageRes,
+    color: messageRes ? 'warning' : 'success'
   }
   await updateContest()
-  registerLoading.value = ''
+  registerLoading.value = false
+}
+
+const register = async (password?: string, open?: boolean) => {
+  await registerInner(false, { password, open })
+}
+
+const teamRegister = async (
+  name: string,
+  passphrase: string,
+  password?: string,
+  open?: boolean
+) => {
+  await registerInner(true, { name, passphrase, password, open })
 }
 
 const nuxtApp = useNuxtApp()
@@ -140,62 +165,18 @@ const $md: MarkdownIt = nuxtApp.$md
       <v-card-subtitle>{{ subtitle }}</v-card-subtitle>
       <v-card-text class="contest-card">
         <template v-if="contestEnded || isWriter || isAdmin" />
-        <div v-else-if="contest.registered" class="mb-4 py-4">
-          <v-btn color="blue-darken-1" disabled class="mr-6">
-            {{ contest.registered === 'open' ? 'オープン' : '' }}参加登録済み
-          </v-btn>
-          <v-btn color="red" @click="unregister">参加登録を取り消す</v-btn>
-        </div>
-        <v-container v-else class="px-0" fluid>
-          <v-row>
-            <v-col
-              v-if="contest.registrationRestriction"
-              cols="12"
-              sm="10"
-              md="5"
-              xl="3"
-            >
-              <v-text-field
-                v-model="password"
-                variant="underlined"
-                density="comfortable"
-                label="参加登録パスワード"
-                class="mb-4 mr-6"
-                prepend-icon="mdi-lock"
-              />
-            </v-col>
-            <v-col cols="6" sm="5" md="4" lg="2">
-              <v-btn
-                block
-                color="primary"
-                :loading="registerLoading === 'normal'"
-                :disabled="
-                  !!registerLoading ||
-                  (contest.registrationRestriction && !password)
-                "
-                @click="register(false)"
-                >参加登録</v-btn
-              >
-            </v-col>
-            <v-col
-              v-if="contest.allowOpenRegistration"
-              cols="6"
-              sm="5"
-              md="3"
-              lg="2"
-            >
-              <v-btn
-                block
-                color="secondary"
-                :loading="registerLoading === 'open'"
-                :disabled="!!registerLoading"
-                @click="register(true)"
-              >
-                オープン参加登録
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
+        <ContestsRegisterForm
+          v-else
+          class="mb-6"
+          :allow-open="contest.allowOpenRegistration"
+          :registered="contest.registered"
+          :allow-team="contest.allowTeamRegistration"
+          :restriction="contest.registrationRestriction"
+          :loading="registerLoading"
+          @individual="register"
+          @team="teamRegister"
+          @unregister="unregister"
+        />
         <v-btn
           v-if="isAdmin"
           color="purple white--text"

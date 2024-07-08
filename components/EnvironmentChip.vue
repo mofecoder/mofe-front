@@ -13,6 +13,11 @@ if (process.env.NODE_ENV === 'development') {
   text = 'Dev'
   environment = environments.development
 }
+const config = useRuntimeConfig()
+let api = 'production'
+if (config.public.apiBase.includes('localhost')) {
+  api = 'Dev'
+}
 </script>
 
 <template>
@@ -24,7 +29,13 @@ if (process.env.NODE_ENV === 'development') {
     label
   >
     {{ text }}
+    <span class="api">/ {{ api }} API</span>
   </v-chip>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.api {
+  margin-left: 0.4em;
+  font-size: 0.85em;
+}
+</style>

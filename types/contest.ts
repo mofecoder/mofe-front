@@ -14,7 +14,7 @@ export interface ContestDetail extends Contest {
   description: string
   penaltyTime: number
   isWriterOrTester: boolean
-  registered: string | null
+  registered: { name: string | null; open: boolean } | null
   editorial: string | null
   writtenTasks: {
     slug: string
@@ -25,12 +25,14 @@ export interface ContestDetail extends Contest {
   standingsMode: 'icpc' | 'atcoder'
   registrationRestriction: boolean
   allowOpenRegistration: boolean
+  allowTeamRegistration: boolean
 }
 
 export interface ContestDetailManage extends ContestDetail {
   tasks: ManageProblem[]
   admins: string[]
   officialMode: boolean
+  closedPassword: string
 }
 
 export interface ContestCreateParam extends Contest {
@@ -49,4 +51,7 @@ export interface ContestEditParam {
   editorialUrl?: string
   officialMode?: boolean
   standingsMode?: 'icpc' | 'atcoder'
+  closedPassword?: string
+  allowTeamRegistration?: boolean
+  allowOpenRegistration?: boolean
 }

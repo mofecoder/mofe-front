@@ -1,6 +1,26 @@
 <template>
+  <div v-if="user.teamMember" class="team">
+    <v-tooltip :text="user.teamMember.join(', ')" location="bottom">
+      <template #activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
+          icon="mdi-account-group"
+          size="small"
+          variant="text"
+          density="compact"
+        />
+      </template>
+    </v-tooltip>
+    <span>{{ user.name }}</span>
+    <div
+      v-if="showTeamMembers"
+      class="team-member"
+      v-text="user.teamMember.join(', ')"
+    />
+  </div>
   <a
-    v-if="user.atcoderId"
+    v-else-if="user.atcoderId"
     :href="`https://atcoder.jp/users/${user.atcoderId}`"
     target="_blank"
     :style="{ color: atcoderColor(user.atcoderRating) }"
@@ -17,7 +37,8 @@ defineProps({
   user: {
     type: Object as PropType<Standing['user']>,
     required: true
-  }
+  },
+  showTeamMembers: Boolean
 })
 
 const atcoderColor = (rating: number | null) => {
@@ -43,3 +64,19 @@ const atcoderColor = (rating: number | null) => {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.team {
+  span {
+    color: blue;
+    font-weight: bold;
+    margin-left: 0.3em;
+  }
+}
+.team-member {
+  color: #606060;
+  font-size: 0.7em;
+  font-style: normal;
+  font-weight: normal;
+}
+</style>

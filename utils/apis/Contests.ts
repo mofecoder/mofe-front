@@ -51,9 +51,13 @@ const getContests = new Api<Contest[]>('/contests')
 const getContest = new Api<ContestDetail, [string]>(
   ([slug]) => `/contests/${slug}`
 )
-const getStandings = new Api<StandingData, [string, boolean]>(
-  ([slug, excludeOpen]) =>
-    `/contests/${slug}/standings?${excludeOpen ? 'exclude_open' : ''}`
+const getStandings = new Api<StandingData, [string, boolean, boolean]>(
+  ([slug, excludeOpen, teamOnly]) => {
+    const options = []
+    if (excludeOpen) options.push('exclude_open')
+    if (teamOnly) options.push('team_only')
+    return `/contests/${slug}/standings?${options.join('&')}`
+  }
 )
 
 const getClarifications = new Api<Clarification[], [string]>(
@@ -116,12 +120,23 @@ const getSubmission = new Api<SubmissionDetail, [string, number]>(
 )
 
 const register = new Api<void, [string], { password?: string; open?: boolean }>(
-  ([slug]) => `/contests/${slug}/register`,
+  ([slug]) => `/contests/${slug}/registrations`,
   'POST'
 )
 
+const teamRegister = new Api<
+  { message: string },
+  [string],
+  {
+    name: string
+    passphrase: string
+    password?: string
+    open?: boolean
+  }
+>(([slug]) => `/contests/${slug}/registrations/team`, 'POST')
+
 const unregister = new Api<void, [string]>(
-  ([slug]) => `/contests/${slug}/unregister`,
+  ([slug]) => `/contests/${slug}/registrations`,
   'DELETE'
 )
 
@@ -138,5 +153,6 @@ export default {
   getSubmission,
   rejudge,
   register,
+  teamRegister,
   unregister
 }

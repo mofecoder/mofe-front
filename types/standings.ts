@@ -8,6 +8,8 @@ type StandingUser = {
   name: string
   atcoderId: string | null
   atcoderRating: number | null
+  teamMember: string[] | null
+  open: boolean
 }
 
 export interface Standing {

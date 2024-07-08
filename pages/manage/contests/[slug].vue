@@ -2,7 +2,7 @@
 import type { Dayjs } from 'dayjs'
 import { FetchError } from 'ofetch'
 import ManageContests from '~/utils/apis/ManageContests'
-import type { ContestDetailManage } from '~/types/contest'
+import type { ContestDetailManage, ContestEditParam } from '~/types/contest'
 import { useUserStore } from '~/store/user'
 
 definePageMeta({
@@ -85,20 +85,21 @@ const reload = async () =>
 const editInformation = async () => {
   if (!contest) return
   loading.information = true
-  await useApi(
-    ManageContests.updateContest,
-    [slug.value],
-    {},
-    {
+  await http(ManageContests.updateContest.$path([slug.value]), {
+    method: 'PUT',
+    body: {
       name: contest.name,
       kind: contest.kind,
       penaltyTime: Number(contest.penaltyTime),
       description: contest.description,
       editorialUrl: contest.editorial || undefined,
       officialMode: contest.officialMode,
-      standingsMode: contest.standingsMode
-    }
-  )
+      standingsMode: contest.standingsMode,
+      allowTeamRegistration: contest.allowTeamRegistration,
+      allowOpenRegistration: contest.allowOpenRegistration,
+      closedPassword: contest.closedPassword
+    } as ContestEditParam
+  })
   updated.value = true
   await reload()
   loading.information = false
@@ -220,6 +221,9 @@ const openModal = async () => {
       v-model:kind="contest.kind"
       v-model:official-mode="contest.officialMode"
       v-model:standings-mode="contest.standingsMode"
+      v-model:allow-open-registration="contest.allowOpenRegistration"
+      v-model:allow-team-registration="contest.allowTeamRegistration"
+      v-model:closed-password="contest.closedPassword"
       :slug="contest.slug"
       :loading="loading.information"
       edit

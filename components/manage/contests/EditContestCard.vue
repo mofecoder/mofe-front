@@ -10,9 +10,12 @@ const props = defineProps<{
   penalty: string
   description: string
   kind: Contest['kind']
-  editorialUrl?: string
+  editorialUrl?: string | null
   officialMode: boolean
   standingsMode: Contest['standingsMode']
+  closedPassword?: string
+  allowOpenRegistration?: boolean
+  allowTeamRegistration?: boolean
   edit?: boolean
   loading?: boolean
 }>()
@@ -27,6 +30,9 @@ const emits = defineEmits<{
   'update:editorialUrl': [string | null]
   'update:officialMode': [boolean]
   'update:standingsMode': [Contest['standingsMode']]
+  'update:closedPassword': [string]
+  'update:allowTeamRegistration': [boolean]
+  'update:allowOpenRegistration': [boolean]
 }>()
 
 const rules = {
@@ -101,6 +107,21 @@ const standingsMode = computed({
   get: () => props.standingsMode,
   set: (v) => emits('update:standingsMode', v)
 })
+
+const allowOpen = computed({
+  get: () => props.allowOpenRegistration,
+  set: (v) => emits('update:allowOpenRegistration', v)
+})
+
+const allowTeam = computed({
+  get: () => props.allowTeamRegistration,
+  set: (v) => emits('update:allowTeamRegistration', v)
+})
+
+const password = computed({
+  get: () => props.closedPassword,
+  set: (v) => emits('update:closedPassword', v!)
+})
 </script>
 
 <template>
@@ -146,6 +167,26 @@ const standingsMode = computed({
           <v-select v-model="contestKind" :items="kinds" label="種類" />
         </v-col>
       </v-row>
+      <v-row v-if="edit">
+        <v-col cols="12" sm="8" lg="6">
+          <v-text-field v-model="password" label="参加登録パスワード" />
+        </v-col>
+        <v-col cols="12" sm="4" lg="3">
+          <v-checkbox
+            v-model="allowOpen"
+            label="オープン参加を許可"
+            color="secondary"
+            :disabled="!password"
+          />
+        </v-col>
+        <v-col cols="12" lg="3">
+          <v-checkbox
+            v-model="allowTeam"
+            label="チーム参加を許可"
+            color="purple"
+          />
+        </v-col>
+      </v-row>
       <v-row justify="end">
         <v-btn
           class="mr-3"
@@ -186,7 +227,7 @@ const standingsMode = computed({
       </p>
       <template v-else>
         <v-row>
-          <v-col cols="12">
+          <v-col v-if="edit" cols="12">
             <v-text-field
               v-model="editorial"
               :rules="rules.url"

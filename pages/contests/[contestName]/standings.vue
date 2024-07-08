@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Contests from '~/utils/apis/Contests'
-import { TEAM_CONTEST_LIST } from '~/constants/teamContestList'
 
 definePageMeta({
   layout: 'contest'
@@ -14,8 +13,14 @@ useHead(() => ({
 }))
 
 const closedMode = ref(false)
+const teamMode = ref(false)
 const args = computed(
-  () => [contestName.value, closedMode.value] as [string, boolean]
+  () =>
+    [contestName.value, closedMode.value, teamMode.value] as [
+      string,
+      boolean,
+      boolean
+    ]
 )
 const {
   data: standingData,
@@ -24,9 +29,8 @@ const {
 } = await useApi(Contests.getStandings, args, {
   lazy: true
 })
-const problems = computed(() => standingData.value?.problems)
+const problems = computed(() => standingData.value?.problems || [])
 const standings = computed(() => standingData.value?.standings)
-const teamPrefix = TEAM_CONTEST_LIST[contestName.value]
 const refreshInterval = ref(-1)
 
 useIntervalFn(async () => {
@@ -44,11 +48,12 @@ useIntervalFn(async () => {
       <template v-else>
         <ContestsStandingsTable
           v-model:closed-mode="closedMode"
+          v-model:team-mode="teamMode"
           :loading="pending"
           :problems="problems"
           :standings="standings"
           :mode="contest.standingsMode"
-          :team-prefix="teamPrefix"
+          :team="contest.allowTeamRegistration"
           :exclude-open="
             contest.allowOpenRegistration && contest.registrationRestriction
           "
