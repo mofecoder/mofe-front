@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ManageProblems from '~/utils/apis/ManageProblems'
-import type { Testcase, TestcaseSet } from '~/types/problems'
+import AggregateTypes from '~/constants/aggregateTypes'
+import type { AggregateType, Testcase, TestcaseSet } from '~/types/problems'
 
 const props = defineProps<{
   problemId: number
@@ -100,7 +101,11 @@ const createTestcase = async (params: {
   testcaseDialog.value = false
 }
 
-const saveSet = async (params: { name: string; points: string }) => {
+const saveSet = async (params: {
+  name: string
+  points: string
+  aggregateType: AggregateType
+}) => {
   if (Number.isNaN(Number(params.points))) return
   let err
   const create = editingTestcaseSetId.value == null
@@ -276,6 +281,7 @@ const addSetMultiple = async () => {
           <thead>
             <tr>
               <th>テストケースセット名</th>
+              <th>集計方法</th>
               <th>配点</th>
               <th>サンプル</th>
               <th />
@@ -284,7 +290,18 @@ const addSetMultiple = async () => {
           <tbody>
             <tr v-for="set in testcaseSets" :key="set.name">
               <td v-text="set.name" />
-              <td v-text="set.points" />
+              <td
+                v-text="
+                  AggregateTypes.find((x) => x.value === set.aggregateType)!
+                    .text
+                "
+              />
+              <td>
+                {{ set.points }}
+                <span v-if="set.aggregateType !== 'all'" class="text-caption">
+                  (表示のみ)
+                </span>
+              </td>
               <td class="is-sample" :class="{ '--sample': set.isSample }">
                 {{ set.isSample ? 'Yes' : 'No' }}
               </td>

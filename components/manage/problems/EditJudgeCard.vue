@@ -49,7 +49,7 @@ const submit = async () => {
     <v-alert class="mb-2" variant="tonal" type="info">
       <v-alert-title>ジャッジの設定方法</v-alert-title>
       <p class="body1">
-        デフォルトチェッカーまたはカスタムチェッカーを利用することができます．
+        デフォルトチェッカーまたはカスタムチェッカーを利用することができます。
       </p>
       <p class="body1">
         デフォルトチェッカーは
@@ -58,17 +58,37 @@ const submit = async () => {
           target="_blank"
           >testlib のサンプル</a
         >
-        を利用しています．
+        を利用しています。
       </p>
       <p class="body1">
-        カスタムチェッカーを利用する場合は，testlib を使って作成してください．
+        カスタムチェッカーを利用する場合は，testlib を使って作成してください。
         (サンプルを参考にしてください)
       </p>
     </v-alert>
-    <v-alert class="mb-4" variant="outlined" type="warning">
-      現時点では、チェッカーにより動的に点数やジャッジ結果（QLE,
-      OLEなど）を設定することはできません。<br />
-      チェッカーでは AC / WA の判定のみ行うことができます。
+    <v-alert
+      class="mb-4"
+      variant="tonal"
+      title="動的点数設定（β）について"
+      type="warning"
+    >
+      次の方法で、テストケースセットごとの点数を動的に設定できます。<br />
+      <ol class="mt-1 mb-2">
+        <li>
+          テストケースセットの「集計方法」を「合計」「最大」「最小」のいずれかに設定する。
+        </li>
+        <li>
+          カスタムチェッカーを選択し、チェッカーでは標準出力に
+          <code>MofeJudge::Score(0)</code>
+          を1行で出力する。（<code>0</code> の部分に点数を入れる）
+        </li>
+      </ol>
+      「合計」の場合はセット内のテストケースに対する点数の合計値、
+      「最大」では最大値、「最小」では最小値が点数になります。<br />
+      出力しなかったケースについては集計対象外となり、対象ケースが 1
+      つも存在しない場合には 0 点となります。<br />
+      出力した配点については表示のみとなり、集計には利用されません。
+      （設定によっては点数が配点を超える可能性もあります）。<br />
+      提出自体に対する点数は、テストケースセットごとの点数の合計です。
     </v-alert>
 
     <v-expansion-panels>
@@ -96,8 +116,8 @@ const submit = async () => {
     />
     <template v-if="checker === 'custom'">
       <p class="body2">
-        コンパイル時間短縮のため，無駄なヘッダー (特に
-        <code>bits/stdc++.h</code>) の include は控えてください．
+        コンパイル時間短縮のため、無駄なヘッダー (特に
+        <code>bits/stdc++.h</code>) の include は控えてください。
       </p>
       <v-file-input
         placeholder="チェッカーファイルをアップロード"

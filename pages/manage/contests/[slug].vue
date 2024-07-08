@@ -4,6 +4,7 @@ import { FetchError } from 'ofetch'
 import ManageContests from '~/utils/apis/ManageContests'
 import type { ContestDetailManage, ContestEditParam } from '~/types/contest'
 import { useUserStore } from '~/store/user'
+import ManageProblems from '~/utils/apis/ManageProblems'
 
 definePageMeta({
   middleware: 'authenticated'
@@ -23,7 +24,7 @@ const {
   refresh: refreshContest
 } = await useApi(ManageContests.getContest, [slug.value])
 const { data: unsetProblems, refresh: refreshUnsetProblems } = await useApi(
-  ManageContests.getUnsetProblems,
+  ManageProblems.getUnsetProblems,
   []
 )
 

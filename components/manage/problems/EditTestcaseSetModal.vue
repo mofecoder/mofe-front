@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
 import ManageProblems from '~/utils/apis/ManageProblems'
+import AggregateTypes from '~/constants/aggregateTypes'
+import type { AggregateType } from '~/types/problems'
 
 const props = defineProps<{
   value: boolean
@@ -15,10 +17,12 @@ const loading = ref(false)
 type ParamsType = {
   name: string
   points: string
+  aggregateType: AggregateType
 }
 const params = ref<ParamsType>({
   name: '',
-  points: '0'
+  points: '0',
+  aggregateType: 'all'
 })
 
 const rules = {
@@ -43,7 +47,8 @@ watch(
       startName.value = ''
       params.value = {
         name: '',
-        points: '0'
+        points: '0',
+        aggregateType: 'all'
       }
       form.value?.resetValidation()
       return
@@ -56,11 +61,20 @@ watch(
     if (data.value) {
       const { name, points } = data.value
       startName.value = name
-      params.value = { name, points: points.toString() }
+      params.value = {
+        name,
+        points: points.toString(),
+        aggregateType: data.value.aggregateType
+      }
     }
     loading.value = false
   }
 )
+
+const scoreHint = computed(() => {
+  if (params.value.aggregateType === 'all') return ''
+  return '表示のみで採点には影響しません'
+})
 
 const check = (v: string) => {
   return (
@@ -74,7 +88,8 @@ const create = () => {
   emits('save', params.value)
   params.value = {
     name: '',
-    points: '0'
+    points: '0',
+    aggregateType: 'all'
   }
   form.value?.resetValidation()
 }
@@ -101,9 +116,16 @@ const editing = computed(() => props.id !== null)
                   :readonly="startName === 'sample' || startName === 'all'"
                 />
               </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" md="12">
+              <v-col cols="12" md="7">
+                <v-select
+                  v-model="params.aggregateType"
+                  label="集計の種類"
+                  :items="AggregateTypes"
+                  item-title="text"
+                  hide-details
+                />
+              </v-col>
+              <v-col cols="12" md="5">
                 <v-text-field
                   v-model="params.points"
                   type="number"
@@ -111,6 +133,8 @@ const editing = computed(() => props.id !== null)
                   required
                   :rules="[rules.required, rules.points]"
                   :counter="8"
+                  :hint="scoreHint"
+                  persistent-hint
                 />
               </v-col>
             </v-row>

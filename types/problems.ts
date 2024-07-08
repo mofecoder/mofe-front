@@ -42,10 +42,13 @@ export interface ProblemDetail {
   contest: Contest | null
 }
 
+export type AggregateType = 'all' | 'sum' | 'max' | 'min'
+
 export interface TestcaseSet {
   id: number
   name: string
   points: number
+  aggregateType: AggregateType
   isSample: boolean
 }
 

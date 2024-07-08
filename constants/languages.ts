@@ -37,8 +37,8 @@ const languages: Language[] = [
     runCommand: 'java Main'
   },
   {
-    innerName: 'python:3.11.4',
-    name: 'Python (CPython 3.11.4)',
+    innerName: 'python:3.12.4',
+    name: 'Python (CPython 3.12.4)',
     mime: 'text/x-python',
     compilationCommand:
       'python3.11 -m py_compile ./Main.py && python3.11 ./Main.py 2> /dev/null',
@@ -48,8 +48,8 @@ const languages: Language[] = [
       'sympy, sortedcontainers, bitarray'
   },
   {
-    innerName: 'go:1.20.6',
-    name: 'Go (1.20.6)',
+    innerName: 'go:1.22.5',
+    name: 'Go (1.22.5)',
     mime: 'text/x-go',
     compilationCommand: 'go build ./Main.go -o Main.out',
     runCommand: './Main.out'
@@ -78,12 +78,12 @@ const languages: Language[] = [
     compilationCommand: 'cargo build --release',
     runCommand: './Main.out',
     libraries:
-      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">' +
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/24.07/Rust/Cargo.toml" target="_blank">' +
       'Cargo.toml</a> を参照'
   },
   {
-    innerName: 'ruby:3.2.2',
-    name: 'Ruby (3.2.2)',
+    innerName: 'ruby:3.3.2',
+    name: 'Ruby (3.3.2)',
     mime: 'text/x-ruby',
     compilationCommand: 'ruby -w -c ./Main.rb',
     runCommand: 'ruby ./Main.rb',
@@ -119,8 +119,8 @@ const languages: Language[] = [
     runCommand: 'cat Main.txt'
   },
   {
-    innerName: 'perl:5.36.0',
-    name: 'Perl (5.36.0)',
+    innerName: 'perl:5.38.2',
+    name: 'Perl (5.38.2)',
     mime: 'text/x-perl',
     compilationCommand: 'perl -W -c ./Main.pl',
     runCommand: 'perl -X ./Main.pl'

@@ -64,4 +64,4 @@ export default [
     description: '符号付きの大きな整数の一致'
   },
   { value: 'int', fileName: 'icmp.cpp', description: 'int 型の数値一致' }
-] as CheckerType[]
+] as const as CheckerType[]
