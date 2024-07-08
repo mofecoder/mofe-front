@@ -144,8 +144,11 @@ const title = computed(() => {
         >
           問題の編集画面へ
         </v-btn>
-        <div class="d-flex">
-          <ProblemsDifficultyChip :difficulty="problem.difficulty" />
+        <div class="d-flex flex-wrap">
+          <ProblemsDifficultyChip
+            class="p-tooltip-0"
+            :difficulty="problem.difficulty"
+          />
           <v-spacer />
           <v-tooltip
             location="bottom"
@@ -153,6 +156,7 @@ const title = computed(() => {
           >
             <template #activator="{ props: p }">
               <v-chip
+                class="p-tooltip"
                 v-bind="p"
                 variant="tonal"
                 size="large"
@@ -171,8 +175,8 @@ const title = computed(() => {
           <v-tooltip location="bottom" :text="`メモリ制限 1024 MB`">
             <template #activator="{ props: p }">
               <v-chip
+                class="ml-3 p-tooltip"
                 v-bind="p"
-                class="ml-3"
                 variant="tonal"
                 size="large"
                 color="teal"
@@ -185,11 +189,15 @@ const title = computed(() => {
               </v-chip>
             </template>
           </v-tooltip>
-          <v-tooltip location="bottom" :text="`配点 ${problem.points} 点`">
+          <v-tooltip
+            v-if="'points' in problem"
+            location="bottom"
+            :text="`配点 ${problem.points} 点`"
+          >
             <template #activator="{ props: p }">
               <v-chip
+                class="ml-3 p-tooltip"
                 v-bind="p"
-                class="ml-3"
                 variant="tonal"
                 size="large"
                 color="indigo"
@@ -202,6 +210,19 @@ const title = computed(() => {
               </v-chip>
             </template>
           </v-tooltip>
+          <v-chip
+            v-else
+            class="ml-3 p-tooltip"
+            variant="tonal"
+            size="large"
+            color="indigo"
+            prepend-icon="mdi-check-circle"
+          >
+            <span class="text-indigo-darken-3">---</span>
+            <template #append>
+              <span class="chip-sub">点</span>
+            </template>
+          </v-chip>
         </div>
       </v-card-title>
       <v-card-text class="mt-3 task-card-text">
@@ -409,6 +430,13 @@ h3 {
 
   &__select {
     max-width: 20em;
+  }
+}
+
+.p-tooltip {
+  order: 1;
+  &-0 {
+    order: 0;
   }
 }
 </style>

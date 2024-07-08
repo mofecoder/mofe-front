@@ -6,6 +6,7 @@ import type {
   Testcase,
   TestcaseSet
 } from '~/types/problems'
+import type { Problem as AdminProblem } from '~/types/contestAdmin'
 type UploadResponseType = { messages: string[] }
 type TestcasesResponseType = {
   testcaseSets: TestcaseSet[]
@@ -27,6 +28,10 @@ const updateProblem = new Api<
   [number],
   { problem: ProblemParams }
 >(([id]) => `/problems/${id}`, 'PUT')
+
+const getUnsetProblems = new Api<AdminProblem[], []>(
+  '/manage/problems/unset_problems'
+)
 
 const createProblem = new Api<ProblemDetail, [], { problem: ProblemParams }>(
   '/problems',
@@ -116,6 +121,7 @@ const updateChecker = new Api<void, [number]>(
 export default {
   getProblems,
   getProblem,
+  getUnsetProblems,
   updateProblem,
   createProblem,
   addTester,

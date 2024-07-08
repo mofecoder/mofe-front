@@ -12,7 +12,7 @@ useHead({
 })
 
 const { data: contests } = await useApi(ManageContests.getContests, [])
-const { data: problems } = await useApi(ManageProblems.getProblems, [])
+const { data: problems } = await useApi(ManageProblems.getUnsetProblems, [])
 
 const updateRating = async () => {
   await useApi(Admin.updateRating, [])
@@ -24,18 +24,43 @@ const updateRating = async () => {
     <v-container>
       <v-row>
         <v-col>
-          <v-btn to="/manage/contests" color="primary" block
-            >コンテスト管理画面へ</v-btn
+          <v-btn
+            to="/manage/contests"
+            variant="tonal"
+            prepend-icon="mdi-application-cog"
+            color="primary"
+            block
           >
-          <v-btn class="mt-2" to="/admin/posts" color="primary" block
-            >記事管理画面へ</v-btn
+            コンテスト管理画面へ
+          </v-btn>
+          <v-btn
+            class="mt-2"
+            to="/admin/posts"
+            color="primary"
+            block
+            variant="tonal"
+            prepend-icon="mdi-note-edit"
           >
-          <v-btn class="mt-2" to="/admin/users" color="primary" block
+            記事管理画面へ
+          </v-btn>
+          <v-btn
+            class="mt-2"
+            to="/admin/users"
+            color="primary"
+            block
+            variant="tonal"
+            prepend-icon="mdi-account-cog"
             >ユーザ管理画面へ</v-btn
           >
-          <v-btn color="yellow" class="mt-2" @click="updateRating"
-            >レーティング更新</v-btn
+          <v-btn
+            color="orange"
+            class="mt-4"
+            variant="tonal"
+            prepend-icon="mdi-autorenew"
+            @click="updateRating"
           >
+            レーティング更新
+          </v-btn>
         </v-col>
         <v-col>
           <h2>問題（未所属）</h2>

@@ -36,6 +36,7 @@ const app = useNuxtApp()
     <template v-if="showEdit || enableLink" #actions>
       <v-btn
         v-if="showEdit"
+        prepend-icon="mdi-note-edit-outline"
         class="mt-3"
         color="purple white--text"
         :to="`/admin/posts/${post.id}`"

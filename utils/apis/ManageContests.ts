@@ -5,7 +5,6 @@ import type {
   ContestDetailManage,
   ContestEditParam
 } from '~/types/contest'
-import type { Problem as AdminProblem } from '~/types/contestAdmin'
 
 const getContest = new Api<ContestDetailManage, [string]>(
   ([slug]) => `/manage/contests/${slug}`
@@ -15,10 +14,6 @@ const getContests = new Api<Contest[]>('/manage/contests', 'GET')
 const createContest = new Api<Contest, [], ContestCreateParam>(
   '/contests',
   'POST'
-)
-
-const getUnsetProblems = new Api<AdminProblem[], []>(
-  '/manage/problems/unset_problems'
 )
 
 const updateContest = new Api<Contest, [string], ContestEditParam>(
@@ -55,7 +50,6 @@ export default {
   getContest,
   getContests,
   createContest,
-  getUnsetProblems,
   updateContest,
   addTask,
   removeTask,
