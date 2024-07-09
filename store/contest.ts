@@ -27,8 +27,8 @@ export const useContestStore = defineStore({
       const _this = this
       await http<ContestDetail>(Contests.getContest.$path([unref(slug)]), {
         onRequest() {
+          if (!updated || !process.client) return
           _this.contest = null
-          if (!updated && !process.client) return
           if (_this.interval != null) {
             window.clearInterval(_this.interval)
           }
@@ -59,8 +59,6 @@ export const useContestStore = defineStore({
       this.clarifications = clarifications
     },
     leave() {
-      this.contest = null
-      this.clarifications = null
       if (this.interval && process.client) {
         window.clearInterval(this.interval)
         this.interval = null
