@@ -30,8 +30,8 @@ const languages: Language[] = [
     runCommand: './Main.out'
   },
   {
-    innerName: 'java:17.0.7',
-    name: 'Java (OpenJDK 17.0.7)',
+    innerName: 'java:17.0.11',
+    name: 'Java (OpenJDK 17.0.11)',
     mime: 'text/x-java',
     compilationCommand: 'javac ./Main.java',
     runCommand: 'java Main'
@@ -55,16 +55,16 @@ const languages: Language[] = [
     runCommand: './Main.out'
   },
   {
-    innerName: 'cs_dotnet:7.0',
-    name: 'C# (.NET 7.0.305)',
+    innerName: 'cs_dotnet:8.0',
+    name: 'C# (.NET 8.0.302)',
     mime: 'text/x-csharp',
     compilationCommand: 'dotnet publish -o . -c Release -v q --nologo 1>&2',
     runCommand: './Main',
     libraries: 'ac-library-csharp@3.0.0-pre8'
   },
   {
-    innerName: 'nim:1.6.14',
-    name: 'Nim (1.6.14)',
+    innerName: 'nim:2.0.8',
+    name: 'Nim (2.0.8)',
     mime: 'text/plain',
     compilationCommand:
       'nim cpp -d:release --opt:speed --multimethods:on -o:Main.out Main.nim',
@@ -72,8 +72,8 @@ const languages: Language[] = [
     libraries: 'Nim-ACL'
   },
   {
-    innerName: 'rust:1.71.0',
-    name: 'Rust (1.71.0)',
+    innerName: 'rust:1.79.0',
+    name: 'Rust (1.79.0)',
     mime: 'text/x-rustsrc',
     compilationCommand: 'cargo build --release',
     runCommand: './Main.out',
@@ -90,8 +90,8 @@ const languages: Language[] = [
     libraries: 'rbtree, ac-library-rb, sorted_set'
   },
   {
-    innerName: 'kotlin:1.9.0',
-    name: 'Kotlin (1.9.0)',
+    innerName: 'kotlin:2.0.0',
+    name: 'Kotlin (2.0.0, JRE 17.0.11)',
     mime: 'text/plain',
     compilationCommand: 'kotlinc ./Main.kt -include-runtime -d Main.jar',
     runCommand: 'kotlin Main.jar'
@@ -104,23 +104,23 @@ const languages: Language[] = [
     runCommand: './Main.out'
   },
   {
-    innerName: 'crystal:1.8.2',
-    name: 'Crystal (1.8.2)',
+    innerName: 'crystal:1.12.2',
+    name: 'Crystal (1.12.2)',
     mime: 'text/x-crystal',
     compilationCommand:
       'crystal build --release --no-debug --no-color -o Main.out ./Main.cr',
     runCommand: './Main.out'
   },
   {
-    innerName: 'text_cat:8.32',
-    name: 'Text (cat 8.32)',
+    innerName: 'text_cat:9.1',
+    name: 'Text (cat 9.1)',
     mime: 'text/plain',
     compilationCommand: '',
     runCommand: 'cat Main.txt'
   },
   {
-    innerName: 'perl:5.38.2',
-    name: 'Perl (5.38.2)',
+    innerName: 'perl:5.36.0',
+    name: 'Perl (5.36.0)',
     mime: 'text/x-perl',
     compilationCommand: 'perl -W -c ./Main.pl',
     runCommand: 'perl -X ./Main.pl'
@@ -140,8 +140,8 @@ const languages: Language[] = [
     runCommand: 'bash ./Main.sh'
   },
   {
-    innerName: 'pypy310:7.3.12',
-    name: 'PyPy3 (3.10-7.3.12)',
+    innerName: 'pypy310:7.3.16',
+    name: 'PyPy3 (3.10-7.3.16)',
     mime: 'text/x-python',
     compilationCommand: 'pypy3 -m py_compile ./Main.py',
     runCommand: 'pypy3 ./Main.py',
@@ -155,6 +155,129 @@ const languages: Language[] = [
     mime: 'text/plain',
     compilationCommand: '',
     runCommand: 'dc Main.dc'
+  },
+  {
+    innerName: 'python:3.11.4',
+    name: 'Python (CPython 3.11.4)',
+    mime: 'text/x-python',
+    compilationCommand:
+      'python3.11 -m py_compile ./Main.py && python3.11 ./Main.py 2> /dev/null',
+    runCommand: 'python3.11 ./Main.py',
+    libraries:
+      'ac-library-python, numpy, scipy, networkx, ' +
+      'sympy, sortedcontainers, bitarray',
+    isOutdated: true
+  },
+  {
+    innerName: 'go:1.20.6',
+    name: 'Go (1.20.6)',
+    mime: 'text/x-go',
+    compilationCommand: 'go build ./Main.go -o Main.out',
+    runCommand: './Main.out',
+    isOutdated: true
+  },
+
+  {
+    innerName: 'perl:5.36.0',
+    name: 'Perl (5.36.0)',
+    mime: 'text/x-perl',
+    compilationCommand: 'perl -W -c ./Main.pl',
+    runCommand: 'perl -X ./Main.pl',
+    isOutdated: true
+  },
+  {
+    innerName: 'ruby:3.2.2',
+    name: 'Ruby (3.2.2)',
+    mime: 'text/x-ruby',
+    compilationCommand: 'ruby -w -c ./Main.rb',
+    runCommand: 'ruby ./Main.rb',
+    libraries: 'rbtree, ac-library-rb, sorted_set',
+    isOutdated: true
+  },
+  {
+    innerName: 'rust:1.71.0',
+    name: 'Rust (1.71.0)',
+    mime: 'text/x-rustsrc',
+    compilationCommand: 'cargo build --release',
+    runCommand: './Main.out',
+    libraries:
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">' +
+      'Cargo.toml</a> を参照',
+    isOutdated: true
+  },
+  {
+    innerName: 'java:17.0.7',
+    name: 'Java (OpenJDK 17.0.7)',
+    mime: 'text/x-java',
+    compilationCommand: 'javac ./Main.java',
+    runCommand: 'java Main',
+    isOutdated: true
+  },
+  {
+    innerName: 'cs_dotnet:7.0',
+    name: 'C# (.NET 7.0.305)',
+    mime: 'text/x-csharp',
+    compilationCommand: 'dotnet publish -o . -c Release -v q --nologo 1>&2',
+    runCommand: './Main',
+    libraries: 'ac-library-csharp@3.0.0-pre8',
+    isOutdated: true
+  },
+  {
+    innerName: 'nim:1.6.14',
+    name: 'Nim (1.6.14)',
+    mime: 'text/plain',
+    compilationCommand:
+      'nim cpp -d:release --opt:speed --multimethods:on -o:Main.out Main.nim',
+    runCommand: './Main.out',
+    libraries: 'Nim-ACL',
+    isOutdated: true
+  },
+  {
+    innerName: 'rust:1.71.0',
+    name: 'Rust (1.71.0)',
+    mime: 'text/x-rustsrc',
+    compilationCommand: 'cargo build --release',
+    runCommand: './Main.out',
+    libraries:
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/24.07/Rust/Cargo.toml" target="_blank">' +
+      'Cargo.toml</a> を参照',
+    isOutdated: true
+  },
+  {
+    innerName: 'kotlin:1.9.0',
+    name: 'Kotlin (1.9.0c)',
+    mime: 'text/plain',
+    compilationCommand: 'kotlinc ./Main.kt -include-runtime -d Main.jar',
+    runCommand: 'kotlin Main.jar',
+    isOutdated: true
+  },
+  {
+    innerName: 'crystal:1.8.2',
+    name: 'Crystal (1.8.2)',
+    mime: 'text/x-crystal',
+    compilationCommand:
+      'crystal build --release --no-debug --no-color -o Main.out ./Main.cr',
+    runCommand: './Main.out',
+    isOutdated: true
+  },
+  {
+    innerName: 'perl:5.38.2',
+    name: 'Perl (5.38.2)',
+    mime: 'text/x-perl',
+    compilationCommand: 'perl -W -c ./Main.pl',
+    runCommand: 'perl -X ./Main.pl',
+    isOutdated: true
+  },
+  {
+    innerName: 'pypy310:7.3.12',
+    name: 'PyPy3 (3.10-7.3.12)',
+    mime: 'text/x-python',
+    compilationCommand: 'pypy3 -m py_compile ./Main.py',
+    runCommand: 'pypy3 ./Main.py',
+    libraries:
+      'ac-library-python, numpy, networkx, ' +
+      'sympy, sortedcontainers, bitarray',
+    isOutdated: true
   },
   {
     innerName: 'cpp17_gcc:10.2.0',
