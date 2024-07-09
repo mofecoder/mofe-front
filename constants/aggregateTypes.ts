@@ -3,7 +3,7 @@ import type { AggregateType } from '~/types/problems'
 export default [
   {
     value: 'all',
-    text: 'なし'
+    text: '通常'
   },
   {
     value: 'sum',

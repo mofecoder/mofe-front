@@ -269,8 +269,8 @@ const addSetMultiple = async () => {
       class="mb-8"
       closable
     >
-      「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
-      そのテストケースセットの配点が加算されます。<br />
+      集計方法が「通常」の場合、「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
+      そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br />
       満点はすべてのテストケースセットの配点の合計となります。<br />
       採点順・表示順はテストケース名の辞書順です。
     </v-alert>
@@ -280,10 +280,10 @@ const addSetMultiple = async () => {
         <v-table v-if="testcaseSets">
           <thead>
             <tr>
-              <th>テストケースセット名</th>
-              <th>集計方法</th>
-              <th>配点</th>
-              <th>サンプル</th>
+              <th class="text-center">テストケースセット名</th>
+              <th class="text-center">集計方法</th>
+              <th class="text-center">配点</th>
+              <th class="text-center">サンプル</th>
               <th />
             </tr>
           </thead>
@@ -291,18 +291,19 @@ const addSetMultiple = async () => {
             <tr v-for="set in testcaseSets" :key="set.name">
               <td v-text="set.name" />
               <td
+                class="text-center"
                 v-text="
                   AggregateTypes.find((x) => x.value === set.aggregateType)!
                     .text
                 "
               />
-              <td>
+              <td class="text-right">
                 {{ set.points }}
                 <span v-if="set.aggregateType !== 'all'" class="text-caption">
                   (表示のみ)
                 </span>
               </td>
-              <td class="is-sample" :class="{ '--sample': set.isSample }">
+              <td class="text-center">
                 {{ set.isSample ? 'Yes' : 'No' }}
               </td>
               <td>
