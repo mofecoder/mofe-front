@@ -131,7 +131,6 @@ const check = (v: string) => {
                   label="入力"
                   required
                   :readonly="readonly"
-                  :rules="[rules.required]"
                 />
               </v-col>
               <v-col cols="12">
@@ -140,7 +139,6 @@ const check = (v: string) => {
                   label="出力"
                   required
                   :readonly="readonly"
-                  :rules="[rules.required]"
                 />
               </v-col>
               <v-col cols="12">
