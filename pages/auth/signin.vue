@@ -57,7 +57,11 @@ const submit = async () => {
     <v-card max-width="480px" class="mx-auto">
       <v-card-title>ログイン</v-card-title>
       <v-card-text>
-        <p class="mb-4">ユーザ名とパスワードを入力してください。</p>
+        <p class="mb-2">ユーザ名とパスワードを入力してください。</p>
+        <p class="mb-4 text-caption">
+          旧 CafeCoder (<code>https://cafecoder.top</code>)
+          と同一のアカウントでログイン可能です。
+        </p>
         <v-form ref="form" v-model="valid" @submit.prevent="submit">
           <v-text-field
             v-model="name"
@@ -74,19 +78,29 @@ const submit = async () => {
             required
             autocomplete="current-password"
           />
-          <p class="mb-2">
-            <NuxtLink to="/auth/signup">アカウントを作成する</NuxtLink>
-          </p>
-          <p>
-            <NuxtLink to="/auth/reset-password"
-              >パスワードを忘れた方はこちら</NuxtLink
+          <div class="d-flex ga-3 my-4 flex-column">
+            <v-btn
+              to="/auth/signup"
+              variant="outlined"
+              prepend-icon="mdi-account-plus"
             >
-          </p>
+              アカウントを作成する
+            </v-btn>
+            <v-btn
+              to="/auth/reset-password"
+              variant="outlined"
+              color="warning"
+              prepend-icon="mdi-lock-question"
+            >
+              パスワードを忘れた場合
+            </v-btn>
+          </div>
           <v-btn
             type="submit"
             :disabled="!valid"
             color="primary"
-            width="100%"
+            block
+            prepend-icon="mdi-login"
             class="mt-3"
           >
             ログインする

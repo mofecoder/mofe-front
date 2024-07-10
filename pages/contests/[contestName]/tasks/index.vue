@@ -14,8 +14,8 @@ useHead(() => ({
 <template>
   <div>
     <template v-if="contest">
-      <v-alert v-if="!contest.tasks">
-        <v-alert type="warning">問題はまだ公開されていません。</v-alert>
+      <v-alert v-if="!contest.tasks" type="warning">
+        問題はまだ公開されていません。
       </v-alert>
       <v-container v-else class="pa-0" fluid>
         <v-card max-width="600px" class="mx-auto">

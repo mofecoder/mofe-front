@@ -85,7 +85,7 @@ const rules = {
 
 const userStore = useUserStore()
 const submit = async () => {
-  if (!form.value?.validate()) return
+  if (!(await form.value?.validate())) return
   const { ok, errors } = await userStore.signUp(
     params.email,
     params.name,
@@ -143,10 +143,6 @@ const submit = async () => {
             required
             autocomplete="username"
           />
-          <p>
-            ※チームアカウントを登録する場合は、prefix を含め 20
-            文字まで登録可能です
-          </p>
           <v-text-field
             v-model="params.password"
             type="password"

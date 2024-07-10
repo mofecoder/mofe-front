@@ -65,34 +65,9 @@ const submit = async () => {
         (サンプルを参考にしてください)
       </p>
     </v-alert>
-    <v-alert
-      class="mb-4"
-      variant="tonal"
-      title="動的点数設定（β）について"
-      type="warning"
-    >
-      次の方法で、テストケースセットごとの点数を動的に設定できます。<br />
-      <ol class="mt-1 mb-2">
-        <li>
-          テストケースセットの「集計方法」を「合計」「最大」「最小」のいずれかに設定する。
-        </li>
-        <li>
-          カスタムチェッカーを選択し、チェッカーでは標準出力に
-          <code>MofeJudge::Score(0)</code>
-          を1行で出力する。（<code>0</code> の部分に点数を入れる）
-        </li>
-      </ol>
-      「合計」の場合はセット内のテストケースに対する点数の合計値、
-      「最大」では最大値、「最小」では最小値が点数になります。<br />
-      出力しなかったケースについては集計対象外となり、対象ケースが 1
-      つも存在しない場合には 0 点となります。<br />
-      設定した配点については表示のみとなり、集計には利用されません。
-      （設定によっては点数が配点を超えることがあります）。<br />
-      提出自体に対する点数は、テストケースセットごとの点数の合計です。
-    </v-alert>
 
-    <v-expansion-panels>
-      <v-expansion-panel class="description mb-4">
+    <v-expansion-panels class="mb-4">
+      <v-expansion-panel class="description">
         <v-expansion-panel-title>用語の説明</v-expansion-panel-title>
         <v-expansion-panel-text>
           <p class="body2">
@@ -105,6 +80,46 @@ const submit = async () => {
           <p class="body2">
             トークンに分ける際，空白の種類の違いは無視されます．
           </p>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel class="description">
+        <v-expansion-panel-title
+          >カスタムチェッカーの独自動作について（動的点数設定など）</v-expansion-panel-title
+        >
+        <v-expansion-panel-text>
+          <v-alert
+            class="mb-2"
+            variant="tonal"
+            title="動的点数設定（β）について"
+            type="warning"
+          >
+            次の方法で、テストケースセットごとの点数を動的に設定できます。<br />
+            <ol class="mt-1 mb-2">
+              <li>
+                テストケースセットの「集計方法」を「合計」「最大」「最小」のいずれかに設定する。
+              </li>
+              <li>
+                カスタムチェッカーを選択し、チェッカーでは標準出力に
+                <code>MofeJudge::Score(0)</code>
+                を1行で出力する。（<code>0</code> の部分に点数を入れる）
+              </li>
+            </ol>
+            「合計」の場合はセット内のテストケースに対する点数の合計値、
+            「最大」では最大値、「最小」では最小値が点数になります。<br />
+            出力しなかったケースについては集計対象外となり、対象ケースが 1
+            つも存在しない場合には 0 点となります。<br />
+            設定した配点については表示のみとなり、集計には利用されません。
+            （設定によっては点数が配点を超えることがあります）。<br />
+            提出自体に対する点数は、テストケースセットごとの点数の合計です。<br />
+            ※複数回出力したときの動作は未定義です。
+          </v-alert>
+          <v-alert class="mb-4" variant="tonal" color="info">
+            カスタムチェッカーにて標準出力に
+            <code>MofeJudge::Status(QLE)</code>
+            と1行に出力すると、テストケースの結果を QLE にすることができます。
+            （そのほかに OLE と WA に対応）<br />
+            ※複数回出力したときの動作は未定義です。
+          </v-alert>
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>

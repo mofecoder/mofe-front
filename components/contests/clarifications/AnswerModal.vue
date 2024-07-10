@@ -51,7 +51,12 @@ async function answer() {
             label="質問"
             :model-value="clarification.question"
           />
-          <v-textarea v-model="clarification.answer" rows="3" label="回答" />
+          <v-textarea
+            v-model="clarification.answer"
+            rows="3"
+            label="回答"
+            placeholder="空欄にして全体公開するとアナウンス扱いになります。"
+          />
           <v-switch v-model="clarification.publish" label="全体公開する" />
         </v-card-text>
         <v-card-actions>
