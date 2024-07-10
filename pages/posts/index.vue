@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import Posts from '~/utils/apis/Posts'
 import ViewPostCard from '~/components/posts/ViewPostCard.vue'
+import { useUserStore } from '~/store/user'
 
 const { data: posts } = await useApi(Posts.getPosts, [])
+const userStore = useUserStore()
+const { user } = toRefs(userStore)
+const isAdmin = computed(() => user.value?.role === 'admin')
 
 useHead({
   title: '記事一覧'
@@ -18,6 +22,7 @@ useHead({
         :key="`post-${post.id}`"
         :post="post"
         class="mt-4"
+        :show-edit="isAdmin"
       />
     </template>
   </v-container>
