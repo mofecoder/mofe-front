@@ -14,6 +14,8 @@ useHead(() => ({
 
 const closedMode = ref(false)
 const teamMode = ref(false)
+const sortColumn = ref<string | null>(null)
+const sortOrder = ref<'asc' | 'desc' | null>(null)
 const args = computed(
   () =>
     [contestName.value, closedMode.value, teamMode.value] as [
@@ -22,11 +24,17 @@ const args = computed(
       boolean
     ]
 )
+
+const query = computed(() => ({
+  sort_column: sortColumn.value,
+  order: sortOrder.value
+}))
 const {
   data: standingData,
   pending,
   refresh
 } = await useApi(Contests.getStandings, args, {
+  query,
   lazy: true
 })
 const problems = computed(() => standingData.value?.problems || [])
@@ -49,6 +57,8 @@ useIntervalFn(async () => {
         <ContestsStandingsTable
           v-model:closed-mode="closedMode"
           v-model:team-mode="teamMode"
+          v-model:sort-column="sortColumn"
+          v-model:sort-order="sortOrder"
           :loading="pending"
           :problems="problems"
           :standings="standings"

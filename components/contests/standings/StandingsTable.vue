@@ -1,46 +1,26 @@
 <script setup lang="ts">
 import type { StandingProblem, Standing } from '~/types/standings'
 
-const props = defineProps({
-  problems: {
-    type: Array as () => StandingProblem[],
-    required: true
-  },
-  standings: {
-    type: Array as () => Standing[],
-    required: true
-  },
-  mode: {
-    type: String,
-    required: true
-  },
-  team: {
-    type: Boolean,
-    default: false
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  excludeOpen: {
-    type: Boolean,
-    default: false
-  },
-  closedMode: {
-    type: Boolean,
-    default: false
-  },
-  teamMode: {
-    type: Boolean,
-    default: false
-  }
-})
+const props = defineProps<{
+  problems: StandingProblem[]
+  standings: Standing[]
+  mode: string
+  team?: boolean
+  loading?: boolean
+  excludeOpen?: boolean
+  closedMode?: boolean
+  teamMode?: boolean
+  sortColumn: string | null
+  sortOrder: 'asc' | 'desc' | null
+}>()
 
 const emit = defineEmits<{
   reload: []
   'update:closedMode': [boolean]
   'update:teamMode': [boolean]
   'update:showTeamMembers': [boolean]
+  'update:sortColumn': [string | null]
+  'update:sortOrder': ['asc' | 'desc' | null]
 }>()
 
 const formatTime = (time: number | undefined): string => {
@@ -66,6 +46,22 @@ const closedModeComputed = computed({
 })
 
 const showTeamMembers = ref(false)
+
+function updateSort(column: string | null) {
+  if (!column) {
+    emit('update:sortColumn', null)
+    emit('update:sortOrder', null)
+  } else if (column === props.sortColumn) {
+    if (props.sortOrder === 'desc') emit('update:sortOrder', 'asc')
+    else {
+      emit('update:sortColumn', null)
+      emit('update:sortOrder', null)
+    }
+  } else {
+    emit('update:sortColumn', column)
+    emit('update:sortOrder', 'desc')
+  }
+}
 </script>
 
 <template>
@@ -112,19 +108,39 @@ const showTeamMembers = ref(false)
         <table class="standings__table">
           <thead>
             <tr class="row-header">
-              <th class="col-rank">順位</th>
+              <th class="col-rank" @click="updateSort(null)">順位</th>
               <th class="col-username">ユーザ名</th>
               <th class="col-result">得点</th>
               <th
                 v-for="problem in problems"
                 :key="problem.slug"
                 class="col-problem"
+                @click="updateSort(problem.position)"
               >
                 <NuxtLink
                   :to="`/contests/${contestName}/tasks/${problem.slug}`"
                 >
                   {{ problem.position }}
                 </NuxtLink>
+                <v-icon
+                  :class="[
+                    'ms-2',
+                    'sort-icon',
+                    sortColumn === problem.position &&
+                      sortOrder == 'desc' &&
+                      'sort-reverse'
+                  ]"
+                  size="small"
+                  :color="sortColumn === problem.position ? 'success' : 'gray'"
+                >
+                  {{
+                    sortColumn !== problem.position
+                      ? 'mdi-sort'
+                      : sortOrder === 'desc'
+                        ? 'mdi-sort-descending'
+                        : 'mdi-sort-ascending'
+                  }}
+                </v-icon>
               </th>
             </tr>
           </thead>
@@ -261,6 +277,7 @@ const showTeamMembers = ref(false)
 
       .col-rank {
         min-width: 6em;
+        cursor: pointer;
       }
 
       .col-username {
@@ -275,6 +292,11 @@ const showTeamMembers = ref(false)
       .col-problem {
         min-width: 4.5em;
         width: 5.5em;
+        cursor: pointer;
+
+        .sort-reverse {
+          transform: scaleY(-1);
+        }
       }
 
       th,
