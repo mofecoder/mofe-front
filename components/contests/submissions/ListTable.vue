@@ -34,6 +34,7 @@ const statuses: SubmissionResult[] = [
   'TLE',
   'RE',
   'OLE',
+  'QLE',
   'IE',
   'CE',
   'MLE',

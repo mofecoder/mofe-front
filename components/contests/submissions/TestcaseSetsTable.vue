@@ -9,7 +9,15 @@ type Result = 'AC' | 'WA' | 'TLE' | 'MLE' | 'OLE' | 'RE'
 
 const getResults = (results: TestcaseSetResult['results']) => {
   const res: [Result, number][] = []
-  for (const status of ['ac', 'wa', 'tle', 'mle', 'ole', 're'] as const) {
+  for (const status of [
+    'ac',
+    'wa',
+    'tle',
+    'mle',
+    'ole',
+    're',
+    'qle'
+  ] as const) {
     if (status in results) {
       res.push([status.toUpperCase() as Result, results[status]])
     }

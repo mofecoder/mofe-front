@@ -280,6 +280,14 @@ const languages: Language[] = [
     isOutdated: true
   },
   {
+    innerName: 'text_cat:8.32',
+    name: 'Text (cat 8.32)',
+    mime: 'text/plain',
+    compilationCommand: ':',
+    runCommand: 'cat ./Main.txt > ./userStdout.txt',
+    isOutdated: true
+  },
+  {
     innerName: 'cpp17_gcc:10.2.0',
     name: 'C++17 (g++ 10.2.0)',
     mime: 'text/x-c++src',

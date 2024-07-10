@@ -7,6 +7,7 @@ type Result =
   | 'TLE'
   | 'RE'
   | 'OLE'
+  | 'QLE'
   | 'IE'
   | 'CE'
   | 'MLE'
@@ -42,7 +43,7 @@ export interface TestcaseSetResult {
   score: number
   point: number
   testcases: string[] | null
-  results: Record<'ac' | 'wa' | 'tle' | 'mle' | 'ole' | 're', number>
+  results: Record<'ac' | 'wa' | 'tle' | 'mle' | 'ole' | 'qle' | 're', number>
 }
 
 export interface SubmissionDetail extends Submit {

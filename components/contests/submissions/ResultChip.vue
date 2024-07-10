@@ -4,15 +4,16 @@ import type { SubmissionResult } from '~/types/submissions'
 
 const TOOLTIP_TEXT: Record<SubmissionResult, string> = {
   AC: '正解 (Accepted)',
-  TLE: '実行時間制限を超過 (Time Limit Exceeded)',
+  TLE: '実行時間制限超過 (Time Limit Exceeded)',
   WA: '不正解 (Wrong Answer)',
   RE: '実行時エラー (Runtime Error)',
   OLE: '出力制限超過 (Output Limit Exceeded)',
   MLE: 'メモリ制限超過 (Memory Limit Exceeded)',
+  QLE: 'クエリ数超過 (Query Limit Exceeded)',
   IE: '内部エラー (Internal Error)',
   CE: 'コンパイルエラー (Compilation Error)',
-  WJ: 'ジャッジ待ち (Waiting Judge)',
-  WR: 'リジャッジ待ち (Waiting Rejudge)',
+  WJ: 'ジャッジ待ち (Waiting for Judging)',
+  WR: 'リジャッジ待ち (Waiting for Rejudging)',
   CP: 'コンパイル中 (Compiling)'
 }
 
@@ -26,6 +27,7 @@ const icon = computed(
       RE: 'mdi-alert-circle',
       OLE: 'mdi-close-thick',
       MLE: 'mdi-close-thick',
+      QLE: 'mdi-close-thick',
       IE: 'mdi-skull',
       WJ: '',
       WR: '',
@@ -155,7 +157,8 @@ $color-ce: #a544ff;
 .result-MLE,
 .result-WA,
 .result-RE,
-.result-OLE {
+.result-OLE,
+.result-QLE {
   border-color: $color-wa;
   color: $color-wa;
 }
