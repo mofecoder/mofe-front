@@ -163,9 +163,7 @@ const languages: Language[] = [
     compilationCommand:
       'python3.11 -m py_compile ./Main.py && python3.11 ./Main.py 2> /dev/null',
     runCommand: 'python3.11 ./Main.py',
-    libraries:
-      'ac-library-python, numpy, scipy, networkx, ' +
-      'sympy, sortedcontainers, bitarray',
+    libraries: 'ac-library-python, networkx, sympy, sortedcontainers, bitarray',
     isOutdated: true
   },
   {
