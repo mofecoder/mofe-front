@@ -77,7 +77,7 @@ function updateSort(column: string | null) {
         >
           更新する
         </v-btn>
-        <div class="d-flex ga-6">
+        <div class="standings-checkbox-wrapper">
           <v-checkbox
             v-if="team"
             v-model="teamModeComputed"
@@ -100,7 +100,12 @@ function updateSort(column: string | null) {
             label="オープン参加を非表示"
             color="secondary"
             density="compact"
-            hide-details
+            persistent-hint
+            :hint="
+              teamModeComputed
+                ? ''
+                : `斜体のユーザ${team ? '・チーム' : ''}がオープン参加です`
+            "
           />
         </div>
       </div>
@@ -152,7 +157,10 @@ function updateSort(column: string | null) {
             >
               <td>{{ user.rank }}</td>
               <th class="user-name" :class="user.user.open && 'open'">
-                <ContestsStandingsUserName :user="user.user" />
+                <ContestsStandingsUserName
+                  :user="user.user"
+                  :show-team-members="showTeamMembers"
+                />
               </th>
               <td v-if="mode === 'atcoder'" class="col-result">
                 <div class="score score--sum">
@@ -246,6 +254,11 @@ function updateSort(column: string | null) {
 
 <style scoped lang="scss">
 @import 'styles/card-reset';
+.standings-checkbox-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+}
 .standings {
   @include card-text-reset();
 

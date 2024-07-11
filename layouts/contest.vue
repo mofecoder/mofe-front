@@ -10,6 +10,7 @@ import { useUserStore } from '~/store/user'
 const contestStore = useContestStore()
 const userStore = useUserStore()
 const dayjs = useDayjs()
+dayjs.locale('ja')
 const drawer = ref<boolean | null>(null)
 
 const { contest, contestName, updateContest } = useContest()
