@@ -3,6 +3,7 @@ import type { SubmissionResult } from '~/types/submissions'
 import type { Task } from '~/types/task'
 import type { FilterOptions, SubmissionResponse } from '~/utils/apis'
 import type { DataTableHeader, SortItem } from '~/types/datatable'
+import { JUDGE_STATUSES } from '~/constants/judgeStatuses'
 
 const emits = defineEmits<{
   refresh: [load: boolean]
@@ -17,7 +18,7 @@ const emits = defineEmits<{
 const props = defineProps<{
   interval: number
   tasks?: Task[]
-  writtenTasks?: string[]
+  writtenTasks?: unknown[]
   submissions: SubmissionResponse
   page: number
   count: number
@@ -26,21 +27,6 @@ const props = defineProps<{
   contestSlug: string
   loading: boolean
 }>()
-
-const statuses: SubmissionResult[] = [
-  'WJ',
-  'AC',
-  'WA',
-  'TLE',
-  'RE',
-  'OLE',
-  'QLE',
-  'IE',
-  'CE',
-  'MLE',
-  'WR',
-  'CP'
-]
 
 const footerProps = reactive({
   showCurrentPage: true,
@@ -122,7 +108,7 @@ const userItems = computed(() => {
 })
 
 async function reload() {
-  await emits('refresh', false)
+  emits('refresh', false)
 }
 
 function setRejudgeStatus(value: boolean, item: { id: number }) {
@@ -172,7 +158,7 @@ const filterStatus = computed({
       <v-select
         v-model="filterStatus"
         label="結果"
-        :items="statuses"
+        :items="JUDGE_STATUSES as string[]"
         clearable
         multiple
       />

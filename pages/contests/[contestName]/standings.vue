@@ -6,6 +6,7 @@ definePageMeta({
 })
 
 const { contest, contestName } = useContest()
+const dayjs = useDayjs()
 
 useHead(() => ({
   title: `順位表 - ${contest.value?.name}`,
@@ -41,6 +42,18 @@ const problems = computed(() => standingData.value?.problems || [])
 const standings = computed(() => standingData.value?.standings)
 const refreshInterval = ref(-1)
 
+const showSubmissions = computed(() =>
+  contest.value
+    ? dayjs(contest.value.endAt).isBefore(dayjs()) ||
+      contest.value.isWriterOrTester
+    : false
+)
+const submissionsPath = computed(() =>
+  showSubmissions.value && contest.value
+    ? `/contests/${contest.value.slug}/submissions`
+    : null
+)
+
 useIntervalFn(async () => {
   await refresh()
 }, refreshInterval)
@@ -67,6 +80,7 @@ useIntervalFn(async () => {
           :exclude-open="
             contest.allowOpenRegistration && contest.registrationRestriction
           "
+          :submissions-path="submissionsPath"
           @reload="refresh"
         />
       </template>

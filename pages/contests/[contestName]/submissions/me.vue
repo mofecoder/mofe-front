@@ -37,7 +37,8 @@ const args = reactive({
 })
 const { data: submissions, refresh } = await useApi(
   Contests.getMySubmissions,
-  args
+  args,
+  { lazy: true }
 )
 
 watch(

@@ -1,45 +1,54 @@
 <template>
-  <div v-if="user.teamMember" class="team">
-    <v-tooltip :text="user.teamMember.join(', ')" location="bottom">
-      <template #activator="{ props }">
-        <v-btn
-          color="primary"
-          v-bind="props"
-          icon="mdi-account-group"
-          size="small"
-          variant="text"
-          density="compact"
-        />
-      </template>
-    </v-tooltip>
-    <span>{{ user.name }}</span>
-    <div
-      v-if="showTeamMembers"
-      class="team-member"
-      v-text="user.teamMember.join(', ')"
+  <div>
+    <div v-if="user.teamMember" class="team">
+      <v-tooltip :text="user.teamMember.join(', ')" location="bottom">
+        <template #activator="{ props }">
+          <v-btn
+            color="primary"
+            v-bind="props"
+            icon="mdi-account-group"
+            size="small"
+            variant="text"
+            density="compact"
+          />
+        </template>
+      </v-tooltip>
+      <span>{{ user.name }}</span>
+      <div
+        v-if="showTeamMembers"
+        class="team-member"
+        v-text="user.teamMember.join(', ')"
+      />
+    </div>
+    <a
+      v-else-if="user.atcoderId"
+      :href="`https://atcoder.jp/users/${user.atcoderId}`"
+      target="_blank"
+      :style="{ color: atcoderColor(user.atcoderRating) }"
+      v-text="user.name"
+    />
+    <span v-else>{{ user.name }}</span>
+    <v-btn
+      v-if="submissions && !user.teamMember"
+      class="ms-1"
+      icon="mdi-text-box-search"
+      size="x-small"
+      variant="text"
+      density="compact"
+      color="black"
+      :to="{ path: submissions, query: { user: user.name } }"
     />
   </div>
-  <a
-    v-else-if="user.atcoderId"
-    :href="`https://atcoder.jp/users/${user.atcoderId}`"
-    target="_blank"
-    :style="{ color: atcoderColor(user.atcoderRating) }"
-    v-text="user.name"
-  />
-  <span v-else>{{ user.name }}</span>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from 'vue'
 import type { Standing } from '~/types/standings'
 
-defineProps({
-  user: {
-    type: Object as PropType<Standing['user']>,
-    required: true
-  },
-  showTeamMembers: Boolean
-})
+defineProps<{
+  user: Standing['user']
+  showTeamMembers?: boolean
+  submissions?: string | null
+}>()
 
 const atcoderColor = (rating: number | null) => {
   if (rating === null) return '#5200ab'

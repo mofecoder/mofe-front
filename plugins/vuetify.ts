@@ -4,6 +4,7 @@ import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css'
 import DayJsAdapter from '@date-io/dayjs'
+import { ja } from 'vuetify/locale'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
@@ -17,6 +18,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     date: {
       adapter: DayJsAdapter
+    },
+    locale: {
+      locale: 'ja',
+      messages: { ja }
     }
   })
 

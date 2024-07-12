@@ -45,7 +45,8 @@ export const useContestStore = defineStore({
 
     async getClarifications(slug: MaybeRef<string>) {
       await http<Clarification[]>(
-        Contests.getClarifications.$path([unref(slug)])
+        Contests.getClarifications.$path([unref(slug)]),
+        { lazy: true }
       ).then((res) => {
         if (res) {
           this.updateClarifications(res)

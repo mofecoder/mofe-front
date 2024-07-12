@@ -12,6 +12,7 @@ const props = defineProps<{
   teamMode?: boolean
   sortColumn: string | null
   sortOrder: 'asc' | 'desc' | null
+  submissionsPath: string | null
 }>()
 
 const emit = defineEmits<{
@@ -160,6 +161,7 @@ function updateSort(column: string | null) {
                 <ContestsStandingsUserName
                   :user="user.user"
                   :show-team-members="showTeamMembers"
+                  :submissions="submissionsPath"
                 />
               </th>
               <td v-if="mode === 'atcoder'" class="col-result">
@@ -323,12 +325,12 @@ function updateSort(column: string | null) {
         color: #5200ab;
         padding: 0 0.3em;
 
-        > a {
-          text-decoration: none;
-        }
-
         &.open {
           font-style: italic;
+        }
+
+        :deep(a) {
+          text-decoration: none;
         }
       }
 
