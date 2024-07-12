@@ -83,6 +83,7 @@ const submit = async () => {
               to="/auth/signup"
               variant="outlined"
               prepend-icon="mdi-account-plus"
+              density="comfortable"
             >
               アカウントを作成する
             </v-btn>
@@ -91,6 +92,7 @@ const submit = async () => {
               variant="outlined"
               color="warning"
               prepend-icon="mdi-lock-question"
+              density="comfortable"
             >
               パスワードを忘れた場合
             </v-btn>

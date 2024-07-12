@@ -35,11 +35,11 @@ const args = reactive({
   sortBy,
   filter
 })
-const { data: submissions, refresh } = await useApi(
-  Contests.getMySubmissions,
-  args,
-  { lazy: true }
-)
+const {
+  data: submissions,
+  refresh,
+  pending: apiLoading
+} = await useApi(Contests.getMySubmissions, args, { lazy: true })
 
 watch(
   submissions,
@@ -79,7 +79,7 @@ const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card v-if="!errorMessage">
+        <v-card v-if="!errorMessage" :loading="apiLoading">
           <v-card-title>自分の提出</v-card-title>
           <v-card-text class="submit-card">
             <ContestsSubmissionsListTable

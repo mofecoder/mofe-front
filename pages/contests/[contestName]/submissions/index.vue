@@ -97,7 +97,7 @@ const args = reactive({
 const {
   data: submissions,
   refresh,
-  apiLoading
+  pending: apiLoading
 } = await useApi(Contests.getAllSubmissions, args, { lazy: true })
 
 async function rejudge(submissionIds: number[]) {
