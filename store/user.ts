@@ -95,7 +95,6 @@ export const useUserStore = defineStore({
         }
       )
 
-      console.log(res)
       let data = res.data.value
       if (!data) data = res.error.value?.data
 

@@ -45,7 +45,6 @@ watch(
   submissions,
   (newVal) => {
     if (!newVal?.data) return
-    console.log('watch')
     timeout.value = newVal.data.some(
       (s) => s.judgeStatus != null || ['WJ', 'WR', 'CP'].includes(s.status)
     )

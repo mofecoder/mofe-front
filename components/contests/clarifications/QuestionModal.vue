@@ -21,7 +21,6 @@ function cancel() {
 }
 
 function question() {
-  console.log(problem.value, content.value)
   emit('submit', problem.value, content.value)
   problem.value = null
   content.value = ''

@@ -53,7 +53,6 @@ const unreadClarifications = computed<number>((oldValue) => {
 const newClarifications = ref(false)
 watch(unreadClarifications, (value, oldValue) => {
   if (oldValue < value) {
-    console.log(oldValue, value)
     newClarifications.value = true
   }
   if (value === 0) {
