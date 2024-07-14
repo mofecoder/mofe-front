@@ -77,6 +77,10 @@
   }
 
   :deep(details) {
+    border: solid 1px #000000;
+    border-radius: 4px;
+    padding: 12px;
+
     summary {
       display: block;
       cursor: pointer;
@@ -99,10 +103,6 @@
         content: "\F0360";
       }
     }
-
-    border: solid 1px #000000;
-    border-radius: 4px;
-    padding: 12px;
   }
 
   :deep(blockquote) {

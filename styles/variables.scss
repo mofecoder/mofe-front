@@ -5,10 +5,6 @@
 
 
 @mixin block-code() {
-  &.hljs {
-    background: #fbfbfb;
-  }
-
   display: block;
   background: #eeeeee;
   border: solid 1px lightgrey;
@@ -19,6 +15,10 @@
   font-weight: normal;
   white-space: pre;
   overflow: auto;
+
+  &.hljs {
+    background: #fbfbfb;
+  }
 
   &:before,
   &:after {
