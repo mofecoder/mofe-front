@@ -2,7 +2,6 @@
 import languages from '~/constants/languages'
 import type { TaskDetail } from '~/types/task'
 import { useUserStore } from '~/store/user'
-import type { MarkdownIt } from '~/types/plugins'
 import Tasks from '~/utils/apis/Tasks'
 import type { ProblemDetail } from '~/types/problems'
 
@@ -51,7 +50,6 @@ const timeLimit = computed(() => {
   if (limit % 100 == 0) return [limit / 1000, 's', '秒']
   return [limit, 'ms', 'ミリ秒']
 })
-const $md: MarkdownIt = useNuxtApp().$md
 
 const { user } = toRefs(useUserStore())
 
@@ -228,19 +226,19 @@ const title = computed(() => {
       <v-card-text class="mt-3 task-card-text">
         <section>
           <h3>問題文</h3>
-          <div class="statement" v-html="$md.render(problem.statement)" />
+          <MarkdownContent class="statement" :markdown="problem.statement" />
         </section>
         <section>
           <h3>制約</h3>
-          <div class="statement" v-html="$md.render(problem.constraints)" />
+          <MarkdownContent class="statement" :markdown="problem.constraints" />
         </section>
         <section>
           <h3>入力</h3>
-          <div class="statement" v-html="$md.render(problem.inputFormat)" />
+          <MarkdownContent class="statement" :markdown="problem.inputFormat" />
         </section>
         <section>
           <h3>出力</h3>
-          <div class="statement" v-html="$md.render(problem.outputFormat)" />
+          <MarkdownContent class="statement" :markdown="problem.outputFormat" />
         </section>
         <v-container class="pa-0">
           <v-row
@@ -280,10 +278,10 @@ const title = computed(() => {
               <div class="statement">
                 <code class="sample__code" v-html="sample.output" />
               </div>
-              <div
+              <MarkdownContent
                 v-if="sample.explanation"
+                :markdown="sample.explanation"
                 class="statement"
-                v-html="$md.render(sample.explanation)"
               />
             </v-col>
           </v-row>
@@ -308,14 +306,12 @@ const title = computed(() => {
             >
               <template #activator="{ props: p }">
                 <v-btn
+                  icon="mdi-information-outline"
                   v-bind="p"
-                  icon
                   variant="text"
                   target="_blank"
                   :to="`/languages?lang=${language.innerName}`"
-                >
-                  <v-icon color="secondary">mdi-information-outline</v-icon>
-                </v-btn>
+                />
               </template>
             </v-tooltip>
           </div>

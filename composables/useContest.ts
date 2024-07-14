@@ -1,7 +1,7 @@
 import { storeToRefs } from 'pinia'
 import { useContestStore } from '~/store/contest'
 
-export function useContest() {
+export function useContest(isLayout?: boolean) {
   const route = useRoute()
   const contestName = computed(() => {
     const p = route.params.contestName
@@ -29,11 +29,13 @@ export function useContest() {
 
   watch(contestName, async () => await updateContest(), { immediate: true })
 
-  onBeforeRouteLeave((to) => {
-    if (!to.path.startsWith(`/contests/${contestName.value}`)) {
-      contestStore.leave()
-    }
-  })
+  if (!isLayout) {
+    onBeforeRouteLeave((to) => {
+      if (!to.path.startsWith(`/contests/${contestName.value}`)) {
+        contestStore.leave()
+      }
+    })
+  }
 
   return {
     contestName,

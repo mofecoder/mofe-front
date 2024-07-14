@@ -12,8 +12,6 @@ import sup from 'markdown-it-sup'
 import mark from 'markdown-it-mark'
 // リンクに target="_blank" を追加
 import mila from 'markdown-it-link-attributes'
-import tm from 'markdown-it-texmath'
-import katex from 'katex'
 import highlightjs from 'markdown-it-highlightjs'
 import 'katex/dist/katex.min.css'
 import 'highlight.js/styles/github.css'
@@ -43,7 +41,6 @@ const mdit: MarkdownIt = new MarkdownIt({
       rel: 'noopener noreferrer'
     }
   })
-  .use(tm, { engine: katex, delimiters: 'dollars' })
   .use(highlightjs)
 
 mdit.renderer.rules.fence = function (tokens, idx, options, _, slf) {

@@ -2,7 +2,6 @@
 import { storeToRefs } from 'pinia'
 import { FetchError } from 'ofetch'
 import { useUserStore } from '~/store/user'
-import type { MarkdownIt } from '~/types/plugins'
 import Contests from '~/utils/apis/Contests'
 
 const route = useRoute()
@@ -141,9 +140,6 @@ const teamRegister = async (
 ) => {
   await registerInner(true, { name, passphrase, password, open })
 }
-
-const nuxtApp = useNuxtApp()
-const $md: MarkdownIt = nuxtApp.$md
 </script>
 
 <template>
@@ -185,9 +181,9 @@ const $md: MarkdownIt = nuxtApp.$md
           prepend-icon="mdi-application-edit"
           >コンテストの編集画面へ</v-btn
         >
-        <div
+        <MarkdownContent
           class="contest-card__description"
-          v-html="$md.render(contest.description)"
+          :markdown="contest.description"
         />
       </v-card-text>
     </template>

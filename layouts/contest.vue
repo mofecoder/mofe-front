@@ -13,7 +13,7 @@ const dayjs = useDayjs()
 dayjs.locale('ja')
 const drawer = ref<boolean | null>(null)
 
-const { contest, contestName, updateContest } = useContest()
+const { contest, contestName, updateContest } = useContest(true)
 await updateContest()
 
 const { user } = storeToRefs(userStore)

@@ -18,8 +18,6 @@ watch(
 function close() {
   emits('close')
 }
-
-const $md = useNuxtApp().$md
 </script>
 
 <template>
@@ -29,7 +27,7 @@ const $md = useNuxtApp().$md
         {{ title || '' }}
       </v-card-title>
       <v-card-text class="modal-content">
-        <div class="md" v-html="$md.render(markdown)" />
+        <MarkdownContent :markdown="markdown" />
       </v-card-text>
       <v-card-actions>
         <v-btn
