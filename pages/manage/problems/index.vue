@@ -9,6 +9,7 @@ useHead({
 })
 
 const headers = [
+  { title: 'ID', key: 'id' },
   { title: '問題名', key: 'name' },
   { title: '難易度', key: 'difficulty' },
   { title: 'コンテスト名', key: 'contestName' },
@@ -33,7 +34,13 @@ const items = computed(() =>
 </script>
 
 <template>
-  <v-data-table :headers="headers" :items="items" locale="ja">
+  <v-data-table
+    density="comfortable"
+    :headers="headers"
+    :items="items"
+    items-per-page="20"
+    locale="ja"
+  >
     <template #top>
       <v-toolbar flat color="white">
         <v-toolbar-title>問題一覧</v-toolbar-title>
@@ -48,9 +55,9 @@ const items = computed(() =>
         >
       </v-toolbar>
     </template>
-    <template #item.contestName="{ item, index }">
-      <NuxtLink v-if="item" :to="`/contests/${items[index].contestSlug}`">
-        {{ item.contestName }}
+    <template #item.contestName="{ item }">
+      <NuxtLink v-if="item" :to="`/contests/${item.contestSlug}`">
+        {{ item.contestSlug }}
       </NuxtLink>
     </template>
     <template #item.edit="{ item }">

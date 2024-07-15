@@ -33,6 +33,7 @@ function close() {
         <v-btn
           variant="flat"
           class="text-white"
+          prepend-icon="mdi-close"
           color="red"
           block
           @click="close"

@@ -9,7 +9,7 @@ function renderKatex() {
   if (!div.value) return
   $render(div.value)
 }
-nextTick(renderKatex)
+onMounted(renderKatex)
 watch(() => props.markdown, renderKatex)
 </script>
 

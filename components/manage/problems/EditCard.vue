@@ -56,7 +56,7 @@ onBeforeRouteLeave(() => {
 
 const formCheck = (e: BeforeUnloadEvent) => {
   if (changed.value) {
-    e.returnValue = '変更が保存されていません。'
+    e.preventDefault()
   }
 }
 
