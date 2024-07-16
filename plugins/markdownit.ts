@@ -5,9 +5,8 @@ import MarkdownIt from 'markdown-it'
 import attrs from 'markdown-it-attrs'
 // 注釈
 import fn from 'markdown-it-footnote'
-// ^ で上付き, ~ で下付き
+// ~ で下付き
 import sub from 'markdown-it-sub'
-import sup from 'markdown-it-sup'
 // == で強調
 import mark from 'markdown-it-mark'
 // リンクに target="_blank" を追加
@@ -30,7 +29,6 @@ const mdit: MarkdownIt = new MarkdownIt({
   })
   .use(fn)
   .use(sub)
-  .use(sup)
   .use(mark)
   .use(mila, {
     matcher(href: string) {
