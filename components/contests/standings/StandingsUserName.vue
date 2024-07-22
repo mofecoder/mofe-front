@@ -20,14 +20,11 @@
         v-text="user.teamMember.join(', ')"
       />
     </div>
-    <a
-      v-else-if="user.atcoderId"
-      :href="`https://atcoder.jp/users/${user.atcoderId}`"
-      target="_blank"
-      :style="{ color: atcoderColor(user.atcoderRating) }"
-      v-text="user.name"
+    <RatingColored
+      :atcoder-id="user.atcoderId"
+      :rating="user.atcoderRating"
+      :text="user.name"
     />
-    <span v-else>{{ user.name }}</span>
     <v-btn
       v-if="submissions && !user.teamMember"
       class="ms-1"
@@ -43,6 +40,7 @@
 
 <script setup lang="ts">
 import type { Standing } from '~/types/standings'
+import RatingColored from '~/components/RatingColored.vue'
 
 defineProps<{
   user: Standing['user']

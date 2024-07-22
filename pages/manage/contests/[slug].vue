@@ -241,24 +241,22 @@ const openModal = async () => {
       :tasks="contest.tasks"
       :loading="loading.tasks"
       :contest-slug="contest.slug"
-      :is-admin="isAdmin"
       class="my-4"
       @add="openModal"
       @remove="remove"
     />
+    <v-alert type="info" variant="tonal">
+      <template #text>
+        コンテスト管理者の追加、他のユーザの問題の追加は管理者のみ可能ですのでお問い合わせください。
+      </template>
+    </v-alert>
     <ManageContestsAddProblemCard
-      v-if="isAdmin"
       class="my-4"
       :loading="loading.add"
       :used-positions="usedPositions"
       :unset-problems="unsetProblems || []"
       @add="addProblem"
     />
-    <v-alert v-else type="info">
-      <template #text>
-        問題の追加・編集は管理者のみ可能ですのでお問い合わせください。
-      </template>
-    </v-alert>
     <ManageContestsAdminsCard
       v-if="isAdmin"
       :loading="loading.admins"

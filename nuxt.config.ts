@@ -60,7 +60,7 @@ const nuxtConfig = defineNuxtConfig({
   },
   routeRules: {
     '/privacy_policy': { prerender: true },
-    '/languages': { prerender: true },
+    // '/languages': { prerender: true },
     '/admin/**': { ssr: false },
     '/manage/**': { ssr: false }
   },

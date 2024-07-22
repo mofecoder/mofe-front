@@ -4,4 +4,7 @@ export interface User {
   role: 'admin' | 'writer' | 'member'
   createdAt: string
   writerRequestCode: string | null
+  currentSignInAt: string
+  atcoderId: string | null
+  atcoderRating: number | null
 }

@@ -161,29 +161,57 @@ const password = computed({
             v-model="standingsMode"
             :items="modes"
             label="順位表の集計モード"
+            hide-details
           />
         </v-col>
         <v-col cols="12" sm="6" lg="4">
-          <v-select v-model="contestKind" :items="kinds" label="種類" />
+          <v-select
+            v-model="contestKind"
+            :items="kinds"
+            label="種類"
+            hide-details
+          />
         </v-col>
       </v-row>
       <v-row v-if="edit">
-        <v-col cols="12" sm="8" lg="6">
-          <v-text-field v-model="password" label="参加登録パスワード" />
+        <v-col cols="12"> </v-col>
+        <v-col cols="12" sm="7" lg="5">
+          <v-text-field
+            v-model="password"
+            label="参加登録パスワード"
+            persistent-hint
+          />
         </v-col>
-        <v-col cols="12" sm="4" lg="3">
+        <v-col cols="11" sm="4" lg="3">
           <v-checkbox
             v-model="allowOpen"
             label="オープン参加を許可"
             color="secondary"
             :disabled="!password"
+            hide-details
           />
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-icon color="info" v-bind="props">mdi-help-circle</v-icon>
+            </template>
+            <span>
+              「参加登録パスワード」を設定すると、このパスワードを知っている人のみ参加登録できるようになります。
+            </span>
+            <br />
+            <span>
+              「オープン参加を許可」すると、パスワードなしでもオープン参加登録できますが、
+              オープン参加でない人・チームのみの順位表を表示することができるようになります。
+            </span>
+          </v-tooltip>
         </v-col>
         <v-col cols="12" lg="3">
           <v-checkbox
             v-model="allowTeam"
             label="チーム参加を許可"
             color="purple"
+            hide-details
           />
         </v-col>
       </v-row>
@@ -239,9 +267,11 @@ const password = computed({
           color="orange-darken-3"
           block
           :disabled="loading"
+          prepend-icon="mdi-content-save"
           @click="emits('submit')"
-          >更新する</v-btn
         >
+          更新する
+        </v-btn>
       </template>
     </v-card-text>
   </v-card>

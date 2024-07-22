@@ -16,16 +16,17 @@ const headers = [
   { title: 'ユーザ名', key: 'name' },
   { title: '権限', key: 'role' },
   { title: '登録日時', key: 'createdAt' },
+  { title: '最終ログイン', key: 'signInDate' },
+  { title: 'AtCoder ID', key: 'atcoder' },
   { title: 'writer リクエストコード', key: 'writerRequestCode' }
 ]
 
 const items = computed(() =>
   users.value?.map((user) => ({
-    id: user.id,
-    name: user.name,
-    role: user.role,
+    ...user,
     createdAt: formatDate(user.createdAt),
-    writerRequestCode: user.writerRequestCode
+    writerRequestCode: user.writerRequestCode || '未発行',
+    signInDate: user.currentSignInAt && formatDate(user.currentSignInAt)
   }))
 )
 
@@ -53,32 +54,38 @@ const search = ref('')
           <v-btn
             size="small"
             density="compact"
-            icon
+            icon="mdi-arrow-up-circle"
             variant="text"
             @click="update(item.id, 'writer')"
-          >
-            <v-icon>mdi-arrow-up-circle</v-icon>
-          </v-btn>
+          />
         </template>
         <template v-else-if="item.role === 'writer'">
           writer
           <v-btn
             size="small"
             density="compact"
-            icon
+            icon="mdi-arrow-down-circle"
             variant="text"
             @click="update(item.id, 'member')"
-          >
-            <v-icon>mdi-arrow-down-circle</v-icon>
-          </v-btn>
+          />
         </template>
         <template v-else>{{ item.role }}</template>
       </template>
-      <template #item.writerRequestCode="{ item }">
-        {{ item.writerRequestCode || '未発行' }}
+      <template #item.atcoder="{ item }">
+        <RatingColored
+          class="atcoder"
+          :atcoder-id="item.atcoderId"
+          :rating="item.atcoderRating"
+          :text="item.atcoderId"
+        />
       </template>
     </v-data-table>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.atcoder {
+  font-weight: bold;
+  text-decoration: none;
+}
+</style>

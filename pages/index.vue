@@ -8,11 +8,9 @@ import Posts from '~/utils/apis/Posts'
 import ViewPostCard from '~/components/posts/ViewPostCard.vue'
 import ContestList from '~/components/ContestList.vue'
 
-const { data: postsData } = await useApi(Posts.getPosts, [], {
+const { data: posts } = await useApi(Posts.getPosts, [], {
   lazy: true
 })
-
-const posts = ref<Post[] | null>(postsData.value ?? null)
 
 const userStore = useUserStore()
 const { user } = toRefs(userStore)
@@ -58,7 +56,7 @@ const { lgAndUp } = useDisplay()
         から AtCoder ID が登録可能です。ぜひご登録ください。
       </v-alert>
       <v-row>
-        <v-col cols="12" lg="5">
+        <v-col cols="12" lg="6">
           <v-card variant="outlined">
             <v-card-text>
               <ContestList />
@@ -81,7 +79,7 @@ const { lgAndUp } = useDisplay()
                   to="/admin"
                   prepend-icon="mdi-security"
                 >
-                  管理ページへ
+                  管理ページ
                 </v-btn>
                 <v-btn
                   v-if="isAdmin"
@@ -90,7 +88,7 @@ const { lgAndUp } = useDisplay()
                   color="primary"
                   to="/manage/contests"
                 >
-                  コンテストの管理画面へ
+                  コンテスト管理画面
                 </v-btn>
                 <v-btn
                   v-if="isWriter"
@@ -98,13 +96,13 @@ const { lgAndUp } = useDisplay()
                   variant="tonal"
                   to="/manage/problems"
                   prepend-icon="mdi-text-box-multiple-outline"
-                  >問題の管理画面へ</v-btn
+                  >問題管理画面</v-btn
                 >
               </div>
             </v-card-text>
           </v-card>
         </v-col>
-        <v-col cols="12" lg="7">
+        <v-col cols="12" lg="6">
           <template v-if="posts">
             <v-virtual-scroll v-if="lgAndUp" :items="posts" :max-height="1000">
               <template #default="{ item }">

@@ -52,7 +52,15 @@ const uploadZip = async () => {
   )
   uploadLoading.value = false
   if (error.value) {
-    messages.value = [error.value.data?.error]
+    if (error.value.data?.error) {
+      messages.value = [error.value.data?.error]
+    }
+    console.table(error.value)
+    if (error.value.statusCode === 413) {
+      messages.value = [
+        '容量制限を超えているため、分割して再アップロードしてください。'
+      ]
+    }
     ok.value = false
     return
   }
@@ -262,260 +270,274 @@ const addSetMultiple = async () => {
 
 <template>
   <v-container class="testcase">
-    <v-alert
-      title="採点の仕組み"
-      type="info"
-      variant="tonal"
-      class="mb-8"
-      closable
-    >
-      集計方法が「通常」の場合、「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
-      そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br />
-      満点はすべてのテストケースセットの配点の合計となります。<br />
-      採点順・表示順はテストケース名の辞書順です。
-    </v-alert>
-    <v-card class="mb-8" variant="outlined" :loading="!testcaseSets">
-      <v-card-title>テストケースセット一覧</v-card-title>
-      <v-card-text class="set-list">
-        <v-table v-if="testcaseSets">
-          <thead>
-            <tr>
-              <th class="text-center">テストケースセット名</th>
-              <th class="text-center">集計方法</th>
-              <th class="text-center">配点</th>
-              <th class="text-center">サンプル</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="set in testcaseSets" :key="set.name">
-              <td v-text="set.name" />
-              <td
-                class="text-center"
-                v-text="
-                  AggregateTypes.find((x) => x.value === set.aggregateType)!
-                    .text
-                "
-              />
-              <td class="text-right">
-                {{ set.points }}
-                <span v-if="set.aggregateType !== 'all'" class="text-caption">
-                  (表示のみ)
-                </span>
-              </td>
-              <td class="text-center">
-                {{ set.isSample ? 'Yes' : 'No' }}
-              </td>
-              <td>
-                <v-btn
-                  icon="mdi-pencil"
-                  size="small"
-                  variant="text"
-                  @click="editSet(set.id)"
-                />
-                <v-btn
-                  v-if="!['all', 'sample'].includes(set.name)"
-                  icon="mdi-delete"
-                  size="small"
-                  variant="text"
-                  @click="deleteSet(set.id)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-        <v-btn color="primary" prepend-icon="mdi-tab-plus" @click="addSet"
-          >テストケースセットを追加</v-btn
+    <v-row>
+      <v-col cols="12" xl="5">
+        <v-alert
+          title="採点の仕組み"
+          type="info"
+          variant="tonal"
+          class="mb-8"
+          closable
         >
-      </v-card-text>
-    </v-card>
-    <v-card
-      class="mb-8"
-      variant="outlined"
-      :loading="!testcases || testcaseLoading"
-    >
-      <v-card-title>テストケース一覧</v-card-title>
-      <v-card-text class="testcase-list">
-        <v-table v-if="testcases" density="compact" class="testcases-table">
-          <thead>
-            <tr>
-              <th>
-                <v-checkbox-btn
-                  :model-value="selecting.size === testcases.length"
-                  :indeterminate="
-                    selecting.size > 0 && selecting.size < testcases.length
-                  "
-                  color="red"
-                  hide-details
-                  @update:model-value="selectingHeader"
-                />
-              </th>
-              <th class="testcase-list__row-testcase-name">テストケース名</th>
-              <th
-                v-for="set in testcaseSets"
-                :key="set.name"
-                class="testcase-list__row-set testcase-set-col"
-                v-text="set.name"
-              />
-              <th class="testcase-list__row-action" />
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(testcase, i) in testcases" :key="testcase.name">
-              <td>
-                <v-checkbox-btn
-                  :model-value="selecting.has(testcase.id)"
-                  hide-details
-                  color="red"
-                  @update:model-value="
-                    $event
-                      ? selecting.add(testcase.id)
-                      : selecting.delete(testcase.id)
-                  "
-                />
-              </td>
-              <td v-text="testcase.name" />
-              <td
-                v-for="(_, j) in testcase.testcaseSets"
-                :key="`${testcase.name}_${j}`"
-                class="testcase-set-col"
+          集計方法が「通常」の場合、「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
+          そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br />
+          満点はすべてのテストケースセットの配点の合計となります。<br />
+          採点順・表示順はテストケース名の辞書順です。
+        </v-alert>
+        <v-card class="mb-8" variant="outlined" :loading="!testcaseSets">
+          <v-card-title>テストケースセット一覧</v-card-title>
+          <v-card-text class="set-list">
+            <v-table v-if="testcaseSets">
+              <thead>
+                <tr>
+                  <th class="text-center">テストケースセット名</th>
+                  <th class="text-center">集計方法</th>
+                  <th class="text-center">配点</th>
+                  <th class="text-center">サンプル</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="set in testcaseSets" :key="set.name">
+                  <td v-text="set.name" />
+                  <td
+                    class="text-center"
+                    v-text="
+                      AggregateTypes.find((x) => x.value === set.aggregateType)!
+                        .text
+                    "
+                  />
+                  <td class="text-right">
+                    {{ set.points }}
+                    <span
+                      v-if="set.aggregateType !== 'all'"
+                      class="text-caption"
+                    >
+                      (表示のみ)
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    {{ set.isSample ? 'Yes' : 'No' }}
+                  </td>
+                  <td>
+                    <v-btn
+                      icon="mdi-pencil"
+                      size="small"
+                      variant="text"
+                      @click="editSet(set.id)"
+                    />
+                    <v-btn
+                      v-if="!['all', 'sample'].includes(set.name)"
+                      icon="mdi-delete"
+                      size="small"
+                      variant="text"
+                      @click="deleteSet(set.id)"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
+            <v-btn color="primary" prepend-icon="mdi-tab-plus" @click="addSet"
+              >テストケースセットを追加</v-btn
+            >
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" xl="7">
+        <v-card
+          class="mb-8"
+          variant="outlined"
+          :loading="!testcases || testcaseLoading"
+        >
+          <v-card-title>テストケース一覧</v-card-title>
+          <v-card-text class="testcase-list">
+            <v-table v-if="testcases" density="compact" class="testcases-table">
+              <thead>
+                <tr>
+                  <th>
+                    <v-checkbox-btn
+                      :model-value="selecting.size === testcases.length"
+                      :indeterminate="
+                        selecting.size > 0 && selecting.size < testcases.length
+                      "
+                      color="red"
+                      hide-details
+                      @update:model-value="selectingHeader"
+                    />
+                  </th>
+                  <th class="testcase-list__row-testcase-name">
+                    テストケース名
+                  </th>
+                  <th
+                    v-for="set in testcaseSets"
+                    :key="set.name"
+                    class="testcase-list__row-set testcase-set-col"
+                    v-text="set.name"
+                  />
+                  <th class="testcase-list__row-action" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(testcase, i) in testcases" :key="testcase.name">
+                  <td>
+                    <v-checkbox-btn
+                      :model-value="selecting.has(testcase.id)"
+                      hide-details
+                      color="red"
+                      @update:model-value="
+                        $event
+                          ? selecting.add(testcase.id)
+                          : selecting.delete(testcase.id)
+                      "
+                    />
+                  </td>
+                  <td v-text="testcase.name" />
+                  <td
+                    v-for="(_, j) in testcase.testcaseSets"
+                    :key="`${testcase.name}_${j}`"
+                    class="testcase-set-col"
+                  >
+                    <v-checkbox-btn
+                      class="mt-0"
+                      :model-value="testcases[i].testcaseSets[j]"
+                      color="orange"
+                      hide-details
+                      @update:model-value="
+                        (v) => changeTestcaseState(i as number, j as number, v)
+                      "
+                    />
+                  </td>
+                  <td>
+                    <v-btn
+                      icon="mdi-pencil"
+                      density="compact"
+                      :disabled="testcaseLoading"
+                      variant="text"
+                      size="small"
+                      @click="viewTestcase(testcase.id)"
+                    />
+                    <v-btn
+                      icon="mdi-delete"
+                      density="compact"
+                      :disabled="testcaseLoading"
+                      variant="text"
+                      size="small"
+                      @click="deleteTestcase(testcase.id)"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
+            <div class="d-flex my-2 flex-wrap">
+              <v-btn
+                color="primary"
+                prepend-icon="mdi-plus"
+                @click.stop="testcaseDialog = true"
               >
-                <v-checkbox-btn
-                  class="mt-0"
-                  :model-value="testcases[i].testcaseSets[j]"
-                  color="orange"
-                  hide-details
-                  @update:model-value="
-                    (v) => changeTestcaseState(i as number, j as number, v)
-                  "
-                />
-              </td>
-              <td>
-                <v-btn
-                  icon="mdi-pencil"
-                  density="compact"
-                  :disabled="testcaseLoading"
-                  variant="text"
-                  size="small"
-                  @click="viewTestcase(testcase.id)"
-                />
-                <v-btn
-                  icon="mdi-delete"
-                  density="compact"
-                  :disabled="testcaseLoading"
-                  variant="text"
-                  size="small"
-                  @click="deleteTestcase(testcase.id)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-        <div class="d-flex my-2 flex-wrap">
-          <v-btn
-            color="primary"
-            prepend-icon="mdi-plus"
-            @click.stop="testcaseDialog = true"
-          >
-            テストケースを追加
-          </v-btn>
-          <v-btn
-            color="red"
-            variant="tonal"
-            :disabled="selecting.size == 0"
-            prepend-icon="mdi-delete-alert"
-            class="ms-4"
-            @click="deleteAll"
-          >
-            選択したテストケース ({{ selecting.size }} 件) をすべて削除
-          </v-btn>
-        </div>
-        <p class="mt-4">
-          正規表現を入力してテストケースセットを選択すると、
-          マッチするすべてのテストケースがテストケースセットに追加されます。
-        </p>
-        <div class="my-2 flex-wrap">
-          <v-text-field
-            v-model="addingPattern"
-            label="正規表現パターン"
-            placeholder="sample-\d+"
-            density="compact"
-            persistent-hint
-            :error-messages="addingHint[0] ? [addingHint[1]] : null"
-            :hint="addingHint[1]"
-            @update:model-value="updateAddingTarget"
-          />
-          <v-select
-            v-model="addingSet"
-            class="mt-2"
-            label="一括追加するテストケースセットを選択"
-            :disabled="addingHint[0] || !addingTarget"
-            :items="testcaseSets"
-            item-title="name"
-            item-value="id"
-            density="compact"
-            @update:model-value="addSetMultiple"
-          />
-        </div>
-      </v-card-text>
-    </v-card>
-    <v-card variant="outlined" :loading="uploadLoading">
-      <v-card-title>テストケースをアップロードする</v-card-title>
-      <v-card-text>
-        <v-expansion-panels class="mb-8">
-          <ManageProblemsTestcaseUploadExpansionPanel />
-        </v-expansion-panels>
-        <v-form @submit.prevent="uploadZip">
-          <v-file-input
-            label="アップロードするファイル"
-            placeholder="ZIPファイルを選択"
-            prepend-icon="mdi-folder-zip"
-            accept=".zip"
-            @change="change($event.target.files[0] || null)"
-          />
-          <v-btn
-            type="submit"
-            color="primary"
-            prepend-icon="mdi-folder-upload"
-            block
-            :disabled="!file || uploadLoading"
-            >アップロードする</v-btn
-          >
-        </v-form>
-        <div v-if="ok != null" class="testcase__result mt-8">
-          <div
-            class="testcase__result__status mb-2"
-            :class="{ ok: ok, ng: !ok }"
-          >
-            テストケースのアップロードに{{ ok ? '成功' : '失敗' }}しました
-          </div>
-          <ul v-if="messages">
-            <li v-for="item in messages" :key="item" v-text="item" />
-          </ul>
-        </div>
-      </v-card-text>
-    </v-card>
-    <LazyManageProblemsEditTestcaseModal
-      :value="testcaseDialog"
-      :problem-id="problemId"
-      :testcase-id="testcaseId"
-      :testcase-names="testcaseNames"
-      @close="closeModal"
-      @create="createTestcase"
-      @update="updateTestcase"
-    />
-    <LazyManageProblemsEditTestcaseSetModal
-      v-model:id="editingTestcaseSetId"
-      :value="testcaseSetDialog"
-      :problem-id="problemId"
-      :testcase-set-names="testcaseSetNames"
-      @save="saveSet"
-      @close="closeSetModal"
-    />
-    <v-snackbar v-model="updateCompleteSnackbar" color="success">
-      テストケースを更新しました
-    </v-snackbar>
+                テストケースを追加
+              </v-btn>
+              <v-btn
+                color="red"
+                variant="tonal"
+                :disabled="selecting.size == 0"
+                prepend-icon="mdi-delete-alert"
+                class="ms-4"
+                @click="deleteAll"
+              >
+                選択したテストケース ({{ selecting.size }} 件) をすべて削除
+              </v-btn>
+            </div>
+            <p class="mt-4">
+              正規表現を入力してテストケースセットを選択すると、
+              マッチするすべてのテストケースがテストケースセットに追加されます。
+            </p>
+            <div class="my-2 flex-wrap">
+              <v-text-field
+                v-model="addingPattern"
+                label="正規表現パターン"
+                placeholder="sample-\d+"
+                density="compact"
+                persistent-hint
+                :error-messages="addingHint[0] ? [addingHint[1]] : null"
+                :hint="addingHint[1]"
+                @update:model-value="updateAddingTarget"
+              />
+              <v-select
+                v-model="addingSet"
+                class="mt-2"
+                label="一括追加するテストケースセットを選択"
+                :disabled="addingHint[0] || !addingTarget"
+                :items="testcaseSets"
+                item-title="name"
+                item-value="id"
+                density="compact"
+                @update:model-value="addSetMultiple"
+              />
+            </div>
+          </v-card-text>
+        </v-card>
+        <v-card variant="outlined" :loading="uploadLoading">
+          <v-card-title>テストケースをアップロードする</v-card-title>
+          <v-card-text>
+            <v-expansion-panels class="mb-8">
+              <ManageProblemsTestcaseUploadExpansionPanel />
+            </v-expansion-panels>
+            <v-form @submit.prevent="uploadZip">
+              <v-file-input
+                label="アップロードするファイル (Max 200MB)"
+                placeholder="ZIPファイルを選択"
+                prepend-icon="mdi-folder-zip"
+                show-size
+                accept=".zip"
+                @change="change($event.target.files[0] || null)"
+              />
+              <v-btn
+                type="submit"
+                color="primary"
+                prepend-icon="mdi-folder-upload"
+                block
+                :disabled="!file || uploadLoading"
+                >アップロードする</v-btn
+              >
+            </v-form>
+            <v-alert
+              v-if="ok != null"
+              class="testcase__result mt-8"
+              variant="tonal"
+              :color="ok ? 'success' : 'error'"
+            >
+              <v-alert-title :class="{ ok: ok, ng: !ok }">
+                テストケースのアップロードに{{ ok ? '成功' : '失敗' }}しました
+              </v-alert-title>
+              <ul v-if="messages">
+                <li v-for="item in messages" :key="item" v-text="item" />
+              </ul>
+            </v-alert>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
+  <LazyManageProblemsEditTestcaseModal
+    :value="testcaseDialog"
+    :problem-id="problemId"
+    :testcase-id="testcaseId"
+    :testcase-names="testcaseNames"
+    @close="closeModal"
+    @create="createTestcase"
+    @update="updateTestcase"
+  />
+  <LazyManageProblemsEditTestcaseSetModal
+    v-model:id="editingTestcaseSetId"
+    :value="testcaseSetDialog"
+    :problem-id="problemId"
+    :testcase-set-names="testcaseSetNames"
+    @save="saveSet"
+    @close="closeSetModal"
+  />
+  <v-snackbar v-model="updateCompleteSnackbar" color="success">
+    テストケースを更新しました
+  </v-snackbar>
 </template>
 
 <style scoped lang="scss">

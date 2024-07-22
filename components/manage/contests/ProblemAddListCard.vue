@@ -19,6 +19,7 @@ const emits = defineEmits<{
         <thead>
           <tr>
             <td />
+            <td>ID</td>
             <td>問題名</td>
             <td>難易度</td>
             <td>writer</td>
@@ -28,24 +29,37 @@ const emits = defineEmits<{
         <tbody>
           <tr v-for="item in items" :key="item.id">
             <td>
-              <v-btn size="small" color="accent" @click="emits('add', item)">
+              <v-btn
+                density="comfortable"
+                color="secondary"
+                variant="tonal"
+                prepend-icon="mdi-import"
+                block
+                @click="emits('add', item)"
+              >
                 この問題を選択
               </v-btn>
             </td>
+            <td>{{ item.id }}</td>
             <td>{{ item.name }}</td>
             <td>{{ item.difficulty }}</td>
             <td>{{ item.writerUser }}</td>
             <td>
-              <v-btn :to="`/manage/problems/${item.id}`" icon variant="text">
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
+              <v-btn
+                :to="`/manage/problems/${item.id}`"
+                icon="mdi-pencil"
+                density="comfortable"
+                variant="text"
+              />
             </td>
           </tr>
         </tbody>
       </v-table>
     </v-card-text>
     <v-card-actions>
-      <v-btn block color="primary" @click="emits('close')">閉じる</v-btn>
+      <v-btn block color="red" prepend-icon="mdi-close" @click="emits('close')">
+        閉じる
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

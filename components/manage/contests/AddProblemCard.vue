@@ -47,7 +47,6 @@ const showProblem = async () => {
   problem.value = await useApi(ManageProblems.getProblem, [problemId.value])
     .then(({ data, error }) => {
       if (error.value) {
-        console.log(error.value)
         status.value = 'error'
         return null
       }
@@ -104,9 +103,15 @@ const tableTasks = computed(() => [problem.value!] as ProblemType[])
           >
         </v-col>
         <v-col cols="11" sm="9" md="7" lg="4">
-          <v-btn color="cyan-lighten-1" block @click="modal = true"
-            >問題一覧から追加</v-btn
+          <v-btn
+            color="cyan-lighten-1"
+            block
+            variant="tonal"
+            prepend-icon="mdi-list-box-outline"
+            @click="modal = true"
           >
+            問題一覧から入力
+          </v-btn>
         </v-col>
       </v-row>
       <v-row justify="end">
@@ -130,7 +135,11 @@ const tableTasks = computed(() => [problem.value!] as ProblemType[])
           />
         </v-col>
         <v-col cols="8" sm="6" lg="4">
-          <v-btn color="green-darken-2" :disabled="!position" @click="add"
+          <v-btn
+            color="green-darken-2"
+            prepend-icon="mdi-plus"
+            :disabled="!position"
+            @click="add"
             >この問題を追加する</v-btn
           >
           <v-checkbox

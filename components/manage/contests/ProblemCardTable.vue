@@ -11,7 +11,7 @@ const props = defineProps<{
   tasks?: ProblemType[]
   contestSlug?: string
   problemMode?: boolean
-  isAdmin: boolean
+  showDelete?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -56,7 +56,7 @@ const items = computed(() => {
     </thead>
     <tbody>
       <tr v-for="item in items" :key="item.name">
-        <td v-if="!problemMode">{{ item.position }}</td>
+        <th v-if="!problemMode">{{ item.position }}</th>
         <td>{{ item.id }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.writerUser }}</td>
@@ -65,23 +65,21 @@ const items = computed(() => {
           <td>{{ item.points }}</td>
           <td>
             <v-btn
-              icon
+              icon="mdi-eye"
               variant="text"
-              density="compact"
+              size="small"
+              density="comfortable"
               :to="`/contests/${contestSlug}/tasks/${item.slug}`"
-            >
-              <v-icon size="small">mdi-eye</v-icon>
-            </v-btn>
+            />
             <v-btn
-              v-if="isAdmin"
-              icon
+              v-if="showDelete"
+              icon="mdi-delete"
               variant="text"
+              size="small"
               color="red"
-              density="compact"
+              density="comfortable"
               @click="emits('remove', item.slug!)"
-            >
-              <v-icon size="small" color="red">mdi-delete</v-icon>
-            </v-btn>
+            />
           </td>
         </template>
       </tr>

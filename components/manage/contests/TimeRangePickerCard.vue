@@ -83,6 +83,7 @@ const submit = () => {
                 color="amber-darken-4"
                 class="text-white"
                 block
+                prepend-icon="mdi-content-save"
                 @click="submit"
               >
                 変更する
