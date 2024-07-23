@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SubmissionResult } from '~/types/submissions'
 import type { Task } from '~/types/task'
 import type { FilterOptions, SubmissionResponse } from '~/utils/apis'
 import type { DataTableHeader, SortItem } from '~/types/datatable'
@@ -171,6 +170,7 @@ const filterStatus = computed({
     :items-length="submissions.meta.pagination.count"
     :loading="loading || loadingInner"
     :footer-props="footerProps"
+    density="compact"
     @update:sort-by="(s) => emits('update:sortBy', s)"
     @update:items-per-page="(cnt) => emits('update:count', cnt)"
     @update:page="(p) => emits('update:page', p)"
@@ -222,6 +222,8 @@ const filterStatus = computed({
 }
 .submits {
   border-collapse: collapse;
+  text-align: center;
+
   table,
   th,
   td {
@@ -234,7 +236,6 @@ const filterStatus = computed({
   td {
     padding: 0.3em 0.5em;
   }
-  text-align: center;
   //.date {
   //  max-width: 11em;
   //}

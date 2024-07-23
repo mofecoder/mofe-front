@@ -6,6 +6,7 @@ import ContestSidebar from '~/components/contests/ContestSidebar.vue'
 import 'dayjs/locale/ja'
 import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
+import ToolbarUser from '~/components/ToolbarUser.vue'
 
 const contestStore = useContestStore()
 const userStore = useUserStore()
@@ -61,14 +62,6 @@ watch(unreadClarifications, (value, oldValue) => {
 })
 
 const { lgAndUp: desktop } = useDisplay()
-const route = useRoute()
-const createLink = (path: string) => ({
-  path,
-  query: {
-    ...route.query,
-    redirect: route.path.startsWith('/auth') ? undefined : route.path
-  }
-})
 const opened = ref(['Problems'])
 const role = computed(() => {
   if (!user.value || !contest.value) return ''
@@ -83,7 +76,7 @@ const role = computed(() => {
 <template>
   <v-app>
     <nuxt-loading-indicator />
-    <v-app-bar color="light-green-lighten-4" class="contest-header">
+    <v-app-bar color="light-green-lighten-4" class="contest-header" flat>
       <template #prepend>
         <v-app-bar-nav-icon
           variant="text"
@@ -106,53 +99,15 @@ const role = computed(() => {
       </template>
       <v-spacer />
       <template #append>
-        <ClientOnly>
-          <div class="d-md-none">
-            <template v-if="user">
-              <v-btn variant="text" icon="mdi-account" to="/user" />
-            </template>
-            <template v-else>
-              <v-btn
-                variant="text"
-                icon="mdi-account-plus"
-                :to="createLink('/auth/signup')"
-              />
-              <v-btn
-                variant="text"
-                icon="mdi-login-variant"
-                :to="createLink('/auth/signin')"
-              />
-            </template>
-          </div>
-          <div v-if="user" class="d-none d-md-flex flex-column align-center">
-            <v-btn
-              variant="text"
-              prepend-icon="mdi-account"
-              class="text-none"
-              to="/user"
-            >
-              {{ user.name }}
-            </v-btn>
-            <p v-if="role" class="text-caption">({{ role }})</p>
-          </div>
-          <div v-else class="d-none d-md-flex align-center">
-            <v-btn
-              :to="createLink('/auth/signup')"
-              prepend-icon="mdi-account-plus"
-              variant="text"
-              >新規登録</v-btn
-            >
-            <v-btn
-              :to="createLink('/auth/signin')"
-              variant="text"
-              prepend-icon="mdi-login-variant"
-              >ログイン</v-btn
-            >
-          </div>
-        </ClientOnly>
+        <ToolbarUser :role="role" />
       </template>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :rail="desktop" expand-on-hover>
+    <v-navigation-drawer
+      v-model="drawer"
+      :rail="desktop"
+      expand-on-hover
+      width="350"
+    >
       <ContestSidebar
         v-if="contest && contestName"
         v-model:opened="opened"

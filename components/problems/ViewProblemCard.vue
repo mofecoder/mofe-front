@@ -355,7 +355,7 @@ h3 {
 
 .statement,
 .problem-text {
-  color: #333333;
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
 }
 
 .task-time-limit,

@@ -48,7 +48,7 @@ const selected = ref(tabs[0])
         問題一覧に戻る
       </v-btn>
       <v-btn
-        v-if="problem.contest"
+        v-if="problem?.contest"
         variant="tonal"
         color="orange"
         :to="`/contests/${problem.contest.slug}/tasks/${problem.slug}`"

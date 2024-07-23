@@ -193,8 +193,8 @@ const password = computed({
         </v-col>
         <v-col cols="1">
           <v-tooltip location="bottom">
-            <template #activator="{ props }">
-              <v-icon color="info" v-bind="props">mdi-help-circle</v-icon>
+            <template #activator="{ p }">
+              <v-icon color="info" v-bind="p">mdi-help-circle</v-icon>
             </template>
             <span>
               「参加登録パスワード」を設定すると、このパスワードを知っている人のみ参加登録できるようになります。

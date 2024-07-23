@@ -103,7 +103,7 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
             :lg="showSets && !showResults ? 5 : 12"
             :xl="showResults || submission.compileError ? 3 : 12"
           >
-            <v-table dense>
+            <v-table density="comfortable">
               <tbody>
                 <tr>
                   <th>提出日時</th>
@@ -125,7 +125,7 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
                 </tr>
                 <tr>
                   <th>言語</th>
-                  <td v-text="language.name" />
+                  <td v-text="language?.name" />
                 </tr>
                 <tr>
                   <th>得点</th>
@@ -152,11 +152,11 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
             </v-table>
           </v-col>
           <v-spacer />
-          <v-col v-if="showSets" cols="12" lg="7" xl="5">
+          <v-col v-if="showSets" cols="12" lg="5" xl="4">
             <h4>セットごとの結果</h4>
             <TestcaseSetsTable :results="submission.testcaseSets" />
           </v-col>
-          <v-col v-if="showResults" cols="12" lg="5" xl="4">
+          <v-col v-if="showResults" cols="12" lg="7" xl="5">
             <h4>ジャッジ結果</h4>
             <ContestsSubmissionsTestcaseResultsTable
               :testcase-results="submission.testcaseResults"

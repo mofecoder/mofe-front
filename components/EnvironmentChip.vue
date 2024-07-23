@@ -1,22 +1,28 @@
 <script setup lang="ts">
 import { VChip } from 'vuetify/components'
 
-const environments: Record<string, VChip['$props']> = {
+const environments = {
   development: {
+    color: 'orange'
+  },
+  devProdApi: {
     color: 'red'
   },
   production: {}
-}
-let text = 'production'
-let environment = {}
-if (process.env.NODE_ENV === 'development') {
-  text = 'Dev'
-  environment = environments.development
-}
+} satisfies Record<string, VChip['$props']>
+
 const config = useRuntimeConfig()
 let api = 'production'
 if (config.public.apiBase.includes('localhost')) {
   api = 'Dev'
+}
+
+let text = 'production'
+let environment = {}
+if (process.env.NODE_ENV === 'development') {
+  text = 'Dev'
+  environment =
+    api === 'Dev' ? environments.development : environments.devProdApi
 }
 </script>
 

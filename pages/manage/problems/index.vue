@@ -42,7 +42,7 @@ const items = computed(() =>
     locale="ja"
   >
     <template #top>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="transparent">
         <v-toolbar-title>問題一覧</v-toolbar-title>
         <v-spacer />
         <v-btn

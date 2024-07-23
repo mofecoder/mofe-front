@@ -2,6 +2,7 @@
 import Admin from '~/utils/apis/Admin'
 import type { User } from '~/types/adminUser'
 import { formatDate } from '~/utils/formatting'
+import type { DataTableHeader } from '~/types/datatable'
 
 definePageMeta({
   middleware: 'admin'
@@ -15,11 +16,11 @@ const { data: users, refresh } = await useApi(Admin.getUsers, [])
 const headers = [
   { title: 'ユーザ名', key: 'name' },
   { title: '権限', key: 'role' },
-  { title: '登録日時', key: 'createdAt' },
-  { title: '最終ログイン', key: 'signInDate' },
+  { title: '登録日時', key: 'createdAt', align: 'end' },
+  { title: '最終ログイン', key: 'signInDate', align: 'end' },
   { title: 'AtCoder ID', key: 'atcoder' },
   { title: 'writer リクエストコード', key: 'writerRequestCode' }
-]
+] satisfies DataTableHeader[]
 
 const items = computed(() =>
   users.value?.map((user) => ({
@@ -47,7 +48,13 @@ const search = ref('')
       label="検索"
       hide-details
     />
-    <v-data-table :headers="headers" :items="items" :search="search">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :search="search"
+      density="comfortable"
+      items-per-page="20"
+    >
       <template #item.role="{ item }">
         <template v-if="item.role === 'member'">
           member
@@ -76,7 +83,7 @@ const search = ref('')
           class="atcoder"
           :atcoder-id="item.atcoderId"
           :rating="item.atcoderRating"
-          :text="item.atcoderId"
+          :text="item.atcoderId || ''"
         />
       </template>
     </v-data-table>

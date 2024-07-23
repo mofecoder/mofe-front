@@ -59,7 +59,7 @@ const submit = async () => {
 const router = useRouter()
 const signOut = async () => {
   await userStore.signOut()
-  await router.replace('/')
+  await router.replace({ path: '/', query: { 'signed-out': null } })
 }
 </script>
 

@@ -1,18 +1,5 @@
 <script lang="ts" setup>
-import { useUserStore } from '~/store/user'
-
-const userStore = useUserStore()
-const user = computed(() => userStore.user)
-
 const title = 'MOFE'
-const route = useRoute()
-const createLink = (path: string) => ({
-  path,
-  query: {
-    ...route.query,
-    redirect: route.path.startsWith('/auth') ? undefined : route.path
-  }
-})
 const dayjs = useDayjs()
 const year = dayjs().year()
 </script>
@@ -28,51 +15,7 @@ const year = dayjs().year()
         <EnvironmentChip />
       </template>
       <template #append>
-        <ClientOnly>
-          <div class="d-md-none">
-            <template v-if="user">
-              <v-btn variant="text" icon="mdi-account" to="/user" />
-            </template>
-            <template v-else>
-              <v-btn
-                variant="text"
-                icon="mdi-account-plus"
-                :to="createLink('/auth/signup')"
-              />
-              <v-btn
-                variant="text"
-                icon="mdi-login-variant"
-                :to="createLink('/auth/signin')"
-              />
-            </template>
-          </div>
-          <div v-if="user" class="d-none d-md-flex flex-column align-center">
-            <v-btn
-              variant="text"
-              prepend-icon="mdi-account"
-              class="text-none"
-              to="/user"
-            >
-              {{ user.name }}
-            </v-btn>
-          </div>
-          <div v-else class="d-none d-md-flex align-center">
-            <v-btn
-              :to="createLink('/auth/signup')"
-              prepend-icon="mdi-account-plus"
-              variant="text"
-            >
-              新規登録
-            </v-btn>
-            <v-btn
-              :to="createLink('/auth/signin')"
-              variant="text"
-              prepend-icon="mdi-login-variant"
-            >
-              ログイン
-            </v-btn>
-          </div>
-        </ClientOnly>
+        <ToolbarUser />
       </template>
     </v-app-bar>
     <v-main style="--v-layout-top: 64px">

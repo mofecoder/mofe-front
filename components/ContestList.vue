@@ -31,25 +31,41 @@ const contestsData = computed(() => {
 <template>
   <v-container class="pa-0">
     <template v-if="contests">
-      <v-list lines="two">
-        <v-list-item v-for="contest in contestsData" :key="contest.slug">
+      <v-list lines="two" nav density="comfortable">
+        <v-list-item
+          v-for="contest in contestsData"
+          :key="contest.slug"
+          :to="`/contests/${contest.slug}`"
+        >
           <template #title>
-            <NuxtLink :to="`/contests/${contest.slug}`">
-              {{ contest.name }}
-            </NuxtLink>
+            {{ contest.name }}
           </template>
           <template #subtitle>
             {{ formatDate(contest.startAt, false) }} -
             {{ formatDate(contest.endAt, false) }}
           </template>
           <template #prepend>
-            <v-icon v-if="checkStatus(contest) === 'ongoing'" color="green">
-              mdi-timer-play-outline
-            </v-icon>
-            <v-icon v-else-if="checkStatus(contest) === 'future'" color="cyan">
-              mdi-timer-sand
-            </v-icon>
-            <v-icon v-else color="gray">mdi-clock-end</v-icon>
+            <v-avatar
+              v-if="checkStatus(contest) === 'ongoing'"
+              color="green"
+              variant="tonal"
+              size="large"
+              tile
+            >
+              開催中
+            </v-avatar>
+            <v-avatar
+              v-else-if="checkStatus(contest) === 'future'"
+              color="cyan"
+              variant="tonal"
+              size="large"
+              tile
+            >
+              終了
+            </v-avatar>
+            <v-avatar v-else color="gray" variant="tonal" size="large" tile>
+              予定
+            </v-avatar>
           </template>
         </v-list-item>
       </v-list>

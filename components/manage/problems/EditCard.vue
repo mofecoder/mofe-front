@@ -328,8 +328,14 @@ const removeTester = async (name: string) => {
         <!-- 登録ボタン -->
         <v-row>
           <v-col cols="12">
-            <v-btn :disabled="!valid" color="primary" type="submit" block>
-              更新
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              type="submit"
+              prepend-icon="mdi-content-save"
+              block
+            >
+              保存
             </v-btn>
           </v-col>
         </v-row>

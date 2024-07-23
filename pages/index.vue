@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import type { Post } from '~~/types/post'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
 import Posts from '~/utils/apis/Posts'
-import ViewPostCard from '~/components/posts/ViewPostCard.vue'
-import ContestList from '~/components/ContestList.vue'
 
 const { data: posts } = await useApi(Posts.getPosts, [], {
   lazy: true
@@ -14,6 +10,8 @@ const { data: posts } = await useApi(Posts.getPosts, [], {
 
 const userStore = useUserStore()
 const { user } = toRefs(userStore)
+
+const route = useRoute()
 
 useHead({
   script: [
@@ -55,6 +53,13 @@ const { lgAndUp } = useDisplay()
         >
         から AtCoder ID が登録可能です。ぜひご登録ください。
       </v-alert>
+      <v-alert
+        v-if="'signed-out' in route.query"
+        class="mb-6"
+        variant="outlined"
+        type="success"
+        title="ログアウトしました。"
+      />
       <v-row>
         <v-col cols="12" lg="6">
           <v-card variant="outlined">
@@ -107,7 +112,7 @@ const { lgAndUp } = useDisplay()
             <v-virtual-scroll v-if="lgAndUp" :items="posts" :max-height="1000">
               <template #default="{ item }">
                 <div class="mx-1">
-                  <ViewPostCard
+                  <PostsViewPostCard
                     :show-edit="isAdmin"
                     :post="item"
                     enable-link

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { VueCodemirror } from 'codemirror-editor-vue3'
 import type { EditorConfiguration } from 'codemirror'
+import { useTheme } from 'vuetify'
 import type { Language } from '~/types/language'
+import 'codemirror/theme/material.css'
 
 const props = defineProps<{
   modelValue: string
@@ -21,10 +23,13 @@ const options: EditorConfiguration = reactive({
   viewportMargin: Infinity
 } as EditorConfiguration)
 
+const theme = useTheme()
+
 watchEffect(() => {
   options.mode = props.language?.mime
   options.readOnly = props.readOnly
   options.cursorBlinkRate = props.readOnly ? -1 : 530
+  options.theme = theme.current.value.dark ? 'material' : 'default'
 })
 
 function onInput(value: string) {

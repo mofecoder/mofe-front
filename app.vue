@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useTheme } from 'vuetify'
+
 const title = 'MOFE'
 useHead({
   title,
@@ -13,6 +15,15 @@ useHead({
   ],
   link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
 })
+
+const theme = useTheme()
+if (process.client) {
+  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
+  darkModeMediaQuery.addEventListener('change', (e) => {
+    theme.global.name.value = e.matches ? 'dark' : 'light'
+  })
+}
 </script>
 
 <template>
