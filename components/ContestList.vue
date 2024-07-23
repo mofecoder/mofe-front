@@ -61,10 +61,10 @@ const contestsData = computed(() => {
               size="large"
               tile
             >
-              終了
+              予定
             </v-avatar>
             <v-avatar v-else color="gray" variant="tonal" size="large" tile>
-              予定
+              終了
             </v-avatar>
           </template>
         </v-list-item>
