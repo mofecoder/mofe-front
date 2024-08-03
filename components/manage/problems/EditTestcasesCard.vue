@@ -187,11 +187,16 @@ const editSet = (id: number | null) => {
 }
 
 const deleteSet = async (id: number) => {
+  testcaseLoading.value = true
   try {
-    await http(ManageProblems.deleteTestcaseSet.$path([props.problemId, id]))
+    await http(ManageProblems.deleteTestcaseSet.$path([props.problemId, id]), {
+      method: 'DELETE'
+    })
   } catch (error) {
     alert('テストケースセットの削除に失敗しました。')
     return
+  } finally {
+    testcaseLoading.value = false
   }
   await refreshTestcase()
 }
