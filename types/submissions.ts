@@ -36,6 +36,7 @@ export interface TestcaseResult {
   status: Result
   executionTime: number
   executionMemory: number
+  score?: number
 }
 
 export interface TestcaseSetResult {

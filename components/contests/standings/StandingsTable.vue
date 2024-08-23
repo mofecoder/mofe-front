@@ -66,7 +66,7 @@ function updateSort(column: string | null) {
 </script>
 
 <template>
-  <v-card :loading="loading" variant="flat">
+  <v-card :loading="loading" variant="flat" theme="light">
     <v-card-title>順位表</v-card-title>
     <v-card-text class="standings">
       <div class="mb-4">
@@ -182,6 +182,7 @@ function updateSort(column: string | null) {
               <td
                 v-for="(problem, index) in user.problems"
                 :key="`${problems[index].slug}-${user.user.name}`"
+                class="col-problem"
               >
                 <template v-if="mode === 'atcoder'">
                   <div class="score">
@@ -300,13 +301,11 @@ function updateSort(column: string | null) {
       }
 
       .col-result {
-        min-width: 5em;
-        width: 6em;
+        min-width: 6em;
       }
 
       .col-problem {
-        min-width: 4.5em;
-        width: 5.5em;
+        min-width: 5.5em;
         cursor: pointer;
 
         .sort-reverse {
@@ -336,6 +335,12 @@ function updateSort(column: string | null) {
 
       td {
         padding: 0.2em 0;
+      }
+
+      .col-result,
+      .col-problem {
+        padding-left: 0.6em;
+        padding-right: 0.6em;
       }
 
       .score {

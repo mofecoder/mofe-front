@@ -39,7 +39,10 @@ const submit = async () => {
   const type = checkersRaw.find((c) => c.value === checker.value)?.fileName
   if (type) formData.append('type', type)
   if (file.value) formData.append('file', file.value)
-  await useApi(ManageProblems.updateChecker, [props.problemId], {}, formData)
+  await http(ManageProblems.updateChecker.$path([props.problemId]), {
+    method: 'POST',
+    body: formData
+  })
   emits('update')
 }
 </script>
@@ -140,7 +143,14 @@ const submit = async () => {
         @change="updateFile($event.target.files[0] || null)"
       />
     </template>
-    <v-btn color="primary" @click="submit">確定</v-btn>
+    <v-btn
+      color="primary"
+      block
+      prepend-icon="mdi-content-save"
+      @click="submit"
+    >
+      保存
+    </v-btn>
   </v-container>
 </template>
 
