@@ -34,10 +34,6 @@ const registerAtCoder = computed(() => {
 
 const isAdmin = computed(() => user.value?.role === 'admin')
 
-const isWriter = computed(() =>
-  ['admin', 'writer'].includes(user.value?.role || '')
-)
-
 const { lgAndUp } = useDisplay()
 </script>
 
