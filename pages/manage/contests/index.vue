@@ -2,7 +2,8 @@
 import ManageContests from '~/utils/apis/ManageContests'
 
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  layout: 'top'
 })
 
 useHead({

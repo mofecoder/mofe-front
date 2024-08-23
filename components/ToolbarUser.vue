@@ -97,7 +97,9 @@ const signOut = async () => {
               prepend-icon="mdi-theme-light-dark"
               @click="changeTheme"
             >
-              テーマ: {{ dark ? 'ダーク (Beta)' : 'ライト' }}
+              <template #title>
+                テーマ: {{ dark ? 'ダーク (Beta)' : 'ライト' }}
+              </template>
             </v-list-item>
             <v-divider />
             <v-list-item

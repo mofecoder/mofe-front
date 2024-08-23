@@ -2,7 +2,8 @@
 import ManageProblems from '~/utils/apis/ManageProblems'
 
 definePageMeta({
-  middleware: 'authenticated'
+  middleware: 'authenticated',
+  layout: 'top'
 })
 useHead({
   title: '問題の管理'

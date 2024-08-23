@@ -5,7 +5,8 @@ import { formatDate } from '~/utils/formatting'
 import type { DataTableHeader } from '~/types/datatable'
 
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  layout: 'top'
 })
 
 useHead({

@@ -24,6 +24,10 @@ useHead({
   titleTemplate: null
 })
 
+definePageMeta({
+  layout: 'top'
+})
+
 const registerAtCoder = computed(() => {
   return user.value && user.value.atcoderId == null
 })
@@ -123,7 +127,7 @@ const { lgAndUp } = useDisplay()
             </v-virtual-scroll>
             <div v-else>
               <div v-for="item in posts" :key="`post-${item.id}`" class="mx-1">
-                <ViewPostCard
+                <PostsViewPostCard
                   :show-edit="isAdmin"
                   :post="item"
                   enable-link

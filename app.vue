@@ -16,6 +16,7 @@ useHead({
   link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
 })
 
+/*
 const theme = useTheme()
 if (process.client) {
   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -24,6 +25,7 @@ if (process.client) {
     theme.global.name.value = e.matches ? 'dark' : 'light'
   })
 }
+*/
 </script>
 
 <template>

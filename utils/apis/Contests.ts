@@ -6,6 +6,12 @@ import type { Submit, SubmissionDetail } from '~/types/submissions'
 import type { Pagination } from '~/types/ApiMeta'
 import type { SortItem } from '~/types/datatable'
 
+export type Contests = {
+  inProgress: Contest[]
+  future: Contest[]
+  past: Contest[]
+  permanent: Contest[]
+}
 export type SubmissionResponse = {
   data: Submit[]
   meta: { pagination: Pagination }
@@ -47,7 +53,7 @@ function formatSubmissionsUrl(
   return url
 }
 
-const getContests = new Api<Contest[]>('/contests')
+const getContests = new Api<Contests>('/contests')
 const getContest = new Api<ContestDetail, [string]>(
   ([slug]) => `/contests/${slug}`
 )

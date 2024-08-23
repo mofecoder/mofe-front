@@ -4,7 +4,8 @@ import ManageProblems from '~/utils/apis/ManageProblems'
 import Admin from '~/utils/apis/Admin'
 
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  layout: 'top'
 })
 
 useHead({

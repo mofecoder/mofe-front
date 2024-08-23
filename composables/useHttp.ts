@@ -6,9 +6,9 @@ import { useUserStore } from '~/store/user'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { toCamelCase, toSnakeCase, log } from '~/utils/http'
 
-const useHttp = async <T>(
+const useHttp = async <ResT, DataT = ResT>(
   url: MaybeRef<string>,
-  options: UseFetchOptions<T> = {}
+  options: UseFetchOptions<ResT, DataT> = {}
 ) => {
   const oldAuth = useCookie<AuthTokens | null>('auth')
   const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
@@ -22,7 +22,7 @@ const useHttp = async <T>(
   const config = useRuntimeConfig()
   const userStore = useUserStore()
 
-  const handleResponse: UseFetchOptions<T>['onResponse'] = (ctx) => {
+  const handleResponse: UseFetchOptions<ResT, DataT>['onResponse'] = (ctx) => {
     const res = ctx.response
     log(
       typeof ctx.request === 'string' ? '' : ctx.request.method,
@@ -44,7 +44,7 @@ const useHttp = async <T>(
   if (options.body && !(options.body instanceof FormData)) {
     options.body = toSnakeCase(options.body)
   }
-  const defaults: UseFetchOptions<T> = {
+  const defaults: UseFetchOptions<ResT, DataT> = {
     baseURL: config.public.apiBase,
     key: unref(url),
     headers: toSnakeCase(headers, true),
@@ -73,7 +73,7 @@ const useHttp = async <T>(
     nuxtLoading.finish()
   }
   nuxtLoading.start()
-  return useFetch<T>(url, defu(options, defaults) as any)
+  return useFetch<ResT, DataT>(url, defu(options, defaults) as any)
 }
 
 export default useHttp as typeof useHttp

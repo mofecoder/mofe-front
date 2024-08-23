@@ -5,7 +5,8 @@ import { STATUS_TABLE } from '~/constants/posts'
 import { definePageMeta } from '#imports'
 
 definePageMeta({
-  middleware: 'admin'
+  middleware: 'admin',
+  layout: 'top'
 })
 
 useHead({

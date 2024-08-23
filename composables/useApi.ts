@@ -4,18 +4,19 @@ import useHttp from '~/composables/useHttp'
 import type { UseFetchOptions } from '#app'
 
 function useApi<
-  T,
+  ResT,
   U extends ArgsType,
-  V extends RequestInit['body'] | Record<string, any>
+  V extends RequestInit['body'] | Record<string, any>,
+  DataT = ResT
 >(
-  api: Api<T, U, V>,
+  api: Api<ResT, U, V>,
   args: MaybeRef<U> | (() => U),
-  options: UseFetchOptions<T> = {},
+  options: UseFetchOptions<ResT, DataT> = {},
   body?: V
 ) {
   const apiOption = api.options(toValue(args))
   const path = computed(() => api.$path(toValue(args)))
-  return useHttp<T>(path, {
+  return useHttp<ResT, DataT>(path, {
     method: api.method,
     body: body,
     ...apiOption,

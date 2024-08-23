@@ -6,11 +6,15 @@ import Contests from '~/utils/apis/Contests'
 
 const dayjs = useDayjs()
 
-const { data: contests } = await useApi(Contests.getContests, [], {
+const { data } = await useApi(Contests.getContests, [], {
   server: false
 })
 
-const showFew = ref(true)
+const contests = computed(() =>
+  data.value
+    ? data.value.inProgress.concat(data.value.future, data.value.past)
+    : []
+)
 
 const checkStatus = (contest: Contest) => {
   const startAt = dayjs(contest.startAt)
@@ -20,20 +24,15 @@ const checkStatus = (contest: Contest) => {
   if (endAt.isBefore(Date())) return 'ended'
   return 'ongoing'
 }
-
-const contestsData = computed(() => {
-  if (!contests.value) return []
-  if (showFew.value) return contests.value.slice(0, 10)
-  return contests.value
-})
 </script>
 
 <template>
   <v-container class="pa-0">
     <template v-if="contests">
       <v-list lines="two" nav density="comfortable">
+        <v-list-subheader>コンテスト一覧（最新10件）</v-list-subheader>
         <v-list-item
-          v-for="contest in contestsData"
+          v-for="contest in contests.slice(0, 10)"
           :key="contest.slug"
           :to="`/contests/${contest.slug}`"
         >
@@ -69,24 +68,6 @@ const contestsData = computed(() => {
           </template>
         </v-list-item>
       </v-list>
-      <v-btn
-        v-if="showFew && contests.length > 10"
-        prepend-icon="mdi-chevron-down"
-        color="primary"
-        variant="text"
-        @click="showFew = false"
-      >
-        すべて表示
-      </v-btn>
-      <v-btn
-        v-else
-        prepend-icon="mdi-chevron-up"
-        color="primary"
-        variant="text"
-        @click="showFew = true"
-      >
-        最新 10 件のみ表示
-      </v-btn>
     </template>
     <template v-else>
       <v-list lines="two">

@@ -2,6 +2,10 @@
 import Posts from '~/utils/apis/Posts'
 import ViewPostCard from '~/components/posts/ViewPostCard.vue'
 import { useUserStore } from '~/store/user'
+import { definePageMeta } from '#imports'
+definePageMeta({
+  layout: 'top'
+})
 
 const { data: posts } = await useApi(Posts.getPosts, [])
 const userStore = useUserStore()

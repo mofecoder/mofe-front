@@ -66,7 +66,8 @@ const nuxtConfig = defineNuxtConfig({
   },
   dayjs: {
     locales: ['ja'],
-    defaultLocale: 'ja'
+    defaultLocale: 'ja',
+    plugins: ['duration']
   }
 })
 
