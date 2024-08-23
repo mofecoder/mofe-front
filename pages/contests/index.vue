@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Duration } from 'dayjs/plugin/duration'
 import { definePageMeta } from '#imports'
 import Contests from '~/utils/apis/Contests'
 import type { Contest } from '~/types/contest'
@@ -9,6 +10,13 @@ definePageMeta({
 
 const { data } = await useApi(Contests.getContests, [])
 const dayjs = useDayjs()
+
+const formatDuration = (duration: Duration) => {
+  const hours = Math.floor(duration.asHours())
+  const minutes = duration.minutes()
+  if (minutes === 0) return `${hours}時間`
+  return `${hours}時間${('00' + minutes).slice(-2)}分`
+}
 
 const transform = (value: Contest[] | undefined) => {
   if (!value) return []
@@ -22,7 +30,7 @@ const transform = (value: Contest[] | undefined) => {
         to: `/contests/${contest.slug}`,
         subtitle:
           `${formatDate(start, false)} - ` +
-          `${formatDate(end, false)} (${duration.format('H時間mm分')})`
+          `${formatDate(end, false)} (${formatDuration(duration)})`
       }
     }
   })
