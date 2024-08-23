@@ -81,33 +81,6 @@ const { lgAndUp } = useDisplay()
                   >
                 </div>
               </ClientOnly>
-              <div class="mt-4 d-flex flex-wrap ga-2">
-                <v-btn
-                  v-if="isAdmin"
-                  color="orange-lighten-1"
-                  to="/admin"
-                  prepend-icon="mdi-security"
-                >
-                  管理ページ
-                </v-btn>
-                <v-btn
-                  v-if="isAdmin"
-                  prepend-icon="mdi-application-cog"
-                  variant="tonal"
-                  color="primary"
-                  to="/manage/contests"
-                >
-                  コンテスト管理画面
-                </v-btn>
-                <v-btn
-                  v-if="isWriter"
-                  color="primary"
-                  variant="tonal"
-                  to="/manage/problems"
-                  prepend-icon="mdi-text-box-multiple-outline"
-                  >問題管理画面</v-btn
-                >
-              </div>
             </v-card-text>
           </v-card>
         </v-col>
