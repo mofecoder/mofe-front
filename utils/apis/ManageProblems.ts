@@ -112,9 +112,15 @@ const addToTestcaseSetMultiple = new Api<
   { testcaseIds: number[]; testcaseSetId: number }
 >(([id]) => `/problems/${id}/testcases/change_state_multiple`, 'PATCH')
 
-const updateChecker = new Api<void, [number]>(
+const updateChecker = new Api<string, [number]>(
   ([id]) => `/problems/${id}/checker`,
   'POST',
+  {}
+)
+
+const downlaodChecker = new Api<void, [number]>(
+  ([id]) => `/problems/${id}/checker`,
+  'GET',
   {}
 )
 

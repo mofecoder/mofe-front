@@ -45,6 +45,20 @@ const submit = async () => {
   })
   emits('update')
 }
+
+const download = async () => {
+  const res: string = await http(
+    ManageProblems.updateChecker.$path([props.problemId])
+  )
+
+  const a = document.createElement('a')
+  a.href = window.URL.createObjectURL(new Blob([res], { type: 'text/x-c' }))
+  a.target = '_blank'
+  a.download = `checker-${problem.value?.id}.cpp`
+  a.click()
+  URL.revokeObjectURL(a.href)
+  document.removeChild(a)
+}
 </script>
 
 <template>
@@ -150,6 +164,15 @@ const submit = async () => {
       @click="submit"
     >
       保存
+    </v-btn>
+    <v-btn
+      class="mt-4"
+      color="secondary"
+      block
+      prepend-icon="mdi-download"
+      @click="download"
+    >
+      チェッカーファイルをダウンロード
     </v-btn>
   </v-container>
 </template>
