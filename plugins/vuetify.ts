@@ -5,11 +5,15 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css'
 import DayJsAdapter from '@date-io/dayjs'
 import { ja } from 'vuetify/locale'
+import { VNumberInput } from 'vuetify/labs/components'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     ssr: true,
-    components,
+    components: {
+      VNumberInput,
+      ...components
+    },
     directives,
     icons: {
       defaultSet: 'mdi',

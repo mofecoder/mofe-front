@@ -40,6 +40,8 @@ export interface ProblemDetail {
   samples: Sample[] | null
   testers: string[]
   contest: Contest | null
+  submissionLimit1: number | null
+  submissionLimit2: number | null
 }
 
 export type AggregateType = 'all' | 'sum' | 'max' | 'min'

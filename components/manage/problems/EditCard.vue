@@ -83,7 +83,9 @@ const onSubmit = async () => {
         inputFormat: problem.value.inputFormat,
         outputFormat: problem.value.outputFormat,
         statement: problem.value.statement,
-        executionTimeLimit: problem.value.executionTimeLimit
+        executionTimeLimit: problem.value.executionTimeLimit,
+        submissionLimit1: problem.value.submissionLimit1,
+        submissionLimit2: problem.value.submissionLimit2
       }
     },
     method: 'PUT'
@@ -157,6 +159,7 @@ const removeTester = async (name: string) => {
               label="問題名"
             />
           </v-col>
+
           <v-col cols="12" md="7" lg="2" class="py-1">
             <v-select
               v-model="problem.difficulty"
@@ -165,14 +168,43 @@ const removeTester = async (name: string) => {
             />
           </v-col>
           <v-col cols="12" md="5" lg="2" class="py-1">
-            <v-text-field
-              v-model.number="problem.executionTimeLimit"
+            <v-number-input
+              v-model="problem.executionTimeLimit"
               :rules="rules.required"
-              type="number"
               label="実行時間制限"
               suffix="ms"
               min="1"
               max="20000"
+              :step="100"
+            />
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-number-input
+              v-model="problem.submissionLimit1"
+              density="comfortable"
+              min="0"
+              max="86400"
+              label="実行時間制限（1つ前）"
+              control-variant="stacked"
+              suffix="秒"
+              :step="5"
+              hint="0秒に設定すると制限なし"
+            />
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-number-input
+              v-model="problem.submissionLimit2"
+              density="comfortable"
+              min="0"
+              max="86400"
+              label="実行時間制限（2つ前）"
+              control-variant="stacked"
+              suffix="秒"
+              :step="5"
+              hint="0秒に設定すると制限なし"
             />
           </v-col>
         </v-row>
@@ -310,6 +342,7 @@ const removeTester = async (name: string) => {
             <ProblemsHtmlTagExpansion />
           </v-col>
         </v-row>
+
         <v-row>
           <v-col cols="12">
             <ManageUserList

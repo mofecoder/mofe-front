@@ -118,7 +118,8 @@ const download = async () => {
               <li>
                 カスタムチェッカーを選択し、チェッカーでは標準出力に
                 <code>MofeJudge::Score(0)</code>
-                を1行で出力する。（<code>0</code> の部分に点数を入れる）
+                と（文字列で）1行で出力する。（<code>0</code>
+                の部分に点数を入れる）
               </li>
             </ol>
             「合計」の場合はセット内のテストケースに対する点数の合計値、
@@ -128,6 +129,9 @@ const download = async () => {
             設定した配点については表示のみとなり、集計には利用されません。
             （設定によっては点数が配点を超えることがあります）。<br />
             提出自体に対する点数は、テストケースセットごとの点数の合計です。<br />
+            TLE / OLE / QLE / RE
+            となった場合（チェッカーで設定した場合も含む）は、 当該ケースは 0
+            点となります。<br />
             ※複数回出力したときの動作は未定義です。
           </v-alert>
           <v-alert class="mb-4" variant="tonal" color="info">
@@ -152,7 +156,7 @@ const download = async () => {
         <code>bits/stdc++.h</code>) の include は控えてください。
       </p>
       <v-file-input
-        placeholder="チェッカーファイルをアップロード"
+        label="チェッカーファイル"
         accept=".cc,.cpp"
         @change="updateFile($event.target.files[0] || null)"
       />

@@ -1,12 +1,21 @@
 import defu from 'defu'
 import type { MaybeRef } from 'vue'
+import type { FetchError } from 'ofetch'
+import type { AvailableRouterMethod, NitroFetchRequest } from 'nitropack'
 import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'
 import { useUserStore } from '~/store/user'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { toCamelCase, toSnakeCase, log } from '~/utils/http'
+import type { FetchResult } from '#app/composables/fetch'
 
-const useHttp = async <ResT, DataT = ResT>(
+type ReqT = NitroFetchRequest
+const useHttp = async <
+  ResT,
+  DataT = ResT extends void
+    ? FetchResult<ReqT, AvailableRouterMethod<ReqT>>
+    : ResT
+>(
   url: MaybeRef<string>,
   options: UseFetchOptions<ResT, DataT> = {}
 ) => {
@@ -73,7 +82,14 @@ const useHttp = async <ResT, DataT = ResT>(
     nuxtLoading.finish()
   }
   nuxtLoading.start()
-  return useFetch<ResT, DataT>(url, defu(options, defaults) as any)
+  return useFetch<
+    ResT,
+    FetchError,
+    NitroFetchRequest,
+    AvailableRouterMethod<NitroFetchRequest>,
+    DataT,
+    DataT
+  >(url, defu(options, defaults) as any)
 }
 
 export default useHttp as typeof useHttp

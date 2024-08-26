@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Tasks from '~/utils/apis/Tasks'
+import SubmitForm from '~/components/contests/SubmitForm.vue'
 
 definePageMeta({
   layout: 'contest'
@@ -42,6 +43,11 @@ const id = computed(
       :problem="problem"
       :contest-slug="contestName"
     />
+    <v-card class="mt-4 mx-auto" max-width="1200px" title="提出">
+      <div class="pa-3">
+        <SubmitForm :problem="problem" :contest-slug="contestName" />
+      </div>
+    </v-card>
   </v-container>
 </template>
 
