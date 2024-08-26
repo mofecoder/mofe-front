@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { useTheme } from 'vuetify'
-
 const title = 'MOFE'
 useHead({
   title,
