@@ -118,7 +118,7 @@ const updateChecker = new Api<string, [number]>(
   {}
 )
 
-const downlaodChecker = new Api<void, [number]>(
+const downloadChecker = new Api<void, [number]>(
   ([id]) => `/problems/${id}/checker`,
   'GET',
   {}
@@ -145,5 +145,6 @@ export default {
   uploadTestcases,
   changeTestcaseState,
   updateChecker,
-  addToTestcaseSetMultiple
+  addToTestcaseSetMultiple,
+  downloadChecker
 }

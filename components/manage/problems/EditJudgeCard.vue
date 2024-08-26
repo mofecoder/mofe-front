@@ -48,7 +48,7 @@ const submit = async () => {
 
 const download = async () => {
   const res: string = await http(
-    ManageProblems.updateChecker.$path([props.problemId])
+    ManageProblems.downloadChecker.$path([props.problemId])
   )
 
   const a = document.createElement('a')
