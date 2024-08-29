@@ -16,7 +16,7 @@ useHead({
 
 /*
 const theme = useTheme()
-if (process.client) {
+if (import.meta.client) {
   const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
   darkModeMediaQuery.addEventListener('change', (e) => {

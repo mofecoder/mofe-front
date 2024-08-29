@@ -97,11 +97,11 @@ const args = reactive({
 const {
   data: submissions,
   refresh,
-  pending: apiLoading
+  status
 } = await useApi(Contests.getAllSubmissions, args, { lazy: true })
 
 async function rejudge(submissionIds: number[]) {
-  await useApi(
+  await api(
     Contests.rejudge,
     [unref(contestName)],
     {},
@@ -125,7 +125,7 @@ const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card v-if="!errorMessage" :loading="apiLoading">
+        <v-card v-if="!errorMessage" :loading="status === 'pending'">
           <v-card-title>すべての提出</v-card-title>
           <v-card-text class="submit-card">
             <v-switch

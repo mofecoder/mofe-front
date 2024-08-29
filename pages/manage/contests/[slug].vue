@@ -86,9 +86,11 @@ const reload = async () =>
 const editInformation = async () => {
   if (!contest) return
   loading.information = true
-  await http(ManageContests.updateContest.$path([slug.value]), {
-    method: 'PUT',
-    body: {
+  await api(
+    ManageContests.updateContest,
+    [slug.value],
+    {},
+    {
       name: contest.name,
       kind: contest.kind,
       penaltyTime: Number(contest.penaltyTime),
@@ -99,8 +101,8 @@ const editInformation = async () => {
       allowTeamRegistration: contest.allowTeamRegistration,
       allowOpenRegistration: contest.allowOpenRegistration,
       closedPassword: contest.closedPassword
-    } as ContestEditParam
-  })
+    }
+  )
   updated.value = true
   await reload()
   loading.information = false
@@ -117,7 +119,7 @@ const timeRange = computed({
 const editTime = async () => {
   if (!contest) return
   loading.time = true
-  await useApi(
+  await api(
     ManageContests.updateContest,
     [slug.value],
     {},
@@ -133,7 +135,7 @@ const editTime = async () => {
 
 const addProblem = async (problemId: number, pos: string) => {
   loading.add = true
-  await useApi(ManageContests.addTask, [
+  await api(ManageContests.addTask, [
     slug.value,
     problemId,
     `${slug.value}_${pos.toLowerCase()}`,
@@ -145,9 +147,7 @@ const addProblem = async (problemId: number, pos: string) => {
 
 const remove = async (slug: string) => {
   loading.tasks = true
-  await http(ManageContests.removeTask.$path([contest.slug, slug]), {
-    method: 'PUT'
-  })
+  await api(ManageContests.removeTask, [contest.slug, slug], {})
   await reload()
   loading.tasks = false
 }
@@ -156,10 +156,14 @@ const adminsError = ref('')
 const addAdmin = async (user: string) => {
   loading.admins = true
   try {
-    await http(ManageContests.addAdmin.$path([contest.slug]), {
-      method: 'POST',
-      body: { userName: user }
-    })
+    await api(
+      ManageContests.addAdmin,
+      [contest.slug],
+      {},
+      {
+        userName: user
+      }
+    )
     adminsError.value = ''
   } catch (error: unknown) {
     if (error instanceof FetchError && error?.data?.error) {
@@ -176,10 +180,14 @@ const addAdmin = async (user: string) => {
 const removeAdmin = async (user: string) => {
   loading.admins = true
   try {
-    await http(ManageContests.removeAdmin.$path([contest.slug]), {
-      method: 'DELETE',
-      body: { userName: user }
-    })
+    await api(
+      ManageContests.removeAdmin,
+      [contest.slug],
+      {},
+      {
+        userName: user
+      }
+    )
   } catch (error: unknown) {
     alert('管理者の削除に失敗しました。')
   } finally {

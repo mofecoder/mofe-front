@@ -33,7 +33,7 @@ const items = computed(() =>
 )
 
 const update = async (userId: number, role: User['role']) => {
-  await useApi(Admin.updateUser, [userId], {}, { role })
+  await api(Admin.updateUser, [userId], {}, { role })
   await refresh()
 }
 

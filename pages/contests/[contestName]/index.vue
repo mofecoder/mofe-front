@@ -95,18 +95,17 @@ const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
   }
 
   registerLoading.value = true
-  let response = ''
+  let response: { message: string } | string = ''
   try {
     if (isTeam) {
-      response = await http(Contests.teamRegister.$path([contestSlug.value!]), {
-        method: 'POST',
+      response = await api(
+        Contests.teamRegister,
+        [contestSlug.value!],
+        {},
         body
-      })
+      )
     } else {
-      response = await http(Contests.register.$path([contestSlug.value!]), {
-        method: 'POST',
-        body
-      })
+      await api(Contests.register, [contestSlug.value!], {}, body)
     }
   } catch (error) {
     const text = error instanceof FetchError ? error?.data?.error : ''

@@ -39,17 +39,12 @@ const submit = async () => {
   const type = checkersRaw.find((c) => c.value === checker.value)?.fileName
   if (type) formData.append('type', type)
   if (file.value) formData.append('file', file.value)
-  await http(ManageProblems.updateChecker.$path([props.problemId]), {
-    method: 'POST',
-    body: formData
-  })
+  await api(ManageProblems.updateChecker, [props.problemId], {}, formData)
   emits('update')
 }
 
 const download = async () => {
-  const res: string = await http(
-    ManageProblems.downloadChecker.$path([props.problemId])
-  )
+  const res = await api(ManageProblems.downloadChecker, [props.problemId])
 
   const a = document.createElement('a')
   a.href = window.URL.createObjectURL(new Blob([res], { type: 'text/x-c' }))

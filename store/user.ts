@@ -108,7 +108,7 @@ export const useUserStore = defineStore({
     },
     async signOut() {
       if (!this.user) return
-      await useApi(Auth.signOut, [])
+      await api(Auth.signOut, [])
       this.updateUser(null)
       const cookie = useCookie(AUTH_COOKIE_NAME)
       cookie.value = null

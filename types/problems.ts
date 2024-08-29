@@ -9,6 +9,8 @@ export interface ProblemParams {
   outputFormat: string
   constraints: string
   executionTimeLimit: number
+  submissionLimit1: string | number | null
+  submissionLimit2: string | number | null
 }
 
 export interface ProblemBase {

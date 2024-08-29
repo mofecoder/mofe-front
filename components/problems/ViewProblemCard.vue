@@ -12,7 +12,7 @@ const props = defineProps<{
 const language = ref(languages[0])
 
 onMounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     language.value =
       languages.filter(
         (lang) => localStorage.getItem('lang') === lang.innerName

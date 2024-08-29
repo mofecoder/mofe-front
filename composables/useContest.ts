@@ -21,7 +21,7 @@ export function useContest(isLayout?: boolean) {
   const dayjs = useDayjs()
   const updateClarifications = async (read = false) => {
     if (!contestName.value) return
-    if (read && process.client) {
+    if (read && import.meta.client) {
       localStorage.setItem(`${contestName.value}_clar`, dayjs().toISOString())
     }
     return contestStore.getClarifications(contestName)

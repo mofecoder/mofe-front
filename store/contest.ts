@@ -22,12 +22,12 @@ export const useContestStore = defineStore({
   actions: {
     async getContest(slug: MaybeRef<string>) {
       if (slug == null) return
-      const updated = process.client && this.slug !== toValue(slug)
-      if (process.client) this.slug = toValue(slug)
+      const updated = import.meta.client && this.slug !== toValue(slug)
+      if (import.meta.client) this.slug = toValue(slug)
       const _this = this
       await http<ContestDetail>(Contests.getContest.$path([unref(slug)]), {
         onRequest() {
-          if (!updated || !process.client) return
+          if (!updated || !import.meta.client) return
           _this.contest = null
           if (_this.interval != null) {
             window.clearInterval(_this.interval)
@@ -60,7 +60,7 @@ export const useContestStore = defineStore({
       this.clarifications = clarifications
     },
     leave() {
-      if (this.interval && process.client) {
+      if (this.interval && import.meta.client) {
         window.clearInterval(this.interval)
         this.interval = null
       }

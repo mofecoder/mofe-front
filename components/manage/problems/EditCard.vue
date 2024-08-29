@@ -74,8 +74,11 @@ onUnmounted(() => {
 
 const onSubmit = async () => {
   if (!problem.value) return
-  await http(ManageProblems.updateProblem.$path([props.problemId]), {
-    body: {
+  await api(
+    ManageProblems.updateProblem,
+    [props.problemId],
+    {},
+    {
       problem: {
         name: problem.value.name,
         difficulty: problem.value.difficulty,
@@ -87,9 +90,8 @@ const onSubmit = async () => {
         submissionLimit1: problem.value.submissionLimit1,
         submissionLimit2: problem.value.submissionLimit2
       }
-    },
-    method: 'PUT'
-  })
+    }
+  )
   updated.value = true
   changed.value = false
   await refresh()
@@ -99,12 +101,14 @@ const onSubmit = async () => {
 const addTester = async (name: string) => {
   testerLoading.value = true
   try {
-    await http(ManageProblems.addTester.$path([props.problemId]), {
-      method: 'POST',
-      body: {
+    await http(
+      ManageProblems.addTester,
+      [props.problemId],
+      {},
+      {
         userName: name
       }
-    })
+    )
     testerError.value = ''
   } catch (error: unknown) {
     if (error instanceof FetchError && error?.data?.error) {
@@ -121,12 +125,14 @@ const addTester = async (name: string) => {
 const removeTester = async (name: string) => {
   testerLoading.value = true
   try {
-    await http(ManageProblems.removeTester.$path([props.problemId]), {
-      method: 'DELETE',
-      body: {
+    await api(
+      ManageProblems.removeTester,
+      [props.problemId],
+      {},
+      {
         userName: name
       }
-    })
+    )
   } catch (err: unknown) {
     alert('テスターの削除に失敗しました。')
   } finally {

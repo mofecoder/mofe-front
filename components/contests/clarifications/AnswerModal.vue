@@ -25,7 +25,7 @@ function cancel() {
 }
 
 async function answer() {
-  await useApi(
+  await api(
     Contests.updateClarification,
     [props.contestSlug, props.clarificationId],
     {},

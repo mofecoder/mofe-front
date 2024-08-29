@@ -42,7 +42,7 @@ const autoHeight = ref(false)
 const showCopiedMessage = ref(false)
 const copySource = () => {
   copy(source.value)
-  if (process.client) {
+  if (import.meta.client) {
     showCopiedMessage.value = true
     setTimeout(() => {
       showCopiedMessage.value = false

@@ -14,9 +14,23 @@ useHead({
 
 const { data: contests } = await useApi(ManageContests.getContests, [])
 const { data: problems } = await useApi(ManageProblems.getUnsetProblems, [])
+const status = ref<[number, number] | null>(null)
 
 const updateRating = async () => {
-  await useApi(Admin.updateRating, [])
+  const response = await api(Admin.updateRating, [], {
+    responseType: 'stream'
+  })
+
+  const reader = response.pipeThrough(new TextDecoderStream()).getReader()
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const { value, done } = await reader.read()
+
+    if (done) break
+    status.value = value.split(',').map(Number) as [number, number]
+    console.log(value)
+  }
 }
 </script>
 
@@ -56,12 +70,17 @@ const updateRating = async () => {
           <v-btn
             color="orange"
             class="mt-4"
+            block
             variant="tonal"
             prepend-icon="mdi-autorenew"
+            :disabled="status != null && status[0] < status[1]"
             @click="updateRating"
           >
             レーティング更新
           </v-btn>
+          <v-progress-linear v-if="status" :model-value="status[0] / status[1]"
+            >{{ status[0] }} / {{ status[1] }}</v-progress-linear
+          >
         </v-col>
         <v-col>
           <h2>問題（未所属）</h2>

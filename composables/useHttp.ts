@@ -34,7 +34,9 @@ const useHttp = async <
   const handleResponse: UseFetchOptions<ResT, DataT>['onResponse'] = (ctx) => {
     const res = ctx.response
     log(
-      typeof ctx.request === 'string' ? '' : ctx.request.method,
+      (typeof ctx.request === 'string'
+        ? ctx.options.method
+        : ctx.request.method) || '',
       unref(url),
       res
     )

@@ -118,7 +118,7 @@ const updateChecker = new Api<string, [number]>(
   {}
 )
 
-const downloadChecker = new Api<void, [number]>(
+const downloadChecker = new Api<string, [number]>(
   ([id]) => `/problems/${id}/checker`,
   'GET',
   {}

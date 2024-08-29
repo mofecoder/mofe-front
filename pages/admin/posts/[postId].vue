@@ -60,7 +60,7 @@ const statuses = Object.entries(STATUS_TABLE).map(([key, value]) => ({
 const router = useRouter()
 async function submit() {
   if (isCreating.value) {
-    await useApi(
+    await api(
       Posts.createPost,
       [],
       {},
@@ -71,7 +71,7 @@ async function submit() {
       }
     )
   } else {
-    await useApi(
+    await api(
       Posts.updatePost,
       [postId.value!],
       {},

@@ -8,7 +8,7 @@ const updateUser = new Api<void, [number], Pick<User, 'role'>>(
   'PATCH'
 )
 
-const updateRating = new Api<void, []>('/users/update_rating', 'POST')
+const updateRating = new Api<ReadableStream, []>('/users/update_rating', 'POST')
 
 export default {
   getUsers,

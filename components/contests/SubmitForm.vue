@@ -65,27 +65,23 @@ async function submit() {
     alert('空のソースは提出できません。')
     return
   }
-  if (process.client) {
+  if (import.meta.client) {
     localStorage.setItem('lang', language.value!.innerName)
   }
   submitted.value = true
   try {
-    await http(
-      Tasks.submit.$path({
+    await api(
+      Tasks.submit,
+      {
         contestSlug: props.contestSlug,
         taskSlug: props.problem.slug,
         lang: language.value!.innerName
-      }),
+      },
       {
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        body: sourceCode,
-        method: 'POST',
-        query: {
-          lang: language.value!.innerName
-        }
-      }
+        headers: { 'Content-Type': 'text/plain' },
+        query: { lang: language.value!.innerName }
+      },
+      sourceCode
     )
     await router.push(`/contests/${props.contestSlug}/submissions/me`)
   } catch (err) {

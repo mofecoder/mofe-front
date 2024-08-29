@@ -55,7 +55,7 @@ watch(
 )
 
 async function rejudge(submissionIds: number[]) {
-  await useApi(
+  await api(
     Contests.rejudge,
     [unref(contestName)],
     {},

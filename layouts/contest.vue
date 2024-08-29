@@ -37,7 +37,7 @@ const unreadClarifications = computed<number>((oldValue) => {
   if (!contest.value) {
     return oldValue || 0
   }
-  if (!contestStore.clarifications || !process.client) {
+  if (!contestStore.clarifications || !import.meta.client) {
     return 0
   }
   const key = `${contest.value.slug}_clar`

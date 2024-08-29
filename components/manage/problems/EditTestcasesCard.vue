@@ -80,7 +80,7 @@ const updateTestcase = async (params: {
   output: string
   explanation: string | null
 }) => {
-  await useApi(
+  await api(
     ManageProblems.updateTestcase,
     [props.problemId, testcaseId.value!],
     {},
@@ -93,7 +93,7 @@ const updateTestcase = async (params: {
 
 const deleteTestcase = async (id: number) => {
   testcaseLoading.value = true
-  await useApi(ManageProblems.deleteTestcase, [props.problemId, id])
+  await api(ManageProblems.deleteTestcase, [props.problemId, id])
   await refreshTestcase()
   testcaseLoading.value = false
 }
@@ -104,7 +104,7 @@ const createTestcase = async (params: {
   output: string
   explanation: string | null
 }) => {
-  await useApi(ManageProblems.createTestcase, [props.problemId], {}, params)
+  await api(ManageProblems.createTestcase, [props.problemId], {}, params)
   await refreshTestcase()
   testcaseDialog.value = false
 }
@@ -168,10 +168,14 @@ const selectingHeader = (value: boolean) => {
 
 const deleteAll = async () => {
   testcaseLoading.value = true
-  await http(ManageProblems.deleteMultipleTestcases.$path([props.problemId]), {
-    method: 'DELETE',
-    body: { testcases: Array.from(selecting) }
-  })
+  await api(
+    ManageProblems.deleteMultipleTestcases,
+    [props.problemId],
+    {},
+    {
+      testcases: Array.from(selecting)
+    }
+  )
   selecting.clear()
   await refreshTestcase()
   testcaseLoading.value = false
@@ -189,9 +193,7 @@ const editSet = (id: number | null) => {
 const deleteSet = async (id: number) => {
   testcaseLoading.value = true
   try {
-    await http(ManageProblems.deleteTestcaseSet.$path([props.problemId, id]), {
-      method: 'DELETE'
-    })
+    await api(ManageProblems.deleteTestcaseSet, [props.problemId, id], {})
   } catch (error) {
     alert('テストケースセットの削除に失敗しました。')
     return
@@ -259,13 +261,15 @@ const updateAddingTarget = () => {
 
 const addSetMultiple = async () => {
   if (addingSet.value === undefined || !addingTarget.value) return
-  await http(ManageProblems.addToTestcaseSetMultiple.$path([props.problemId]), {
-    method: 'PATCH',
-    body: {
+  await api(
+    ManageProblems.addToTestcaseSetMultiple,
+    [props.problemId],
+    {},
+    {
       testcaseIds: addingTarget.value.map((x) => x.id),
       testcaseSetId: addingSet.value
     }
-  })
+  )
   addingPattern.value = undefined
   addingSet.value = undefined
   updateAddingTarget()

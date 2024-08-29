@@ -43,7 +43,7 @@ function color(responseCode: number) {
 
 export function log<T>(method: string, url: string, res: FetchResponse<T>) {
   if (process.env.NODE_ENV === 'production') return
-  if (!process.client) return
+  if (!import.meta.client) return
   console.log(
     `[Fetch] %c[${res.status} ${res.statusText}] %c${method} %c${url}\n%o`,
     `color: ${color(res.status)}; font-weight: bold`,
@@ -93,7 +93,9 @@ export function http<T>(
   const handleResponse: UseFetchOptions<T>['onResponse'] = async (ctx) => {
     const res = ctx.response
     log(
-      typeof ctx.request === 'string' ? '' : ctx.request.method,
+      (typeof ctx.request === 'string'
+        ? ctx.options.method
+        : ctx.request.method) || '',
       unref(url),
       res
     )

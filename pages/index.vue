@@ -9,7 +9,7 @@ const { user } = toRefs(userStore)
 
 const route = useRoute()
 
-const { data } = await useApi(top, [], { lazy: true })
+const { data, error } = await useApi(top, [], { lazy: true })
 
 useHead({
   script: [
@@ -56,10 +56,12 @@ const { lgAndUp } = useDisplay()
       title="ログアウトしました。"
     />
     <v-alert
-      v-if="!data"
+      v-if="error"
       type="error"
-      text="データの読み込みに失敗しました。"
+      title="データの読み込みに失敗しました。"
+      :text="error.message"
     />
+    <template v-if="!data" />
     <v-container v-else>
       <v-row>
         <v-col cols="12" lg="6">

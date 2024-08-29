@@ -1,4 +1,4 @@
 export async function copy(text: string) {
-  if (!process.client) return
+  if (!import.meta.client) return
   await navigator.clipboard.writeText(text)
 }

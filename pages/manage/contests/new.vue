@@ -37,7 +37,7 @@ const disabled = computed(() => {
 
 const router = useRouter()
 const submit = async () => {
-  await useApi(
+  await api(
     ManageContests.createContest,
     [],
     {},
@@ -51,10 +51,13 @@ const submit = async () => {
       penaltyTime: parseInt(params.penalty) * 60,
       standingsMode: params.standingsMode
     }
-  ).then(({ error }) => {
-    if (error.value) alert('コンテストの作成に失敗しました')
-    else router.push(`/manage/contests/${params.slug}`)
-  })
+  )
+    .then(() => {
+      router.push(`/manage/contests/${params.slug}`)
+    })
+    .catch(() => {
+      alert('コンテストの作成に失敗しました')
+    })
 }
 </script>
 

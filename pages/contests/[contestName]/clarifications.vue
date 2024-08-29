@@ -34,10 +34,14 @@ const question = () => {
 }
 
 const submitQuestion = async (task: string | null, content: string) => {
-  await http(Contests.createClarification.$path([contestName.value]), {
-    method: 'POST',
-    body: { clarification: { task, question: content } }
-  })
+  await api(
+    Contests.createClarification,
+    [contestName.value],
+    {},
+    {
+      clarification: { task, question: content }
+    }
+  )
   await updateClarifications(true)
   questionFlag.value = false
 }
@@ -81,7 +85,7 @@ const user = useUserStore().user
               </v-btn>
             </template>
           </v-alert>
-          <v-card v-else :key="clar.id" class="mb-6">
+          <v-card v-else :key="`${clar.id}_c`" class="mb-6">
             <template v-if="clar.task" #title>
               <NuxtLink
                 v-if="clar.task"
