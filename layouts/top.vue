@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 import { useUserStore } from '~/store/user'
 
 const dayjs = useDayjs()
@@ -80,7 +81,8 @@ const admin = [
 ]
 
 const role = computed(() => userStore.user?.role)
-const drawer = ref(false)
+const display = useDisplay()
+const drawer = ref(!display.mobile.value)
 </script>
 
 <template>

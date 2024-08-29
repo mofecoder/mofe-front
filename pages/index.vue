@@ -2,16 +2,14 @@
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
-import Posts from '~/utils/apis/Posts'
-
-const { data: posts } = await useApi(Posts.getPosts, [], {
-  lazy: true
-})
+import { top } from '~/utils/apis'
 
 const userStore = useUserStore()
 const { user } = toRefs(userStore)
 
 const route = useRoute()
+
+const { data } = await useApi(top, [], { lazy: true })
 
 useHead({
   script: [
@@ -39,32 +37,47 @@ const { lgAndUp } = useDisplay()
 
 <template>
   <div>
-    <v-container>
-      <v-alert
-        v-if="registerAtCoder && !isAdmin"
-        density="compact"
-        type="info"
-        variant="tonal"
-        class="mb-6"
-        closable
-      >
-        <NuxtLink to="/user" class="text-decoration-none"
-          >ユーザページ</NuxtLink
-        >
-        から AtCoder ID が登録可能です。ぜひご登録ください。
-      </v-alert>
-      <v-alert
-        v-if="'signed-out' in route.query"
-        class="mb-6"
-        variant="outlined"
-        type="success"
-        title="ログアウトしました。"
-      />
+    <v-alert
+      v-if="registerAtCoder && !isAdmin"
+      density="compact"
+      type="info"
+      variant="tonal"
+      class="mb-6"
+      closable
+    >
+      <NuxtLink to="/user" class="text-decoration-none">ユーザページ</NuxtLink>
+      から AtCoder ID が登録可能です。ぜひご登録ください。
+    </v-alert>
+    <v-alert
+      v-if="'signed-out' in route.query"
+      class="mb-6"
+      variant="outlined"
+      type="success"
+      title="ログアウトしました。"
+    />
+    <v-alert
+      v-if="!data"
+      type="error"
+      text="データの読み込みに失敗しました。"
+    />
+    <v-container v-else>
       <v-row>
         <v-col cols="12" lg="6">
           <v-card variant="outlined">
             <v-card-text>
-              <ContestList />
+              <v-list v-if="data.creating" nav density="comfortable">
+                <v-list-subheader>作成中の問題</v-list-subheader>
+                <v-list-item
+                  v-for="problem in data.creating"
+                  :key="problem.id"
+                  :to="`/manage/problems/${problem.id}`"
+                  :title="problem.name"
+                  :subtitle="
+                    problem.contest?.name || '（コンテスト未割り当て）'
+                  "
+                />
+              </v-list>
+              <ContestList :contests="data?.contests || null" />
               <ClientOnly>
                 <div class="mt-4">
                   <p>障害情報等のお知らせは X で発信しています</p>
@@ -81,8 +94,12 @@ const { lgAndUp } = useDisplay()
           </v-card>
         </v-col>
         <v-col cols="12" lg="6">
-          <template v-if="posts">
-            <v-virtual-scroll v-if="lgAndUp" :items="posts" :max-height="1000">
+          <template v-if="data.posts">
+            <v-virtual-scroll
+              v-if="lgAndUp"
+              :items="data.posts"
+              :max-height="1000"
+            >
               <template #default="{ item }">
                 <div class="mx-1">
                   <PostsViewPostCard
@@ -95,7 +112,11 @@ const { lgAndUp } = useDisplay()
               </template>
             </v-virtual-scroll>
             <div v-else>
-              <div v-for="item in posts" :key="`post-${item.id}`" class="mx-1">
+              <div
+                v-for="item in data.posts"
+                :key="`post-${item.id}`"
+                class="mx-1"
+              >
                 <PostsViewPostCard
                   :show-edit="isAdmin"
                   :post="item"

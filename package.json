@@ -21,6 +21,7 @@
     "@date-io/dayjs": "^3.0.0",
     "@hsorby/vue3-katex": "^0.6.0-rc.5",
     "@pinia/nuxt": "^0.5.1",
+    "@sentry/vue": "^8.27.0",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vuepic/vue-datepicker": "^8.0.0",
     "cheerio": "^1.0.0-rc.12",

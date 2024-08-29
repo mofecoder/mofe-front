@@ -45,7 +45,7 @@ watch(
 )
 
 onBeforeRouteLeave(() => {
-  if (changed.value && process.client) {
+  if (changed.value && import.meta.client) {
     if (
       !window.confirm('変更が保存されていませんが、移動してもよろしいですか？')
     ) {
@@ -61,13 +61,13 @@ const formCheck = (e: BeforeUnloadEvent) => {
 }
 
 onMounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     window.addEventListener('beforeunload', formCheck)
   }
 })
 
 onUnmounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     window.removeEventListener('beforeunload', formCheck)
   }
 })
@@ -152,7 +152,7 @@ const removeTester = async (name: string) => {
           <v-col cols="12" md="4" lg="1" class="py-1">
             <v-text-field :model-value="problemId" readonly label="ID" />
           </v-col>
-          <v-col cols="12" md="8" lg="7" class="py-1">
+          <v-col cols="12" md="8" lg="6" class="py-1">
             <v-text-field
               v-model="problem.name"
               :rules="rules.required"
@@ -167,7 +167,7 @@ const removeTester = async (name: string) => {
               label="難易度"
             />
           </v-col>
-          <v-col cols="12" md="5" lg="2" class="py-1">
+          <v-col cols="12" md="5" lg="3" class="py-1">
             <v-number-input
               v-model="problem.executionTimeLimit"
               :rules="rules.required"
@@ -185,8 +185,8 @@ const removeTester = async (name: string) => {
             <v-number-input
               v-model="problem.submissionLimit1"
               density="comfortable"
-              min="0"
-              max="86400"
+              :min="0"
+              :max="86400"
               label="実行時間制限（1つ前）"
               control-variant="stacked"
               suffix="秒"
@@ -198,8 +198,8 @@ const removeTester = async (name: string) => {
             <v-number-input
               v-model="problem.submissionLimit2"
               density="comfortable"
-              min="0"
-              max="86400"
+              :min="0"
+              :max="86400"
               label="実行時間制限（2つ前）"
               control-variant="stacked"
               suffix="秒"

@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import { formatDate } from '~/utils/formatting'
 import type { Contest } from '~/types/contest'
-import useApi from '~/composables/useApi'
-import Contests from '~/utils/apis/Contests'
 
 const dayjs = useDayjs()
 
-const { data } = await useApi(Contests.getContests, [], {
-  server: false
-})
-
-const contests = computed(() =>
-  data.value
-    ? data.value.inProgress.concat(data.value.future, data.value.past)
-    : []
-)
+defineProps<{
+  contests: Contest[] | null
+}>()
 
 const checkStatus = (contest: Contest) => {
   const startAt = dayjs(contest.startAt)
