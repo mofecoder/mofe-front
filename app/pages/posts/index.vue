@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import Posts from '~/utils/apis/Posts'
-import ViewPostCard from '~/components/posts/ViewPostCard.vue'
 import { useUserStore } from '~/store/user'
-import { definePageMeta } from '#imports'
 definePageMeta({
   layout: 'top'
 })
@@ -21,7 +19,7 @@ useHead({
   <v-container>
     <h2>記事一覧</h2>
     <template v-if="posts">
-      <ViewPostCard
+      <PostsViewPostCard
         v-for="post in posts"
         :key="`post-${post.id}`"
         :post="post"

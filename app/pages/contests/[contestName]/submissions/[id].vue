@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Contests from '~/utils/apis/Contests'
-import TestcaseSetsTable from '~/components/contests/submissions/TestcaseSetsTable.vue'
 
 definePageMeta({
   layout: 'contest',
@@ -167,7 +166,9 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
           <v-spacer />
           <v-col v-if="showSets" cols="12" lg="5" xl="4">
             <h4>セットごとの結果</h4>
-            <TestcaseSetsTable :results="submission.testcaseSets" />
+            <ContestsSubmissionsTestcaseSetsTable
+              :results="submission.testcaseSets"
+            />
           </v-col>
           <v-col v-if="showResults" cols="12" lg="7" xl="5">
             <h4>ジャッジ結果</h4>

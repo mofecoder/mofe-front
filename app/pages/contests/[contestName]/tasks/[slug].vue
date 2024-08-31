@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Tasks from '~/utils/apis/Tasks'
-import SubmitForm from '~/components/contests/SubmitForm.vue'
 
 definePageMeta({
   layout: 'contest'
@@ -8,11 +7,14 @@ definePageMeta({
 
 const { contest, contestName } = useContest()
 const route = useRoute()
-const slug = computed(() =>
-  Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug
+const slug = computed(
+  () =>
+    (Array.isArray(route.params.slug)
+      ? route.params.slug[0]
+      : route.params.slug) || ''
 )
 const { data: problem, error } = await useApi(Tasks.getTask, [
-  unref(contestName),
+  unref(contestName)!,
   unref(slug)
 ])
 
@@ -45,7 +47,7 @@ const id = computed(
     />
     <v-card class="mt-4 mx-auto" max-width="1200px" title="提出">
       <div class="pa-3">
-        <SubmitForm :problem="problem" :contest-slug="contestName" />
+        <ContestsSubmitForm :problem="problem" :contest-slug="contestName!" />
       </div>
     </v-card>
   </v-container>

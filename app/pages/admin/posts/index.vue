@@ -53,12 +53,10 @@ const items = computed(() => {
         <template #item.actions="{ item }">
           <v-btn
             size="small"
-            icon
+            icon="mdi-pencil"
             variant="text"
             :to="`/admin/posts/${item.id}`"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
+          />
         </template>
       </v-data-table>
     </v-card-text>

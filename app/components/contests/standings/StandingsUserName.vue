@@ -41,7 +41,6 @@
 
 <script setup lang="ts">
 import type { Standing } from '~/types/standings'
-import RatingColored from '~/components/RatingColored.vue'
 
 defineProps<{
   user: Standing['user']

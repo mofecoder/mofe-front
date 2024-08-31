@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { definePageMeta } from '#imports'
 import EditCard from '~/components/manage/problems/EditCard.vue'
 import EditTestcasesCard from '~/components/manage/problems/EditTestcasesCard.vue'
 import EditJudgeCard from '~/components/manage/problems/EditJudgeCard.vue'
@@ -9,7 +8,7 @@ import ManageProblems from '~/utils/apis/ManageProblems'
 definePageMeta({
   middleware: 'authenticated',
   validate: (route) => {
-    if (Array.isArray(route.params.problemId)) return false
+    if (typeof route.params.problemId !== 'string') return false
     return /^[1-9]\d*$/.test(route.params.problemId)
   },
   layout: 'default'

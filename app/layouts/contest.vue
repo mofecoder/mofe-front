@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import ContestSidebar from '~/components/contests/ContestSidebar.vue'
 import 'dayjs/locale/ja'
 import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
-import ToolbarUser from '~/components/ToolbarUser.vue'
 
 const contestStore = useContestStore()
 const userStore = useUserStore()
@@ -107,7 +105,7 @@ const role = computed(() => {
       expand-on-hover
       width="350"
     >
-      <ContestSidebar
+      <ContestsContestSidebar
         v-if="contest && contestName"
         v-model:opened="opened"
         :contest="contest"

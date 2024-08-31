@@ -206,17 +206,13 @@ const deleteSet = async (id: number) => {
 const changeTestcaseState = async (i: number, j: number, v: boolean) => {
   if (!testcaseSets.value) return
   testcaseLoading.value = true
-  await http(
-    ManageProblems.changeTestcaseState.$path([
-      props.problemId,
-      testcases.value![i].id
-    ]),
+  await api(
+    ManageProblems.changeTestcaseState,
+    [props.problemId, testcases.value![i]!.id],
+    {},
     {
-      method: 'PATCH',
-      body: {
-        testcaseSetId: testcaseSets.value[j].id,
-        state: v
-      }
+      testcaseSetId: testcaseSets.value[j]!.id,
+      state: v
     }
   )
   await refreshTestcase()
@@ -408,7 +404,7 @@ const addSetMultiple = async () => {
                   >
                     <v-checkbox-btn
                       class="mt-0"
-                      :model-value="testcases[i].testcaseSets[j]"
+                      :model-value="testcases[i]!.testcaseSets[j]"
                       color="orange"
                       hide-details
                       @update:model-value="

@@ -101,7 +101,7 @@ const onSubmit = async () => {
 const addTester = async (name: string) => {
   testerLoading.value = true
   try {
-    await http(
+    await api(
       ManageProblems.addTester,
       [props.problemId],
       {},

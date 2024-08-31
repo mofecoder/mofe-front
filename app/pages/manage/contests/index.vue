@@ -49,22 +49,18 @@ const items = computed(
     <template #item.edit="{ item }">
       <v-btn
         size="small"
-        density="compact"
+        density="comfortable"
         :to="`/contests/${item.slug}`"
-        icon
+        icon="mdi-eye"
         variant="text"
-      >
-        <v-icon icon="mdi-eye" />
-      </v-btn>
+      />
       <v-btn
         size="small"
-        density="compact"
+        density="comfortable"
         :to="`/manage/contests/${item.slug}`"
-        icon
+        icon="mdi-pencil"
         variant="text"
-      >
-        <v-icon icon="mdi-pencil" />
-      </v-btn>
+      />
     </template>
   </v-data-table>
 </template>

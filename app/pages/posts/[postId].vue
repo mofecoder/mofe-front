@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useUserStore } from '~/store/user'
-import ViewPostCard from '~/components/posts/ViewPostCard.vue'
 import Posts from '~/utils/apis/Posts'
 
 const user = storeToRefs(useUserStore()).user
@@ -19,7 +18,7 @@ useHead(() => ({
 
 <template>
   <v-card v-if="!post" loading>読み込み中…</v-card>
-  <ViewPostCard v-else :post="post" :show-edit="isAdmin" />
+  <PostsViewPostCard v-else :post="post" :show-edit="isAdmin" />
 </template>
 
 <style scoped lang="scss"></style>

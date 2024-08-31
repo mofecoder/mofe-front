@@ -16,12 +16,12 @@
   white-space: pre;
   overflow: auto;
 
-  &.hljs {
-    background: #fbfbfb;
-  }
-
   &:before,
   &:after {
     content: none;
+  }
+
+  &.hljs {
+    background: #fbfbfb;
   }
 }

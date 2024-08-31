@@ -63,14 +63,12 @@ const items = computed(() =>
     </template>
     <template #item.edit="{ item }">
       <v-btn
-        icon
+        icon="mdi-pencil"
         variant="text"
         size="small"
-        density="compact"
+        density="comfortable"
         :to="`/manage/problems/${item.id}`"
-      >
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
+      />
     </template>
   </v-data-table>
 </template>

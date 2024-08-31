@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
 import type { ContestDetail } from '~/types/contest'
-import TimeRangePickerCard from '~/components/manage/contests/TimeRangePickerCard.vue'
 import ManageContests from '~/utils/apis/ManageContests'
-import EditContestCard from '~/components/manage/contests/EditContestCard.vue'
 
 const dayjs = useDayjs()
 
@@ -64,7 +62,7 @@ const submit = async () => {
 <template>
   <v-container fluid>
     <h1 class="text-h4 ma-2">コンテストの作成</h1>
-    <EditContestCard
+    <ManageContestsEditContestCard
       v-model:name="params.name"
       v-model:slug="params.slug"
       v-model:description="params.description"
@@ -74,7 +72,10 @@ const submit = async () => {
       v-model:standings-mode="params.standingsMode"
       class="my-2"
     />
-    <TimeRangePickerCard v-model="params.dateRange" class="my-2" />
+    <ManageContestsTimeRangePickerCard
+      v-model="params.dateRange"
+      class="my-2"
+    />
     <v-btn
       :disabled="disabled"
       block
