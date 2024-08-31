@@ -45,11 +45,6 @@ const nuxtConfig = defineNuxtConfig({
     },
     define: {
       'process.env.DEBUG': false
-    },
-    vue: {
-      script: {
-        defineModel: true
-      }
     }
   },
   runtimeConfig: {
@@ -64,6 +59,10 @@ const nuxtConfig = defineNuxtConfig({
     '/admin/**': { ssr: false },
     '/manage/**': { ssr: false }
   },
+  future: {
+    compatibilityVersion: 4
+  },
+  compatibilityDate: '2024-08-31',
   dayjs: {
     locales: ['ja'],
     defaultLocale: 'ja',

@@ -1,0 +1,49 @@
+@use "../../node_modules/vuetify/styles";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+code {
+  font-family: Menlo, Monaco, Consolas, "NotoSans JP", "Courier New", monospace !important;
+}
+
+ul, ol {
+  padding-left: 2em;
+}
+
+:not(pre) > code {
+  color: black;
+  background-color: #e0e0e0;
+  padding: 0.1em 0.3em;
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+  border-radius: 0.2em;
+}
+
+@font-face {
+  font-family: 'NotoSans JP';
+  src: url('/fonts/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2') format('woff2');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono/JetBrainsMono-ExtraBold.woff2') format('woff2');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono/JetBrainsMono-MediumItalic.woff2') format('woff2');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono/JetBrainsMono-ExtraBoldItalic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+}
