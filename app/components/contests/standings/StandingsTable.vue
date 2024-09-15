@@ -181,7 +181,7 @@ function updateSort(column: string | null) {
               </td>
               <td
                 v-for="(problem, index) in user.problems"
-                :key="`${problems[index].slug}-${user.user.name}`"
+                :key="`${problems[index]!.slug}-${user.user.name}`"
                 class="col-problem"
               >
                 <template v-if="mode === 'atcoder'">

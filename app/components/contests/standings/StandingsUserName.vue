@@ -4,7 +4,7 @@
       <v-tooltip :text="user.teamMember.join(', ')" location="bottom">
         <template #activator="{ props }">
           <v-btn
-            color="primary"
+            color="secondary"
             v-bind="props"
             icon="mdi-account-group"
             size="small"
@@ -52,7 +52,7 @@ defineProps<{
 <style lang="scss" scoped>
 .team {
   span {
-    color: blue;
+    color: black;
     font-weight: bold;
     margin-left: 0.3em;
   }
