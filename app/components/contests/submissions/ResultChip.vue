@@ -91,17 +91,14 @@ const smallText = computed(() => {
             v-if="judgeStatus"
             :size="dense ? 16 : 24"
             :width="dense ? 4 : 5"
-            :model-value="(judgeStatus.completed / judgeStatus.all) * 100"
-            :rotate="180"
+            :model-value="((judgeStatus.completed - 1) / judgeStatus.all) * 100"
             class="mr-1"
-            bg-color="white"
             :color="['WJ', 'WR'].includes(status) ? 'cyan' : 'deep-orange'"
           />
           <v-progress-circular
             v-else-if="['WJ', 'WR', 'CP'].includes(status)"
             :size="dense ? 16 : 24"
             :width="2"
-            :rotate="180"
             color="blue-grey-darken-2"
             class="mr-1"
             indeterminate
@@ -126,7 +123,6 @@ $color-ce: #a544ff;
   display: inline-block;
   border-radius: 4px;
   font-weight: bold;
-  font-size: 110%;
   box-sizing: content-box;
   height: 1.5em;
   min-width: 65px;
@@ -139,10 +135,10 @@ $color-ce: #a544ff;
   }
 }
 .chip-dense {
-  font-size: 100%;
+  font-size: 90%;
 }
 .chip-subtext {
-  padding-left: 0.15em;
+  padding-left: 0.1em;
   font-size: 0.9em;
 }
 .chip-no-min-width {

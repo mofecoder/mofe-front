@@ -55,14 +55,19 @@ async function answer() {
             v-model="clarification.answer"
             rows="3"
             label="回答"
-            placeholder="空欄にして全体公開するとアナウンス扱いになります。"
+            hint="回答を空欄にして全体公開すると、「質問」の内容がアナウンス扱いになります。"
+            counter="255"
+            persistent-hint
           />
-          <v-switch v-model="clarification.publish" label="全体公開する" />
+          <v-switch
+            v-model="clarification.publish"
+            color="orange"
+            label="全体公開する"
+          />
         </v-card-text>
         <v-card-actions>
-          <v-spacer />
-          <v-btn variant="text" color="red" @click="cancel">キャンセル</v-btn>
-          <v-btn variant="text" color="primary" @click="answer">回答する</v-btn>
+          <v-btn variant="flat" color="red" @click="cancel">キャンセル</v-btn>
+          <v-btn variant="flat" color="primary" @click="answer">回答する</v-btn>
         </v-card-actions>
       </template>
     </v-card>

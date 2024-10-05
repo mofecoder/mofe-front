@@ -177,6 +177,7 @@ const filterStatus = computed({
   >
     <template #item.task="{ item, index }">
       <NuxtLink
+        class="text-decoration-none font-weight-medium"
         :to="`/contests/${contestSlug}/tasks/${submissionsData[index]!.taskSlug}`"
         >{{ item.task }}</NuxtLink
       >

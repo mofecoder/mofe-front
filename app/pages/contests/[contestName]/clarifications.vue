@@ -36,7 +36,7 @@ const question = () => {
 const submitQuestion = async (task: string | null, content: string) => {
   await api(
     Contests.createClarification,
-    [contestName.value],
+    [contestName.value!],
     {},
     {
       clarification: { task, question: content }
@@ -66,6 +66,16 @@ const user = useUserStore().user
             type="warning"
             class="mb-6"
           >
+            <template v-if="clar.task" #title>
+              <NuxtLink
+                v-if="clar.task"
+                :to="`/contests/${contestName}/tasks/${clar.task.slug}`"
+                class="text-decoration-none text-grey-darken-3"
+                append
+              >
+                {{ clar.task!.position }} - {{ clar.task!.name }}
+              </NuxtLink>
+            </template>
             <template #text>
               <div class="text-pre-wrap text-body-1">
                 {{ clar.question }}

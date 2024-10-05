@@ -41,6 +41,7 @@ const items = computed(() => {
       <v-card-text class="text-black">
         <v-select
           v-model="problem"
+          class="mb-2"
           label="問題"
           :items="items"
           hint="コンテスト全体に対する質問の場合は空欄にしてください"
@@ -49,7 +50,7 @@ const items = computed(() => {
           no-data-text="問題は存在しません"
         >
         </v-select>
-        <v-textarea v-model="content" rows="3" label="質問" />
+        <v-textarea v-model="content" rows="3" label="質問" counter="255" />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
