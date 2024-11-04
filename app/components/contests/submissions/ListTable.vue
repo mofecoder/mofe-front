@@ -168,6 +168,7 @@ const filterStatus = computed({
     :headers="headers"
     :items="submissionsData"
     :items-length="submissions.meta.pagination.count"
+    :items-per-page-options="[10, 20, 50, 100, 200]"
     :loading="loading || loadingInner"
     :footer-props="footerProps"
     density="compact"
