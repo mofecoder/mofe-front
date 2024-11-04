@@ -8,6 +8,7 @@ export interface ProblemParams {
   inputFormat: string
   outputFormat: string
   constraints: string
+  partialScores: string | null
   executionTimeLimit: number
   submissionLimit1: string | number | null
   submissionLimit2: string | number | null
@@ -36,6 +37,7 @@ export interface ProblemDetail {
   writerUser: string
   statement: string
   constraints: string
+  partialScores: string | null
   inputFormat: string
   outputFormat: string
   checkerPath: string | null

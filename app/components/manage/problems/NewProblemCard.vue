@@ -3,17 +3,11 @@ import { ref } from 'vue'
 import { Difficulties } from '~/constants/difficulty'
 import ManageProblems from '~/utils/apis/ManageProblems'
 import type { Difficulty } from '~/types/task'
+import type { ProblemDetail } from '~/types/problems'
 
 const rules = {
   required: [(text: string) => /\S+/.test(text) || 'このフィールドは必須です']
 }
-
-const modals = reactive({
-  problemStatement: false,
-  constraints: false,
-  input: false,
-  output: false
-})
 
 const valid = ref(false)
 
@@ -23,10 +17,20 @@ const problem = ref({
   constraints: '',
   inputFormat: '',
   outputFormat: '',
+  partialScores: '',
   statement: ''
 })
 
 const router = useRouter()
+
+const modals = reactive({
+  problemStatement: false,
+  constraints: false,
+  partialScores: false,
+  input: false,
+  output: false
+})
+
 const onSubmit = async () => {
   if (!problem.value) return
   const { data, error } = await useApi(
@@ -39,9 +43,12 @@ const onSubmit = async () => {
         difficulty: problem.value.difficulty as Difficulty,
         executionTimeLimit: 2000,
         constraints: problem.value.constraints,
+        partialScores: problem.value.partialScores || null,
         inputFormat: problem.value.inputFormat,
         outputFormat: problem.value.outputFormat,
-        statement: problem.value.statement
+        statement: problem.value.statement,
+        submissionLimit1: 5,
+        submissionLimit2: 60
       }
     }
   )
@@ -67,7 +74,7 @@ const onSubmit = async () => {
           </v-col>
           <v-col cols="12" lg="5" class="py-1">
             <v-select
-              v-model="problem.difficulty"
+              v-model="problem.difficulty as ProblemDetail['difficulty']"
               :items="Difficulties"
               :rules="rules.required"
               label="難易度"
@@ -127,6 +134,33 @@ const onSubmit = async () => {
           :markdown="problem.constraints"
           :value="modals.constraints"
           @close="modals.constraints = false"
+        />
+        <!-- 部分点 -->
+        <v-row justify="end">
+          <v-btn
+            class="mr-4"
+            variant="text"
+            width="auto"
+            color="purple"
+            @click="modals.partialScores = true"
+            >プレビュー
+          </v-btn>
+        </v-row>
+        <v-row>
+          <v-col cols="12" class="pt-0 pb-2">
+            <v-textarea
+              v-model="problem.partialScores"
+              label="部分点 (Markdown)"
+              variant="outlined"
+              auto-grow
+            />
+          </v-col>
+        </v-row>
+        <MarkdownPreviewModal
+          title="プレビュー - 部分点"
+          :markdown="problem.partialScores"
+          :value="modals.partialScores"
+          @close="modals.partialScores = false"
         />
         <!-- 入力 -->
         <v-row justify="end">

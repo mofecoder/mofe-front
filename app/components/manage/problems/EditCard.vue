@@ -19,6 +19,7 @@ const emits = defineEmits<{
 const modals = reactive({
   problemStatement: false,
   constraints: false,
+  partialScores: false,
   input: false,
   output: false
 })
@@ -30,9 +31,15 @@ const testerError = ref('')
 const testerLoading = ref(false)
 
 const changed = ref(false)
-const { data: problem, refresh } = await useApi(ManageProblems.getProblem, [
-  props.problemId
-])
+const { data, refresh } = await useApi(
+  ManageProblems.getProblem,
+  [props.problemId],
+  {
+    deep: true
+  }
+)
+
+const problem = ref({ ...data.value! })
 const testers = computed(() => problem.value?.testers ?? [])
 watch(
   problem,
@@ -43,6 +50,21 @@ watch(
   },
   { deep: true }
 )
+
+const usePartialScores = computed({
+  get() {
+    return problem.value!.partialScores !== null
+  },
+  set(value: boolean) {
+    problem.value!.partialScores = value ? '' : null
+    console.dir(problem.value)
+  }
+})
+
+watch(data, () => {
+  if (!data.value) return
+  problem.value = data.value
+})
 
 onBeforeRouteLeave(() => {
   if (changed.value && import.meta.client) {
@@ -83,6 +105,7 @@ const onSubmit = async () => {
         name: problem.value.name,
         difficulty: problem.value.difficulty,
         constraints: problem.value.constraints,
+        partialScores: problem.value.partialScores,
         inputFormat: problem.value.inputFormat,
         outputFormat: problem.value.outputFormat,
         statement: problem.value.statement,
@@ -94,7 +117,6 @@ const onSubmit = async () => {
   )
   updated.value = true
   changed.value = false
-  await refresh()
   emits('update')
 }
 
@@ -153,7 +175,7 @@ const removeTester = async (name: string) => {
       >
         テキストエリア内は Ctrl + Enter で保存できます。
       </v-alert>
-      <v-form v-if="problem != null" v-model="valid" @submit.prevent="onSubmit">
+      <v-form v-if="problem" v-model="valid" @submit.prevent="onSubmit">
         <v-row>
           <v-col cols="12" md="4" lg="1" class="py-1">
             <v-text-field :model-value="problemId" readonly label="ID" />
@@ -179,8 +201,8 @@ const removeTester = async (name: string) => {
               :rules="rules.required"
               label="実行時間制限"
               suffix="ms"
-              min="1"
-              max="20000"
+              :min="1"
+              :max="20000"
               :step="100"
             />
           </v-col>
@@ -275,6 +297,43 @@ const removeTester = async (name: string) => {
           :markdown="problem.constraints"
           :value="modals.constraints"
           @close="modals.constraints = false"
+        />
+        <!-- 部分点 -->
+        <v-row justify="space-between">
+          <v-checkbox
+            v-model="usePartialScores"
+            label="部分点を表示する"
+            hide-details
+          />
+          <v-btn
+            class="mr-4"
+            variant="text"
+            width="auto"
+            color="purple"
+            @click="modals.partialScores = true"
+          >
+            プレビュー
+          </v-btn>
+        </v-row>
+        <v-row>
+          <v-col cols="12" class="pt-0 pb-2">
+            <v-textarea
+              v-model="problem.partialScores"
+              :disabled="!usePartialScores"
+              label="部分点 (Markdown)"
+              variant="outlined"
+              auto-grow
+              counter
+              maxlength="4000"
+              @keydown.ctrl.enter="onSubmit"
+            />
+          </v-col>
+        </v-row>
+        <MarkdownPreviewModal
+          title="プレビュー - 部分点"
+          :markdown="problem.partialScores || ''"
+          :value="modals.partialScores"
+          @close="modals.partialScores = false"
         />
         <!-- 入力 -->
         <v-row justify="end">

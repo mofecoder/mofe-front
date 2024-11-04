@@ -143,6 +143,13 @@ const title = computed(() => {
           <h3>制約</h3>
           <MarkdownContent class="statement" :markdown="problem.constraints" />
         </section>
+        <section v-if="problem.partialScores !== null">
+          <h3>部分点</h3>
+          <MarkdownContent
+            class="statement"
+            :markdown="problem.partialScores"
+          />
+        </section>
         <section>
           <h3>入力</h3>
           <MarkdownContent class="statement" :markdown="problem.inputFormat" />
@@ -203,8 +210,8 @@ const title = computed(() => {
 </template>
 
 <style scoped lang="scss">
-@import '../../styles/markdown';
-@import '../../styles/variables';
+@use '@/styles/markdown';
+@use '@/styles/variables';
 h2 {
   font-size: 3rem;
 }
@@ -244,14 +251,14 @@ h3 {
   margin: 1em 0 2em 1.5em;
   font-size: 1.15em;
 
-  @include markdown();
+  @include markdown.markdown();
 }
 .sample {
   border-top: solid 1px #e8e8e8;
   padding-top: 8px;
 
   &__code {
-    @include block-code();
+    @include variables.block-code();
   }
 
   .__editor {

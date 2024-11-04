@@ -29,5 +29,6 @@ export interface TaskDetail extends Task {
   outputFormat: string
   inputFormat: string
   constraints: string
+  partialScores: string
   samples: Sample[]
 }
