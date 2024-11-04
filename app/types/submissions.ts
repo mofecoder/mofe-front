@@ -28,6 +28,7 @@ export interface Submit {
   executionTime: number | null
   executionMemory: number | null
   point: number
+  public: boolean
   judgeStatus: { completed: number; all: number } | null
 }
 
@@ -51,6 +52,7 @@ export interface SubmissionDetail extends Submit {
   source: string
   sampleCount: number | null
   compileError: string | null
+  permission: boolean
   testcaseResults: TestcaseResult[]
   testcaseSets: TestcaseSetResult[]
 }

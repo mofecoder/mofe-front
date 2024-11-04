@@ -84,7 +84,7 @@ const role = computed(() => {
         </v-app-bar-nav-icon>
       </template>
       <template v-if="contest">
-        <v-btn icon="mdi-home" to="/" />
+        <v-btn icon="mdi-tea" to="/" />
         <v-app-bar-title class="d-none d-md-inline contest-header__title">
           {{ contest.name }}
         </v-app-bar-title>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
 import Contests from '~/utils/apis/Contests'
 
 definePageMeta({
@@ -64,6 +65,16 @@ const copySource = () => {
 
 const showResults = computed(() => submission.value?.testcaseResults?.length)
 const showSets = computed(() => submission.value?.testcaseSets != null)
+
+const display = useDisplay()
+
+const togglePublished = async () => {
+  await api(Contests.togglePublishStatus, [contestName.value!, id.value])
+    .then(async () => await refresh())
+    .catch(() => {
+      alert('公開状態の切り替えに失敗しました')
+    })
+}
 </script>
 
 <template>
@@ -71,8 +82,20 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
     <v-card-title v-if="submission">提出 #{{ submission.id }}</v-card-title>
     <v-card-text>
       <v-container v-if="submission">
+        <v-alert
+          v-if="submission.permission && !submission.public"
+          variant="tonal"
+          type="warning"
+          title="この提出は非公開設定です。"
+          class="mb-4"
+        >
+          非公開設定にすると、「コンテスト管理者」と「該当問題の
+          writer」以外は「すべての提出」に表示されなくなります。<br />
+          提出したユーザは非公開設定の影響を受けません。tester
+          は直接リンクから閲覧可能です。
+        </v-alert>
         <v-row>
-          <v-col cols="12" sm="5">
+          <v-col cols="12" sm="4">
             <v-switch
               v-model="autoHeight"
               color="amber-darken-3"
@@ -82,7 +105,12 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
             />
           </v-col>
           <v-spacer />
-          <v-col cols="12" sm="7" md="4" lg="3">
+          <v-col v-if="submission.permission" cols="12" sm="4" md="3" lg="3">
+            <v-btn block variant="tonal" color="red" @click="togglePublished">
+              提出を{{ submission.public ? '非公開' : '公開' }}にする
+            </v-btn>
+          </v-col>
+          <v-col cols="12" sm="4" md="4" lg="3">
             <v-btn
               variant="outlined"
               :disabled="showCopiedMessage"
@@ -92,7 +120,11 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
               "
               @click="copySource"
               >{{
-                showCopiedMessage ? 'コピーしました!' : 'ソースコードをコピー'
+                showCopiedMessage
+                  ? 'コピーしました!'
+                  : display.mdAndUp.value
+                    ? 'ソースコードをコピー'
+                    : 'コピー'
               }}</v-btn
             >
           </v-col>
@@ -193,9 +225,10 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
 </template>
 
 <style scoped lang="scss">
-@use '../../../../styles/markdown';
+@use '@/styles/variables';
+
 .compile-error code {
-  @include markdown.block-code();
+  @include variables.block-code();
 
   font-size: 0.8em;
   line-height: 1.4;

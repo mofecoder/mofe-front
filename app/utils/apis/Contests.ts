@@ -125,6 +125,12 @@ const getSubmission = new Api<SubmissionDetail, [string, number]>(
   ([contestSlug, id]) => `/contests/${contestSlug}/submissions/${id}`
 )
 
+const togglePublishStatus = new Api<{ public: boolean }, [string, number]>(
+  ([contestSlug, id]) =>
+    `/contests/${contestSlug}/submissions/${id}/toggle_published`,
+  'PATCH'
+)
+
 const register = new Api<void, [string], { password?: string; open?: boolean }>(
   ([slug]) => `/contests/${slug}/registrations`,
   'POST'
@@ -160,5 +166,6 @@ export default {
   rejudge,
   register,
   teamRegister,
-  unregister
+  unregister,
+  togglePublishStatus
 }

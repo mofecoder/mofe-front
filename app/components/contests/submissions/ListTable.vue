@@ -205,8 +205,9 @@ const filterStatus = computed({
     </template>
     <template #item.rejudge="{ index }">
       <v-checkbox-btn
-        :model-value="rejudgeIds.has(submissionsData[index].id)"
-        @update:model-value="setRejudgeStatus($event, submissionsData[index])"
+        :model-value="rejudgeIds.has(submissionsData[index]!.id)"
+        density="compact"
+        @update:model-value="setRejudgeStatus($event, submissionsData[index]!)"
       />
     </template>
     <template #expanded-row> EXPANDED ROW </template>
