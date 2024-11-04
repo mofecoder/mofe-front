@@ -47,8 +47,8 @@ defineProps({
 </template>
 
 <style scoped lang="scss">
-@import '../../styles/markdown';
+@use '@/styles/markdown';
 .post-card-text {
-  @include markdown();
+  @include markdown.markdown();
 }
 </style>

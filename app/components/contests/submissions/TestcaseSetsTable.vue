@@ -123,8 +123,6 @@ const TESTCASE_SHOW_MAX = 10
 </template>
 
 <style scoped lang="scss">
-@import '../../../../node_modules/vuetify/lib/components/VTable/variables';
-
 .testcase-set-table {
   th,
   td {

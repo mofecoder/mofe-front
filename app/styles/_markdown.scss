@@ -1,4 +1,4 @@
-@import './variables';
+@use 'variables';
 
 @mixin markdown() {
   line-height: 1.3em;
@@ -28,7 +28,7 @@
     border-bottom: #000000 solid 1px;
   }
   :deep(pre code) {
-    @include block-code();
+    @include variables.block-code();
   }
 
   :deep(p), > :deep(ul), :deep(ol) {

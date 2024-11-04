@@ -103,7 +103,7 @@ const {
 async function rejudge(submissionIds: number[]) {
   await api(
     Contests.rejudge,
-    [unref(contestName)],
+    [unref(contestName!)],
     {},
     {
       submissionIds
@@ -144,7 +144,7 @@ const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
               :submissions="submissions"
               :tasks="contest.tasks"
               :written-tasks="writtenTaskList"
-              :contest-slug="contestName"
+              :contest-slug="contestName!"
               :loading="loading"
               @rejudge="rejudge"
               @refresh="reload"

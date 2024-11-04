@@ -31,3 +31,7 @@ if (import.meta.client) {
     <NuxtPage />
   </NuxtLayout>
 </template>
+
+<style lang="scss">
+@use '@/styles/style';
+</style>

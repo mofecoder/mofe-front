@@ -189,8 +189,8 @@ const teamRegister = async (
 </template>
 
 <style scoped lang="scss">
-@import '../../../styles/markdown';
+@use '@/styles/markdown';
 .contest-card__description {
-  @include markdown();
+  @include markdown.markdown();
 }
 </style>

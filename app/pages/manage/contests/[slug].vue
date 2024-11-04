@@ -88,7 +88,7 @@ const editInformation = async () => {
   loading.information = true
   await api(
     ManageContests.updateContest,
-    [slug.value],
+    [slug.value!],
     {},
     {
       name: contest.name,
@@ -136,7 +136,7 @@ const editTime = async () => {
 const addProblem = async (problemId: number, pos: string) => {
   loading.add = true
   await api(ManageContests.addTask, [
-    slug.value,
+    slug.value!,
     problemId,
     `${slug.value}_${pos.toLowerCase()}`,
     pos

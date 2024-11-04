@@ -5,6 +5,7 @@ const nuxtConfig = defineNuxtConfig({
   devServer: {
     port: 8000
   },
+  devtools: { enabled: true },
   alias: {
     'katex/contrib/auto-render': 'katex/dist/contrib/auto-render.js',
     'codemirror/mode': 'codemirror/mode'
@@ -21,10 +22,6 @@ const nuxtConfig = defineNuxtConfig({
       config.plugins!.push(vuetify())
     }
   },
-  /*
-   ** Global CSS
-   */
-  css: ['~/styles/style.scss', '~/styles/variables.scss'],
   /*
    ** Nuxt.js modules
    */
@@ -45,6 +42,13 @@ const nuxtConfig = defineNuxtConfig({
     },
     define: {
       'process.env.DEBUG': false
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler'
+        }
+      }
     }
   },
   runtimeConfig: {

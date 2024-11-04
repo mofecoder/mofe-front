@@ -256,14 +256,14 @@ function updateSort(column: string | null) {
 </template>
 
 <style scoped lang="scss">
-@import '../../../styles/card-reset';
+@use '@/styles/card-reset';
 .standings-checkbox-wrapper {
   display: flex;
   flex-wrap: wrap;
   column-gap: 24px;
 }
 .standings {
-  @include card-text-reset();
+  @include card-reset.card-text-reset();
 
   font-size: 0.875rem;
   letter-spacing: 0.0178571429em;

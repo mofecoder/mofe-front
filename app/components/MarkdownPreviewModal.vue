@@ -46,8 +46,8 @@ function close() {
 </template>
 
 <style scoped lang="scss">
-@import '../styles/markdown';
+@use '@/styles/markdown';
 .modal-content {
-  @include markdown();
+  @include markdown.markdown();
 }
 </style>
