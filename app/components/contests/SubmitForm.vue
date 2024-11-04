@@ -25,6 +25,12 @@ const selectableLanguages = languages
     value: lang
   }))
 
+onMounted(() => {
+  const localLang = localStorage.getItem('lang')
+  const found = selectableLanguages.find((x) => x.value.innerName === localLang)
+  if (found) language.value = found.value
+})
+
 function langFilter(value: string, queryText: string) {
   function toHalf(str: string): string {
     const offset = 'Ａ'.charCodeAt(0) - 'A'.charCodeAt(0)
