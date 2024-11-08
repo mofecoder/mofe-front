@@ -37,7 +37,7 @@ const isWaitingJudge = computed(
 
 const { pause } = useIntervalFn(async () => await refresh(), 2000)
 
-watchOnce(() => !isWaitingJudge.value, pause, { immediate: true })
+watchOnce(() => !isWaitingJudge.value, pause)
 
 if (error.value) {
   errorMessage.value = error.value?.data.error || ''

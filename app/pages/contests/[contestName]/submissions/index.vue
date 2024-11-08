@@ -18,7 +18,9 @@ useHead(() => ({
   titleTemplate: null
 }))
 
-function toArray(value: LocationQueryValue | LocationQueryValue[]): string[] {
+function toArray(
+  value: LocationQueryValue | LocationQueryValue[] | undefined
+): string[] {
   if (Array.isArray(value)) {
     return value.filter((x) => x !== null) as string[]
   } else if (value) {
