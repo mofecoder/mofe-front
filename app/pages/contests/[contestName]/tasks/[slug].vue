@@ -44,6 +44,9 @@ const id = computed(
       :id="id"
       :problem="problem"
       :contest-slug="contestName"
+      :is-writer="
+        contest != null && (contest.isWriterOrTester || contest.isAdmin)
+      "
     />
     <v-card class="mt-4 mx-auto" max-width="1200px" title="提出">
       <div class="pa-3">

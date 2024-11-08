@@ -2,11 +2,13 @@
 import languages from '~/constants/languages'
 import type { TaskDetail } from '~/types/task'
 import type { ProblemDetail } from '~/types/problems'
+import { useUserStore } from '~/store/user'
 
 const props = defineProps<{
   contestSlug?: string
   id: number | null
   problem: ProblemDetail | TaskDetail
+  isWriter?: boolean
 }>()
 
 const language = ref(languages[0])
@@ -33,6 +35,13 @@ const title = computed(() => {
     return props.problem.name
   }
 })
+
+const path = computed(() =>
+  props.contestSlug && 'slug' in props.problem
+    ? `/contests/${props.contestSlug!}/submissions?task=${props.problem.slug}`
+    : ''
+)
+const { user } = useUserStore()
 </script>
 
 <template>
@@ -42,17 +51,38 @@ const title = computed(() => {
         <h2 class="d-flex">
           {{ title }}
         </h2>
-        <v-btn
-          v-if="id"
-          color="purple white--text"
-          class="mb-4"
-          :to="`/manage/problems/${id}`"
-          variant="tonal"
-          density="comfortable"
-          prepend-icon="mdi-note-edit-outline"
-        >
-          問題の編集画面へ
-        </v-btn>
+        <div class="d-flex ga-2 flex-wrap mb-4">
+          <v-btn
+            v-if="id"
+            color="purple white--text"
+            :to="`/manage/problems/${id}`"
+            variant="tonal"
+            density="comfortable"
+            prepend-icon="mdi-note-edit-outline"
+          >
+            問題の編集画面へ
+          </v-btn>
+          <template v-if="path && isWriter">
+            <v-btn
+              v-if="isWriter"
+              color="blue"
+              variant="tonal"
+              density="comfortable"
+              prepend-icon="mdi-account-multiple"
+              :to="path"
+              >全員の提出</v-btn
+            >
+            <v-btn
+              v-if="isWriter"
+              color="teal"
+              variant="tonal"
+              density="comfortable"
+              prepend-icon="mdi-account"
+              :to="path + '&user=' + user!.name"
+              >自分の提出</v-btn
+            >
+          </template>
+        </div>
         <div class="d-flex flex-wrap">
           <ProblemsDifficultyChip
             class="p-tooltip-0"
