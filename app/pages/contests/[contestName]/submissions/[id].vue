@@ -30,14 +30,17 @@ const source = ref('')
 
 const isWaitingJudge = computed(
   () =>
-    submission.value &&
+    submission.value != null &&
     (['WJ', 'WR', 'CP'].includes(submission.value.status) ||
       submission.value.judgeStatus != null)
 )
 
-const { pause } = useIntervalFn(async () => await refresh(), 2000)
+const { pause, resume } = useIntervalFn(async () => await refresh(), 2000)
 
-watchOnce(() => !isWaitingJudge.value, pause)
+watch(isWaitingJudge, () => {
+  if (!isWaitingJudge.value) pause()
+  else resume()
+})
 
 if (error.value) {
   errorMessage.value = error.value?.data.error || ''
