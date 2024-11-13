@@ -53,7 +53,7 @@ const closeQuestion = () => {
 const user = useUserStore().user
 </script>
 <template>
-  <v-card :loading="!clarifications" flat>
+  <v-card :loading="!clarifications" flat density="comfortable">
     <v-card-title>質問</v-card-title>
     <v-card-text v-if="contest" class="text-black">
       <template v-if="clarifications && clarifications.length">
@@ -107,13 +107,19 @@ const user = useUserStore().user
               </NuxtLink>
             </template>
             <template #text>
-              <v-timeline align="start" side="end" class="clar-timeline">
+              <v-timeline
+                align="start"
+                side="end"
+                class="clar-timeline"
+                density="comfortable"
+              >
                 <v-timeline-item
                   :dot-color="clar.answer ? 'green' : 'grey'"
                   hide-opposite
+                  size="small"
                   width="100%"
                 >
-                  <div class="text-h5 font-weight-bold">
+                  <div class="text-h6 font-weight-bold">
                     <div>
                       {{ clar.user }}
                     </div>
@@ -129,9 +135,10 @@ const user = useUserStore().user
                   v-if="clar.answer"
                   dot-color="red"
                   hide-opposite
+                  size="small"
                   width="100%"
                 >
-                  <div class="text-h5 font-weight-bold">
+                  <div class="text-h6 font-weight-bold">
                     <div>回答</div>
                     <div class="text-body-1 flex-shrink-0">
                       {{ formatDate(clar.updatedAt) }}
