@@ -22,10 +22,31 @@ const dayjs = useDayjs()
 const afterContest = computed(() => {
   return props.contest && dayjs(props.contest.endAt).isBefore(Date())
 })
-const subtitle = (slug: string, diff: string) => {
-  const task = props.contest.writtenTasks.find((x) => x.slug === slug)
-  return task ? `#${task.id} / ${diff}` : diff
+
+const colors = {
+  admin: undefined,
+  writer: 'deep-purple-darken-1',
+  tester: 'teal-darken-3'
 }
+
+const tasks = computed(() => {
+  if (!props.contest?.tasks) return []
+  const writtenAll = new Map(props.contest.writtenTasks.map((x) => [x.slug, x]))
+  const ret = []
+  for (const task of props.contest.tasks) {
+    const written = writtenAll.get(task.slug)
+    ret.push({
+      ...task,
+      written,
+      color: written
+        ? colors[written.role]
+        : task.accepted
+          ? 'green-darken-4'
+          : undefined
+    })
+  }
+  return ret
+})
 </script>
 
 <template>
@@ -53,7 +74,7 @@ const subtitle = (slug: string, diff: string) => {
         <v-list-item v-bind="p" prepend-icon="mdi-magnify" title="問題一覧" />
       </template>
       <v-list-item
-        v-for="task in contest.tasks"
+        v-for="task in tasks"
         :key="task.slug"
         :to="`/contests/${contestName}/tasks/${task.slug}`"
         density="compact"
@@ -62,9 +83,9 @@ const subtitle = (slug: string, diff: string) => {
             ? `mdi-alpha-${task.position.toLowerCase()}-box`
             : 'mdi-pound-box-outline'
         "
-        :base-color="task.accepted ? 'green-darken-4' : undefined"
-        :title="task.name"
-        :subtitle="subtitle(task.slug, task.difficulty)"
+        :base-color="task.color"
+        :title="(task.written ? `#${task.written.id} ` : '') + task.name"
+        :subtitle="task.difficulty"
       />
     </v-list-group>
     <v-list-item

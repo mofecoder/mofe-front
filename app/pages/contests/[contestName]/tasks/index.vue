@@ -36,6 +36,9 @@ const subtitle = (slug: string, diff: string) => {
               :base-color="problem.accepted ? 'green-darken-4' : undefined"
               density="comfortable"
             >
+              <template #append>
+                <span class="text-grey-darken-2">({{ problem.points }})</span>
+              </template>
             </v-list-item>
           </v-list>
         </v-card>
