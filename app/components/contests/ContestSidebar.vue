@@ -22,6 +22,10 @@ const dayjs = useDayjs()
 const afterContest = computed(() => {
   return props.contest && dayjs(props.contest.endAt).isBefore(Date())
 })
+const subtitle = (slug: string, diff: string) => {
+  const task = props.contest.writtenTasks.find((x) => x.slug === slug)
+  return task ? `#${task.id} / ${diff}` : diff
+}
 </script>
 
 <template>
@@ -60,7 +64,7 @@ const afterContest = computed(() => {
         "
         :base-color="task.accepted ? 'green-darken-4' : undefined"
         :title="task.name"
-        :subtitle="task.difficulty"
+        :subtitle="subtitle(task.slug, task.difficulty)"
       />
     </v-list-group>
     <v-list-item

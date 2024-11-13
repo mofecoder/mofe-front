@@ -9,6 +9,11 @@ useHead(() => ({
   title: `問題 - ${contest.value?.name}`,
   titleTemplate: null
 }))
+
+const subtitle = (slug: string, diff: string) => {
+  const task = contest.value?.writtenTasks.find((x) => x.slug === slug)
+  return task ? `#${task.id} / ${diff}` : diff
+}
 </script>
 
 <template>
@@ -27,7 +32,7 @@ useHead(() => ({
               :to="`/contests/${contestName}/tasks/${problem.slug}`"
               :prepend-icon="`mdi-alpha-${problem.position.toLowerCase()}-box`"
               :title="problem.name"
-              :subtitle="problem.difficulty"
+              :subtitle="subtitle(problem.slug, problem.difficulty)"
               :base-color="problem.accepted ? 'green-darken-4' : undefined"
               density="comfortable"
             >
