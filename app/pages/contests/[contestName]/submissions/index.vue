@@ -90,7 +90,7 @@ const loading = ref<boolean>(false)
 const timeout = computed(() => (adminMode.value ? 2000 : 30000))
 
 const args = reactive({
-  slug: contestName,
+  slug: contestName.value!,
   page,
   count,
   sortBy,
@@ -99,13 +99,14 @@ const args = reactive({
 const {
   data: submissions,
   refresh,
-  status
+  status,
+  error
 } = await useApi(Contests.getAllSubmissions, args, { lazy: true })
 
 async function rejudge(submissionIds: number[]) {
   await api(
     Contests.rejudge,
-    [unref(contestName!)],
+    [unref(contestName)!],
     {},
     {
       submissionIds
@@ -127,7 +128,10 @@ const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
   <div>
     <template v-if="contest">
       <v-container class="pa-0" fluid>
-        <v-card v-if="!errorMessage" :loading="status === 'pending'">
+        <v-alert v-if="error" type="error">
+          {{ error.data?.error || '提出一覧を取得できませんでした。' }}
+        </v-alert>
+        <v-card v-else :loading="status === 'pending'">
           <v-card-title>すべての提出</v-card-title>
           <v-card-text class="submit-card">
             <v-switch
@@ -153,9 +157,6 @@ const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
             />
           </v-card-text>
         </v-card>
-        <v-alert v-else type="error" icon="mdi-alert">
-          {{ errorMessage }}
-        </v-alert>
       </v-container>
     </template>
   </div>
