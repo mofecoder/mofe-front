@@ -3,7 +3,7 @@ FROM node:18-slim
 WORKDIR /usr/src/app
 
 COPY . ./
-RUN npm install
+RUN npm install --production
 
 EXPOSE 8080
 
@@ -12,4 +12,4 @@ ENV PORT=8080
 
 RUN npm run build
 
-CMD [ "npm", "run", "start" ]
+CMD [ "node", "./output/server/index.mjs" ]
