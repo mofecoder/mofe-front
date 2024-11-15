@@ -3,7 +3,7 @@ FROM node:22-slim
 WORKDIR /usr/src/app
 
 COPY . ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 EXPOSE 8080
 
