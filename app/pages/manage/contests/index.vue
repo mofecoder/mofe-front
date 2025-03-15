@@ -42,8 +42,9 @@ const items = computed(
           to="/manage/contests/new"
           variant="tonal"
           prepend-icon="mdi-plus"
-          >コンテストを作成</v-btn
         >
+          コンテストを作成
+        </v-btn>
       </v-toolbar>
     </template>
     <template #item.edit="{ item }">

@@ -88,8 +88,7 @@ const { lgAndUp } = useDisplay()
                     class="twitter-follow-button"
                     data-lang="ja"
                     data-show-count="true"
-                    >Follow @CafeCoder_</a
-                  >
+                  >Follow @CafeCoder_</a>
                 </div>
               </ClientOnly>
             </v-card-text>

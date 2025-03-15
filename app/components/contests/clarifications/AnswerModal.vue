@@ -66,8 +66,12 @@ async function answer() {
           />
         </v-card-text>
         <v-card-actions>
-          <v-btn variant="flat" color="red" @click="cancel">キャンセル</v-btn>
-          <v-btn variant="flat" color="primary" @click="answer">回答する</v-btn>
+          <v-btn variant="flat" color="red" @click="cancel">
+            キャンセル
+          </v-btn>
+          <v-btn variant="flat" color="primary" @click="answer">
+            回答する
+          </v-btn>
         </v-card-actions>
       </template>
     </v-card>

@@ -149,7 +149,9 @@ const teamRegister = async (
       density="comfortable"
       class="mb-4"
     >
-      <template #title>{{ message.title }}</template>
+      <template #title>
+        {{ message.title }}
+      </template>
       {{ message.text }}
     </v-alert>
     <template v-if="contest">
@@ -177,8 +179,9 @@ const teamRegister = async (
           class="mb-4"
           :to="`/manage/contests/${contestSlug}`"
           prepend-icon="mdi-application-edit"
-          >コンテストの編集画面へ</v-btn
         >
+          コンテストの編集画面へ
+        </v-btn>
         <MarkdownContent
           class="contest-card__description"
           :markdown="contest.description"

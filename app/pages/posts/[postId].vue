@@ -17,7 +17,9 @@ useHead(() => ({
 </script>
 
 <template>
-  <v-card v-if="!post" loading>読み込み中…</v-card>
+  <v-card v-if="!post" loading>
+    読み込み中…
+  </v-card>
   <PostsViewPostCard v-else :post="post" :show-edit="isAdmin" />
 </template>
 

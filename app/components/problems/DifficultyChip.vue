@@ -50,10 +50,13 @@ const difficulties: {
 
 const item = difficulties.find((x) => x.difficulty === props.difficulty)!
 </script>
+
 <template>
-  <v-chip :color="item.color" class="chip" label :class="item.class">{{
-    item.difficulty
-  }}</v-chip>
+  <v-chip :color="item.color" class="chip" label :class="item.class">
+    {{
+      item.difficulty
+    }}
+  </v-chip>
 </template>
 
 <style lang="scss" scoped>

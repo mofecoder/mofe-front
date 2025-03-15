@@ -68,8 +68,7 @@ const download = async () => {
         <a
           href="https://github.com/MikeMirzayanov/testlib/blob/master/checkers"
           target="_blank"
-          >testlib のサンプル</a
-        >
+        >testlib のサンプル</a>
         を利用しています。
       </p>
       <p class="body1">
@@ -95,9 +94,9 @@ const download = async () => {
         </v-expansion-panel-text>
       </v-expansion-panel>
       <v-expansion-panel class="description">
-        <v-expansion-panel-title
-          >カスタムチェッカーの独自動作について（動的点数設定など）</v-expansion-panel-title
-        >
+        <v-expansion-panel-title>
+          カスタムチェッカーの独自動作について（動的点数設定など）
+        </v-expansion-panel-title>
         <v-expansion-panel-text>
           <v-alert
             class="mb-2"
@@ -105,7 +104,7 @@ const download = async () => {
             title="動的点数設定（β）について"
             type="warning"
           >
-            次の方法で、テストケースセットごとの点数を動的に設定できます。<br />
+            次の方法で、テストケースセットごとの点数を動的に設定できます。<br>
             <ol class="mt-1 mb-2">
               <li>
                 テストケースセットの「集計方法」を「合計」「最大」「最小」のいずれかに設定する。
@@ -118,22 +117,22 @@ const download = async () => {
               </li>
             </ol>
             「合計」の場合はセット内のテストケースに対する点数の合計値、
-            「最大」では最大値、「最小」では最小値が点数になります。<br />
+            「最大」では最大値、「最小」では最小値が点数になります。<br>
             出力しなかったケースについては集計対象外となり、対象ケースが 1
-            つも存在しない場合には 0 点となります。<br />
+            つも存在しない場合には 0 点となります。<br>
             設定した配点については表示のみとなり、集計には利用されません。
-            （設定によっては点数が配点を超えることがあります）。<br />
-            提出自体に対する点数は、テストケースセットごとの点数の合計です。<br />
+            （設定によっては点数が配点を超えることがあります）。<br>
+            提出自体に対する点数は、テストケースセットごとの点数の合計です。<br>
             TLE / OLE / QLE / RE
             となった場合（チェッカーで設定した場合も含む）は、 当該ケースは 0
-            点となります。<br />
+            点となります。<br>
             ※複数回出力したときの動作は未定義です。
           </v-alert>
           <v-alert class="mb-4" variant="tonal" color="info">
             カスタムチェッカーにて標準出力に
             <code>MofeJudge::Status(QLE)</code>
             と1行に出力すると、テストケースの結果を QLE にすることができます。
-            （そのほかに OLE と WA に対応）<br />
+            （そのほかに OLE と WA に対応）<br>
             ※複数回出力したときの動作は未定義です。
           </v-alert>
         </v-expansion-panel-text>

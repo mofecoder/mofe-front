@@ -155,7 +155,7 @@ const removeTester = async (name: string) => {
         userName: name
       }
     )
-  } catch (err: unknown) {
+  } catch {
     alert('テスターの削除に失敗しました。')
   } finally {
     await refresh()
@@ -163,6 +163,7 @@ const removeTester = async (name: string) => {
   }
 }
 </script>
+
 <template>
   <v-card class="wrapper" :loading="!problem">
     <v-card-text>
@@ -244,7 +245,8 @@ const removeTester = async (name: string) => {
             width="auto"
             color="purple"
             @click="modals.problemStatement = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -275,7 +277,8 @@ const removeTester = async (name: string) => {
             width="auto"
             color="purple"
             @click="modals.constraints = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -343,7 +346,8 @@ const removeTester = async (name: string) => {
             width="auto"
             color="purple"
             @click="modals.input = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -379,7 +383,8 @@ const removeTester = async (name: string) => {
             width="auto"
             color="purple"
             @click="modals.output = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -418,8 +423,12 @@ const removeTester = async (name: string) => {
               @add="addTester"
               @remove="removeTester"
             >
-              <template #emptyMessage>テスターは追加されていません</template>
-              <template #subheader>Testers</template>
+              <template #emptyMessage>
+                テスターは追加されていません
+              </template>
+              <template #subheader>
+                Testers
+              </template>
             </ManageUserList>
           </v-col>
         </v-row>

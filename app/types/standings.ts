@@ -25,7 +25,7 @@ export interface StandingProblem {
   slug: string
   solved: number
   tried: number
-  firstAccept: { user: StandingUser; time: number } | null
+  firstAccept: { user: StandingUser, time: number } | null
 }
 
 export interface StandingData {

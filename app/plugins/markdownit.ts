@@ -55,9 +55,9 @@ mdit.renderer.rules.fence = function (tokens, idx, options, _, slf) {
   }
 
   if (options.highlight) {
-    highlighted =
-      options.highlight(token.content, langName, langAttrs) ||
-      mdit.utils.escapeHtml(token.content)
+    highlighted
+      = options.highlight(token.content, langName, langAttrs)
+        || mdit.utils.escapeHtml(token.content)
   } else {
     highlighted = mdit.utils.escapeHtml(token.content)
   }
@@ -67,11 +67,11 @@ mdit.renderer.rules.fence = function (tokens, idx, options, _, slf) {
   }
 
   return (
-    '<pre' +
-    slf.renderAttrs(token) +
-    '><code class="hljs">' +
-    highlighted +
-    '</code></pre>\n'
+    '<pre'
+    + slf.renderAttrs(token)
+    + '><code class="hljs">'
+    + highlighted
+    + '</code></pre>\n'
   )
 }
 

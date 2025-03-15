@@ -14,6 +14,7 @@ watch(() => props.markdown, renderKatex)
 </script>
 
 <template>
+  <!-- eslint-disable-next-line vue/no-v-html -->
   <div ref="div" v-html="$md.render(markdown)" />
 </template>
 

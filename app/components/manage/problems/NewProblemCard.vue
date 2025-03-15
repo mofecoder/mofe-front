@@ -89,7 +89,8 @@ const onSubmit = async () => {
             width="auto"
             color="purple"
             @click="modals.problemStatement = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -116,7 +117,8 @@ const onSubmit = async () => {
             width="auto"
             color="purple"
             @click="modals.constraints = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -143,7 +145,8 @@ const onSubmit = async () => {
             width="auto"
             color="purple"
             @click="modals.partialScores = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -170,7 +173,8 @@ const onSubmit = async () => {
             width="auto"
             color="purple"
             @click="modals.input = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>
@@ -202,7 +206,8 @@ const onSubmit = async () => {
             width="auto"
             color="purple"
             @click="modals.output = true"
-            >プレビュー
+          >
+            プレビュー
           </v-btn>
         </v-row>
         <v-row>

@@ -26,10 +26,10 @@ const params = reactive({
 
 const disabled = computed(() => {
   return !(
-    params.dateRange[0].isBefore(params.dateRange[1]) &&
-    params.name &&
-    /\S+/.test(params.slug) &&
-    params.slug !== 'new'
+    params.dateRange[0].isBefore(params.dateRange[1])
+    && params.name
+    && /\S+/.test(params.slug)
+    && params.slug !== 'new'
   )
 })
 
@@ -61,7 +61,9 @@ const submit = async () => {
 
 <template>
   <v-container fluid>
-    <h1 class="text-h4 ma-2">コンテストの作成</h1>
+    <h1 class="text-h4 ma-2">
+      コンテストの作成
+    </h1>
     <ManageContestsEditContestCard
       v-model:name="params.name"
       v-model:slug="params.slug"

@@ -6,7 +6,7 @@ defineSlots<{
   fallback(): any
 }>()
 
-const cond = await(async () => {
+const cond = await (async () => {
   if (typeof props.condition === 'boolean') {
     return props.condition
   }

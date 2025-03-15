@@ -99,8 +99,9 @@ const tableTasks = computed(() => [problem.value!] as ProblemType[])
             :disabled="!problemId"
             :loading="status === 'loading'"
             @click="showProblem"
-            >表示</v-btn
           >
+            表示
+          </v-btn>
         </v-col>
         <v-col cols="11" sm="9" md="7" lg="4">
           <v-btn
@@ -140,8 +141,9 @@ const tableTasks = computed(() => [problem.value!] as ProblemType[])
             prepend-icon="mdi-plus"
             :disabled="!position"
             @click="add"
-            >この問題を追加する</v-btn
           >
+            この問題を追加する
+          </v-btn>
           <v-checkbox
             v-model="showAll"
             class="mt-1"

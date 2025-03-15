@@ -14,7 +14,7 @@ export interface ContestDetail extends Contest {
   description: string
   penaltyTime: number
   isWriterOrTester: boolean
-  registered: { name: string | null; open: boolean } | null
+  registered: { name: string | null, open: boolean } | null
   editorial: string | null
   writtenTasks: {
     slug: string

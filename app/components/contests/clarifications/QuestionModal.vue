@@ -48,20 +48,22 @@ const items = computed(() => {
           persistent-hint
           clearable
           no-data-text="問題は存在しません"
-        >
-        </v-select>
+        />
         <v-textarea v-model="content" rows="3" label="質問" counter="255" />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="text" color="red" @click="cancel">キャンセル</v-btn>
+        <v-btn variant="text" color="red" @click="cancel">
+          キャンセル
+        </v-btn>
         <v-btn
           variant="text"
           color="primary"
           :disabled="!content"
           @click="question"
-          >質問する</v-btn
         >
+          質問する
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

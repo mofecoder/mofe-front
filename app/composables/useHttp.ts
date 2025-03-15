@@ -12,6 +12,7 @@ import type { FetchResult } from '#app/composables/fetch'
 type ReqT = NitroFetchRequest
 const useHttp = async <
   ResT,
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   DataT = ResT extends void
     ? FetchResult<ReqT, AvailableRouterMethod<ReqT>>
     : ResT
@@ -26,6 +27,7 @@ const useHttp = async <
     oldAuth.value = null
   }
   const headers: HeadersInit = {
+    accept: 'application/json',
     ...(client && accessToken && uid && { accessToken, client, uid })
   }
   const config = useRuntimeConfig()

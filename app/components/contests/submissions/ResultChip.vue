@@ -41,7 +41,7 @@ const props = defineProps({
   },
   dense: Boolean,
   judgeStatus: {
-    type: Object as PropType<{ completed: number; all: number } | null>,
+    type: Object as PropType<{ completed: number, all: number } | null>,
     default: null
   },
   hideIcon: {
@@ -74,6 +74,7 @@ const smallText = computed(() => {
     : `${props.judgeStatus.completed}/${props.judgeStatus.all}`
 })
 </script>
+
 <template>
   <v-tooltip location="top" text="tooltipText">
     <template #activator="{ props: p }">
@@ -82,7 +83,7 @@ const smallText = computed(() => {
           `result-${status}`,
           dense && 'chip-dense',
           judgeStatus && 'chip-judging',
-          noMinWidth && 'chip-no-min-width'
+          noMinWidth && 'chip-no-min-width',
         ]"
         v-bind="p"
       >
@@ -103,7 +104,9 @@ const smallText = computed(() => {
             class="mr-1"
             indeterminate
           />
-          <v-icon v-else class="mr-1 icon" size="small">{{ icon }}</v-icon>
+          <v-icon v-else class="mr-1 icon" size="small">
+            {{ icon }}
+          </v-icon>
         </template>
         {{ text }}
         <span v-if="smallText" class="chip-subtext">{{ smallText }}</span>

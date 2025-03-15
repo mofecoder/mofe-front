@@ -110,21 +110,25 @@ const signOut = async () => {
           </v-list>
         </v-sheet>
       </v-overlay>
-      <p v-if="role" class="text-caption">({{ role }})</p>
+      <p v-if="role" class="text-caption">
+        ({{ role }})
+      </p>
     </div>
     <div v-else class="d-none d-md-flex align-center">
       <v-btn
         :to="createLink('/auth/signup')"
         prepend-icon="mdi-account-plus"
         variant="text"
-        >新規登録</v-btn
       >
+        新規登録
+      </v-btn>
       <v-btn
         :to="createLink('/auth/signin')"
         variant="text"
         prepend-icon="mdi-login-variant"
-        >ログイン</v-btn
       >
+        ログイン
+      </v-btn>
     </div>
   </ClientOnly>
 </template>

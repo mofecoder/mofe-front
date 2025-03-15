@@ -29,8 +29,8 @@ const transform = (value: Contest[] | undefined) => {
       props: {
         to: `/contests/${contest.slug}`,
         subtitle:
-          `${formatDate(start, false)} - ` +
-          `${formatDate(end, false)} (${formatDuration(duration)})`
+          `${formatDate(start, false)} - `
+          + `${formatDate(end, false)} (${formatDuration(duration)})`
       }
     }
   })

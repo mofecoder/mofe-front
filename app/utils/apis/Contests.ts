@@ -16,7 +16,7 @@ export type SubmissionResponse = {
   data: Submit[]
   meta: { pagination: Pagination }
 }
-export type FilterOptions = { task: string[]; user: string; status: string[] }
+export type FilterOptions = { task: string[], user: string, status: string[] }
 
 function formatSubmissionsUrl(
   url: string,
@@ -30,8 +30,8 @@ function formatSubmissionsUrl(
   if (count != null) data.push(['count', count])
   if (filter || sortBy) {
     const options: {
-      sort?: { target: string; desc: boolean }[]
-      filter?: { target: string; value: string[] }[]
+      sort?: { target: string, desc: boolean }[]
+      filter?: { target: string, value: string[] }[]
     } = {}
     if (sortBy && sortBy.length) {
       options.sort = sortBy
@@ -77,13 +77,13 @@ const getClarification = new Api<Clarification, [string, number]>(
 const updateClarification = new Api<
   Clarification,
   [string, number],
-  { answer: string; publish: boolean }
+  { answer: string, publish: boolean }
 >(([slug, id]) => `/contests/${slug}/clarifications/${id}`, 'PUT')
 
 const createClarification = new Api<
   Clarification,
   [string],
-  { clarification: { task: string | null; question: string } }
+  { clarification: { task: string | null, question: string } }
 >(([slug]) => `/contests/${slug}/clarifications`, 'POST')
 
 type GetSubmissionParams = {
@@ -131,7 +131,7 @@ const togglePublishStatus = new Api<{ public: boolean }, [string, number]>(
   'PATCH'
 )
 
-const register = new Api<void, [string], { password?: string; open?: boolean }>(
+const register = new Api<void, [string], { password?: string, open?: boolean }>(
   ([slug]) => `/contests/${slug}/registrations`,
   'POST'
 )

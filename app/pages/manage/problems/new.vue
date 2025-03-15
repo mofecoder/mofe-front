@@ -26,4 +26,5 @@ useHead(() => ({
     </v-card>
   </v-container>
 </template>
+
 <style scoped lang="scss"></style>

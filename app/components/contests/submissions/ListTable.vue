@@ -5,9 +5,9 @@ import type { DataTableHeader, SortItem } from '~/types/datatable'
 import { JUDGE_STATUSES } from '~/constants/judgeStatuses'
 
 const emits = defineEmits<{
-  refresh: [load: boolean]
-  interval: []
-  rejudge: [value: number[]]
+  'refresh': [load: boolean]
+  'interval': []
+  'rejudge': [value: number[]]
   'update:page': [value: number]
   'update:count': [value: number]
   'update:sortBy': [value: SortItem[]]
@@ -180,8 +180,7 @@ const filterStatus = computed({
       <NuxtLink
         class="text-decoration-none font-weight-medium"
         :to="`/contests/${contestSlug}/tasks/${submissionsData[index]!.taskSlug}`"
-        >{{ item.task }}</NuxtLink
-      >
+      >{{ item.task }}</NuxtLink>
     </template>
     <template #item.status="{ item, index }">
       <ContestsSubmissionsResultChip
@@ -211,12 +210,14 @@ const filterStatus = computed({
         @update:model-value="setRejudgeStatus($event, submissionsData[index]!)"
       />
     </template>
-    <template #expanded-row> EXPANDED ROW </template>
+    <template #expanded-row>
+      EXPANDED ROW
+    </template>
   </v-data-table-server>
   <div v-if="rejudgeIds.size">
-    <v-btn color="orange-lighten-3" @click="rejudge"
-      >選択した提出 ({{ rejudgeIds.size }} 件) をリジャッジする</v-btn
-    >
+    <v-btn color="orange-lighten-3" @click="rejudge">
+      選択した提出 ({{ rejudgeIds.size }} 件) をリジャッジする
+    </v-btn>
   </div>
 </template>
 

@@ -47,8 +47,9 @@ const items = computed(() => {
         variant="tonal"
         to="/admin/posts/new"
         prepend-icon="mdi-note-plus"
-        >新規記事作成</v-btn
       >
+        新規記事作成
+      </v-btn>
       <v-data-table :headers="tableHeader" :items="items" :loading="!posts">
         <template #item.actions="{ item }">
           <v-btn

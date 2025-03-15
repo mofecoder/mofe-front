@@ -30,9 +30,9 @@ const source = ref('')
 
 const isWaitingJudge = computed(
   () =>
-    submission.value != null &&
-    (['WJ', 'WR', 'CP'].includes(submission.value.status) ||
-      submission.value.judgeStatus != null)
+    submission.value != null
+    && (['WJ', 'WR', 'CP'].includes(submission.value.status)
+      || submission.value.judgeStatus != null)
 )
 
 const { pause, resume } = useIntervalFn(async () => await refresh(), 2000)
@@ -86,7 +86,9 @@ const togglePublished = async () => {
 
 <template>
   <v-card v-if="contest && !errorMessage" :loading="status === 'pending'">
-    <v-card-title v-if="submission">提出 #{{ submission.id }}</v-card-title>
+    <v-card-title v-if="submission">
+      提出 #{{ submission.id }}
+    </v-card-title>
     <v-card-text>
       <v-container v-if="submission">
         <v-alert
@@ -97,7 +99,7 @@ const togglePublished = async () => {
           class="mb-4"
         >
           非公開設定にすると、「コンテスト管理者」と「該当問題の
-          writer」以外は「すべての提出」に表示されなくなります。<br />
+          writer」以外は「すべての提出」に表示されなくなります。<br>
           提出したユーザは非公開設定の影響を受けません。tester
           は直接リンクから閲覧可能です。
         </v-alert>
@@ -126,14 +128,15 @@ const togglePublished = async () => {
                 showCopiedMessage ? 'mdi-check' : 'mdi-content-copy'
               "
               @click="copySource"
-              >{{
+            >
+              {{
                 showCopiedMessage
                   ? 'コピーしました!'
                   : display.mdAndUp.value
                     ? 'ソースコードをコピー'
                     : 'コピー'
-              }}</v-btn
-            >
+              }}
+            </v-btn>
           </v-col>
         </v-row>
         <v-row>

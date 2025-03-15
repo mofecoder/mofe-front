@@ -21,7 +21,7 @@ const postId = computed(() => {
 const isCreating = computed(() => postId.value === null)
 
 useHead(() => ({
-  title: isCreating ? '記事の新規投稿' : `[${postId.value}] 記事の編集`
+  title: isCreating.value ? '記事の新規投稿' : `[${postId.value}] 記事の編集`
 }))
 
 const valid = ref(false)
@@ -88,9 +88,11 @@ async function submit() {
 
 <template>
   <v-card :loading="!post">
-    <v-card-title class="text-h5">{{
-      isCreating ? '新規記事の投稿' : '記事の編集'
-    }}</v-card-title>
+    <v-card-title class="text-h5">
+      {{
+        isCreating ? '新規記事の投稿' : '記事の編集'
+      }}
+    </v-card-title>
     <v-card-text>
       <v-form v-model="valid" @submit.prevent="submit">
         <v-row class="py-1">
@@ -116,8 +118,9 @@ async function submit() {
             width="auto"
             color="purple"
             @click="preview = true"
-            >プレビュー</v-btn
           >
+            プレビュー
+          </v-btn>
         </v-row>
         <v-row>
           <v-col cols="12" class="py-1">
@@ -132,9 +135,11 @@ async function submit() {
         </v-row>
         <v-row>
           <v-col cols="12">
-            <v-btn block type="submit" color="primary">{{
-              isCreating ? '投稿' : '更新'
-            }}</v-btn>
+            <v-btn block type="submit" color="primary">
+              {{
+                isCreating ? '投稿' : '更新'
+              }}
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>

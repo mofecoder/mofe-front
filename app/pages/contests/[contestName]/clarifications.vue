@@ -7,8 +7,8 @@ definePageMeta({
   layout: 'contest'
 })
 
-const { contest, contestName, clarifications, updateClarifications } =
-  useContest()
+const { contest, contestName, clarifications, updateClarifications }
+  = useContest()
 
 await updateClarifications(true)
 useHead(() => ({
@@ -52,6 +52,7 @@ const closeQuestion = () => {
 
 const user = useUserStore().user
 </script>
+
 <template>
   <v-card :loading="!clarifications" flat density="comfortable">
     <v-card-title>質問</v-card-title>
@@ -82,7 +83,7 @@ const user = useUserStore().user
               </div>
               <div class="text-grey-darken-2 mt-4 text-body-2">
                 投稿日時：{{ formatDate(clar.createdAt) }}
-                <br />
+                <br>
                 更新日時：{{ formatDate(clar.updatedAt) }}
               </div>
               <v-btn
@@ -159,8 +160,9 @@ const user = useUserStore().user
                   clar.answer != null ? 'mdi-comment-edit-outline' : 'mdi-reply'
                 "
                 @click="answer(clar.id)"
-                >{{ clar.answer != null ? '回答を編集' : '回答する' }}</v-btn
               >
+                {{ clar.answer != null ? '回答を編集' : '回答する' }}
+              </v-btn>
             </template>
           </v-card>
         </template>

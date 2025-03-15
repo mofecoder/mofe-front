@@ -43,8 +43,7 @@ async function fetchUser() {
     return 'network'
   }
 }
-export const useUserStore = defineStore({
-  id: 'user',
+export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     user: null
   }),

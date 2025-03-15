@@ -21,8 +21,8 @@ let text = 'production'
 let environment = {}
 if (process.env.NODE_ENV === 'development') {
   text = 'Dev'
-  environment =
-    api === 'Dev' ? environments.development : environments.devProdApi
+  environment
+    = api === 'Dev' ? environments.development : environments.devProdApi
 }
 </script>
 

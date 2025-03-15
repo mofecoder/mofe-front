@@ -56,15 +56,13 @@ const tasks = computed(() => {
       exact
       prepend-icon="mdi-home-outline"
       title="トップ"
-    >
-    </v-list-item>
+    />
     <v-list-item
       :to="`/contests/${contestName}/tasks`"
       exact
       prepend-icon="mdi-format-list-bulleted"
       title="問題"
-    >
-    </v-list-item>
+    />
     <v-list-group
       v-if="contest"
       v-show="contest.tasks && contest.tasks.length"
@@ -100,8 +98,8 @@ const tasks = computed(() => {
     <v-list-item
       :to="`/contests/${contestName}/submissions`"
       :disabled="
-        !contest ||
-        (!afterContest && !contest.isWriterOrTester && !contest.isAdmin)
+        !contest
+          || (!afterContest && !contest.isWriterOrTester && !contest.isAdmin)
       "
       prepend-icon="mdi-list-status"
       title="すべての提出"

@@ -30,4 +30,5 @@
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
+
 <style scoped lang="scss"></style>

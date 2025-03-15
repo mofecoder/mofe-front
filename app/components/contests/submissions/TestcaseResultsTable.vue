@@ -28,7 +28,9 @@ const getTestcaseName = (index: number): string => {
       <tr>
         <th>テストケース名</th>
         <th>結果</th>
-        <th v-if="isAdmin" class="text-gray">採点</th>
+        <th v-if="isAdmin" class="text-gray">
+          採点
+        </th>
         <th>実行時間</th>
         <th>メモリ使用量</th>
       </tr>
@@ -43,9 +45,15 @@ const getTestcaseName = (index: number): string => {
             no-min-width
           />
         </td>
-        <td v-if="isAdmin" class="row-score">{{ result.score }}</td>
-        <td class="row-time">{{ result.executionTime }} ms</td>
-        <td class="row-memory">{{ result.executionMemory || '---' }} KB</td>
+        <td v-if="isAdmin" class="row-score">
+          {{ result.score }}
+        </td>
+        <td class="row-time">
+          {{ result.executionTime }} ms
+        </td>
+        <td class="row-memory">
+          {{ result.executionMemory || '---' }} KB
+        </td>
       </tr>
     </tbody>
   </v-table>

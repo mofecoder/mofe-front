@@ -42,14 +42,20 @@ const TESTCASE_SHOW_MAX = 10
   <v-table class="testcase-set-table">
     <thead>
       <tr>
-        <th class="row-name">セット名</th>
-        <th class="row-score">得点 / 配点</th>
+        <th class="row-name">
+          セット名
+        </th>
+        <th class="row-score">
+          得点 / 配点
+        </th>
         <th v-if="showName" rowspan="2" class="row-testcases">
           テストケース名
         </th>
       </tr>
       <tr>
-        <th colspan="2" class="row-status">結果</th>
+        <th colspan="2" class="row-status">
+          結果
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -81,8 +87,8 @@ const TESTCASE_SHOW_MAX = 10
               </template>
               <div
                 v-show="
-                  set.testcases!.length <= TESTCASE_SHOW_MAX ||
-                  showNameList.has(set.name)
+                  set.testcases!.length <= TESTCASE_SHOW_MAX
+                    || showNameList.has(set.name)
                 "
                 class="testcases"
               >

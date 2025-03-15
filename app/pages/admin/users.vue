@@ -77,7 +77,9 @@ const search = ref('')
             @click="update(item.id, 'member')"
           />
         </template>
-        <template v-else>{{ item.role }}</template>
+        <template v-else>
+          {{ item.role }}
+        </template>
       </template>
       <template #item.atcoder="{ item }">
         <RatingColored

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  registered: { name: string | null; open: boolean } | null
+  registered: { name: string | null, open: boolean } | null
   allowTeam: boolean
   restriction: boolean
   allowOpen: boolean
@@ -79,11 +79,15 @@ const submit = () => {
             mandatory
           >
             <v-btn :value="false">
-              <v-icon start>mdi-account</v-icon>
+              <v-icon start>
+                mdi-account
+              </v-icon>
               個人参加
             </v-btn>
             <v-btn :value="true">
-              <v-icon start>mdi-account-group</v-icon>
+              <v-icon start>
+                mdi-account-group
+              </v-icon>
               チーム参加
             </v-btn>
           </v-btn-toggle>
@@ -99,11 +103,15 @@ const submit = () => {
             mandatory
           >
             <v-btn :value="false" color="primary">
-              <v-icon start>mdi-lock</v-icon>
+              <v-icon start>
+                mdi-lock
+              </v-icon>
               通常参加
             </v-btn>
             <v-btn :value="true" color="secondary">
-              <v-icon start>mdi-lock-open-variant</v-icon>
+              <v-icon start>
+                mdi-lock-open-variant
+              </v-icon>
               オープン参加
             </v-btn>
           </v-btn-toggle>

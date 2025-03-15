@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineSlots<{
-  subheader(props: {}): any
-  emptyMessage(props: {}): any
+  subheader(props: object): any
+  emptyMessage(props: object): any
 }>()
 withDefaults(
   defineProps<{
@@ -75,8 +75,9 @@ const add = () => {
         :loading="loading"
         :disabled="!adding"
         @click="add"
-        >追加</v-btn
       >
+        追加
+      </v-btn>
     </div>
   </div>
 </template>

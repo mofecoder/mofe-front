@@ -26,7 +26,9 @@ defineEmits<{
         <template #emptyMessage>
           コンテスト管理者は設定されていません。
         </template>
-        <template #subheader>Contest Admins</template>
+        <template #subheader>
+          Contest Admins
+        </template>
       </ManageUserList>
     </v-card-text>
   </v-card>

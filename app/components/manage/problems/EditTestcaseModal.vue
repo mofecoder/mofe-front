@@ -102,8 +102,8 @@ const submit = () => {
 const check = (v: string) => {
   const max = props.testcaseId ? 1 : 0
   return (
-    props.testcaseNames.filter((name) => name === v).length <= max ||
-    'この名前のテストケースは既に存在します。'
+    props.testcaseNames.filter((name) => name === v).length <= max
+    || 'この名前のテストケースは既に存在します。'
   )
 }
 </script>
@@ -111,7 +111,9 @@ const check = (v: string) => {
 <template>
   <v-dialog :model-value="value" persistent>
     <v-card :loading="loading">
-      <v-card-title v-if="!readonly">テストケースを追加</v-card-title>
+      <v-card-title v-if="!readonly">
+        テストケースを追加
+      </v-card-title>
       <v-card-text>
         <v-form ref="createTestcase" v-model="ok">
           <v-container>
@@ -155,17 +157,18 @@ const check = (v: string) => {
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn :disabled="loading" variant="text" color="red" @click="close"
-          >閉じる</v-btn
-        >
+        <v-btn :disabled="loading" variant="text" color="red" @click="close">
+          閉じる
+        </v-btn>
         <v-btn
           v-if="!readonly"
           variant="text"
           color="primary"
           :disabled="!ok || loading"
           @click="submit"
-          >保存</v-btn
         >
+          保存
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

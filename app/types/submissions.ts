@@ -29,7 +29,7 @@ export interface Submit {
   executionMemory: number | null
   point: number
   public: boolean
-  judgeStatus: { completed: number; all: number } | null
+  judgeStatus: { completed: number, all: number } | null
 }
 
 export interface TestcaseResult {

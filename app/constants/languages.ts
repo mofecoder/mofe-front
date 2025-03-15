@@ -44,8 +44,8 @@ const languages: Language[] = [
       'python3.11 -m py_compile ./Main.py && python3.11 ./Main.py 2> /dev/null',
     runCommand: 'python3.11 ./Main.py',
     libraries:
-      'ac-library-python, numpy, scipy, networkx, ' +
-      'sympy, sortedcontainers, bitarray'
+      'ac-library-python, numpy, scipy, networkx, '
+      + 'sympy, sortedcontainers, bitarray'
   },
   {
     innerName: 'go:1.22.5',
@@ -78,8 +78,8 @@ const languages: Language[] = [
     compilationCommand: 'cargo build --release',
     runCommand: './Main.out',
     libraries:
-      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/24.07/Rust/Cargo.toml" target="_blank">' +
-      'Cargo.toml</a> を参照'
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/24.07/Rust/Cargo.toml" target="_blank">'
+      + 'Cargo.toml</a> を参照'
   },
   {
     innerName: 'ruby:3.3.2',
@@ -146,8 +146,8 @@ const languages: Language[] = [
     compilationCommand: 'pypy3 -m py_compile ./Main.py',
     runCommand: 'pypy3 ./Main.py',
     libraries:
-      'ac-library-python, numpy, networkx, ' +
-      'sympy, sortedcontainers, bitarray'
+      'ac-library-python, numpy, networkx, '
+      + 'sympy, sortedcontainers, bitarray'
   },
   {
     innerName: 'dc:1.4.1',
@@ -199,8 +199,8 @@ const languages: Language[] = [
     compilationCommand: 'cargo build --release',
     runCommand: './Main.out',
     libraries:
-      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">' +
-      'Cargo.toml</a> を参照',
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/20.10/Rust/Cargo.toml" target="_blank">'
+      + 'Cargo.toml</a> を参照',
     isOutdated: true
   },
   {
@@ -237,8 +237,8 @@ const languages: Language[] = [
     compilationCommand: 'cargo build --release',
     runCommand: './Main.out',
     libraries:
-      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/24.07/Rust/Cargo.toml" target="_blank">' +
-      'Cargo.toml</a> を参照',
+      '<a href="https://raw.githubusercontent.com/cafecoder-dev/language-update/24.07/Rust/Cargo.toml" target="_blank">'
+      + 'Cargo.toml</a> を参照',
     isOutdated: true
   },
   {
@@ -273,8 +273,8 @@ const languages: Language[] = [
     compilationCommand: 'pypy3 -m py_compile ./Main.py',
     runCommand: 'pypy3 ./Main.py',
     libraries:
-      'ac-library-python, numpy, networkx, ' +
-      'sympy, sortedcontainers, bitarray',
+      'ac-library-python, numpy, networkx, '
+      + 'sympy, sortedcontainers, bitarray',
     isOutdated: true
   },
   {

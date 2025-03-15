@@ -103,9 +103,11 @@ async function submit() {
 </script>
 
 <template>
-  <v-alert v-if="error" class="mb-6" variant="tonal" type="error">{{
-    error
-  }}</v-alert>
+  <v-alert v-if="error" class="mb-6" variant="tonal" type="error">
+    {{
+      error
+    }}
+  </v-alert>
   <div class="submit-head justify-start">
     <v-autocomplete
       v-model="language"

@@ -7,6 +7,7 @@ import type {
   TestcaseSet
 } from '~/types/problems'
 import type { Problem as AdminProblem } from '~/types/contestAdmin'
+
 type UploadResponseType = { messages: string[] }
 type TestcasesResponseType = {
   testcaseSets: TestcaseSet[]
@@ -109,7 +110,7 @@ const changeTestcaseState = new Api<void, [number, number]>(
 const addToTestcaseSetMultiple = new Api<
   void,
   [number],
-  { testcaseIds: number[]; testcaseSetId: number }
+  { testcaseIds: number[], testcaseSetId: number }
 >(([id]) => `/problems/${id}/testcases/change_state_multiple`, 'PATCH')
 
 const updateChecker = new Api<string, [number]>(

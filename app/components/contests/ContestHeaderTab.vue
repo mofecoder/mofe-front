@@ -2,18 +2,26 @@
   <div>
     <div class="standings__wrap">
       <a class="tab" :class="active('index')" @click="go('')">トップ</a>
-      <div class="tab" :class="active('tasks')" @click="go('tasks')">問題</div>
+      <div class="tab" :class="active('tasks')" @click="go('tasks')">
+        問題
+      </div>
       <div class="tab submit" @click="switchSubmit">
         提出一覧<span class="triangle">▼</span>
         <div v-show="showSubmissions" class="submits">
-          <div class="tab">自分の提出</div>
-          <div class="tab">みんなの提出</div>
+          <div class="tab">
+            自分の提出
+          </div>
+          <div class="tab">
+            みんなの提出
+          </div>
         </div>
       </div>
       <a class="tab" :class="active('standings')" @click="go('standings')">
         順位表
       </a>
-      <div class="tab tab--disabled">解説</div>
+      <div class="tab tab--disabled">
+        解説
+      </div>
     </div>
   </div>
 </template>

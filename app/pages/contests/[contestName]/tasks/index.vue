@@ -68,6 +68,7 @@ const subtitle = (slug: string, diff: string) => {
   overflow: unset;
 }
 </style>
+
 <style>
 .v-list-item__content > * {
   flex: unset !important;

@@ -15,8 +15,8 @@ const language = ref(languages[0])
 
 onMounted(() => {
   if (import.meta.client) {
-    language.value =
-      languages.filter(
+    language.value
+      = languages.filter(
         (lang) => localStorage.getItem('lang') === lang.innerName
       )[0] || languages[0]
   }
@@ -70,8 +70,9 @@ const { user } = useUserStore()
               density="comfortable"
               prepend-icon="mdi-account-multiple"
               :to="path"
-              >全員の提出</v-btn
             >
+              全員の提出
+            </v-btn>
             <v-btn
               v-if="isWriter"
               color="teal"
@@ -79,8 +80,9 @@ const { user } = useUserStore()
               density="comfortable"
               prepend-icon="mdi-account"
               :to="path + '&user=' + user!.name"
-              >自分の提出</v-btn
             >
+              自分の提出
+            </v-btn>
           </template>
         </div>
         <div class="d-flex flex-wrap">
@@ -197,33 +199,41 @@ const { user } = useUserStore()
           >
             <v-col cols="12" xl="6" class="pb-0">
               <div class="sample-head lb">
-                <div class="sample-head__title">入力例 {{ index + 1 }}</div>
+                <div class="sample-head__title">
+                  入力例 {{ index + 1 }}
+                </div>
                 <v-btn
                   color="blue"
                   variant="tonal"
                   size="small"
                   prepend-icon="mdi-content-copy"
                   @click="copy(sample.input)"
-                  >コピー</v-btn
                 >
+                  コピー
+                </v-btn>
               </div>
               <div class="statement">
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <code class="sample__code" v-html="sample.input" />
               </div>
             </v-col>
             <v-col cols="12" xl="6">
               <div class="sample-head">
-                <div class="sample-head__title">出力例 {{ index + 1 }}</div>
+                <div class="sample-head__title">
+                  出力例 {{ index + 1 }}
+                </div>
                 <v-btn
                   color="blue"
                   variant="tonal"
                   size="small"
                   prepend-icon="mdi-content-copy"
                   @click="copy(sample.output)"
-                  >コピー</v-btn
                 >
+                  コピー
+                </v-btn>
               </div>
               <div class="statement">
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <code class="sample__code" v-html="sample.output" />
               </div>
               <MarkdownContent

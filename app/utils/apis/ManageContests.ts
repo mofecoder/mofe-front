@@ -23,10 +23,10 @@ const updateContest = new Api<Contest, [string], ContestEditParam>(
 
 const addTask = new Api<void, [string, number, string, string]>(
   ([contestSlug, problemId, problemSlug, position]) =>
-    `/contests/${contestSlug}/set_task` +
-    `?problem_id=${problemId}` +
-    `&problem_slug=${problemSlug}` +
-    `&position=${position}`,
+    `/contests/${contestSlug}/set_task`
+    + `?problem_id=${problemId}`
+    + `&problem_slug=${problemSlug}`
+    + `&position=${position}`,
   'PUT'
 )
 

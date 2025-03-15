@@ -34,7 +34,8 @@ const nuxtConfig = defineNuxtConfig({
         lintOnStart: false
       }
     ],
-    'dayjs-nuxt'
+    'dayjs-nuxt',
+    '@nuxt/eslint'
   ],
   vite: {
     ssr: {
@@ -65,6 +66,11 @@ const nuxtConfig = defineNuxtConfig({
   },
   future: {
     compatibilityVersion: 4
+  },
+  eslint: {
+    config: {
+      stylistic: true
+    }
   },
   compatibilityDate: '2024-08-31',
   dayjs: {

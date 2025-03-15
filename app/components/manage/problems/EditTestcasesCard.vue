@@ -194,7 +194,7 @@ const deleteSet = async (id: number) => {
   testcaseLoading.value = true
   try {
     await api(ManageProblems.deleteTestcaseSet, [props.problemId, id], {})
-  } catch (error) {
+  } catch {
     alert('テストケースセットの削除に失敗しました。')
     return
   } finally {
@@ -285,8 +285,8 @@ const addSetMultiple = async () => {
           closable
         >
           集計方法が「通常」の場合、「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
-          そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br />
-          満点はすべてのテストケースセットの配点の合計となります。<br />
+          そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br>
+          満点はすべてのテストケースセットの配点の合計となります。<br>
           採点順・表示順はテストケース名の辞書順です。
         </v-alert>
         <v-card class="mb-8" variant="outlined" :loading="!testcaseSets">
@@ -295,10 +295,18 @@ const addSetMultiple = async () => {
             <v-table v-if="testcaseSets">
               <thead>
                 <tr>
-                  <th class="text-center">テストケースセット名</th>
-                  <th class="text-center">集計方法</th>
-                  <th class="text-center">配点</th>
-                  <th class="text-center">サンプル</th>
+                  <th class="text-center">
+                    テストケースセット名
+                  </th>
+                  <th class="text-center">
+                    集計方法
+                  </th>
+                  <th class="text-center">
+                    配点
+                  </th>
+                  <th class="text-center">
+                    サンプル
+                  </th>
                   <th />
                 </tr>
               </thead>
@@ -342,9 +350,9 @@ const addSetMultiple = async () => {
                 </tr>
               </tbody>
             </v-table>
-            <v-btn color="primary" prepend-icon="mdi-tab-plus" @click="addSet"
-              >テストケースセットを追加</v-btn
-            >
+            <v-btn color="primary" prepend-icon="mdi-tab-plus" @click="addSet">
+              テストケースセットを追加
+            </v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -502,8 +510,9 @@ const addSetMultiple = async () => {
                 prepend-icon="mdi-folder-upload"
                 block
                 :disabled="!file || uploadLoading"
-                >アップロードする</v-btn
               >
+                アップロードする
+              </v-btn>
             </v-form>
             <v-alert
               v-if="ok != null"

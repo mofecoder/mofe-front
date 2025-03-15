@@ -6,12 +6,12 @@ type AuthResponse<
   ErrorsType = string[]
 > =
   | {
-      success: false
-      errors: ErrorsType
-    }
+    success: false
+    errors: ErrorsType
+  }
   | ({ data: AuthUser } & (SuccessType extends undefined
-      ? {}
-      : { success: true }))
+    ? object
+    : { success: true }))
 
 const signIn = new Api<AuthResponse, [string, string]>(
   '/auth/sign_in',

@@ -43,8 +43,8 @@ const standings = computed(() => standingData.value?.standings)
 
 const showSubmissions = computed(() =>
   contest.value
-    ? dayjs(contest.value.endAt).isBefore(dayjs()) ||
-      contest.value.isWriterOrTester
+    ? dayjs(contest.value.endAt).isBefore(dayjs())
+    || contest.value.isWriterOrTester
     : false
 )
 const submissionsPath = computed(() =>
@@ -66,7 +66,9 @@ const { pause, resume, isActive } = useIntervalFn(
   <div>
     <v-no-ssr v-if="contest">
       <v-sheet v-if="!standings">
-        <h2 class="my-4">順位表</h2>
+        <h2 class="my-4">
+          順位表
+        </h2>
         <p>Loading...</p>
       </v-sheet>
       <template v-else>

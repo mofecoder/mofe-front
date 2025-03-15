@@ -25,7 +25,7 @@ const filter = ref({
   user: '',
   status: []
 } as FilterOptions)
-const loading = ref<Boolean>(false)
+const loading = ref<boolean>(false)
 const timeout = ref(15000)
 
 const args = reactive({
@@ -75,6 +75,7 @@ async function reload(load: boolean) {
 }
 const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
 </script>
+
 <template>
   <div>
     <template v-if="contest">

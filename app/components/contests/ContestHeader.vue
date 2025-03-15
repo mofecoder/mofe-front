@@ -3,6 +3,7 @@
     <div>{{ name }}</div>
   </div>
 </template>
+
 <script setup lang="ts">
 defineProps({
   name: {

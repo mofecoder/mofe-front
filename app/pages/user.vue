@@ -25,8 +25,8 @@ const rules = {
   atcoderId: [(v: string) => /^\w{1,16}$/.test(v) || 'AtCoder ID が無効です。'],
   name: (name: string) => [
     (v: string) =>
-      v.toLowerCase() === name.toLowerCase() ||
-      '大文字・小文字の変更のみ可能です。'
+      v.toLowerCase() === name.toLowerCase()
+      || '大文字・小文字の変更のみ可能です。'
   ]
 }
 
@@ -83,7 +83,9 @@ const signOut = async () => {
           :rules="nameRules"
           hint="名前の大文字・小文字の変更ができます。名前の変更は1度のみ可能です。"
         />
-        <v-btn class="mt-3" color="primary" type="submit">更新する</v-btn>
+        <v-btn class="mt-3" color="primary" type="submit">
+          更新する
+        </v-btn>
       </v-form>
       <div class="ml-0 mt-6">
         <v-btn
@@ -91,8 +93,9 @@ const signOut = async () => {
           variant="tonal"
           prepend-icon="mdi-logout-variant"
           @click="signOut"
-          >ログアウトする</v-btn
         >
+          ログアウトする
+        </v-btn>
       </div>
     </v-card-text>
     <v-snackbar v-model="showSnack" :timeout="4000">

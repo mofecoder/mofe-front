@@ -38,6 +38,7 @@ watch(
           <p>コンパイルコマンド：<code v-text="lang.compilationCommand" /></p>
           <p>実行コマンド：<code v-text="lang.runCommand" /></p>
           <p v-if="lang.libraries">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             ライブラリ：<span v-html="lang.libraries" />
           </p>
         </template>

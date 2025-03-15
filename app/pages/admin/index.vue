@@ -23,7 +23,6 @@ const updateRating = async () => {
 
   const reader = response.pipeThrough(new TextDecoderStream()).getReader()
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const { value, done } = await reader.read()
 
@@ -65,8 +64,9 @@ const updateRating = async () => {
             block
             variant="tonal"
             prepend-icon="mdi-account-cog"
-            >ユーザ管理画面へ</v-btn
           >
+            ユーザ管理画面へ
+          </v-btn>
           <v-btn
             color="orange"
             class="mt-4"
@@ -78,9 +78,9 @@ const updateRating = async () => {
           >
             レーティング更新
           </v-btn>
-          <v-progress-linear v-if="status" :model-value="status[0] / status[1]"
-            >{{ status[0] }} / {{ status[1] }}</v-progress-linear
-          >
+          <v-progress-linear v-if="status" :model-value="status[0] / status[1]">
+            {{ status[0] }} / {{ status[1] }}
+          </v-progress-linear>
         </v-col>
         <v-col>
           <h2>問題（未所属）</h2>
@@ -93,7 +93,9 @@ const updateRating = async () => {
               </NuxtLink>
             </li>
           </ul>
-          <p v-else-if="problems != null">該当なし</p>
+          <p v-else-if="problems != null">
+            該当なし
+          </p>
         </v-col>
       </v-row>
     </v-container>

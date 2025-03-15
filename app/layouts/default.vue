@@ -3,6 +3,7 @@ const title = 'MOFE'
 const dayjs = useDayjs()
 const year = dayjs().year()
 </script>
+
 <template>
   <v-app>
     <nuxt-loading-indicator />
@@ -28,7 +29,9 @@ const year = dayjs().year()
       class="d-flex flex-column justify-center bg-grey-lighten-3"
       absolute
     >
-      <p class="mb-0 mr-3">Copyright 2020 - {{ year }} CafeCoder & MOFE</p>
+      <p class="mb-0 mr-3">
+        Copyright 2020 - {{ year }} CafeCoder & MOFE
+      </p>
       <NuxtLink to="/privacy_policy">プライバシーポリシー</NuxtLink>
     </v-footer>
   </v-app>

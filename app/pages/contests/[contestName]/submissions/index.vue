@@ -31,7 +31,6 @@ function toArray(
 }
 
 const adminMode = ref(false)
-const errorMessage = ref<string | null>(null)
 
 const allowAdminMode = computed(() => !!contest.value?.writtenTasks.length)
 const page = ref(
@@ -124,6 +123,7 @@ async function reload(load: boolean) {
 }
 const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
 </script>
+
 <template>
   <div>
     <template v-if="contest">

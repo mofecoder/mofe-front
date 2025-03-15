@@ -6,6 +6,7 @@ import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { useUserStore } from '~/store/user'
+
 const { camelCase, isObject, mapKeys, mapValues, snakeCase } = lodash
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
@@ -85,6 +86,7 @@ export function http<T>(
   const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
   const { client, accessToken, uid } = auth.value || {}
   const headers: HeadersInit = {
+    accept: 'application/json',
     ...(client && accessToken && uid && { accessToken, client, uid })
   }
   const config = useRuntimeConfig()

@@ -2,8 +2,8 @@
 import type { ContestDetail as Contest } from '~/types/contest'
 import { KIND_TABLE, STANDINGS_MODE_TABLE } from '~/constants/contests'
 
-const URL_REGEX =
-  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
+const URL_REGEX
+  = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
 const props = defineProps<{
   name: string
   slug: string
@@ -21,7 +21,7 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  submit: []
+  'submit': []
   'update:name': [string]
   'update:slug': [string]
   'update:penalty': [string]
@@ -39,16 +39,16 @@ const rules = {
   notEmpty: [(text: string) => /\S+/.test(text) || 'このフィールドは必須です'],
   slug: [
     (text: string) =>
-      (/^[a-z0-9_]+$/.test(text) && text !== 'new') ||
-      "Slug は英小文字, 数字, '_' で構成される必要があります"
+      (/^[a-z0-9_]+$/.test(text) && text !== 'new')
+      || 'Slug は英小文字, 数字, \'_\' で構成される必要があります'
   ],
   penalty: (s: string): string | boolean => {
     const num = Number(s)
     let max = 24 * 60
     if (props.edit) max *= 60
     return (
-      (!isNaN(num) && num >= 0 && num <= max) ||
-      '0分以上24時間以下にしてください'
+      (!isNaN(num) && num >= 0 && num <= max)
+      || '0分以上24時間以下にしてください'
     )
   },
   url: [
@@ -203,7 +203,7 @@ const password = computed({
         <v-col cols="12">
           <v-alert variant="tonal" density="compact" type="info">
             「参加登録パスワード」を設定すると、このパスワードを知っている人のみ参加登録できるようになります。
-            <br />
+            <br>
             「オープン参加を許可」すると、パスワードなしでもオープン参加登録できますが、
             オープン参加でない人・チームのみの順位表を表示することができるようになります。
           </v-alert>
@@ -216,8 +216,9 @@ const password = computed({
           width="auto"
           color="purple"
           @click="preview = true"
-          >プレビュー</v-btn
         >
+          プレビュー
+        </v-btn>
       </v-row>
       <v-row>
         <v-col class="pt-0" cols="12">

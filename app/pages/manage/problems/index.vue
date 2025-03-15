@@ -52,8 +52,9 @@ const items = computed(() =>
           to="/manage/problems/new"
           variant="tonal"
           prepend-icon="mdi-plus-box"
-          >問題を作成</v-btn
         >
+          問題を作成
+        </v-btn>
       </v-toolbar>
     </template>
     <template #item.contestName="{ item }">

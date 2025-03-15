@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Task } from '~/types/contestAdmin'
+
 export type ProblemType = Task & {
   id: number
   writerUser?: string
@@ -50,13 +51,17 @@ const items = computed(() => {
         <th>問題名</th>
         <th>writer</th>
         <th>難易度</th>
-        <th v-if="!problemMode">配点</th>
+        <th v-if="!problemMode">
+          配点
+        </th>
         <th v-if="!problemMode" />
       </tr>
     </thead>
     <tbody>
       <tr v-for="item in items" :key="item.name">
-        <th v-if="!problemMode">{{ item.position }}</th>
+        <th v-if="!problemMode">
+          {{ item.position }}
+        </th>
         <td>{{ item.id }}</td>
         <td>{{ item.name }}</td>
         <td>{{ item.writerUser }}</td>

@@ -57,7 +57,9 @@ const selected = ref(tabs[0])
         コンテストページで表示
       </v-btn>
     </div>
-    <h3 v-if="problem">編集中: [{{ problemId }}] {{ problem.name }}</h3>
+    <h3 v-if="problem">
+      編集中: [{{ problemId }}] {{ problem.name }}
+    </h3>
     <v-card class="mt-2">
       <v-tabs v-model="selected" align-tabs="center" color="secondary">
         <v-tab v-for="(tab, i) in tabs" :key="tab" :value="tab">
@@ -76,4 +78,5 @@ const selected = ref(tabs[0])
     </v-card>
   </v-container>
 </template>
+
 <style scoped lang="scss"></style>

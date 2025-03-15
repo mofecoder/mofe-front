@@ -78,9 +78,9 @@ const scoreHint = computed(() => {
 
 const check = (v: string) => {
   return (
-    startName.value === v ||
-    !props.testcaseSetNames.includes(v) ||
-    'この名前のテストケースセットは既に存在します。'
+    startName.value === v
+    || !props.testcaseSetNames.includes(v)
+    || 'この名前のテストケースセットは既に存在します。'
   )
 }
 
@@ -143,10 +143,12 @@ const editing = computed(() => props.id !== null)
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="text" color="red" @click="emits('close')">閉じる</v-btn>
-        <v-btn variant="text" color="primary" :disabled="!ok" @click="create"
-          >保存</v-btn
-        >
+        <v-btn variant="text" color="red" @click="emits('close')">
+          閉じる
+        </v-btn>
+        <v-btn variant="text" color="primary" :disabled="!ok" @click="create">
+          保存
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -18,7 +18,7 @@ const dayjs = useDayjs()
 
 const emits = defineEmits<{
   'update:modelValue': [value: [Dayjs, Dayjs]]
-  submit: [value: [Dayjs, Dayjs]]
+  'submit': [value: [Dayjs, Dayjs]]
 }>()
 
 const range = computed({
@@ -59,7 +59,6 @@ const submit = () => {
           <v-row cols="12">
             <vue-date-picker
               v-model="range"
-              menu-class-name="picker"
               range
               timezone="Asia/Tokyo"
               week-start="0"

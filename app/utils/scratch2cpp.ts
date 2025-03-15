@@ -349,8 +349,8 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
     this.initialize()
 
     cppSource += 'Var ' + this.nameOfAnswerVariable + '; // for "answer"\n\n'
-    cppSource +=
-      '// ============================= Scripts =============================\n\n'
+    cppSource
+      += '// ============================= Scripts =============================\n\n'
 
     // These are appended to cppSource finally.．
     let variableDeclareSource = '// variable declaration\n'
@@ -383,12 +383,12 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
       const name = variables[varID][0]
       if (!this.usedVariableSet.has(name)) continue
       const initialValue = variables[varID][1]
-      variableDeclareSource +=
-        'Var ' +
-        this.modifyVariableName(name) +
-        '(' +
-        Sb3ToCppConverter.processLiteral(initialValue) +
-        ');\n'
+      variableDeclareSource
+        += 'Var '
+          + this.modifyVariableName(name)
+          + '('
+          + Sb3ToCppConverter.processLiteral(initialValue)
+          + ');\n'
     }
 
     // declare variables (vector<Var>)
@@ -409,14 +409,14 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
     // （Scratch3.0 ではデフォルトで "へんすう" という名前の変数が宣言だけされているが，
     // この名前の変数が C++ コードに毎回登場するのを避けたい（非ascii文字がありGCCでコンパイルできなくなる）
 
-    cppSource +=
-      variableDeclareSource +
-      '\n' +
-      listDeclareSource +
-      '\n' +
-      funcPrototypeSource +
-      '\n' +
-      funcContentSource
+    cppSource
+      += variableDeclareSource
+        + '\n'
+        + listDeclareSource
+        + '\n'
+        + funcPrototypeSource
+        + '\n'
+        + funcContentSource
 
     // AtCoder 上での「バイト数」を 100 の倍数に正規化する処理
     // （「提出一覧」から scratch2cpp で生成されたコードを発見しやすくするための処置です）
@@ -534,8 +534,8 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
               blockInfo.inputs.SUBSTACK,
               allBlocksInfo
             )
-            snippet =
-              'while (1){\n' + Sb3ToCppConverter.indent(innerSnippet, 4) + '}\n'
+            snippet
+              = 'while (1){\n' + Sb3ToCppConverter.indent(innerSnippet, 4) + '}\n'
             break
           case 'control_repeat': {
             innerSnippet = this.processValueInfo(
@@ -545,13 +545,13 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
             // let cntName = randomIdentifierName();
             const cntName = `cnt_${this.loopCounterIndex}`
             this.loopCounterIndex++
-            snippet =
-              `for (int ${cntName}=0;${cntName}<${this.processValueInfo(
+            snippet
+              = `for (int ${cntName}=0;${cntName}<${this.processValueInfo(
                 blockInfo.inputs.TIMES,
                 allBlocksInfo
-              )}.asNumber();${cntName}++){\n` +
-              Sb3ToCppConverter.indent(innerSnippet, 4) +
-              '}\n'
+              )}.asNumber();${cntName}++){\n`
+              + Sb3ToCppConverter.indent(innerSnippet, 4)
+              + '}\n'
             break
           }
           case 'control_repeat_until':
@@ -559,39 +559,39 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
               blockInfo.inputs.SUBSTACK,
               allBlocksInfo
             )
-            snippet =
-              `while (!${this.processValueInfo(
+            snippet
+              = `while (!${this.processValueInfo(
                 blockInfo.inputs.CONDITION,
                 allBlocksInfo
-              )}){\n` +
-              Sb3ToCppConverter.indent(innerSnippet, 4) +
-              '}\n'
+              )}){\n`
+              + Sb3ToCppConverter.indent(innerSnippet, 4)
+              + '}\n'
             break
           case 'control_if':
             innerSnippet = this.processValueInfo(
               blockInfo.inputs.SUBSTACK,
               allBlocksInfo
             )
-            snippet =
-              `if (${this.processValueInfo(
+            snippet
+              = `if (${this.processValueInfo(
                 blockInfo.inputs.CONDITION,
                 allBlocksInfo
-              )}){\n` +
-              Sb3ToCppConverter.indent(innerSnippet, 4) +
-              '}\n'
+              )}){\n`
+              + Sb3ToCppConverter.indent(innerSnippet, 4)
+              + '}\n'
             break
           case 'control_if_else':
             innerSnippet = this.processValueInfo(
               blockInfo.inputs.SUBSTACK,
               allBlocksInfo
             ) // not SUBSTACK1
-            snippet =
-              `if (${this.processValueInfo(
+            snippet
+              = `if (${this.processValueInfo(
                 blockInfo.inputs.CONDITION,
                 allBlocksInfo
-              )}){\n` +
-              Sb3ToCppConverter.indent(innerSnippet, 4) +
-              '} else {\n'
+              )}){\n`
+              + Sb3ToCppConverter.indent(innerSnippet, 4)
+              + '} else {\n'
             innerSnippet = this.processValueInfo(
               blockInfo.inputs.SUBSTACK2,
               allBlocksInfo
@@ -716,10 +716,10 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
               snippet = `Var(pow(10.0, ${value}.asNumber()))`
             } else {
               const dic = {
-                abs: 'fabs',
-                ceiling: 'ceil',
-                ln: 'log',
-                log: 'log10',
+                'abs': 'fabs',
+                'ceiling': 'ceil',
+                'ln': 'log',
+                'log': 'log10',
                 'e ^': 'exp'
               }
 
@@ -1006,19 +1006,19 @@ ${floatTypeName} randUniform(const ${floatTypeName} x, const ${floatTypeName} y)
         const code = c.charCodeAt(0)
         if (escapeNonAscii) {
           if (
-            (c >= '0' && c <= '9') ||
-            (c >= 'A' && c <= 'Z') ||
-            (c >= 'a' && c <= 'z')
+            (c >= '0' && c <= '9')
+            || (c >= 'A' && c <= 'Z')
+            || (c >= 'a' && c <= 'z')
           ) {
             ret += c
           } else {
             ret += '_' + ('000' + code.toString(16)).substr(-4)
           }
         } else if (
-          (c >= '0' && c <= '9') ||
-          (c >= 'A' && c <= 'Z') ||
-          (c >= 'a' && c <= 'z') ||
-          code >= 256
+          (c >= '0' && c <= '9')
+          || (c >= 'A' && c <= 'Z')
+          || (c >= 'a' && c <= 'z')
+          || code >= 256
         ) {
           ret += c
         } else {

@@ -188,7 +188,7 @@ const removeAdmin = async (user: string) => {
         userName: user
       }
     )
-  } catch (error: unknown) {
+  } catch {
     alert('管理者の削除に失敗しました。')
   } finally {
     await reload()
@@ -211,16 +211,18 @@ const openModal = async () => {
         variant="tonal"
         color="purple"
         prepend-icon="mdi-arrow-left"
-        >コンテスト一覧に戻る</v-btn
       >
+        コンテスト一覧に戻る
+      </v-btn>
       <v-btn
         class="mr-2"
         :to="`/contests/${contest.slug}`"
         variant="tonal"
         color="purple"
         prepend-icon="mdi-arrow-left"
-        >コンテストページに戻る</v-btn
       >
+        コンテストページに戻る
+      </v-btn>
     </div>
     <ManageContestsEditContestCard
       v-model:name="contest.name"

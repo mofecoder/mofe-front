@@ -60,7 +60,9 @@ const submit = async () => {
     <v-card max-width="480px" class="mx-auto">
       <v-card-title>ログイン</v-card-title>
       <v-card-text>
-        <p class="mb-2">ユーザ名とパスワードを入力してください。</p>
+        <p class="mb-2">
+          ユーザ名とパスワードを入力してください。
+        </p>
         <p class="mb-4 text-caption">
           旧 CafeCoder (<code>https://cafecoder.top</code>)
           と同一のアカウントでログイン可能です。

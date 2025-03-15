@@ -23,8 +23,8 @@ const params = reactive({
 })
 const checkPasswordConfirm = (): boolean | string => {
   return (
-    params.password === params.passwordConfirmation ||
-    'パスワードが一致しません。'
+    params.password === params.passwordConfirmation
+    || 'パスワードが一致しません。'
   )
 }
 
@@ -40,7 +40,7 @@ const loading = ref(false)
 const form = ref<VForm>()
 
 const handleError = (
-  e: FetchError<{ success: false; errors: string[] }> | null | undefined
+  e: FetchError<{ success: false, errors: string[] }> | null | undefined
 ) => {
   if (!e || !e.data) {
     error.value = '処理に失敗しました。'
@@ -101,21 +101,21 @@ const rules = {
   email: [
     (v: string) => !!v || 'このフィールドは必須です。',
     (v: string) =>
-      !v ||
-      /^([\w-]+\.)*[\w-]+@([a-zA-Z]\w*[a-zA-Z0-9]\.)+[a-zA-Z]+$/.test(v) ||
-      'メールアドレスの形式が無効です。',
+      !v
+      || /^([\w-]+\.)*[\w-]+@([a-zA-Z]\w*[a-zA-Z0-9]\.)+[a-zA-Z]+$/.test(v)
+      || 'メールアドレスの形式が無効です。',
     (v: string) => !v || v.length <= 64 || 'メールアドレスが長すぎます。'
   ],
   password: [
     (v: string) => !!v || 'このフィールドは必須です。',
     (v: string) =>
-      !v ||
-      /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@\\[\]^_`{}|~]+$/.test(v) ||
-      'パスワードの形式が無効です。',
+      !v
+      || /^[a-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@\\[\]^_`{}|~]+$/.test(v)
+      || 'パスワードの形式が無効です。',
     (v: string) =>
-      !v ||
-      (v.length >= 8 && v.length <= 128) ||
-      'パスワードが短すぎるか長過ぎます。',
+      !v
+      || (v.length >= 8 && v.length <= 128)
+      || 'パスワードが短すぎるか長過ぎます。',
     (v: string) => !v || checkPasswordFormat(v)
   ],
   passwordConfirm: [
@@ -133,8 +133,9 @@ const rules = {
       class="mx-auto mb-6"
       type="error"
       variant="tonal"
-      >{{ error }}</v-alert
     >
+      {{ error }}
+    </v-alert>
     <v-card max-width="480px" class="mx-auto" :loading="loading">
       <v-card-title>パスワードリセット</v-card-title>
       <v-card-text v-if="!resetToken">

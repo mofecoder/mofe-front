@@ -16,7 +16,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  reload: []
+  'reload': []
   'update:closedMode': [boolean]
   'update:teamMode': [boolean]
   'update:showTeamMembers': [boolean]
@@ -114,9 +114,15 @@ function updateSort(column: string | null) {
         <table class="standings__table">
           <thead>
             <tr class="row-header">
-              <th class="col-rank" @click="updateSort(null)">順位</th>
-              <th class="col-username">ユーザ名</th>
-              <th class="col-result">得点</th>
+              <th class="col-rank" @click="updateSort(null)">
+                順位
+              </th>
+              <th class="col-username">
+                ユーザ名
+              </th>
+              <th class="col-result">
+                得点
+              </th>
               <th
                 v-for="problem in problems"
                 :key="problem.slug"
@@ -132,9 +138,9 @@ function updateSort(column: string | null) {
                   :class="[
                     'ms-2',
                     'sort-icon',
-                    sortColumn === problem.position &&
-                      sortOrder == 'desc' &&
-                      'sort-reverse'
+                    sortColumn === problem.position
+                      && sortOrder == 'desc'
+                      && 'sort-reverse',
                   ]"
                   size="small"
                   :color="sortColumn === problem.position ? 'success' : 'gray'"
@@ -171,13 +177,17 @@ function updateSort(column: string | null) {
                     ({{ user.result.penalty }})
                   </span>
                 </div>
-                <div class="time">{{ formatTime(user.result.time) }}</div>
+                <div class="time">
+                  {{ formatTime(user.result.time) }}
+                </div>
               </td>
               <td v-else class="col-result">
                 <div class="score score--sum">
                   <span class="point">{{ user.result.score }}</span>
                 </div>
-                <div class="time">{{ user.result.time }}</div>
+                <div class="time">
+                  {{ user.result.time }}
+                </div>
               </td>
               <td
                 v-for="(problem, index) in user.problems"
@@ -203,8 +213,8 @@ function updateSort(column: string | null) {
                   <div
                     class="icpc-score"
                     :class="{
-                      solved: !!problem.score,
-                      'penalty-only': !problem.score && !!problem.penalty
+                      'solved': !!problem.score,
+                      'penalty-only': !problem.score && !!problem.penalty,
                     }"
                   >
                     <div class="time">
@@ -213,7 +223,9 @@ function updateSort(column: string | null) {
                     <div v-if="problem.penalty" class="penalty">
                       (+{{ problem.penalty }})
                     </div>
-                    <div v-else class="no-penalty">-</div>
+                    <div v-else class="no-penalty">
+                      -
+                    </div>
                   </div>
                 </template>
               </td>

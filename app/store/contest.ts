@@ -11,8 +11,7 @@ interface ContestState {
   interval: number | null
 }
 
-export const useContestStore = defineStore({
-  id: 'contest',
+export const useContestStore = defineStore('contest', {
   state: (): ContestState => ({
     slug: null,
     contest: null,
@@ -24,16 +23,15 @@ export const useContestStore = defineStore({
       if (slug == null) return
       const updated = import.meta.client && this.slug !== toValue(slug)
       if (import.meta.client) this.slug = toValue(slug)
-      const _this = this
       await http<ContestDetail>(Contests.getContest.$path([unref(slug)]), {
-        onRequest() {
+        onRequest: () => {
           if (!updated || !import.meta.client) return
-          _this.contest = null
-          if (_this.interval != null) {
-            window.clearInterval(_this.interval)
+          this.contest = null
+          if (this.interval != null) {
+            window.clearInterval(this.interval)
           }
-          _this.interval = window.setInterval(async () => {
-            await _this.getClarifications(slug)
+          this.interval = window.setInterval(async () => {
+            await this.getClarifications(slug)
           }, 30000)
         }
       }).then((res) => {

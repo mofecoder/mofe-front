@@ -1,8 +1,8 @@
 <script setup lang="ts">
-const format =
-  '- zipfile.zip\n' +
-  '  - input\n    - testcase1.txt\n    - testcase2.txt\n' +
-  '  - output\n    - testcase1.txt\n    - testcase2.txt'
+const format
+  = '- zipfile.zip\n'
+    + '  - input\n    - testcase1.txt\n    - testcase2.txt\n'
+    + '  - output\n    - testcase1.txt\n    - testcase2.txt'
 </script>
 
 <template>
