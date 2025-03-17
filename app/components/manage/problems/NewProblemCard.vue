@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Difficulties } from '~/constants/difficulty'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 import type { Difficulty } from '~/types/task'
 import type { ProblemDetail } from '~/types/problems'
 

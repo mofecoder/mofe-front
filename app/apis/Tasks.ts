@@ -2,7 +2,7 @@ import type { TaskDetail } from '~/types/task'
 import { Api } from '~/types/api'
 
 const getTask = new Api<TaskDetail, [string, string]>(
-  ([slug, task]) => `/contests/${slug}/tasks/${task}`
+  ([slug, task]) => `/api/contests/${slug}/tasks/${task}`
 )
 
 const submit = new Api<
@@ -14,7 +14,7 @@ const submit = new Api<
   }
 >(
   ({ contestSlug, taskSlug }) =>
-    `/contests/${contestSlug}/tasks/${taskSlug}/submit`,
+    `/api/contests/${contestSlug}/tasks/${taskSlug}/submit`,
   'POST',
   ({ lang }) => ({ query: { lang } })
 )

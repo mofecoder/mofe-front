@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FetchError } from 'ofetch'
 import languages from '~/constants/languages'
-import Tasks from '~/utils/apis/Tasks'
+import Tasks from '~/apis/Tasks'
 import type { ProblemDetail } from '~/types/problems'
 import type { TaskDetail } from '~/types/task'
 
@@ -104,9 +104,7 @@ async function submit() {
 
 <template>
   <v-alert v-if="error" class="mb-6" variant="tonal" type="error">
-    {{
-      error
-    }}
+    {{ error }}
   </v-alert>
   <div class="submit-head justify-start">
     <v-autocomplete

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Tasks from '~/utils/apis/Tasks'
+import Tasks from '~/apis/Tasks'
 
 definePageMeta({
   layout: 'contest'

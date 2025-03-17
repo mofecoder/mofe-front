@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ManageContests from '~/utils/apis/ManageContests'
-import ManageProblems from '~/utils/apis/ManageProblems'
-import Admin from '~/utils/apis/Admin'
+import ManageContests from '~/apis/ManageContests'
+import ManageProblems from '~/apis/ManageProblems'
+import Admin from '~/apis/Admin'
 
 definePageMeta({
   middleware: 'admin',

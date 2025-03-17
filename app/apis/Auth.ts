@@ -14,7 +14,7 @@ type AuthResponse<
     : { success: true }))
 
 const signIn = new Api<AuthResponse, [string, string]>(
-  '/auth/sign_in',
+  '/api/auth/sign_in',
   'POST',
   ([userName, password]) => ({
     body: { name: userName, password }
@@ -22,7 +22,7 @@ const signIn = new Api<AuthResponse, [string, string]>(
 )
 
 const validateToken = new Api<AuthResponse<true>>(
-  '/auth/validate_token',
+  '/api/auth/validate_token',
   'GET',
   () => ({
     headers: {
@@ -38,7 +38,7 @@ const updateUser = new Api<
     atcoderId: string | null
     name: string
   }
->(([id]) => `/users/${id}`, 'PUT')
+>(([id]) => `/api/users/${id}`, 'PUT')
 
 const signUp = new Api<
   AuthResponse<
@@ -57,7 +57,7 @@ const signUp = new Api<
   }
 >('/auth', 'POST')
 
-const signOut = new Api<void, []>('/auth/sign_out', 'DELETE')
+const signOut = new Api<void, []>('/api/auth/sign_out', 'DELETE')
 
 const resetPasswordRequest = new Api<
   { message: string },

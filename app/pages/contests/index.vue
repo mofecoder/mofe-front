@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Duration } from 'dayjs/plugin/duration'
 import { definePageMeta } from '#imports'
-import Contests from '~/utils/apis/Contests'
+import Contests from '~/apis/Contests'
 import type { Contest } from '~/types/contest'
 
 definePageMeta({

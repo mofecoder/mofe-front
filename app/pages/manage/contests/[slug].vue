@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
 import { FetchError } from 'ofetch'
-import ManageContests from '~/utils/apis/ManageContests'
+import ManageContests from '~/apis/ManageContests'
 import type { ContestDetailManage } from '~/types/contest'
 import { useUserStore } from '~/store/user'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 
 definePageMeta({
   middleware: 'authenticated'

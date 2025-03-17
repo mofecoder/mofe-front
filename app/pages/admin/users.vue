@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Admin from '~/utils/apis/Admin'
+import Admin from '~/apis/Admin'
 import type { User } from '~/types/adminUser'
 import { formatDate } from '~/utils/formatting'
 import type { DataTableHeader } from '~/types/datatable'

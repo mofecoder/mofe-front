@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 
 definePageMeta({
   middleware: 'authenticated',

@@ -67,11 +67,6 @@ const nuxtConfig = defineNuxtConfig({
   future: {
     compatibilityVersion: 4
   },
-  eslint: {
-    config: {
-      stylistic: true
-    }
-  },
   compatibilityDate: '2024-08-31',
   dayjs: {
     locales: ['ja'],

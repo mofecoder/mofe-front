@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 // import { httpGet } from '~~/utils/axios'
 import type { AuthUser } from '~/types/AuthUser'
-import Auth from '~/utils/apis/Auth'
+import Auth from '~/apis/Auth'
 import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'

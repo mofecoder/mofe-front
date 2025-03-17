@@ -3,7 +3,7 @@ import EditCard from '~/components/manage/problems/EditCard.vue'
 import EditTestcasesCard from '~/components/manage/problems/EditTestcasesCard.vue'
 import EditJudgeCard from '~/components/manage/problems/EditJudgeCard.vue'
 import CheckProblemCard from '~/components/manage/problems/CheckProblemCard.vue'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 
 definePageMeta({
   middleware: 'authenticated',

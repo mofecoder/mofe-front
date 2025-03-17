@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '~/store/user'
-import Posts from '~/utils/apis/Posts'
+import Posts from '~/apis/Posts'
 
 const user = storeToRefs(useUserStore()).user
 const isAdmin = computed(() => user.value?.role === 'admin')

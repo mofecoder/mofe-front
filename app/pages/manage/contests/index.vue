@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ManageContests from '~/utils/apis/ManageContests'
+import ManageContests from '~/apis/ManageContests'
 
 definePageMeta({
   middleware: 'admin',

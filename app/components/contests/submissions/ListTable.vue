@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Task } from '~/types/task'
-import type { FilterOptions, SubmissionResponse } from '~/utils/apis'
+import type { FilterOptions, SubmissionResponse } from '~/apis'
 import type { DataTableHeader, SortItem } from '~/types/datatable'
 import { JUDGE_STATUSES } from '~/constants/judgeStatuses'
 

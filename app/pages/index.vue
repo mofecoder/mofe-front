@@ -2,7 +2,7 @@
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
-import { top } from '~/utils/apis'
+import { top } from '../apis'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

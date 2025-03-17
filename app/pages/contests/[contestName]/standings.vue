@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Contests from '~/utils/apis/Contests'
+import Contests from '~/apis/Contests'
 
 definePageMeta({
   layout: 'contest'

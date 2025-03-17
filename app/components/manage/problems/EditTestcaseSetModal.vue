@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 import AggregateTypes from '~/constants/aggregateTypes'
 import type { AggregateType } from '~/types/problems'
 

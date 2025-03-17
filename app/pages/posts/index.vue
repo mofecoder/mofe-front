@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Posts from '~/utils/apis/Posts'
+import Posts from '~/apis/Posts'
 import { useUserStore } from '~/store/user'
 
 definePageMeta({

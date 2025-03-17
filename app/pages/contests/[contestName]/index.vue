@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { FetchError } from 'ofetch'
 import { useUserStore } from '~/store/user'
-import Contests from '~/utils/apis/Contests'
+import Contests from '~/apis/Contests'
 
 const route = useRoute()
 const dayjs = useDayjs()

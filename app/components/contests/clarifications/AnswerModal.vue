@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Contests from '~/utils/apis/Contests'
+import Contests from '~/apis/Contests'
 
 const props = defineProps<{
   contestSlug: string

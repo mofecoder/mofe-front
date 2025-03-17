@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Problem } from '~/types/contestAdmin'
 import type { ProblemDetail } from '~/types/problems'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 
 import { Positions } from '~/constants/contests'
 import type { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'

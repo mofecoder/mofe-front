@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import checkersRaw from '~/constants/checkers'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import ManageProblems from '~/apis/ManageProblems'
 
 const emits = defineEmits<{
   update: []

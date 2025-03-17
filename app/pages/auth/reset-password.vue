@@ -3,7 +3,7 @@ import { VForm } from 'vuetify/components'
 import type { FetchError } from 'ofetch'
 import { checkPasswordFormat } from '~/utils/validation'
 import { useUserStore } from '~/store/user'
-import Auth from '~/utils/apis/Auth'
+import Auth from '~/apis/Auth'
 
 const router = useRouter()
 const route = useRoute()

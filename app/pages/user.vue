@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '~/store/user'
-import Auth from '~/utils/apis/Auth'
+import Auth from '~/apis/Auth'
 import { definePageMeta } from '#imports'
 
 definePageMeta({

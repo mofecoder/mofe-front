@@ -7,23 +7,23 @@ import type {
 } from '~/types/contest'
 
 const getContest = new Api<ContestDetailManage, [string]>(
-  ([slug]) => `/manage/contests/${slug}`
+  ([slug]) => `/api/manage/contests/${slug}`
 )
-const getContests = new Api<Contest[]>('/manage/contests', 'GET')
+const getContests = new Api<Contest[]>('/api/manage/contests', 'GET')
 
 const createContest = new Api<Contest, [], ContestCreateParam>(
-  '/contests',
+  '/api/contests',
   'POST'
 )
 
 const updateContest = new Api<Contest, [string], ContestEditParam>(
-  ([slug]) => `/contests/${slug}`,
+  ([slug]) => `/api/contests/${slug}`,
   'PUT'
 )
 
 const addTask = new Api<void, [string, number, string, string]>(
   ([contestSlug, problemId, problemSlug, position]) =>
-    `/contests/${contestSlug}/set_task`
+    `/api/contests/${contestSlug}/set_task`
     + `?problem_id=${problemId}`
     + `&problem_slug=${problemSlug}`
     + `&position=${position}`,
@@ -32,17 +32,17 @@ const addTask = new Api<void, [string, number, string, string]>(
 
 const removeTask = new Api<void, [string, string]>(
   ([contestSlug, problemSlug]) =>
-    `/contests/${contestSlug}/tasks/${problemSlug}/remove_from_contest`,
+    `/api/contests/${contestSlug}/tasks/${problemSlug}/remove_from_contest`,
   'PUT'
 )
 
 const addAdmin = new Api<void, [string], { userName: string }>(
-  ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
+  ([contestSlug]) => `/api/contests/${contestSlug}/contest_admins`,
   'POST'
 )
 
 const removeAdmin = new Api<void, [string], { userName: string }>(
-  ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
+  ([contestSlug]) => `/api/contests/${contestSlug}/contest_admins`,
   'DELETE'
 )
 

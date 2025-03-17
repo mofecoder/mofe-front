@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
 import type { ContestDetail } from '~/types/contest'
-import ManageContests from '~/utils/apis/ManageContests'
+import ManageContests from '~/apis/ManageContests'
 
 const dayjs = useDayjs()
 

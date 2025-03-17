@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import Contests from '~/utils/apis/Contests'
+import Contests from '~/apis/Contests'
 
 definePageMeta({
   layout: 'contest',

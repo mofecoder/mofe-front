@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import type { MaybeRef } from 'vue'
 import type { ContestDetail } from '~/types/contest'
 import type { Clarification } from '~/types/clarification'
-import Contests from '~/utils/apis/Contests'
+import Contests from '~/apis/Contests'
 
 interface ContestState {
   slug: string | null

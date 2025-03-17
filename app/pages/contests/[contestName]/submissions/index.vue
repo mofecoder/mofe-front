@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LocationQueryValue } from 'vue-router'
-import type { FilterOptions } from '~/utils/apis/Contests'
-import Contests from '~/utils/apis/Contests'
+import type { FilterOptions } from '~/apis/Contests'
+import Contests from '~/apis/Contests'
 import type { SortItem } from '~/types/datatable'
 import { JUDGE_STATUSES } from '~/constants/judgeStatuses'
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Posts from '~/utils/apis/Posts'
+import Posts from '~/apis/Posts'
 import { formatDate } from '~/utils/formatting'
 import { STATUS_TABLE } from '~/constants/posts'
 import { definePageMeta } from '#imports'
