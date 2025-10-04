@@ -53,11 +53,11 @@ function formatSubmissionsUrl(
   return url
 }
 
-const getContests = new Api<Contests>('/api/contests')
-const getContest = new Api<ContestDetail, [string]>(
+const getContests = new Api<Contests>('v1', '/api/contests')
+const getContest = new Api<ContestDetail, [string]>('v1',
   ([slug]) => `/api/contests/${slug}`
 )
-const getStandings = new Api<StandingData, [string, boolean, boolean]>(
+const getStandings = new Api<StandingData, [string, boolean, boolean]>('v1',
   ([slug, excludeOpen, teamOnly]) => {
     const options = []
     if (excludeOpen) options.push('exclude_open')
@@ -66,11 +66,11 @@ const getStandings = new Api<StandingData, [string, boolean, boolean]>(
   }
 )
 
-const getClarifications = new Api<Clarification[], [string]>(
+const getClarifications = new Api<Clarification[], [string]>('v1',
   ([slug]) => `/api/contests/${slug}/clarifications`
 )
 
-const getClarification = new Api<Clarification, [string, number]>(
+const getClarification = new Api<Clarification, [string, number]>('v1',
   ([slug, id]) => `/api/contests/${slug}/clarifications/${id}`
 )
 
@@ -94,7 +94,7 @@ type GetSubmissionParams = {
   filter?: FilterOptions
 }
 
-const getAllSubmissions = new Api<SubmissionResponse, GetSubmissionParams>(
+const getAllSubmissions = new Api<SubmissionResponse, GetSubmissionParams>('v1',
   ({ slug, page, count, sortBy, filter }) =>
     formatSubmissionsUrl(
       `/api/contests/${slug}/submissions/all`,
@@ -105,7 +105,7 @@ const getAllSubmissions = new Api<SubmissionResponse, GetSubmissionParams>(
     )
 )
 
-const getMySubmissions = new Api<SubmissionResponse, GetSubmissionParams>(
+const getMySubmissions = new Api<SubmissionResponse, GetSubmissionParams>('v1',
   ({ slug, page, count, sortBy, filter }) =>
     formatSubmissionsUrl(
       `/api/contests/${slug}/submissions`,
@@ -116,22 +116,22 @@ const getMySubmissions = new Api<SubmissionResponse, GetSubmissionParams>(
     )
 )
 
-const rejudge = new Api<Submit, [string]>(
+const rejudge = new Api<Submit, [string]>('v1',
   ([slug]) => `/api/contests/${slug}/rejudge`,
   'POST'
 )
 
-const getSubmission = new Api<SubmissionDetail, [string, number]>(
+const getSubmission = new Api<SubmissionDetail, [string, number]>('v1',
   ([contestSlug, id]) => `/api/contests/${contestSlug}/submissions/${id}`
 )
 
-const togglePublishStatus = new Api<{ public: boolean }, [string, number]>(
+const togglePublishStatus = new Api<{ public: boolean }, [string, number]>('v1',
   ([contestSlug, id]) =>
     `/api/contests/${contestSlug}/submissions/${id}/toggle_published`,
   'PATCH'
 )
 
-const register = new Api<void, [string], { password?: string, open?: boolean }>(
+const register = new Api<void, [string], { password?: string, open?: boolean }>('v1',
   ([slug]) => `/api/contests/${slug}/registrations`,
   'POST'
 )
@@ -147,7 +147,7 @@ const teamRegister = new Api<
   }
 >(([slug]) => `/api/contests/${slug}/registrations/team`, 'POST')
 
-const unregister = new Api<void, [string]>(
+const unregister = new Api<void, [string]>('v1',
   ([slug]) => `/api/contests/${slug}/registrations`,
   'DELETE'
 )

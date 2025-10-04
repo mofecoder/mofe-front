@@ -1,18 +1,17 @@
-import VueGtagPlugin from 'vue-gtag'
+import { configure } from 'vue-gtag'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const router = useRouter()
 
   const runtimeConfig = useRuntimeConfig()
   const trackingId = runtimeConfig.public.gaTrackingId
   if (!trackingId) return
-  nuxtApp.vueApp.use(
-    VueGtagPlugin,
-    {
-      appName: 'mofe',
-      pageTrackerScreenviewEnabled: true,
-      config: { id: trackingId }
+  configure({
+    appName: 'mofe',
+    pageTracker: {
+      router,
+      useScreenview: true
     },
-    router
-  )
+    tagId: trackingId
+  })
 })

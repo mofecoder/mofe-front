@@ -84,7 +84,7 @@ const unregister = async () => {
   await updateContest()
 }
 
-const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
+const registerInner = async (isTeam: boolean, body: Record<string, unknown>) => {
   if (!storeToRefs(userStore).user.value) {
     await router.push({
       path: '/auth/signin',

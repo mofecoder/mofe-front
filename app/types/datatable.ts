@@ -1,8 +1,10 @@
-type SelectItemKey =
-  | boolean
-  | string
-  | (string | number)[]
-  | ((item: Record<string, any>, fallback?: any) => any)
+type SelectItemKey
+  = | boolean
+    | string
+    | (string | number)[]
+    | ((item: Record<string, unknown>, fallback?: unknown) => unknown)
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DataTableCompareFunction<T = any> = (a: T, b: T) => number
 export type DataTableHeader = {
   key: string

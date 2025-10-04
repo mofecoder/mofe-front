@@ -1,13 +1,16 @@
 import type { FetchResponse } from 'ofetch'
 import type { MaybeRef } from 'vue'
-import lodash from 'lodash'
+import camelCase from 'lodash.camelcase'
+import snakeCase from 'lodash.snakecase'
+import mapKeys from 'lodash.mapkeys'
+import mapValues from 'lodash.mapvalues'
+import isObject from 'lodash.isobject'
+import { toValue, unref, watchEffect } from 'vue'
 import defu from 'defu'
 import type { UseFetchOptions } from '#app'
-import type AuthTokens from '~/types/AuthTokens'
-import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { useUserStore } from '~/store/user'
 
-const { camelCase, isObject, mapKeys, mapValues, snakeCase } = lodash
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
   if (Array.isArray(data)) {
@@ -83,13 +86,9 @@ export function http<T>(
   url: MaybeRef<string>,
   options: UseFetchOptions<T> = {}
 ) {
-  const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
-  const { client, accessToken, uid } = auth.value || {}
   const headers: HeadersInit = {
-    accept: 'application/json',
-    ...(client && accessToken && uid && { accessToken, client, uid })
+    accept: 'application/json'
   }
-  const config = useRuntimeConfig()
   const userStore = useUserStore()
 
   const handleResponse: UseFetchOptions<T>['onResponse'] = async (ctx) => {
@@ -105,7 +104,7 @@ export function http<T>(
 
     if (res.status === 401) {
       await userStore.signOut()
-      useCookie(AUTH_COOKIE_NAME).value = null
+      // TODO: 401
     }
 
     // if (isErrorCode(res.status)) {
@@ -117,7 +116,7 @@ export function http<T>(
     options.body = toSnakeCase(options.body)
   }
   const defaults: UseFetchOptions<T> = {
-    baseURL: config.public.apiBase,
+    baseURL: '/api/proxy',
     key: unref(url),
     headers: toSnakeCase(headers, true),
     method: 'GET',

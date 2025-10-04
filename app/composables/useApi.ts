@@ -6,7 +6,7 @@ import type { UseFetchOptions } from '#app'
 function useApi<
   ResT,
   U extends ArgsType,
-  V extends RequestInit['body'] | Record<string, any>,
+  V extends RequestInit['body'] | Record<string, unknown>,
   DataT = ResT
 >(
   api: Api<ResT, U, V>,

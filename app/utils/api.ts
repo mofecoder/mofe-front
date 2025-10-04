@@ -4,7 +4,7 @@ import type { UseFetchOptions } from '#app'
 export function api<
   ResT,
   Args extends ArgsType,
-  Body extends RequestInit['body'] | Record<string, any>
+  Body extends RequestInit['body'] | Record<string, unknown>
 >(
   api: Api<ResT, Args, Body>,
   args: MaybeRefOrGetter<Args>,

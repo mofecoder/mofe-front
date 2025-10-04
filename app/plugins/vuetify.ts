@@ -1,27 +1,23 @@
 import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css'
 import DayJsAdapter from '@date-io/dayjs'
 import { ja } from 'vuetify/locale'
-import { VNumberInput } from 'vuetify/labs/components'
+import { md3 } from 'vuetify/blueprints'
+import dayJsJa from 'dayjs/locale/ja'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     ssr: true,
-    components: {
-      VNumberInput,
-      ...components
-    },
-    directives,
     icons: {
       defaultSet: 'mdi',
       aliases,
       sets: { mdi }
     },
+    blueprint: md3,
     date: {
-      adapter: DayJsAdapter
+      adapter: DayJsAdapter,
+      locale: { dayJsJa }
     },
     locale: {
       locale: 'ja',

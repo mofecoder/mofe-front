@@ -53,6 +53,7 @@ watch(contestData, (value, oldValue) => {
       if (key === 'penaltyTime') {
         contest[key] = value[key].toString()
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ;(contest as any)[key] = value[key]
       }
     }

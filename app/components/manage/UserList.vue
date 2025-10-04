@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineSlots<{
-  subheader(props: object): any
-  emptyMessage(props: object): any
+  subheader(props: object): unknown
+  emptyMessage(props: object): unknown
 }>()
 withDefaults(
   defineProps<{

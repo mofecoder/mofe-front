@@ -83,7 +83,7 @@ const submit = async () => {
             required
             autocomplete="current-password"
           />
-          <div class="d-flex ga-3 my-4 flex-column">
+          <div class="d-flex ga-2 my-4 flex-column">
             <v-btn
               to="/auth/signup"
               variant="outlined"

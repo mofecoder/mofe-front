@@ -1,4 +1,7 @@
 import type { UseFetchOptions } from '#app'
+import type { ApiVersion } from '#shared/types'
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export type Methods = 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE'
 export type ArgsType = any[] | Record<string, any>
@@ -11,13 +14,19 @@ export class Api<
 > {
   $path: (params: U) => string
   method: Methods
+  version: ApiVersion = 'v1'
   options: (params: U) => UseFetchOptions<any>
+
   constructor(
+    apiVersion: ApiVersion = 'v1',
     path: string | ((params: U) => string),
     method: Methods = 'GET',
     options?: UseFetchOptions<any> | ((params: U) => UseFetchOptions<any>)
   ) {
-    this.$path = typeof path === 'string' ? () => path : (args) => path(args)
+    this.version = apiVersion
+    this.$path = typeof path === 'string'
+      ? () => `${this.version}${path}`
+      : (args) => `${this.version}${path(args)}`
     this.method = method
     if (options) {
       this.options = typeof options === 'function' ? options : () => options
@@ -27,22 +36,22 @@ export class Api<
   }
 
   get POST() {
-    return new Api<T, U>(this.$path, 'POST', this.options)
+    return new Api<T, U>(this.version, this.$path, 'POST', this.options)
   }
 
   get GET() {
-    return new Api<T, U>(this.$path, 'GET', this.options)
+    return new Api<T, U>(this.version, this.$path, 'GET', this.options)
   }
 
   get PUT() {
-    return new Api<T, U>(this.$path, 'PUT', this.options)
+    return new Api<T, U>(this.version, this.$path, 'PUT', this.options)
   }
 
   get PATCH() {
-    return new Api<T, U>(this.$path, 'PATCH', this.options)
+    return new Api<T, U>(this.version, this.$path, 'PATCH', this.options)
   }
 
   get DELETE() {
-    return new Api<T, U>(this.$path, 'DELETE', this.options)
+    return new Api<T, U>(this.version, this.$path, 'DELETE', this.options)
   }
 }

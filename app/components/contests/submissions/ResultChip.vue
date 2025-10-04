@@ -83,7 +83,7 @@ const smallText = computed(() => {
           `result-${status}`,
           dense && 'chip-dense',
           judgeStatus && 'chip-judging',
-          noMinWidth && 'chip-no-min-width',
+          noMinWidth && 'chip-no-min-width'
         ]"
         v-bind="p"
       >

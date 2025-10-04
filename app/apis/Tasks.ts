@@ -1,7 +1,7 @@
 import type { TaskDetail } from '~/types/task'
 import { Api } from '~/types/api'
 
-const getTask = new Api<TaskDetail, [string, string]>(
+const getTask = new Api<TaskDetail, [string, string]>('v1',
   ([slug, task]) => `/api/contests/${slug}/tasks/${task}`
 )
 
@@ -13,6 +13,7 @@ const submit = new Api<
     lang: string
   }
 >(
+  'v1',
   ({ contestSlug, taskSlug }) =>
     `/api/contests/${contestSlug}/tasks/${taskSlug}/submit`,
   'POST',

@@ -4,8 +4,8 @@ import type { AuthUser } from '~/types/AuthUser'
 type AuthResponse<
   SuccessType extends true | undefined = undefined,
   ErrorsType = string[]
-> =
-  | {
+>
+  = | {
     success: false
     errors: ErrorsType
   }
@@ -13,7 +13,7 @@ type AuthResponse<
     ? object
     : { success: true }))
 
-const signIn = new Api<AuthResponse, [string, string]>(
+const signIn = new Api<AuthResponse, [string, string]>('v1',
   '/api/auth/sign_in',
   'POST',
   ([userName, password]) => ({
@@ -21,7 +21,7 @@ const signIn = new Api<AuthResponse, [string, string]>(
   })
 )
 
-const validateToken = new Api<AuthResponse<true>>(
+const validateToken = new Api<AuthResponse<true>>('v1',
   '/api/auth/validate_token',
   'GET',
   () => ({
@@ -38,7 +38,7 @@ const updateUser = new Api<
     atcoderId: string | null
     name: string
   }
->(([id]) => `/api/users/${id}`, 'PUT')
+>('v1', ([id]) => `/api/users/${id}`, 'PUT')
 
 const signUp = new Api<
   AuthResponse<
@@ -55,9 +55,9 @@ const signUp = new Api<
     password: string
     passwordConfirmation: string
   }
->('/auth', 'POST')
+>('v1', '/auth', 'POST')
 
-const signOut = new Api<void, []>('/api/auth/sign_out', 'DELETE')
+const signOut = new Api<void, []>('v1', '/api/auth/sign_out', 'DELETE')
 
 const resetPasswordRequest = new Api<
   { message: string },
@@ -66,7 +66,7 @@ const resetPasswordRequest = new Api<
     email: string
     redirectUrl: string
   }
->('/auth/password', 'POST')
+>('v1', '/auth/password', 'POST')
 
 const resetPassword = new Api<
   { message: string },
@@ -78,7 +78,7 @@ const resetPassword = new Api<
       passwordConfirmation: string
     }
   }
->('/auth/password', 'PUT')
+>('v1', '/auth/password', 'PUT')
 
 export default {
   signIn,

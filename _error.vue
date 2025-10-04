@@ -3,6 +3,7 @@ definePageMeta({
   layout: false
 })
 const props = defineProps<{
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: any
 }>()
 

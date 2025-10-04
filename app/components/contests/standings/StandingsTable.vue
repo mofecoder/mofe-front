@@ -140,7 +140,7 @@ function updateSort(column: string | null) {
                     'sort-icon',
                     sortColumn === problem.position
                       && sortOrder == 'desc'
-                      && 'sort-reverse',
+                      && 'sort-reverse'
                   ]"
                   size="small"
                   :color="sortColumn === problem.position ? 'success' : 'gray'"
@@ -214,7 +214,7 @@ function updateSort(column: string | null) {
                     class="icpc-score"
                     :class="{
                       'solved': !!problem.score,
-                      'penalty-only': !problem.score && !!problem.penalty,
+                      'penalty-only': !problem.score && !!problem.penalty
                     }"
                   >
                     <div class="time">

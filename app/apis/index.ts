@@ -11,6 +11,6 @@ const top = new Api<{
   contests: Contest[]
   creating: Problem[] | null
   posts: Post[]
-}>('/top')
+}>('v1', '/api/top')
 
 export { top }

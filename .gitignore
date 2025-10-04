@@ -98,3 +98,5 @@ firebase.json
 config/.env.prod
 
 .output
+.env.local
+/service-account.json

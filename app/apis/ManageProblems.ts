@@ -21,57 +21,57 @@ type TestcaseResponseType = {
   explanation: string | null
 }
 
-const getProblems = new Api<Problem[]>('/api/problems')
+const getProblems = new Api<Problem[]>('v4', '/problems')
 
-const getProblem = new Api<ProblemDetail, [number]>(([id]) => `/api/problems/${id}`)
+const getProblem = new Api<ProblemDetail, [number]>('v4', ([id]) => `/problems/${id}`)
 const updateProblem = new Api<
   ProblemDetail,
   [number],
   { problem: ProblemParams }
->(([id]) => `/api/problems/${id}`, 'PUT')
+>('v1', ([id]) => `/v4/problems/${id}`, 'PUT')
 
-const getUnsetProblems = new Api<AdminProblem[], []>(
+const getUnsetProblems = new Api<AdminProblem[], []>('v1',
   '/api/manage/problems/unset_problems'
 )
 
-const createProblem = new Api<ProblemDetail, [], { problem: ProblemParams }>(
-  '/api/problems',
+const createProblem = new Api<ProblemDetail, [], { problem: ProblemParams }>('v1',
+  '/v4/problems',
   'POST'
 )
 
-const addTester = new Api<void, [number]>(
+const addTester = new Api<void, [number]>('v1',
   ([id]) => `/api/problems/${id}/tester_relations`,
   'POST'
 )
-const removeTester = new Api<void, [number]>(
+const removeTester = new Api<void, [number]>('v1',
   ([id]) => `/api/problems/${id}/tester_relations`,
   'DELETE'
 )
 
-const getTestcases = new Api<TestcasesResponseType, [number]>(
+const getTestcases = new Api<TestcasesResponseType, [number]>('v1',
   ([id]) => `/api/problems/${id}/testcases`
 )
 
-const getTestcase = new Api<TestcaseResponseType, [number, number]>(
+const getTestcase = new Api<TestcaseResponseType, [number, number]>('v1',
   ([id, testcaseId]) => `/api/problems/${id}/testcases/${testcaseId}`
 )
 
-const deleteTestcase = new Api<void, [number, number]>(
+const deleteTestcase = new Api<void, [number, number]>('v1',
   ([id, testcaseId]) => `/api/problems/${id}/testcases/${testcaseId}`,
   'DELETE'
 )
 
-const createTestcase = new Api<void, [number]>(
+const createTestcase = new Api<void, [number]>('v1',
   ([id]) => `/api/problems/${id}/testcases`,
   'POST'
 )
 
-const updateTestcase = new Api<void, [number, number]>(
+const updateTestcase = new Api<void, [number, number]>('v1',
   ([id, testcaseId]) => `/api/problems/${id}/testcases/${testcaseId}`,
   'PUT'
 )
 
-const getTestcaseSet = new Api<TestcaseSet, [number, number]>(
+const getTestcaseSet = new Api<TestcaseSet, [number, number]>('v1',
   ([id, testcaseSetId]) => `/api/problems/${id}/testcase_sets/${testcaseSetId}`
 )
 
@@ -79,30 +79,30 @@ const deleteMultipleTestcases = new Api<
   void,
   [number],
   { testcases: number[] }
->(([id]) => `/api/problems/${id}/testcases/delete_multiple`, 'DELETE')
+>('v1', ([id]) => `/api/problems/${id}/testcases/delete_multiple`, 'DELETE')
 
-const createTestcaseSet = new Api<void, [number]>(
+const createTestcaseSet = new Api<void, [number]>('v1',
   ([id]) => `/api/problems/${id}/testcase_sets`,
   'POST'
 )
 
-const updateTestcaseSet = new Api<void, [number, number]>(
+const updateTestcaseSet = new Api<void, [number, number]>('v1',
   ([id, testcaseSetId]) => `/api/problems/${id}/testcase_sets/${testcaseSetId}`,
   'PUT'
 )
 
-const deleteTestcaseSet = new Api<void, [number, number]>(
+const deleteTestcaseSet = new Api<void, [number, number]>('v1',
   ([id, testcaseSetId]) => `/api/problems/${id}/testcase_sets/${testcaseSetId}`,
   'DELETE'
 )
 
-const uploadTestcases = new Api<UploadResponseType, [number]>(
+const uploadTestcases = new Api<UploadResponseType, [number]>('v1',
   ([id]) => `/api/problems/${id}/testcases/upload`,
   'POST',
   {}
 )
 
-const changeTestcaseState = new Api<void, [number, number]>(
+const changeTestcaseState = new Api<void, [number, number]>('v1',
   ([id, testcaseId]) => `/api/problems/${id}/testcases/${testcaseId}/change_state`,
   'PATCH'
 )
@@ -111,15 +111,15 @@ const addToTestcaseSetMultiple = new Api<
   void,
   [number],
   { testcaseIds: number[], testcaseSetId: number }
->(([id]) => `/api/problems/${id}/testcases/change_state_multiple`, 'PATCH')
+>('v1', ([id]) => `/api/problems/${id}/testcases/change_state_multiple`, 'PATCH')
 
-const updateChecker = new Api<string, [number]>(
+const updateChecker = new Api<string, [number]>('v1',
   ([id]) => `/api/problems/${id}/checker`,
   'POST',
   {}
 )
 
-const downloadChecker = new Api<string, [number]>(
+const downloadChecker = new Api<string, [number]>('v1',
   ([id]) => `/api/problems/${id}/checker`,
   'GET',
   {}

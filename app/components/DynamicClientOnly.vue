@@ -3,6 +3,7 @@ const props = defineProps<{
   condition: boolean | (() => boolean) | (() => Promise<boolean>)
 }>()
 defineSlots<{
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   fallback(): any
 }>()
 

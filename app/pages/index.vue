@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import { top } from '../apis'
 import { useUserStore } from '~/store/user'
 import useApi from '~/composables/useApi'
-import { top } from '../apis'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)

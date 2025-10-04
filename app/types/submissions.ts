@@ -1,18 +1,18 @@
 import type { Task } from '~/types/task'
 
-type Result =
-  | 'WJ'
-  | 'AC'
-  | 'WA'
-  | 'TLE'
-  | 'RE'
-  | 'OLE'
-  | 'QLE'
-  | 'IE'
-  | 'CE'
-  | 'MLE'
-  | 'WR'
-  | 'CP'
+type Result
+  = | 'WJ'
+    | 'AC'
+    | 'WA'
+    | 'TLE'
+    | 'RE'
+    | 'OLE'
+    | 'QLE'
+    | 'IE'
+    | 'CE'
+    | 'MLE'
+    | 'WR'
+    | 'CP'
 
 export type SubmissionResult = Result
 

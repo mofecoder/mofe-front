@@ -1,5 +1,7 @@
 import JSZip from 'jszip'
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // a fork of yos1up/scratch2cpp
 // see https://github.com/yos1up/scratch2cpp/blob/master/web/crx/sb3_to_cpp.js
 export class Sb3ToCppConverter {
@@ -170,7 +172,7 @@ public:
         }else{
             numericState = STRINGY;
             dval = 0.0;
-        }        
+        }
         dvalValid = true;
     }
     static bool isNumericString(const string &s, ${floatTypeName} *ptr) {
@@ -183,16 +185,16 @@ public:
     bool isNumeric() const{
         fillDval();
         return numericState == NUMERIC;
-    }    
+    }
     void fillSval() const{
         if (svalValid) return;
         sval = (${floorVariantName}(dval) == dval) ? to_string((ll)dval) : to_string(dval);
         svalValid = true;
-    }       
+    }
     ${floatTypeName} asNumber() const{
         fillDval();
         return dval;
-    } 
+    }
     string asString() const{
         fillSval();
         return sval;
@@ -289,7 +291,7 @@ public:
     void insertAtIndexOfList(const Var &item, const Var &index){
         /* index: 1-origined */
         int idx = (int)index.asNumber() - 1;
-        if (0 <= idx && idx <= data.size()) data.insert(data.begin() + idx, item);   
+        if (0 <= idx && idx <= data.size()) data.insert(data.begin() + idx, item);
     }
     void insertAtRandomOfList(const Var &item){
         int idx = rand() % (data.size() + 1);
@@ -304,7 +306,7 @@ public:
             if (i > 0) ret += ' ';
             ret += data[i].asString();
         }
-        return ret;        
+        return ret;
     }
     int itemNumOfList(const Var &item) const{
         auto itr = find(data.begin(), data.end(), item);

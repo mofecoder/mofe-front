@@ -3,9 +3,7 @@ import type { MaybeRef } from 'vue'
 import type { FetchError } from 'ofetch'
 import type { AvailableRouterMethod, NitroFetchRequest } from 'nitropack'
 import type { UseFetchOptions } from '#app'
-import type AuthTokens from '~/types/AuthTokens'
 import { useUserStore } from '~/store/user'
-import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { toCamelCase, toSnakeCase, log } from '~/utils/http'
 import type { FetchResult } from '#app/composables/fetch'
 
@@ -20,17 +18,11 @@ const useHttp = async <
   url: MaybeRef<string>,
   options: UseFetchOptions<ResT, DataT> = {}
 ) => {
-  const oldAuth = useCookie<AuthTokens | null>('auth')
-  const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
-  const { client, accessToken, uid } = auth.value || oldAuth.value || {}
-  if (oldAuth.value) {
-    oldAuth.value = null
-  }
+  const serverHeaders = useRequestHeaders(['cookie'])
   const headers: HeadersInit = {
-    accept: 'application/json',
-    ...(client && accessToken && uid && { accessToken, client, uid })
+    ...serverHeaders,
+    accept: 'application/json'
   }
-  const config = useRuntimeConfig()
   const userStore = useUserStore()
 
   const handleResponse: UseFetchOptions<ResT, DataT>['onResponse'] = (ctx) => {
@@ -45,8 +37,8 @@ const useHttp = async <
     res._data = toCamelCase(ctx.response._data)
 
     if (res.status === 401) {
+      // TODO: 401
       userStore.signOut()
-      useCookie(AUTH_COOKIE_NAME).value = null
     }
 
     // if (isErrorCode(res.status)) {
@@ -58,7 +50,7 @@ const useHttp = async <
     options.body = toSnakeCase(options.body)
   }
   const defaults: UseFetchOptions<ResT, DataT> = {
-    baseURL: config.public.apiBase,
+    baseURL: '/api/proxy',
     key: unref(url),
     headers: toSnakeCase(headers, true),
     method: 'GET',
@@ -93,7 +85,7 @@ const useHttp = async <
     AvailableRouterMethod<NitroFetchRequest>,
     DataT,
     DataT
-  >(url, defu(options, defaults) as any)
+  >(url, defu(options, defaults) as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export default useHttp as typeof useHttp

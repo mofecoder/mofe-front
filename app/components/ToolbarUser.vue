@@ -123,11 +123,11 @@ const signOut = async () => {
         新規登録
       </v-btn>
       <v-btn
-        :to="createLink('/auth/signin')"
+        :to="createLink('/firebase/login')"
         variant="text"
         prepend-icon="mdi-login-variant"
       >
-        ログイン
+        FBログイン
       </v-btn>
     </div>
   </ClientOnly>

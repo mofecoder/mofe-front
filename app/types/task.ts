@@ -1,12 +1,12 @@
-export type Difficulty =
-  | 'Milk'
-  | 'Assam'
-  | 'Benihuki'
-  | 'Ceylon'
-  | 'Darjeeling'
-  | 'Earlgray'
-  | 'Flavor'
-  | 'ผักชี'
+export type Difficulty
+  = | 'Milk'
+    | 'Assam'
+    | 'Benihuki'
+    | 'Ceylon'
+    | 'Darjeeling'
+    | 'Earlgray'
+    | 'Flavor'
+    | 'ผักชี'
 
 export type Sample = {
   input: string

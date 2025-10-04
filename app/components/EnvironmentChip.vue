@@ -11,18 +11,11 @@ const environments = {
   production: {}
 } satisfies Record<string, VChip['$props']>
 
-const config = useRuntimeConfig()
-let api = 'production'
-if (config.public.apiBase.includes('localhost')) {
-  api = 'Dev'
-}
-
 let text = 'production'
 let environment = {}
 if (process.env.NODE_ENV === 'development') {
   text = 'Dev'
-  environment
-    = api === 'Dev' ? environments.development : environments.devProdApi
+  environment = environments.development
 }
 </script>
 
@@ -35,7 +28,6 @@ if (process.env.NODE_ENV === 'development') {
     label
   >
     {{ text }}
-    <span class="api">/ {{ api }} API</span>
   </v-chip>
 </template>
 

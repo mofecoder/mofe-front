@@ -28,14 +28,7 @@ const nuxtConfig = defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@vueuse/nuxt',
-    [
-      '@nuxtjs/eslint-module',
-      {
-        lintOnStart: false
-      }
-    ],
-    'dayjs-nuxt',
-    '@nuxt/eslint'
+    'dayjs-nuxt'
   ],
   vite: {
     ssr: {
@@ -53,16 +46,26 @@ const nuxtConfig = defineNuxtConfig({
     }
   },
   runtimeConfig: {
+    privateKey: process.env.NUXT_PRIVATE_KEY,
+    apiBaseUrl: process.env.NUXT_API_BASE_URL,
+    secret: process.env.NUXT_SECRET,
     public: {
+      authDomain: '',
       apiBase: '',
-      gaTrackingId: ''
+      gaTrackingId: '',
+      firebaseAppId: '',
+      firebaseApiKey: '',
+      firebaseProjectId: ''
     }
   },
   routeRules: {
     '/privacy_policy': { prerender: true },
     // '/languages': { prerender: true },
     '/admin/**': { ssr: false },
-    '/manage/**': { ssr: false }
+    '/manage/**': { ssr: false },
+    '/auth/login': { ssr: false },
+    '/auth/callback/**': { ssr: false },
+    '/firebase/login': { ssr: false }
   },
   future: {
     compatibilityVersion: 4
