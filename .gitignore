@@ -98,3 +98,6 @@ firebase.json
 config/.env.prod
 
 .output
+
+# Google Cloud / Firebase service account credentials
+service-account.json
