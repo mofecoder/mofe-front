@@ -1,12 +1,15 @@
 import type { FetchResponse } from 'ofetch'
 import type { MaybeRef } from 'vue'
-import lodash from 'lodash'
+import camelCase from 'lodash.camelcase'
+import isObject from 'lodash.isobject'
+import mapKeys from 'lodash.mapkeys'
+import mapValues from 'lodash.mapvalues'
+import snakeCase from 'lodash.snakecase'
 import defu from 'defu'
 import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { useUserStore } from '~/store/user'
-const { camelCase, isObject, mapKeys, mapValues, snakeCase } = lodash
 
 function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
   if (Array.isArray(data)) {
