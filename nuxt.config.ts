@@ -28,12 +28,7 @@ const nuxtConfig = defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@vueuse/nuxt',
-    [
-      '@nuxtjs/eslint-module',
-      {
-        lintOnStart: false
-      }
-    ],
+    '@nuxt/eslint',
     'dayjs-nuxt'
   ],
   vite: {
