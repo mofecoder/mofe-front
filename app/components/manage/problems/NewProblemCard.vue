@@ -82,7 +82,7 @@ const onSubmit = async () => {
           </v-col>
         </v-row>
         <!-- 問題文 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -109,7 +109,7 @@ const onSubmit = async () => {
           @close="modals.problemStatement = false"
         />
         <!-- 制約 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -136,7 +136,7 @@ const onSubmit = async () => {
           @close="modals.constraints = false"
         />
         <!-- 部分点 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -163,7 +163,7 @@ const onSubmit = async () => {
           @close="modals.partialScores = false"
         />
         <!-- 入力 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -195,7 +195,7 @@ const onSubmit = async () => {
           @close="modals.input = false"
         />
         <!-- 出力 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"

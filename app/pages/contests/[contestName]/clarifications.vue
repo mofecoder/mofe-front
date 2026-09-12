@@ -77,10 +77,10 @@ const user = useUserStore().user
               </NuxtLink>
             </template>
             <template #text>
-              <div class="text-pre-wrap text-body-1">
+              <div class="text-pre-wrap text-body-large">
                 {{ clar.question }}
               </div>
-              <div class="text-grey-darken-2 mt-4 text-body-2">
+              <div class="text-grey-darken-2 mt-4 text-body-medium">
                 投稿日時：{{ formatDate(clar.createdAt) }}
                 <br />
                 更新日時：{{ formatDate(clar.updatedAt) }}
@@ -119,15 +119,15 @@ const user = useUserStore().user
                   size="small"
                   width="100%"
                 >
-                  <div class="text-h6 font-weight-bold">
+                  <div class="text-title-large font-weight-bold">
                     <div>
                       {{ clar.user }}
                     </div>
-                    <div class="text-body-1 flex-shrink-0">
+                    <div class="text-body-large flex-shrink-0">
                       {{ formatDate(clar.createdAt) }}
                     </div>
                   </div>
-                  <div class="text-pre-wrap text-body-1 mt-2">
+                  <div class="text-pre-wrap text-body-large mt-2">
                     {{ clar.question }}
                   </div>
                 </v-timeline-item>
@@ -138,13 +138,13 @@ const user = useUserStore().user
                   size="small"
                   width="100%"
                 >
-                  <div class="text-h6 font-weight-bold">
+                  <div class="text-title-large font-weight-bold">
                     <div>回答</div>
-                    <div class="text-body-1 flex-shrink-0">
+                    <div class="text-body-large flex-shrink-0">
                       {{ formatDate(clar.updatedAt) }}
                     </div>
                   </div>
-                  <div class="text-pre-wrap text-body-1 mt-2">
+                  <div class="text-pre-wrap text-body-large mt-2">
                     {{ clar.answer }}
                   </div>
                 </v-timeline-item>

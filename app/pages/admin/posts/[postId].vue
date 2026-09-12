@@ -88,7 +88,7 @@ async function submit() {
 
 <template>
   <v-card :loading="!post">
-    <v-card-title class="text-h5">{{
+    <v-card-title class="text-headline-small">{{
       isCreating ? '新規記事の投稿' : '記事の編集'
     }}</v-card-title>
     <v-card-text>
@@ -109,7 +109,7 @@ async function submit() {
             />
           </v-col>
         </v-row>
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"

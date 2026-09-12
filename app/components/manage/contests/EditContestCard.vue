@@ -209,7 +209,7 @@ const password = computed({
           </v-alert>
         </v-col>
       </v-row>
-      <v-row justify="end">
+      <v-row class="justify-end">
         <v-btn
           class="mr-3"
           variant="text"

@@ -316,7 +316,7 @@ const addSetMultiple = async () => {
                     {{ set.points }}
                     <span
                       v-if="set.aggregateType !== 'all'"
-                      class="text-caption"
+                      class="text-body-small"
                     >
                       (表示のみ)
                     </span>
