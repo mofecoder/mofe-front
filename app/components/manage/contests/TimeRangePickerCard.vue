@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
-import VueDatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const props = withDefaults(
@@ -63,10 +63,10 @@ const submit = () => {
               range
               timezone="Asia/Tokyo"
               week-start="0"
-              minutes-grid-increment="5"
+              :time-config="{ minutesGridIncrement: 5 }"
               :teleport="true"
               :flow="['calendar', 'hours', 'minutes']"
-              :format="formatRange"
+              :formats="{ format: formatRange }"
             />
           </v-row>
           <v-row>
