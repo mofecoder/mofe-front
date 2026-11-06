@@ -155,7 +155,7 @@ const removeTester = async (name: string) => {
         userName: name
       }
     )
-  } catch (err: unknown) {
+  } catch {
     alert('テスターの削除に失敗しました。')
   } finally {
     await refresh()

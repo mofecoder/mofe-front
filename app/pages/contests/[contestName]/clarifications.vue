@@ -82,7 +82,7 @@ const user = useUserStore().user
               </div>
               <div class="text-grey-darken-2 mt-4 text-body-medium">
                 投稿日時：{{ formatDate(clar.createdAt) }}
-                <br />
+                <br>
                 更新日時：{{ formatDate(clar.updatedAt) }}
               </div>
               <v-btn

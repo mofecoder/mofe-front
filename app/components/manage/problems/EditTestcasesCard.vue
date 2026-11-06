@@ -194,7 +194,7 @@ const deleteSet = async (id: number) => {
   testcaseLoading.value = true
   try {
     await api(ManageProblems.deleteTestcaseSet, [props.problemId, id], {})
-  } catch (error) {
+  } catch {
     alert('テストケースセットの削除に失敗しました。')
     return
   } finally {
@@ -285,8 +285,8 @@ const addSetMultiple = async () => {
           closable
         >
           集計方法が「通常」の場合、「テストケースセット」に含まれるすべてのテストケースがACとなった場合、
-          そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br />
-          満点はすべてのテストケースセットの配点の合計となります。<br />
+          そのテストケースセットの配点が加算されます（特殊な集計方法については「ジャッジ」タブを参照）。<br>
+          満点はすべてのテストケースセットの配点の合計となります。<br>
           採点順・表示順はテストケース名の辞書順です。
         </v-alert>
         <v-card class="mb-8" variant="outlined" :loading="!testcaseSets">

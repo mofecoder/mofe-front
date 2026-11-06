@@ -48,8 +48,7 @@ const items = computed(() => {
           persistent-hint
           clearable
           no-data-text="問題は存在しません"
-        >
-        </v-select>
+        />
         <v-textarea v-model="content" rows="3" label="質問" counter="255" />
       </v-card-text>
       <v-card-actions>

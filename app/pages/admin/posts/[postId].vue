@@ -21,7 +21,7 @@ const postId = computed(() => {
 const isCreating = computed(() => postId.value === null)
 
 useHead(() => ({
-  title: isCreating ? '記事の新規投稿' : `[${postId.value}] 記事の編集`
+  title: isCreating.value ? '記事の新規投稿' : `[${postId.value}] 記事の編集`
 }))
 
 const valid = ref(false)

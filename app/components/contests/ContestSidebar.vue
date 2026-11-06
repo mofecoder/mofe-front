@@ -16,6 +16,8 @@ const props = defineProps({
     default: 0
   }
 })
+// defineModel が生成する prop に既定値は不要（ルール側が対応していないための誤検知）
+// eslint-disable-next-line vue/require-default-prop
 const opened = defineModel<string[]>('opened')
 const dayjs = useDayjs()
 
@@ -56,15 +58,13 @@ const tasks = computed(() => {
       exact
       prepend-icon="mdi-home-outline"
       title="トップ"
-    >
-    </v-list-item>
+    />
     <v-list-item
       :to="`/contests/${contestName}/tasks`"
       exact
       prepend-icon="mdi-format-list-bulleted"
       title="問題"
-    >
-    </v-list-item>
+    />
     <v-list-group
       v-if="contest"
       v-show="contest.tasks && contest.tasks.length"

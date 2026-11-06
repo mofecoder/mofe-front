@@ -10,7 +10,7 @@ type AuthResponse<
       errors: ErrorsType
     }
   | ({ data: AuthUser } & (SuccessType extends undefined
-      ? {}
+      ? unknown
       : { success: true }))
 
 const signIn = new Api<AuthResponse, [string, string]>(

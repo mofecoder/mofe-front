@@ -12,6 +12,8 @@ import type { FetchResult } from '#app/composables/fetch'
 type ReqT = NitroFetchRequest
 const useHttp = async <
   ResT,
+  // ResT が void のときだけ既定の FetchResult へフォールバックする条件型
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   DataT = ResT extends void
     ? FetchResult<ReqT, AvailableRouterMethod<ReqT>>
     : ResT

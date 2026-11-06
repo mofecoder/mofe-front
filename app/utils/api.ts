@@ -1,5 +1,4 @@
-import type { ArgsType } from '~/types/api'
-import type { Api } from '~/types/api'
+import type { ArgsType, Api } from '~/types/api'
 import type { UseFetchOptions } from '#app'
 
 export function api<
