@@ -61,7 +61,7 @@ const submit = async () => {
 
 <template>
   <v-container fluid>
-    <h1 class="text-h4 ma-2">コンテストの作成</h1>
+    <h1 class="text-headline-large ma-2">コンテストの作成</h1>
     <ManageContestsEditContestCard
       v-model:name="params.name"
       v-model:slug="params.slug"

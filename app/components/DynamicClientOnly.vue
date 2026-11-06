@@ -3,7 +3,7 @@ const props = defineProps<{
   condition: boolean | (() => boolean) | (() => Promise<boolean>)
 }>()
 defineSlots<{
-  fallback(): any
+  fallback(): unknown
 }>()
 
 const cond = await(async () => {

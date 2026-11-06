@@ -21,7 +21,7 @@ function getAuthHeader(headers: Headers) {
   return { client, accessToken, uid, expiry: parseInt(expiry) }
 }
 
-const onResponse: UseFetchOptions<any>['onResponse'] = ({ response }) => {
+const onResponse: UseFetchOptions<unknown>['onResponse'] = ({ response }) => {
   const { headers } = response
   const authHeader = getAuthHeader(headers)
   if (!authHeader) return
@@ -43,8 +43,7 @@ async function fetchUser() {
     return 'network'
   }
 }
-export const useUserStore = defineStore({
-  id: 'user',
+export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     user: null
   }),

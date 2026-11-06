@@ -10,7 +10,7 @@ const format =
     <template #text>
       <p>テストケースを zip 形式でアップロードすることができます。</p>
       <p>以下のフォーマットのZIPファイルをアップロードしてください。</p>
-      <v-row justify="start">
+      <v-row class="justify-start">
         <v-col cols="12" md="6">
           <pre><code class="format" v-text="format" /></pre>
         </v-col>

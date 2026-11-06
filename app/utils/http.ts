@@ -1,16 +1,23 @@
 import type { FetchResponse } from 'ofetch'
 import type { MaybeRef } from 'vue'
-import lodash from 'lodash'
+import camelCase from 'lodash.camelcase'
+import isObject from 'lodash.isobject'
+import mapKeys from 'lodash.mapkeys'
+import mapValues from 'lodash.mapvalues'
+import snakeCase from 'lodash.snakecase'
 import defu from 'defu'
 import type { UseFetchOptions } from '#app'
 import type AuthTokens from '~/types/AuthTokens'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
 import { useUserStore } from '~/store/user'
-const { camelCase, isObject, mapKeys, mapValues, snakeCase } = lodash
 
-function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
+// 戻り値は呼び出し側（useHttp など）の代入先の都合で any のままにしている
+function mapKeysDeep(
+  data: unknown,
+  callback: (_: unknown, key: string) => string
+): any {
   if (Array.isArray(data)) {
-    return data.map((innerData: any) => mapKeysDeep(innerData, callback))
+    return data.map((innerData) => mapKeysDeep(innerData, callback))
   } else if (isObject(data)) {
     return mapValues(mapKeys(data, callback), (val) =>
       mapKeysDeep(val, callback)
@@ -21,12 +28,12 @@ function mapKeysDeep(data: any, callback: (_: any, key: any) => string): any {
 }
 
 export function toCamelCase(data: any) {
-  const callback = (_: any, key: any) => camelCase(key)
+  const callback = (_: unknown, key: string) => camelCase(key)
   return mapKeysDeep(data, callback)
 }
 
 export function toSnakeCase(data: any, header = false) {
-  const callback = (_: any, key: any) => {
+  const callback = (_: unknown, key: string) => {
     let k = snakeCase(key)
     if (header) k = k.replace('_', '-')
     return k
@@ -75,7 +82,7 @@ export class HttpError extends Error {
     Object.setPrototypeOf(this, new.target.prototype)
   }
 
-  response: FetchResponse<any>
+  response: FetchResponse<unknown>
 }
 
 export function http<T>(

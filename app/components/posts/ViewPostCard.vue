@@ -24,10 +24,10 @@ defineProps({
     <v-card-text class="post-card-text mt-2">
       <MarkdownContent :markdown="post.content" />
       <div class="text-grey-darken-2 text-right py-1 pr-2">
-        <p class="text-caption mb-0">
+        <p class="text-body-small mb-0">
           投稿日時: {{ formatDate(post.createdAt) }}
         </p>
-        <p class="text-caption mb-0">
+        <p class="text-body-small mb-0">
           最終更新: {{ formatDate(post.updatedAt) }}
         </p>
       </div>

@@ -155,7 +155,7 @@ const removeTester = async (name: string) => {
         userName: name
       }
     )
-  } catch (err: unknown) {
+  } catch {
     alert('テスターの削除に失敗しました。')
   } finally {
     await refresh()
@@ -237,7 +237,7 @@ const removeTester = async (name: string) => {
           </v-col>
         </v-row>
         <!-- 問題文 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -268,7 +268,7 @@ const removeTester = async (name: string) => {
           @close="modals.problemStatement = false"
         />
         <!-- 制約 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -299,7 +299,7 @@ const removeTester = async (name: string) => {
           @close="modals.constraints = false"
         />
         <!-- 部分点 -->
-        <v-row justify="space-between">
+        <v-row class="justify-space-between">
           <v-checkbox
             v-model="usePartialScores"
             label="部分点を表示する"
@@ -336,7 +336,7 @@ const removeTester = async (name: string) => {
           @close="modals.partialScores = false"
         />
         <!-- 入力 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"
@@ -372,7 +372,7 @@ const removeTester = async (name: string) => {
           @close="modals.input = false"
         />
         <!-- 出力 -->
-        <v-row justify="end">
+        <v-row class="justify-end">
           <v-btn
             class="mr-4"
             variant="text"

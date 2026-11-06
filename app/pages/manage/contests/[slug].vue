@@ -188,7 +188,7 @@ const removeAdmin = async (user: string) => {
         userName: user
       }
     )
-  } catch (error: unknown) {
+  } catch {
     alert('管理者の削除に失敗しました。')
   } finally {
     await reload()

@@ -203,13 +203,13 @@ const password = computed({
         <v-col cols="12">
           <v-alert variant="tonal" density="compact" type="info">
             「参加登録パスワード」を設定すると、このパスワードを知っている人のみ参加登録できるようになります。
-            <br />
+            <br>
             「オープン参加を許可」すると、パスワードなしでもオープン参加登録できますが、
             オープン参加でない人・チームのみの順位表を表示することができるようになります。
           </v-alert>
         </v-col>
       </v-row>
-      <v-row justify="end">
+      <v-row class="justify-end">
         <v-btn
           class="mr-3"
           variant="text"

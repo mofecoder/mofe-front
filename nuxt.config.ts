@@ -28,17 +28,23 @@ const nuxtConfig = defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@vueuse/nuxt',
-    [
-      '@nuxtjs/eslint-module',
-      {
-        lintOnStart: false
-      }
-    ],
+    '@nuxt/eslint',
     'dayjs-nuxt'
   ],
   vite: {
     ssr: {
       noExternal: ['vuetify']
+    },
+    // Vite の事前バンドルで useStack が分割されると、ダイアログ内のメニューや
+    // セレクトが z-index 2000 に沈む (Vuetify 4 の既知問題) ため明示的に含める。
+    optimizeDeps: {
+      include: [
+        'vuetify/components/VOverlay',
+        'vuetify/components/VDialog',
+        'vuetify/components/VMenu',
+        'vuetify/components/VSelect',
+        'vuetify/components/VTooltip'
+      ]
     },
     define: {
       'process.env.DEBUG': false

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
-  markdown: string
+  markdown?: string | null
 }>()
 
 const div = ref<HTMLDivElement>()
@@ -14,7 +14,7 @@ watch(() => props.markdown, renderKatex)
 </script>
 
 <template>
-  <div ref="div" v-html="$md.render(markdown)" />
+  <div ref="div" v-html="$md.render(markdown ?? '')" />
 </template>
 
 <style scoped lang="scss">

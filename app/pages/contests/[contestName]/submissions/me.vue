@@ -25,7 +25,7 @@ const filter = ref({
   user: '',
   status: []
 } as FilterOptions)
-const loading = ref<Boolean>(false)
+const loading = ref<boolean>(false)
 const timeout = ref(15000)
 
 const args = reactive({
