@@ -101,3 +101,6 @@ config/.env.prod
 
 # Google Cloud / Firebase service account credentials
 service-account.json
+
+# pnpm がパッケージ管理の正。npm ci 用の package-lock.json は作らない
+package-lock.json
