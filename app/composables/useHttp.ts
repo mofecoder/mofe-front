@@ -59,17 +59,14 @@ const useHttp = async <
   }
   const defaults: UseFetchOptions<ResT, DataT> = {
     baseURL: config.public.apiBase,
-    key: unref(url),
+    // URL の変化で再取得させるため、ref のまま渡して key を reactive にする
+    key: url,
     headers: toSnakeCase(headers, true),
     method: 'GET',
     mode: 'cors',
 
     onResponse: handleResponse
   }
-
-  watchEffect(() => {
-    defaults.key = unref(url)
-  })
 
   const onResponse = options.onResponse
   const nuxtLoading = useLoadingIndicator()
