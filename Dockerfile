@@ -3,7 +3,7 @@ FROM node:26-slim
 WORKDIR /usr/src/app
 
 COPY . ./
-RUN corepack enable && corepack install
+RUN npm install -g corepack && corepack enable && corepack install
 RUN pnpm install --frozen-lockfile
 
 EXPOSE 8080
