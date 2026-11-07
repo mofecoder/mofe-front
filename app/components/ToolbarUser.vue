@@ -110,7 +110,7 @@ const signOut = async () => {
           </v-list>
         </v-sheet>
       </v-overlay>
-      <p v-if="role" class="text-body-small">({{ role }})</p>
+      <p v-if="role" class="text-body-small ma-0">({{ role }})</p>
     </div>
     <div v-else class="d-none d-md-flex align-center">
       <v-btn
