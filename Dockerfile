@@ -14,4 +14,4 @@ ENV HUSKY=0
 
 RUN pnpm run build
 
-CMD [ "node", "./output/server/index.mjs" ]
+CMD [ "node", "./.output/server/index.mjs" ]
