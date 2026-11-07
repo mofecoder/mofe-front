@@ -133,7 +133,6 @@ const role = computed(() => {
 
 <style lang="scss">
 .contest-header {
-  font-size: 1.5rem;
   display: flex;
   align-items: center;
   position: sticky;
@@ -142,6 +141,7 @@ const role = computed(() => {
   z-index: 9999;
 
   &__title {
+    font-size: 1.5rem;
     flex-grow: 0;
     min-width: auto;
   }
