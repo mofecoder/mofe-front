@@ -94,6 +94,11 @@ export const contestsApi = () => {
       api<SubmissionResponse>(`/contests/${slug}/submissions`, {
         query: toSubmissionsQuery(q)
       }),
+    // 同じチームのメンバー全員 (自分を含む) の提出
+    teamSubmissions: (slug: string, q: SubmissionsQuery = {}) =>
+      api<SubmissionResponse>(`/contests/${slug}/submissions/team`, {
+        query: toSubmissionsQuery(q)
+      }),
     submission: (p: { slug: string; id: number }) =>
       api<SubmissionDetail>(`/contests/${p.slug}/submissions/${p.id}`),
     togglePublished: (p: { slug: string; id: number }) =>

@@ -1,21 +1,12 @@
 <script lang="ts" setup>
-import type { PropType } from 'vue'
 import type { ContestDetail } from '~/types/contest'
 
-const props = defineProps({
-  contest: {
-    type: Object as PropType<ContestDetail>,
-    required: true
-  },
-  contestName: {
-    type: String,
-    required: true
-  },
-  unreadClarifications: {
-    type: Number,
-    default: 0
-  }
-})
+const props = defineProps<{
+  contest: ContestDetail
+  contestName: string
+  unreadClarifications: number
+  isTeamRegistration: boolean
+}>()
 // defineModel が生成する prop に既定値は不要（ルール側が対応していないための誤検知）
 // eslint-disable-next-line vue/require-default-prop
 const opened = defineModel<string[]>('opened')
@@ -111,6 +102,13 @@ const tasks = computed(() => {
       exact
       prepend-icon="mdi-account-details"
       title="自分の提出"
+    />
+    <v-list-item
+      v-if="isTeamRegistration"
+      :to="`/contests/${contestName}/submissions/team`"
+      exact
+      prepend-icon="mdi-account-group"
+      title="チームの提出"
     />
     <v-list-item
       :to="`/contests/${contestName}/standings`"
