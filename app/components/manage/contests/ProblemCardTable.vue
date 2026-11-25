@@ -11,11 +11,11 @@ const props = defineProps<{
   tasks?: ProblemType[]
   contestSlug?: string
   problemMode?: boolean
-  showDelete?: boolean
+  showEdit?: boolean
 }>()
 
 const emits = defineEmits<{
-  remove: [string]
+  edit: [number]
 }>()
 type ItemType = {
   id: number
@@ -72,13 +72,12 @@ const items = computed(() => {
               :to="`/contests/${contestSlug}/tasks/${item.slug}`"
             />
             <v-btn
-              v-if="showDelete"
-              icon="mdi-delete"
+              v-if="showEdit"
+              icon="mdi-pencil"
               variant="text"
               size="small"
-              color="red"
               density="comfortable"
-              @click="emits('remove', item.slug!)"
+              @click="emits('edit', item.id)"
             />
           </td>
         </template>

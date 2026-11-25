@@ -30,6 +30,12 @@ export const manageContestsApi = () => {
       api<unknown>(`/contests/${p.slug}/tasks/${p.taskSlug}/remove_from_contest`, {
         method: 'PUT'
       }),
+    // 問題の位置を変更する。移動先に別の問題があれば入れ替える
+    moveTask: (p: { slug: string; taskSlug: string }, position: string) =>
+      api<unknown>(`/contests/${p.slug}/tasks/${p.taskSlug}/move`, {
+        method: 'PUT',
+        query: { position }
+      }),
     addAdmin: (slug: string, body: { userName: string }) =>
       api<unknown>(`/contests/${slug}/contest_admins`, { method: 'POST', body }),
     removeAdmin: (slug: string, body: { userName: string }) =>
