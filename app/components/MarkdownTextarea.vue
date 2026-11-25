@@ -112,14 +112,27 @@ function onDrop(e: DragEvent) {
   uploadFiles(Array.from(e.dataTransfer?.files ?? []))
 }
 
+// クリップボードのテキストを優先して貼るか
+// 表計算ソフトのセルのようにテキストと画像の両方を持つときはテキストとして貼る。
+// ただし Finder などでファイルをコピーしたときはファイル名がテキストとして入るので、
+// テキストがファイル名だけならファイルとして扱う
+function prefersText(data: DataTransfer, files: File[]): boolean {
+  const text = data.getData('text/plain').trim()
+  if (!text) return false
+  const names = new Set(files.map((f) => f.name))
+  return !text
+    .split(/\r\n|\r|\n/)
+    .map((line) => line.trim())
+    .filter((line) => line)
+    .every((line) => names.has(line))
+}
+
 function onPaste(e: ClipboardEvent) {
   if (!enabled.value || !e.clipboardData) return
-  // 表計算ソフトのセルのように、テキストと画像の両方を持つときはテキストとして貼る
-  if (e.clipboardData.types.includes('text/plain')) return
   const files = Array.from(e.clipboardData.files).filter((f) =>
     f.type.startsWith('image/')
   )
-  if (files.length === 0) return
+  if (files.length === 0 || prefersText(e.clipboardData, files)) return
   e.preventDefault()
   uploadFiles(files)
 }
