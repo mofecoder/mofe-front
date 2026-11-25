@@ -3,27 +3,57 @@ defineSlots<{
   subheader(): unknown
   emptyMessage(): unknown
 }>()
-withDefaults(
+const props = withDefaults(
   defineProps<{
     placeholder?: string
     loading?: boolean
-    error?: string
+    error?: string | string[]
     users: string[]
+    bulk?: boolean
   }>(),
   {
     placeholder: 'ユーザ名',
-    error: ''
+    error: '',
+    bulk: false
   }
 )
 
 const emits = defineEmits<{
-  add: [user: string]
+  add: [users: string[]]
   remove: [user: string]
 }>()
 const adding = ref<string>('')
 
 const add = () => {
-  emits('add', adding.value)
+  if (!adding.value) return
+  emits('add', [adding.value])
+  adding.value = ''
+}
+
+const hasError = computed(() =>
+  Array.isArray(props.error) ? props.error.length > 0 : !!props.error
+)
+const errorMessages = computed(() => {
+  if (Array.isArray(props.error)) return props.error
+  return props.error ? [props.error] : []
+})
+
+// 区切り後に 2 件以上になるペーストのみ一括追加し、それ以外は通常のペーストとして扱う
+const onPaste = (event: ClipboardEvent) => {
+  if (!props.bulk) return
+  const text = event.clipboardData?.getData('text/plain')
+  if (!text) return
+  const users = [
+    ...new Set(
+      text
+        .split(/[\s,、，;]+/)
+        .map((s) => s.trim())
+        .filter((s) => s)
+    )
+  ]
+  if (users.length < 2) return
+  event.preventDefault()
+  emits('add', users)
   adding.value = ''
 }
 </script>
@@ -63,9 +93,10 @@ const add = () => {
           :placeholder="placeholder"
           :loading="loading"
           density="compact"
-          :error="!!error"
-          :error-messages="error ? [error] : undefined"
+          :error="hasError"
+          hide-details
           @keydown.enter="add"
+          @paste="onPaste"
         />
       </v-responsive>
       <v-btn
@@ -77,6 +108,13 @@ const add = () => {
         @click="add"
         >追加</v-btn
       >
+    </div>
+    <div
+      v-if="errorMessages.length"
+      class="text-error text-caption mt-1"
+      role="alert"
+    >
+      <div v-for="(message, i) in errorMessages" :key="i">{{ message }}</div>
     </div>
   </div>
 </template>

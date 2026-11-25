@@ -389,7 +389,7 @@ const removeTester = async (name: string) => {
               :users="testers"
               :error="testerError"
               placeholder="テスターを追加"
-              @add="addTester"
+              @add="(users) => addTester(users[0]!)"
               @remove="removeTester"
             >
               <template #emptyMessage>テスターは追加されていません</template>

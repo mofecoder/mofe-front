@@ -55,3 +55,8 @@ export interface ContestEditParam {
   allowTeamRegistration?: boolean
   allowOpenRegistration?: boolean
 }
+
+export interface AddAdminsResult {
+  added: string[]
+  errors: { userName: string; error: string }[]
+}

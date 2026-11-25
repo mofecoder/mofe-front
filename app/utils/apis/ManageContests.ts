@@ -1,4 +1,5 @@
 import type {
+  AddAdminsResult,
   Contest,
   ContestCreateParam,
   ContestDetailManage,
@@ -36,8 +37,12 @@ export const manageContestsApi = () => {
         method: 'PUT',
         query: { position }
       }),
-    addAdmin: (slug: string, body: { userName: string }) =>
-      api<unknown>(`/contests/${slug}/contest_admins`, { method: 'POST', body }),
+    // 複数人をまとめて追加する。追加できなかったユーザは errors に入る
+    addAdmins: (slug: string, body: { userNames: string[] }) =>
+      api<AddAdminsResult>(`/contests/${slug}/contest_admins`, {
+        method: 'POST',
+        body
+      }),
     removeAdmin: (slug: string, body: { userName: string }) =>
       api<unknown>(`/contests/${slug}/contest_admins`, { method: 'DELETE', body })
   }

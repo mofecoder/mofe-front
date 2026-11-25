@@ -172,17 +172,20 @@ const moveProblem = async (taskSlug: string, pos: string) => {
   }
 }
 
-const adminsError = ref('')
-const addAdmin = async (user: string) => {
+const adminsError = ref<string[]>([])
+const addAdmin = async (users: string[]) => {
   loading.admins = true
   try {
-    await manageContestsRepo.addAdmin(contest.slug, { userName: user })
-    adminsError.value = ''
-  } catch (error: unknown) {
-    adminsError.value = getErrorMessage(
-      error,
-      'コンテスト管理者の追加に失敗しました。'
+    const result = await manageContestsRepo.addAdmins(contest.slug, {
+      userNames: users
+    })
+    adminsError.value = result.errors.map(
+      ({ userName, error }) => `${userName}: ${error}`
     )
+  } catch (error: unknown) {
+    adminsError.value = [
+      getErrorMessage(error, 'コンテスト管理者の追加に失敗しました。')
+    ]
   } finally {
     await reload()
     loading.admins = false
