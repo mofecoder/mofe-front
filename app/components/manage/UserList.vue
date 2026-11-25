@@ -95,8 +95,7 @@ const onPaste = (event: ClipboardEvent) => {
           :loading="loading"
           density="compact"
           :error="hasError"
-          :error-messages="errorMessages"
-          :max-errors="errorMessages.length"
+          hide-details
           @keydown.enter="add"
           @paste="onPaste"
         />
@@ -110,6 +109,14 @@ const onPaste = (event: ClipboardEvent) => {
         @click="add"
         >追加</v-btn
       >
+    </div>
+    <!-- 入力欄の幅に縛られないよう、エラーは入力欄の外にまとめて表示する -->
+    <div
+      v-if="errorMessages.length"
+      class="text-error text-caption mt-1"
+      role="alert"
+    >
+      <div v-for="(message, i) in errorMessages" :key="i">{{ message }}</div>
     </div>
   </div>
 </template>
