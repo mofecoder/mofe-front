@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Problem } from '~/types/contestAdmin'
 import type { ProblemDetail } from '~/types/problems'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 
 import { Positions } from '~/constants/contests'
 import type { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
@@ -16,6 +16,7 @@ const emits = defineEmits<{
   add: [problemId: number, position: string]
 }>()
 
+const manageProblemsRepo = manageProblemsApi()
 const problemId = ref<number | null>(null)
 const status = ref('')
 const position = ref('')
@@ -44,20 +45,14 @@ const positions = computed(() => {
 const showProblem = async () => {
   if (!problemId.value) return
   status.value = 'loading'
-  problem.value = await useApi(ManageProblems.getProblem, [problemId.value])
-    .then(({ data, error }) => {
-      if (error.value) {
-        status.value = 'error'
-        return null
-      }
-      status.value = 'ok'
-      position.value = positions.value[0] || ''
-      return data.value
-    })
-    .catch(() => {
-      status.value = 'error'
-      return null
-    })
+  try {
+    problem.value = await manageProblemsRepo.get(problemId.value)
+    status.value = 'ok'
+    position.value = positions.value[0] || ''
+  } catch {
+    status.value = 'error'
+    problem.value = null
+  }
 }
 
 const addProblem = async ({ id }: Problem) => {

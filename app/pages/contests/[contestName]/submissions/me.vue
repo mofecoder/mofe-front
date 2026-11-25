@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { FilterOptions } from '~/utils/apis/Contests'
-import Contests from '~/utils/apis/Contests'
+import { contestsApi, type FilterOptions } from '~/utils/apis'
 import type { SortItem } from '~/types/datatable'
 
 definePageMeta({
@@ -28,18 +27,23 @@ const filter = ref({
 const loading = ref<boolean>(false)
 const timeout = ref(15000)
 
-const args = reactive({
-  slug: contestName,
-  page,
-  count,
-  sortBy,
-  filter
-})
+const contestsRepo = contestsApi()
+const query = computed(() => ({
+  page: page.value,
+  count: count.value,
+  sortBy: sortBy.value,
+  filter: filter.value
+}))
+// key に条件を含めて、ページ・ソート・絞り込みが変わったら再取得する
 const {
   data: submissions,
   refresh,
   pending: apiLoading
-} = await useApi(Contests.getMySubmissions, args, { lazy: true })
+} = await useAsyncData(
+  () => `submissions:me:${contestName.value}:${JSON.stringify(query.value)}`,
+  () => contestsRepo.mySubmissions(contestName.value!, query.value),
+  { lazy: true }
+)
 
 watch(
   submissions,
@@ -55,14 +59,7 @@ watch(
 )
 
 async function rejudge(submissionIds: number[]) {
-  await api(
-    Contests.rejudge,
-    [unref(contestName)],
-    {},
-    {
-      submissionIds
-    }
-  )
+  await contestsRepo.rejudge(contestName.value!, { submissionIds })
   await refresh()
 }
 

@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import ManageProblems from '~/utils/apis/ManageProblems'
+import {
+  manageProblemsApi,
+  type TestcaseParams,
+  type TestcaseSetParams
+} from '~/utils/apis'
 import AggregateTypes from '~/constants/aggregateTypes'
-import type { AggregateType, Testcase, TestcaseSet } from '~/types/problems'
+import type { Testcase, TestcaseSet } from '~/types/problems'
 
 const props = defineProps<{
   problemId: number
@@ -23,9 +27,10 @@ const testcaseSetNames = computed(
   () => testcaseSets.value?.map((x) => x.name) || []
 )
 
-const { data, refresh: refreshTestcase } = await useApi(
-  ManageProblems.getTestcases,
-  [props.problemId]
+const manageProblemsRepo = manageProblemsApi()
+const { data, refresh: refreshTestcase } = await useAsyncData(
+  () => `manage:testcases:${props.problemId}`,
+  () => manageProblemsRepo.testcases(props.problemId)
 )
 const testcases = computed(() => data.value?.testcases || [])
 const testcaseSets = computed<TestcaseSet[]>(
@@ -41,49 +46,35 @@ const uploadZip = async () => {
   uploadLoading.value = true
   const form = new FormData()
   form.append('file', file.value)
-  const { data, error } = await useApi(
-    ManageProblems.uploadTestcases,
-    [props.problemId],
-    {
+  let res
+  try {
+    res = await manageProblemsRepo.uploadTestcases(props.problemId, form, {
       signal: AbortSignal.timeout(1200 * 1000),
       retry: false
-    },
-    form
-  )
-  uploadLoading.value = false
-  if (error.value) {
-    if (error.value.data?.error) {
-      messages.value = [error.value.data?.error]
-    }
-    console.table(error.value)
-    if (error.value.statusCode === 413) {
-      messages.value = [
-        '容量制限を超えているため、分割して再アップロードしてください。'
-      ]
-    }
+    })
+  } catch (e) {
+    console.error(e)
+    messages.value = [
+      getErrorStatus(e) === 413
+        ? '容量制限を超えているため、分割して再アップロードしてください。'
+        : getErrorMessage(e, 'アップロードに失敗しました。')
+    ]
     ok.value = false
     return
+  } finally {
+    uploadLoading.value = false
   }
-  if (data.value) {
-    messages.value = data.value.messages
-    ok.value = true
-    file.value = null
-    testcaseLoading.value = true
-    await refreshTestcase()
-    testcaseLoading.value = false
-  }
+  messages.value = res.messages
+  ok.value = true
+  file.value = null
+  testcaseLoading.value = true
+  await refreshTestcase()
+  testcaseLoading.value = false
 }
 
-const updateTestcase = async (params: {
-  name: string
-  input: string
-  output: string
-  explanation: string | null
-}) => {
-  await api(
-    ManageProblems.updateTestcase,
-    [props.problemId, testcaseId.value!],
-    {},
+const updateTestcase = async (params: TestcaseParams) => {
+  await manageProblemsRepo.updateTestcase(
+    { problemId: props.problemId, testcaseId: testcaseId.value! },
     params
   )
   await refreshTestcase()
@@ -93,52 +84,41 @@ const updateTestcase = async (params: {
 
 const deleteTestcase = async (id: number) => {
   testcaseLoading.value = true
-  await api(ManageProblems.deleteTestcase, [props.problemId, id])
+  await manageProblemsRepo.deleteTestcase({
+    problemId: props.problemId,
+    testcaseId: id
+  })
   await refreshTestcase()
   testcaseLoading.value = false
 }
 
-const createTestcase = async (params: {
-  name: string
-  input: string
-  output: string
-  explanation: string | null
-}) => {
-  await api(ManageProblems.createTestcase, [props.problemId], {}, params)
+const createTestcase = async (params: TestcaseParams) => {
+  await manageProblemsRepo.createTestcase(props.problemId, params)
   await refreshTestcase()
   testcaseDialog.value = false
 }
 
-const saveSet = async (params: {
-  name: string
-  points: string
-  aggregateType: AggregateType
-}) => {
+const saveSet = async (params: TestcaseSetParams) => {
   if (Number.isNaN(Number(params.points))) return
-  let err
   const create = editingTestcaseSetId.value == null
-  if (create) {
-    const { error } = await useApi(
-      ManageProblems.createTestcaseSet,
-      [props.problemId],
-      {},
-      params
-    )
-    err = error
-  } else {
-    const { error } = await useApi(
-      ManageProblems.updateTestcaseSet,
-      [props.problemId, editingTestcaseSetId.value!],
-      {},
-      params
-    )
-    err = error
-  }
-  if (err.value?.statusCode === 400) {
+  try {
+    if (create) {
+      await manageProblemsRepo.createTestcaseSet(props.problemId, params)
+    } else {
+      await manageProblemsRepo.updateTestcaseSet(
+        {
+          problemId: props.problemId,
+          testcaseSetId: editingTestcaseSetId.value!
+        },
+        params
+      )
+    }
+  } catch (e) {
     alert(
-      `テストケースセットの${create ? '追加' : '更新'}に失敗しました: ${
-        err.value.data?.error
-      }`
+      `テストケースセットの${create ? '追加' : '更新'}に失敗しました: ${getErrorMessage(
+        e,
+        '不明なエラー'
+      )}`
     )
   }
   await refreshTestcase()
@@ -168,14 +148,9 @@ const selectingHeader = (value: boolean) => {
 
 const deleteAll = async () => {
   testcaseLoading.value = true
-  await api(
-    ManageProblems.deleteMultipleTestcases,
-    [props.problemId],
-    {},
-    {
-      testcases: Array.from(selecting)
-    }
-  )
+  await manageProblemsRepo.deleteTestcases(props.problemId, {
+    testcases: Array.from(selecting)
+  })
   selecting.clear()
   await refreshTestcase()
   testcaseLoading.value = false
@@ -193,7 +168,10 @@ const editSet = (id: number | null) => {
 const deleteSet = async (id: number) => {
   testcaseLoading.value = true
   try {
-    await api(ManageProblems.deleteTestcaseSet, [props.problemId, id], {})
+    await manageProblemsRepo.deleteTestcaseSet({
+      problemId: props.problemId,
+      testcaseSetId: id
+    })
   } catch {
     alert('テストケースセットの削除に失敗しました。')
     return
@@ -206,14 +184,9 @@ const deleteSet = async (id: number) => {
 const changeTestcaseState = async (i: number, j: number, v: boolean) => {
   if (!testcaseSets.value) return
   testcaseLoading.value = true
-  await api(
-    ManageProblems.changeTestcaseState,
-    [props.problemId, testcases.value![i]!.id],
-    {},
-    {
-      testcaseSetId: testcaseSets.value[j]!.id,
-      state: v
-    }
+  await manageProblemsRepo.changeTestcaseState(
+    { problemId: props.problemId, testcaseId: testcases.value[i]!.id },
+    { testcaseSetId: testcaseSets.value[j]!.id, state: v }
   )
   await refreshTestcase()
   testcaseLoading.value = false
@@ -257,15 +230,10 @@ const updateAddingTarget = () => {
 
 const addSetMultiple = async () => {
   if (addingSet.value === undefined || !addingTarget.value) return
-  await api(
-    ManageProblems.addToTestcaseSetMultiple,
-    [props.problemId],
-    {},
-    {
-      testcaseIds: addingTarget.value.map((x) => x.id),
-      testcaseSetId: addingSet.value
-    }
-  )
+  await manageProblemsRepo.addToTestcaseSet(props.problemId, {
+    testcaseIds: addingTarget.value.map((x) => x.id),
+    testcaseSetId: addingSet.value
+  })
   addingPattern.value = undefined
   addingSet.value = undefined
   updateAddingTarget()

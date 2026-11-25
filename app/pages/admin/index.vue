@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import ManageContests from '~/utils/apis/ManageContests'
-import ManageProblems from '~/utils/apis/ManageProblems'
-import Admin from '~/utils/apis/Admin'
+import { adminApi, manageContestsApi, manageProblemsApi } from '~/utils/apis'
 
 definePageMeta({
   middleware: 'admin',
@@ -12,14 +10,19 @@ useHead({
   title: '管理画面'
 })
 
-const { data: contests } = await useApi(ManageContests.getContests, [])
-const { data: problems } = await useApi(ManageProblems.getUnsetProblems, [])
+const adminRepo = adminApi()
+const manageContestsRepo = manageContestsApi()
+const manageProblemsRepo = manageProblemsApi()
+const { data: contests } = await useAsyncData('manage:contests', () =>
+  manageContestsRepo.list()
+)
+const { data: problems } = await useAsyncData('manage:unset-problems', () =>
+  manageProblemsRepo.unsetProblems()
+)
 const status = ref<[number, number] | null>(null)
 
 const updateRating = async () => {
-  const response = await api(Admin.updateRating, [], {
-    responseType: 'stream'
-  })
+  const response = await adminRepo.updateRating()
 
   const reader = response.pipeThrough(new TextDecoderStream()).getReader()
 

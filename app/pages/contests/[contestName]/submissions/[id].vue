@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import Contests from '~/utils/apis/Contests'
+import { contestsApi } from '~/utils/apis'
 
 definePageMeta({
   layout: 'contest',
@@ -19,12 +19,16 @@ useHead(() => ({
   titleTemplate: null
 }))
 
+const contestsRepo = contestsApi()
 const {
   data: submission,
   error,
   status,
   refresh
-} = await useApi(Contests.getSubmission, [contestName.value!, id.value])
+} = await useAsyncData(
+  () => `submission:${contestName.value}:${id.value}`,
+  () => contestsRepo.submission({ slug: contestName.value!, id: id.value })
+)
 const errorMessage = ref('')
 const source = ref('')
 
@@ -47,7 +51,7 @@ watch(
 )
 
 if (error.value) {
-  errorMessage.value = error.value?.data.error || ''
+  errorMessage.value = getErrorMessage(error.value, '')
 } else {
   source.value = submission.value!.source
 }
@@ -76,11 +80,16 @@ const showSets = computed(() => submission.value?.testcaseSets != null)
 const display = useDisplay()
 
 const togglePublished = async () => {
-  await api(Contests.togglePublishStatus, [contestName.value!, id.value])
-    .then(async () => await refresh())
-    .catch(() => {
-      alert('公開状態の切り替えに失敗しました')
+  try {
+    await contestsRepo.togglePublished({
+      slug: contestName.value!,
+      id: id.value
     })
+  } catch {
+    alert('公開状態の切り替えに失敗しました')
+    return
+  }
+  await refresh()
 }
 </script>
 

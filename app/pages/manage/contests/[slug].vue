@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
-import { FetchError } from 'ofetch'
-import ManageContests from '~/utils/apis/ManageContests'
+import { manageContestsApi, manageProblemsApi } from '~/utils/apis'
 import type { ContestDetailManage } from '~/types/contest'
 import { useUserStore } from '~/store/user'
-import ManageProblems from '~/utils/apis/ManageProblems'
 
 definePageMeta({
   middleware: 'authenticated'
@@ -18,17 +16,22 @@ const modal = ref(false)
 const slug = computed(() =>
   Array.isArray(route.params.slug) ? route.params.slug[0] : route.params.slug
 )
+const manageContestsRepo = manageContestsApi()
+const manageProblemsRepo = manageProblemsApi()
 const {
   data: contestData,
   error,
   refresh: refreshContest
-} = await useApi(ManageContests.getContest, [slug.value])
-const { data: unsetProblems, refresh: refreshUnsetProblems } = await useApi(
-  ManageProblems.getUnsetProblems,
-  []
+} = await useAsyncData(
+  () => `manage:contest:${slug.value}`,
+  () => manageContestsRepo.get(slug.value!)
 )
+const { data: unsetProblems, refresh: refreshUnsetProblems } =
+  await useAsyncData('manage:unset-problems', () =>
+    manageProblemsRepo.unsetProblems()
+  )
 
-if (error.value?.status === 403) {
+if (getErrorStatus(error.value) === 403) {
   await navigateTo('/')
 }
 
@@ -86,11 +89,7 @@ const reload = async () =>
 const editInformation = async () => {
   if (!contest) return
   loading.information = true
-  await api(
-    ManageContests.updateContest,
-    [slug.value!],
-    {},
-    {
+  await manageContestsRepo.update(slug.value!, {
       name: contest.name,
       kind: contest.kind,
       penaltyTime: Number(contest.penaltyTime),
@@ -101,8 +100,7 @@ const editInformation = async () => {
       allowTeamRegistration: contest.allowTeamRegistration,
       allowOpenRegistration: contest.allowOpenRegistration,
       closedPassword: contest.closedPassword
-    }
-  )
+  })
   updated.value = true
   await reload()
   loading.information = false
@@ -119,15 +117,10 @@ const timeRange = computed({
 const editTime = async () => {
   if (!contest) return
   loading.time = true
-  await api(
-    ManageContests.updateContest,
-    [slug.value],
-    {},
-    {
-      startAt: dayjs(contest.startAt).format(),
-      endAt: dayjs(contest.endAt).format()
-    }
-  )
+  await manageContestsRepo.update(slug.value!, {
+    startAt: dayjs(contest.startAt).format(),
+    endAt: dayjs(contest.endAt).format()
+  })
   updated.value = true
   await reload()
   loading.time = false
@@ -135,19 +128,18 @@ const editTime = async () => {
 
 const addProblem = async (problemId: number, pos: string) => {
   loading.add = true
-  await api(ManageContests.addTask, [
-    slug.value!,
+  await manageContestsRepo.addTask(slug.value!, {
     problemId,
-    `${slug.value}_${pos.toLowerCase()}`,
-    pos
-  ])
+    problemSlug: `${slug.value}_${pos.toLowerCase()}`,
+    position: pos
+  })
   await reload()
   loading.add = false
 }
 
 const remove = async (slug: string) => {
   loading.tasks = true
-  await api(ManageContests.removeTask, [contest.slug, slug], {})
+  await manageContestsRepo.removeTask({ slug: contest.slug, taskSlug: slug })
   await reload()
   loading.tasks = false
 }
@@ -156,23 +148,16 @@ const adminsError = ref<string[]>([])
 const addAdmin = async (users: string[]) => {
   loading.admins = true
   try {
-    const result = await api(
-      ManageContests.addAdmin,
-      [contest.slug],
-      {},
-      {
-        userNames: users
-      }
-    )
+    const result = await manageContestsRepo.addAdmins(contest.slug, {
+      userNames: users
+    })
     adminsError.value = result.errors.map(
       ({ userName, error }) => `${userName}: ${error}`
     )
   } catch (error: unknown) {
-    if (error instanceof FetchError && error?.data?.error) {
-      adminsError.value = [error.data.error]
-    } else {
-      adminsError.value = ['コンテスト管理者の追加に失敗しました。']
-    }
+    adminsError.value = [
+      getErrorMessage(error, 'コンテスト管理者の追加に失敗しました。')
+    ]
   } finally {
     await reload()
     loading.admins = false
@@ -182,14 +167,7 @@ const addAdmin = async (users: string[]) => {
 const removeAdmin = async (user: string) => {
   loading.admins = true
   try {
-    await api(
-      ManageContests.removeAdmin,
-      [contest.slug],
-      {},
-      {
-        userName: user
-      }
-    )
+    await manageContestsRepo.removeAdmin(contest.slug, { userName: user })
   } catch {
     alert('管理者の削除に失敗しました。')
   } finally {

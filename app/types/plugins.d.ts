@@ -1,4 +1,3 @@
-import type { CafeCoderApi } from '.old/apis'
 import type { Language } from '~/types/language'
 
 interface Utils {
@@ -12,7 +11,6 @@ interface MarkdownIt {
 
 declare module 'vue/types/vue' {
   interface Vue {
-    readonly $api: CafeCoderApi
     readonly $md: MarkdownIt
     readonly $getLanguage: (lang: string) => Language | null
   }
