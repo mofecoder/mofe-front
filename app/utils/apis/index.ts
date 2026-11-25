@@ -9,6 +9,7 @@ export * from './ManageContests'
 export * from './ManageProblems'
 export * from './Posts'
 export * from './Tasks'
+export * from './Uploads'
 
 export type TopResponse = {
   contests: Contest[]
