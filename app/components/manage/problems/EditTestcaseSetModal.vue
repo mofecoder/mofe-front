@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 import AggregateTypes from '~/constants/aggregateTypes'
 import type { AggregateType } from '~/types/problems'
 
@@ -12,6 +12,7 @@ const props = defineProps<{
   testcaseSetNames: string[]
 }>()
 
+const manageProblemsRepo = manageProblemsApi()
 const ok = ref(false)
 const loading = ref(false)
 type ParamsType = {
@@ -54,20 +55,19 @@ watch(
       return
     }
     loading.value = true
-    const { data } = await useApi(ManageProblems.getTestcaseSet, [
-      props.problemId,
-      props.id
-    ])
-    if (data.value) {
-      const { name, points } = data.value
+    try {
+      const { name, points, aggregateType } =
+        await manageProblemsRepo.testcaseSet({
+          problemId: props.problemId,
+          testcaseSetId: props.id
+        })
       startName.value = name
-      params.value = {
-        name,
-        points: points.toString(),
-        aggregateType: data.value.aggregateType
-      }
+      params.value = { name, points: points.toString(), aggregateType }
+    } catch {
+      alert('テストケースセットの取得に失敗しました。')
+    } finally {
+      loading.value = false
     }
-    loading.value = false
   }
 )
 

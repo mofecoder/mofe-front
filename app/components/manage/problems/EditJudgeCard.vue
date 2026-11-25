@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import checkersRaw from '~/constants/checkers'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 
 const emits = defineEmits<{
   update: []
@@ -19,9 +19,11 @@ const props = defineProps<{
   problemId: number
 }>()
 
-const { data: problem } = await useApi(ManageProblems.getProblem, [
-  props.problemId
-])
+const manageProblemsRepo = manageProblemsApi()
+const { data: problem } = await useAsyncData(
+  () => `manage:problem:${props.problemId}`,
+  () => manageProblemsRepo.get(props.problemId)
+)
 const checkerPath = problem.value?.checkerPath
 if (checkerPath) {
   const c = checkersRaw.find((c) => c.fileName === checkerPath.split('/')[1])
@@ -39,12 +41,12 @@ const submit = async () => {
   const type = checkersRaw.find((c) => c.value === checker.value)?.fileName
   if (type) formData.append('type', type)
   if (file.value) formData.append('file', file.value)
-  await api(ManageProblems.updateChecker, [props.problemId], {}, formData)
+  await manageProblemsRepo.updateChecker(props.problemId, formData)
   emits('update')
 }
 
 const download = async () => {
-  const res = await api(ManageProblems.downloadChecker, [props.problemId])
+  const res = await manageProblemsRepo.downloadChecker(props.problemId)
 
   const a = document.createElement('a')
   a.href = window.URL.createObjectURL(new Blob([res], { type: 'text/x-c' }))

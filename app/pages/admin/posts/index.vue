@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Posts from '~/utils/apis/Posts'
+import { postsApi } from '~/utils/apis'
 import { formatDate } from '~/utils/formatting'
 import { STATUS_TABLE } from '~/constants/posts'
 import { definePageMeta } from '#imports'
@@ -22,7 +22,8 @@ const tableHeader = [
   { title: '', key: 'actions' }
 ]
 
-const { data: posts } = await useApi(Posts.getPosts, [])
+const postsRepo = postsApi()
+const { data: posts } = await useAsyncData('posts', () => postsRepo.list())
 const items = computed(() => {
   if (!posts.value) return []
   return posts.value.map((post) => {

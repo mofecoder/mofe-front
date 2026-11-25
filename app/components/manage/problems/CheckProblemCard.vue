@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 
 const props = defineProps<{
   problemId: number
 }>()
 
-const { data: problem } = await useApi(ManageProblems.getProblem, [
-  props.problemId
-])
+const manageProblemsRepo = manageProblemsApi()
+const { data: problem } = await useAsyncData(
+  () => `manage:problem:${props.problemId}`,
+  () => manageProblemsRepo.get(props.problemId)
+)
 </script>
 
 <template>

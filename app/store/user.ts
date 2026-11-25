@@ -1,48 +1,33 @@
 import { defineStore } from 'pinia'
-// import { httpGet } from '~~/utils/axios'
 import type { AuthUser } from '~/types/AuthUser'
-import Auth from '~/utils/apis/Auth'
-import type { UseFetchOptions } from '#app'
-import type AuthTokens from '~/types/AuthTokens'
+import { authApi, type AuthErrorResponse } from '~/utils/apis'
 import { AUTH_COOKIE_NAME } from '~/constants/cookies'
-
-const dayjs = useDayjs()
 
 interface UserState {
   user: AuthUser | null
 }
 
-function getAuthHeader(headers: Headers) {
-  const client = headers.get('client')
-  const accessToken = headers.get('access-token')
-  const uid = headers.get('uid')
-  const expiry = headers.get('expiry')
-  if (!client || !accessToken || !uid || !expiry) return null
-  return { client, accessToken, uid, expiry: parseInt(expiry) }
+// devise_token_auth のエラーレスポンスからメッセージの配列を取り出す
+function getAuthErrors(e: unknown): string[] {
+  const data = getApiError(e) as AuthErrorResponse | undefined
+  if (!data?.errors) return ['Network Error']
+  return Array.isArray(data.errors) ? data.errors : data.errors.fullMessages
 }
 
-const onResponse: UseFetchOptions<unknown>['onResponse'] = ({ response }) => {
-  const { headers } = response
-  const authHeader = getAuthHeader(headers)
-  if (!authHeader) return
-  const cookie = useCookie<AuthTokens>(AUTH_COOKIE_NAME, {
-    expires: dayjs.unix(authHeader.expiry).toDate()
-  })
-  cookie.value = authHeader
-}
-
+// トークンの更新 (cookie への保存) と 401 時の破棄は plugins/api.ts で共通に行う
 async function fetchUser() {
+  const cookie = useCookie(AUTH_COOKIE_NAME)
+  if (!cookie.value) return 'error'
+  const auth = authApi()
   try {
-    const cookie = useCookie(AUTH_COOKIE_NAME)
-    if (!cookie.value) return 'error'
-    const res = await useApi(Auth.validateToken, [])
-    if (!res.data.value) return 'network'
-    if (!res.data.value.success) return 'error'
-    return res.data.value.data
-  } catch {
-    return 'network'
+    const res = await auth.validateToken()
+    if (!res.success) return 'error'
+    return res.data
+  } catch (e) {
+    return getErrorStatus(e) === 401 ? 'error' : 'network'
   }
 }
+
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     user: null
@@ -63,16 +48,14 @@ export const useUserStore = defineStore('user', {
       return typeof user === 'string' ? null : user
     },
     async signIn(userName: string, password: string) {
-      const res = await useApi(Auth.signIn, [userName, password], {
-        onResponse
-      })
-
-      if (!res.data.value) return { ok: false, errors: ['Network Error'] }
-      const data = res.data.value
-      if ('success' in data) return { ok: false, errors: data.errors }
-
-      this.updateUser(data.data)
-      return { ok: true, user: data.data }
+      const auth = authApi()
+      try {
+        const res = await auth.signIn({ name: userName, password })
+        this.updateUser(res.data)
+        return { ok: true, user: res.data }
+      } catch (e) {
+        return { ok: false, errors: getAuthErrors(e) }
+      }
     },
     async signUp(
       email: string,
@@ -80,41 +63,31 @@ export const useUserStore = defineStore('user', {
       password: string,
       passwordConfirmation: string
     ) {
-      const res = await useApi(
-        Auth.signUp,
-        [],
-        {
-          onResponse
-        },
-        {
+      const auth = authApi()
+      try {
+        const res = await auth.signUp({
           email,
           name: userName,
           password,
           passwordConfirmation
-        }
-      )
-
-      let data = res.data.value
-      if (!data) data = res.error.value?.data
-
-      if (!data) return { ok: false, errors: ['Network Error'] }
-      if ('errors' in data) {
-        return { ok: false, errors: data.errors.fullMessages }
+        })
+        this.updateUser(res.data)
+        return { ok: true, user: res.data }
+      } catch (e) {
+        return { ok: false, errors: getAuthErrors(e) }
       }
-
-      this.updateUser(data.data)
-      return { ok: true, user: data.data }
     },
     async signOut() {
       if (!this.user) return
-      await api(Auth.signOut, [])
-      this.updateUser(null)
-      const cookie = useCookie(AUTH_COOKIE_NAME)
-      cookie.value = null
+      const auth = authApi()
+      try {
+        await auth.signOut()
+      } finally {
+        this.updateUser(null)
+        useCookie(AUTH_COOKIE_NAME).value = null
+      }
     },
     updateUser(user: AuthUser | null) {
-      // if (user) localStorage.setItem('user', JSON.stringify(user))
-      // else localStorage.removeItem('user')
       this.user = user
     }
   }

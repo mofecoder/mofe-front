@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '~/store/user'
-import Auth from '~/utils/apis/Auth'
+import { authApi } from '~/utils/apis'
 import { definePageMeta } from '#imports'
 
 definePageMeta({
@@ -11,6 +11,7 @@ useHead({
   title: 'ユーザ情報'
 })
 
+const authRepo = authApi()
 const ok = ref(false)
 
 const userStore = useUserStore()
@@ -47,9 +48,13 @@ const showSnack = computed({
 })
 
 const submit = async () => {
-  const { error } = await useApi(Auth.updateUser, [user.value!.id], {}, params)
-  if (error.value) {
-    message.value = 'ユーザ情報の更新に失敗しました。'
+  try {
+    await authRepo.updateUser(user.value!.id, {
+      atcoderId: params.atcoderId ?? null,
+      name: params.name
+    })
+  } catch (e) {
+    message.value = getErrorMessage(e, 'ユーザ情報の更新に失敗しました。')
     return
   }
   await userStore.fetchUser(true)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Tasks from '~/utils/apis/Tasks'
+import { tasksApi } from '~/utils/apis'
 
 definePageMeta({
   layout: 'contest'
@@ -13,10 +13,11 @@ const slug = computed(
       ? route.params.slug[0]
       : route.params.slug) || ''
 )
-const { data: problem, error } = await useApi(Tasks.getTask, [
-  unref(contestName)!,
-  unref(slug)
-])
+const tasksRepo = tasksApi()
+const { data: problem, error } = await useAsyncData(
+  () => `task:${contestName.value}:${slug.value}`,
+  () => tasksRepo.get({ contestSlug: contestName.value!, taskSlug: slug.value })
+)
 
 useHead(() => ({
   title:

@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import Contests from '~/utils/apis/Contests'
+import { contestsApi } from '~/utils/apis'
 
 const props = defineProps<{
   contestSlug: string
   clarificationId: number
 }>()
 
-const { data } = await useApi(Contests.getClarification, [
-  props.contestSlug,
-  props.clarificationId
-])
+const contestsRepo = contestsApi()
+const { data } = await useAsyncData(
+  () => `clarification:${props.contestSlug}:${props.clarificationId}`,
+  () =>
+    contestsRepo.clarification({
+      slug: props.contestSlug,
+      id: props.clarificationId
+    })
+)
 const clarification = ref(data.value)
 
 watch(data, (newData) => {
@@ -25,17 +30,14 @@ function cancel() {
 }
 
 async function answer() {
-  await api(
-    Contests.updateClarification,
-    [props.contestSlug, props.clarificationId],
-    {},
+  await contestsRepo.updateClarification(
+    { slug: props.contestSlug, id: props.clarificationId },
     {
       answer: clarification.value!.answer,
       publish: clarification.value!.publish
     }
-  ).then(() => {
-    emit('close', true)
-  })
+  )
+  emit('close', true)
 }
 </script>
 

@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '~/store/user'
-import useApi from '~/composables/useApi'
-import { top } from '~/utils/apis'
+import { topApi } from '~/utils/apis'
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 const route = useRoute()
 
-const { data, error } = await useApi(top, [], { lazy: true })
+const topRepo = topApi()
+const { data, error } = await useAsyncData('top', () => topRepo.get(), {
+  lazy: true
+})
 
 useHead({
   script: [

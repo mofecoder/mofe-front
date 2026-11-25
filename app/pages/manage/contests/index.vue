@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ManageContests from '~/utils/apis/ManageContests'
+import { manageContestsApi } from '~/utils/apis'
 
 definePageMeta({
   middleware: 'admin',
@@ -10,7 +10,10 @@ useHead({
   title: 'コンテストの管理'
 })
 
-const { data: contests } = await useApi(ManageContests.getContests, [])
+const manageContestsRepo = manageContestsApi()
+const { data: contests } = await useAsyncData('manage:contests', () =>
+  manageContestsRepo.list()
+)
 const dayjs = useDayjs()
 
 const headers = [

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { LocationQueryValue } from 'vue-router'
-import type { FilterOptions } from '~/utils/apis/Contests'
-import Contests from '~/utils/apis/Contests'
+import { contestsApi, type FilterOptions } from '~/utils/apis'
 import type { SortItem } from '~/types/datatable'
 import { JUDGE_STATUSES } from '~/constants/judgeStatuses'
 
@@ -88,29 +87,27 @@ watch(count, (value) => {
 const loading = ref<boolean>(false)
 const timeout = computed(() => (adminMode.value ? 2000 : 30000))
 
-const args = reactive({
-  slug: contestName.value!,
-  page,
-  count,
-  sortBy,
-  filter
-})
+const contestsRepo = contestsApi()
+const query = computed(() => ({
+  page: page.value,
+  count: count.value,
+  sortBy: sortBy.value,
+  filter: filter.value
+}))
+// key に条件を含めて、ページ・ソート・絞り込みが変わったら再取得する
 const {
   data: submissions,
   refresh,
   status,
   error
-} = await useApi(Contests.getAllSubmissions, args, { lazy: true })
+} = await useAsyncData(
+  () => `submissions:all:${contestName.value}:${JSON.stringify(query.value)}`,
+  () => contestsRepo.allSubmissions(contestName.value!, query.value),
+  { lazy: true }
+)
 
 async function rejudge(submissionIds: number[]) {
-  await api(
-    Contests.rejudge,
-    [unref(contestName)!],
-    {},
-    {
-      submissionIds
-    }
-  )
+  await contestsRepo.rejudge(contestName.value!, { submissionIds })
   await refresh()
 }
 
@@ -128,7 +125,7 @@ const writtenTaskList = computed(() => contest.value?.writtenTasks ?? [])
     <template v-if="contest">
       <v-container class="pa-0" fluid>
         <v-alert v-if="error" type="error">
-          {{ error.data?.error || '提出一覧を取得できませんでした。' }}
+          {{ getErrorMessage(error, '提出一覧を取得できませんでした。') }}
         </v-alert>
         <v-card v-else :loading="status === 'pending'">
           <v-card-title>すべての提出</v-card-title>

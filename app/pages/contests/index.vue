@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { Duration } from 'dayjs/plugin/duration'
 import { definePageMeta } from '#imports'
-import Contests from '~/utils/apis/Contests'
+import { contestsApi } from '~/utils/apis'
 import type { Contest } from '~/types/contest'
 
 definePageMeta({
   layout: 'top'
 })
 
-const { data } = await useApi(Contests.getContests, [])
+const contestsRepo = contestsApi()
+const { data } = await useAsyncData('contests', () => contestsRepo.list())
 const dayjs = useDayjs()
 
 const formatDuration = (duration: Duration) => {

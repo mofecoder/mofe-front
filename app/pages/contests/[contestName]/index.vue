@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { FetchError } from 'ofetch'
 import { useUserStore } from '~/store/user'
-import Contests from '~/utils/apis/Contests'
+import { contestsApi } from '~/utils/apis'
 
 const route = useRoute()
 const dayjs = useDayjs()
@@ -48,6 +47,7 @@ const isWriter = computed(() =>
 const contestSlug = computed(() => contest.value?.slug)
 
 const router = useRouter()
+const contestsRepo = contestsApi()
 
 const registerLoading = ref(false)
 
@@ -59,10 +59,7 @@ const message = ref<{
 
 const unregister = async () => {
   try {
-    const res = await http<{ message: string | null }>(
-      Contests.unregister.$path([contestSlug.value!]),
-      { method: 'DELETE' }
-    )
+    const res = await contestsRepo.unregister(contestSlug.value!)
     const messageRes = res?.message
     message.value = {
       title: '参加登録を取り消しました',
@@ -71,7 +68,7 @@ const unregister = async () => {
     }
   } catch (error) {
     console.error(error)
-    const text = error instanceof FetchError ? error?.data?.error : ''
+    const text = getErrorMessage(error, '')
     message.value = {
       title: '参加登録の取り消しに失敗しました',
       text,
@@ -84,7 +81,8 @@ const unregister = async () => {
   await updateContest()
 }
 
-const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
+// request は参加登録 API を呼ぶ関数。チーム登録ではメッセージが返ることがある
+const registerInner = async (request: () => Promise<unknown>) => {
   if (!storeToRefs(userStore).user.value) {
     await router.push({
       path: '/auth/signin',
@@ -94,20 +92,11 @@ const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
   }
 
   registerLoading.value = true
-  let response: { message: string } | string = ''
+  let response: unknown
   try {
-    if (isTeam) {
-      response = await api(
-        Contests.teamRegister,
-        [contestSlug.value!],
-        {},
-        body
-      )
-    } else {
-      await api(Contests.register, [contestSlug.value!], {}, body)
-    }
+    response = await request()
   } catch (error) {
-    const text = error instanceof FetchError ? error?.data?.error : ''
+    const text = getErrorMessage(error, '')
     message.value = {
       title: '参加登録に失敗しました',
       text,
@@ -116,7 +105,10 @@ const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
     registerLoading.value = false
     return
   }
-  const messageRes = typeof response === 'object' ? response['message'] : ''
+  const messageRes =
+    response && typeof response === 'object' && 'message' in response
+      ? String(response.message ?? '')
+      : ''
   message.value = {
     title: '参加登録しました',
     text: messageRes,
@@ -127,7 +119,9 @@ const registerInner = async (isTeam: boolean, body: Record<string, any>) => {
 }
 
 const register = async (password?: string, open?: boolean) => {
-  await registerInner(false, { password, open })
+  await registerInner(() =>
+    contestsRepo.register(contestSlug.value!, { password, open })
+  )
 }
 
 const teamRegister = async (
@@ -136,7 +130,14 @@ const teamRegister = async (
   password?: string,
   open?: boolean
 ) => {
-  await registerInner(true, { name, passphrase, password, open })
+  await registerInner(() =>
+    contestsRepo.teamRegister(contestSlug.value!, {
+      name,
+      passphrase,
+      password,
+      open
+    })
+  )
 }
 </script>
 
