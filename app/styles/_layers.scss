@@ -1,5 +1,0 @@
-// Vuetify 4 の CSS 層の優先順位を宣言する。
-// 層の優先度は最初に出現した順で決まるが、`@use "vuetify/styles"` は vuetify-components 層 (.blockquote) を
-// Vuetify 自身の層の順序宣言より先に出力するため、vuetify-core (リセット等) がコンポーネントより強くなってしまう。
-// style.scss で vuetify/styles より前に @use し、本来の順序を先に宣言しておく。
-@layer vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, vuetify-final;
