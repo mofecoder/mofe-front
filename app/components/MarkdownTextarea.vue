@@ -172,12 +172,8 @@ function onFileSelected(e: Event) {
         :disabled="!enabled"
         @click="fileInput?.click()"
       >
-        画像をアップロード
+        画像をアップロード（最大 {{ maxMb }} MB）
       </v-btn>
-      <span class="text-caption text-medium-emphasis">
-        ドラッグ＆ドロップや貼り付けでも追加できます (PNG / JPEG / GIF /
-        WebP、{{ maxMb }} MB まで)
-      </span>
       <input
         ref="fileInput"
         type="file"
