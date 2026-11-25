@@ -5,6 +5,7 @@ import ManageContests from '~/utils/apis/ManageContests'
 import type { ContestDetailManage } from '~/types/contest'
 import { useUserStore } from '~/store/user'
 import ManageProblems from '~/utils/apis/ManageProblems'
+import type { ProblemType } from '~/components/manage/contests/ProblemCardTable.vue'
 
 definePageMeta({
   middleware: 'authenticated'
@@ -150,6 +151,33 @@ const remove = async (slug: string) => {
   await api(ManageContests.removeTask, [contest.slug, slug], {})
   await reload()
   loading.tasks = false
+  editingProblem.value = null
+}
+
+// 編集中の問題 (null なら「問題を追加」カードは追加モード)
+const editingProblem = ref<ProblemType | null>(null)
+const addProblemCard = useTemplateRef('addProblemCard')
+
+// API は id を返すが Task 型には無いので ProblemType として扱う
+const tasks = computed(() => contest.tasks as ProblemType[])
+
+const startEdit = (id: number) => {
+  editingProblem.value = tasks.value.find((t) => t.id === id) ?? null
+  if (!editingProblem.value) return
+  addProblemCard.value?.$el?.scrollIntoView({ behavior: 'smooth' })
+}
+
+const moveProblem = async (taskSlug: string, pos: string) => {
+  loading.add = true
+  try {
+    await api(ManageContests.moveTask, [contest.slug, taskSlug, pos])
+    await reload()
+    editingProblem.value = null
+  } catch {
+    alert('問題の位置の変更に失敗しました。')
+  } finally {
+    loading.add = false
+  }
 }
 
 const adminsError = ref('')
@@ -251,7 +279,7 @@ const openModal = async () => {
       :contest-slug="contest.slug"
       class="my-4"
       @add="openModal"
-      @remove="remove"
+      @edit="startEdit"
     />
     <v-alert type="info" variant="tonal">
       <template #text>
@@ -259,11 +287,17 @@ const openModal = async () => {
       </template>
     </v-alert>
     <ManageContestsAddProblemCard
+      ref="addProblemCard"
       class="my-4"
       :loading="loading.add"
       :used-positions="usedPositions"
       :unset-problems="unsetProblems || []"
+      :tasks="tasks"
+      :editing-problem="editingProblem"
       @add="addProblem"
+      @move="moveProblem"
+      @remove="remove"
+      @cancel-edit="editingProblem = null"
     />
     <ManageContestsAdminsCard
       v-if="isAdmin"

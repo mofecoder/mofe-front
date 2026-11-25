@@ -36,6 +36,12 @@ const removeTask = new Api<void, [string, string]>(
   'PUT'
 )
 
+const moveTask = new Api<void, [string, string, string]>(
+  ([contestSlug, taskSlug, position]) =>
+    `/contests/${contestSlug}/tasks/${taskSlug}/move?position=${position}`,
+  'PUT'
+)
+
 const addAdmin = new Api<void, [string], { userName: string }>(
   ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
   'POST'
@@ -53,6 +59,7 @@ export default {
   updateContest,
   addTask,
   removeTask,
+  moveTask,
   addAdmin,
   removeAdmin
 }

@@ -6,7 +6,7 @@ defineProps<{
   contestSlug: string
 }>()
 defineEmits<{
-  remove: [string]
+  edit: [number]
 }>()
 </script>
 
@@ -17,8 +17,8 @@ defineEmits<{
       <ManageContestsProblemCardTable
         :contest-slug="contestSlug"
         :tasks="tasks"
-        show-delete
-        @remove="$emit('remove', $event)"
+        show-edit
+        @edit="$emit('edit', $event)"
       />
     </v-card-text>
   </v-card>
