@@ -111,6 +111,7 @@ const role = computed(() => {
         :contest="contest"
         :contest-name="contestName"
         :unread-clarifications="unreadClarifications"
+        :is-team-registration="contest.registered?.name != null"
       />
     </v-navigation-drawer>
     <v-main style="--v-layout-top: 64px">
