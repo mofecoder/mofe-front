@@ -193,7 +193,7 @@ const tableTasks = computed(
             :hide-details="!!swapTarget"
           />
           <p v-if="swapTarget" class="text-caption mt-1">
-            {{ swapTarget.position }} 問題「{{ swapTarget.name }}」と入れ替えます
+            「{{ swapTarget.name }}」と入れ替えます
           </p>
         </v-col>
         <v-col v-if="editingProblem" cols="8" sm="9" lg="10">
@@ -203,14 +203,16 @@ const tableTasks = computed(
               prepend-icon="mdi-swap-vertical"
               :disabled="!position || position === editingProblem.position"
               @click="move"
-              >位置を変更する</v-btn
             >
-            <v-btn color="red" prepend-icon="mdi-delete" @click="remove"
-              >コンテストから削除</v-btn
-            >
-            <v-btn variant="text" @click="emits('cancelEdit')"
-              >キャンセル</v-btn
-            >
+              位置を変更する
+            </v-btn>
+            <v-btn color="red" prepend-icon="mdi-delete" @click="remove">
+              コンテストから削除
+            </v-btn>
+            <v-spacer />
+            <v-btn color="red" variant="text" prepend-icon="mdi-close" @click="emits('cancelEdit')">
+              キャンセル
+            </v-btn>
           </div>
           <v-checkbox
             v-model="showAll"
