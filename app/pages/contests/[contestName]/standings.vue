@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Contests from '~/utils/apis/Contests'
+import { contestsApi } from '~/utils/apis'
 
 definePageMeta({
   layout: 'contest'
@@ -17,27 +17,23 @@ const closedMode = ref(false)
 const teamMode = ref(false)
 const sortColumn = ref<string | null>(null)
 const sortOrder = ref<'asc' | 'desc' | null>(null)
-const args = computed(
-  () =>
-    [contestName.value, closedMode.value, teamMode.value] as [
-      string,
-      boolean,
-      boolean
-    ]
-)
-
+const contestsRepo = contestsApi()
 const query = computed(() => ({
-  sort_column: sortColumn.value,
+  excludeOpen: closedMode.value,
+  teamOnly: teamMode.value,
+  sortColumn: sortColumn.value,
   order: sortOrder.value
 }))
+// key に条件を含めて、条件が変わったら再取得する
 const {
   data: standingData,
   status,
   refresh
-} = await useApi(Contests.getStandings, args, {
-  query,
-  lazy: true
-})
+} = await useAsyncData(
+  () => `standings:${contestName.value}:${JSON.stringify(query.value)}`,
+  () => contestsRepo.standings(contestName.value!, query.value),
+  { lazy: true }
+)
 const problems = computed(() => standingData.value?.problems || [])
 const standings = computed(() => standingData.value?.standings)
 

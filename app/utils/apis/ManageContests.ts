@@ -1,4 +1,3 @@
-import { Api } from '~/types/api'
 import type {
   Contest,
   ContestCreateParam,
@@ -6,60 +5,40 @@ import type {
   ContestEditParam
 } from '~/types/contest'
 
-const getContest = new Api<ContestDetailManage, [string]>(
-  ([slug]) => `/manage/contests/${slug}`
-)
-const getContests = new Api<Contest[]>('/manage/contests', 'GET')
-
-const createContest = new Api<Contest, [], ContestCreateParam>(
-  '/contests',
-  'POST'
-)
-
-const updateContest = new Api<Contest, [string], ContestEditParam>(
-  ([slug]) => `/contests/${slug}`,
-  'PUT'
-)
-
-const addTask = new Api<void, [string, number, string, string]>(
-  ([contestSlug, problemId, problemSlug, position]) =>
-    `/contests/${contestSlug}/set_task` +
-    `?problem_id=${problemId}` +
-    `&problem_slug=${problemSlug}` +
-    `&position=${position}`,
-  'PUT'
-)
-
-const removeTask = new Api<void, [string, string]>(
-  ([contestSlug, problemSlug]) =>
-    `/contests/${contestSlug}/tasks/${problemSlug}/remove_from_contest`,
-  'PUT'
-)
-
-const moveTask = new Api<void, [string, string, string]>(
-  ([contestSlug, taskSlug, position]) =>
-    `/contests/${contestSlug}/tasks/${taskSlug}/move?position=${position}`,
-  'PUT'
-)
-
-const addAdmin = new Api<void, [string], { userName: string }>(
-  ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
-  'POST'
-)
-
-const removeAdmin = new Api<void, [string], { userName: string }>(
-  ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
-  'DELETE'
-)
-
-export default {
-  getContest,
-  getContests,
-  createContest,
-  updateContest,
-  addTask,
-  removeTask,
-  moveTask,
-  addAdmin,
-  removeAdmin
+export const manageContestsApi = () => {
+  const api = useNuxtApp().$api
+  return {
+    list: () => api<Contest[]>('/manage/contests'),
+    get: (slug: string) => api<ContestDetailManage>(`/manage/contests/${slug}`),
+    create: (body: ContestCreateParam) =>
+      api<Contest>('/contests', { method: 'POST', body }),
+    update: (slug: string, body: ContestEditParam) =>
+      api<Contest>(`/contests/${slug}`, { method: 'PUT', body }),
+    addTask: (
+      slug: string,
+      q: { problemId: number; problemSlug: string; position: string }
+    ) =>
+      api<unknown>(`/contests/${slug}/set_task`, {
+        method: 'PUT',
+        query: {
+          problem_id: q.problemId,
+          problem_slug: q.problemSlug,
+          position: q.position
+        }
+      }),
+    removeTask: (p: { slug: string; taskSlug: string }) =>
+      api<unknown>(`/contests/${p.slug}/tasks/${p.taskSlug}/remove_from_contest`, {
+        method: 'PUT'
+      }),
+    // 問題の位置を変更する。移動先に別の問題があれば入れ替える
+    moveTask: (p: { slug: string; taskSlug: string }, position: string) =>
+      api<unknown>(`/contests/${p.slug}/tasks/${p.taskSlug}/move`, {
+        method: 'PUT',
+        query: { position }
+      }),
+    addAdmin: (slug: string, body: { userName: string }) =>
+      api<unknown>(`/contests/${slug}/contest_admins`, { method: 'POST', body }),
+    removeAdmin: (slug: string, body: { userName: string }) =>
+      api<unknown>(`/contests/${slug}/contest_admins`, { method: 'DELETE', body })
+  }
 }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { FetchError } from 'ofetch'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 import { Difficulties } from '~/constants/difficulty'
 
 const rules = {
@@ -31,12 +30,10 @@ const testerError = ref('')
 const testerLoading = ref(false)
 
 const changed = ref(false)
-const { data, refresh } = await useApi(
-  ManageProblems.getProblem,
-  [props.problemId],
-  {
-    deep: true
-  }
+const manageProblemsRepo = manageProblemsApi()
+const { data, refresh } = await useAsyncData(
+  () => `manage:problem:${props.problemId}`,
+  () => manageProblemsRepo.get(props.problemId)
 )
 
 const problem = ref({ ...data.value! })
@@ -96,11 +93,7 @@ onUnmounted(() => {
 
 const onSubmit = async () => {
   if (!problem.value) return
-  await api(
-    ManageProblems.updateProblem,
-    [props.problemId],
-    {},
-    {
+  await manageProblemsRepo.update(props.problemId, {
       problem: {
         name: problem.value.name,
         difficulty: problem.value.difficulty,
@@ -113,8 +106,7 @@ const onSubmit = async () => {
         submissionLimit1: problem.value.submissionLimit1,
         submissionLimit2: problem.value.submissionLimit2
       }
-    }
-  )
+  })
   updated.value = true
   changed.value = false
   emits('update')
@@ -123,21 +115,10 @@ const onSubmit = async () => {
 const addTester = async (name: string) => {
   testerLoading.value = true
   try {
-    await api(
-      ManageProblems.addTester,
-      [props.problemId],
-      {},
-      {
-        userName: name
-      }
-    )
+    await manageProblemsRepo.addTester(props.problemId, { userName: name })
     testerError.value = ''
   } catch (error: unknown) {
-    if (error instanceof FetchError && error?.data?.error) {
-      testerError.value = error.data.error
-    } else {
-      testerError.value = 'テスターの追加に失敗しました。'
-    }
+    testerError.value = getErrorMessage(error, 'テスターの追加に失敗しました。')
   } finally {
     await refresh()
     testerLoading.value = false
@@ -147,14 +128,7 @@ const addTester = async (name: string) => {
 const removeTester = async (name: string) => {
   testerLoading.value = true
   try {
-    await api(
-      ManageProblems.removeTester,
-      [props.problemId],
-      {},
-      {
-        userName: name
-      }
-    )
+    await manageProblemsRepo.removeTester(props.problemId, { userName: name })
   } catch {
     alert('テスターの削除に失敗しました。')
   } finally {

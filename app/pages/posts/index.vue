@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import Posts from '~/utils/apis/Posts'
+import { postsApi } from '~/utils/apis'
 import { useUserStore } from '~/store/user'
 definePageMeta({
   layout: 'top'
 })
 
-const { data: posts } = await useApi(Posts.getPosts, [])
+const postsRepo = postsApi()
+const { data: posts } = await useAsyncData('posts', () => postsRepo.list())
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 const isAdmin = computed(() => user.value?.role === 'admin')

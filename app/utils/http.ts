@@ -1,17 +1,11 @@
 import type { FetchResponse } from 'ofetch'
-import type { MaybeRef } from 'vue'
 import camelCase from 'lodash.camelcase'
 import isObject from 'lodash.isobject'
 import mapKeys from 'lodash.mapkeys'
 import mapValues from 'lodash.mapvalues'
 import snakeCase from 'lodash.snakecase'
-import defu from 'defu'
-import type { UseFetchOptions } from '#app'
-import type AuthTokens from '~/types/AuthTokens'
-import { AUTH_COOKIE_NAME } from '~/constants/cookies'
-import { useUserStore } from '~/store/user'
 
-// 戻り値は呼び出し側（useHttp など）の代入先の都合で any のままにしている
+// 戻り値は呼び出し側の代入先の都合で any のままにしている
 function mapKeysDeep(
   data: unknown,
   callback: (_: unknown, key: string) => string
@@ -61,88 +55,4 @@ export function log<T>(method: string, url: string, res: FetchResponse<T>) {
       data: res._data
     }
   )
-}
-
-export class HttpError extends Error {
-  constructor(message: string, response: FetchResponse<unknown>) {
-    super(message)
-    this.response = response
-    this.response._data = toCamelCase(this.response._data)
-    Object.defineProperty(this, 'name', {
-      configurable: true,
-      enumerable: false,
-      value: 'HttpError',
-      writable: true
-    })
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, HttpError)
-    }
-
-    Object.setPrototypeOf(this, new.target.prototype)
-  }
-
-  response: FetchResponse<unknown>
-}
-
-export function http<T>(
-  url: MaybeRef<string>,
-  options: UseFetchOptions<T> = {}
-) {
-  const auth = useCookie<AuthTokens>(AUTH_COOKIE_NAME)
-  const { client, accessToken, uid } = auth.value || {}
-  const headers: HeadersInit = {
-    ...(client && accessToken && uid && { accessToken, client, uid })
-  }
-  const config = useRuntimeConfig()
-  const userStore = useUserStore()
-
-  const handleResponse: UseFetchOptions<T>['onResponse'] = async (ctx) => {
-    const res = ctx.response
-    log(
-      (typeof ctx.request === 'string'
-        ? ctx.options.method
-        : ctx.request.method) || '',
-      unref(url),
-      res
-    )
-    res._data = toCamelCase(ctx.response._data)
-
-    if (res.status === 401) {
-      await userStore.signOut()
-      useCookie(AUTH_COOKIE_NAME).value = null
-    }
-
-    // if (isErrorCode(res.status)) {
-    //   throw new HttpError(`HTTP Error (Response: ${res.status})`, res)
-    // }
-  }
-
-  if (options.body && !(options.body instanceof FormData)) {
-    options.body = toSnakeCase(options.body)
-  }
-  const defaults: UseFetchOptions<T> = {
-    baseURL: config.public.apiBase,
-    key: unref(url),
-    headers: toSnakeCase(headers, true),
-    method: 'GET',
-    mode: 'cors',
-
-    onResponse: handleResponse
-  }
-
-  watchEffect(() => {
-    defaults.key = unref(url)
-  })
-
-  const onResponse = options.onResponse
-  options['onResponse'] = (ctx) => {
-    handleResponse(ctx)
-
-    if (onResponse) {
-      const onResponseValue = toValue(onResponse)
-      onResponseValue(ctx)
-    }
-  }
-  return $fetch<T>(unref(url), defu(options, defaults) as any)
 }

@@ -1,17 +1,16 @@
-import { Api } from '~/types/api'
 import type { User } from '~/types/adminUser'
 
-const getUsers = new Api<User[], []>('/users')
-
-const updateUser = new Api<void, [number], Pick<User, 'role'>>(
-  ([id]) => `/users/${id}/update_admin`,
-  'PATCH'
-)
-
-const updateRating = new Api<ReadableStream, []>('/users/update_rating', 'POST')
-
-export default {
-  getUsers,
-  updateUser,
-  updateRating
+export const adminApi = () => {
+  const api = useNuxtApp().$api
+  return {
+    users: () => api<User[]>('/users'),
+    updateUserRole: (id: number, body: Pick<User, 'role'>) =>
+      api<unknown>(`/users/${id}/update_admin`, { method: 'PATCH', body }),
+    // 進捗を "現在,全体" の形式で逐次返すストリーム
+    updateRating: () =>
+      api<ReadableStream<Uint8Array>>('/users/update_rating', {
+        method: 'POST',
+        responseType: 'stream'
+      })
+  }
 }

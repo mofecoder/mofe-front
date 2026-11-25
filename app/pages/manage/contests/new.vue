@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Dayjs } from 'dayjs'
 import type { ContestDetail } from '~/types/contest'
-import ManageContests from '~/utils/apis/ManageContests'
+import { manageContestsApi } from '~/utils/apis'
 
 const dayjs = useDayjs()
 
@@ -34,12 +34,10 @@ const disabled = computed(() => {
 })
 
 const router = useRouter()
+const manageContestsRepo = manageContestsApi()
 const submit = async () => {
-  await api(
-    ManageContests.createContest,
-    [],
-    {},
-    {
+  try {
+    await manageContestsRepo.create({
       name: params.name,
       slug: params.slug,
       kind: params.kind,
@@ -48,14 +46,12 @@ const submit = async () => {
       description: params.description,
       penaltyTime: parseInt(params.penalty) * 60,
       standingsMode: params.standingsMode
-    }
-  )
-    .then(() => {
-      router.push(`/manage/contests/${params.slug}`)
     })
-    .catch(() => {
-      alert('コンテストの作成に失敗しました')
-    })
+  } catch (e) {
+    alert(getErrorMessage(e, 'コンテストの作成に失敗しました'))
+    return
+  }
+  await router.push(`/manage/contests/${params.slug}`)
 }
 </script>
 

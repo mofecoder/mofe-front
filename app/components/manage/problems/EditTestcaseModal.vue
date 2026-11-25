@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 
 const props = defineProps<{
   value: boolean
@@ -10,6 +10,7 @@ const props = defineProps<{
   testcaseNames: string[]
 }>()
 
+const manageProblemsRepo = manageProblemsApi()
 const ok = ref(false)
 const loading = ref(false)
 type ParamsType = {
@@ -50,12 +51,16 @@ watch(
       return
     }
     loading.value = true
-    const { data } = await useApi(ManageProblems.getTestcase, [
-      props.problemId,
-      props.testcaseId
-    ])
-    if (data.value) params.value = data.value
-    loading.value = false
+    try {
+      params.value = await manageProblemsRepo.testcase({
+        problemId: props.problemId,
+        testcaseId: props.testcaseId
+      })
+    } catch {
+      alert('テストケースの取得に失敗しました。')
+    } finally {
+      loading.value = false
+    }
   }
 )
 
