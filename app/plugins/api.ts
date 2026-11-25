@@ -28,24 +28,38 @@ export default defineNuxtPlugin((nuxtApp) => {
   const dayjs = useDayjs()
   const loading = useLoadingIndicator()
 
-  // フックは Nuxt のコンテキスト外で呼ばれることがあるため、composable はこの中で使う
-  // (同期関数を渡すので戻り値は Promise にならない)
-  const withContext = <T>(fn: () => T): T => nuxtApp.runWithContext(fn) as T
+  // 401 時に消すユーザー状態。フック内では inject が使えないので pinia を明示して先に取得する
+  const userStore = useUserStore(nuxtApp.$pinia)
 
-  const authCookie = (expires?: Date) =>
-    withContext(() =>
-      useCookie<AuthTokens | null>(AUTH_COOKIE_NAME, { expires })
-    )
+  // 認証 cookie の有効期限。トークンを保存する直前に更新する
+  let authExpires: Date | undefined
+  const authCookieOptions = { expires: () => authExpires }
 
-  const readAuthTokens = () =>
-    withContext(() => {
-      const auth = useCookie<AuthTokens | null>(AUTH_COOKIE_NAME)
-      // 旧 cookie 名 (auth) からの移行
-      const oldAuth = useCookie<AuthTokens | null>('auth')
-      const tokens = auth.value || oldAuth.value
-      if (oldAuth.value) oldAuth.value = null
-      return tokens
-    })
+  // ofetch のフックは await の後に呼ばれるため、Nuxt のコンテキストがなく composable を呼べない。
+  // サーバーでは nuxtApp.runWithContext も Promise を返すので (unctx の callAsync が async)、
+  // その中で useCookie しても値を同期的に読み書きできない。
+  // プラグインはリクエストごとに実行されるので、サーバーでは初期化時に作った ref を使い回す。
+  // クライアントでは store なども同じ cookie を別の ref で書き換えるので、呼ぶたびに作り直す。
+  const serverAuthCookie = import.meta.server
+    ? useCookie<AuthTokens | null>(AUTH_COOKIE_NAME, authCookieOptions)
+    : null
+  const serverOldAuthCookie = import.meta.server
+    ? useCookie<AuthTokens | null>('auth')
+    : null
+  const authCookie = () =>
+    serverAuthCookie ??
+    useCookie<AuthTokens | null>(AUTH_COOKIE_NAME, authCookieOptions)
+  const oldAuthCookie = () =>
+    serverOldAuthCookie ?? useCookie<AuthTokens | null>('auth')
+
+  const readAuthTokens = () => {
+    const auth = authCookie()
+    // 旧 cookie 名 (auth) からの移行
+    const oldAuth = oldAuthCookie()
+    const tokens = auth.value || oldAuth.value
+    if (oldAuth.value) oldAuth.value = null
+    return tokens
+  }
 
   const api = $fetch.create({
     baseURL: config.public.apiBase,
@@ -76,7 +90,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       // トークンが返ってきたら cookie を更新する
       const authHeader = getAuthHeader(response.headers)
       if (authHeader) {
-        authCookie(dayjs.unix(authHeader.expiry).toDate()).value = authHeader
+        authExpires = dayjs.unix(authHeader.expiry).toDate()
+        authCookie().value = authHeader
       }
       loading.finish()
     },
@@ -87,7 +102,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (response.status === 401) {
         // トークンが無効なのでログイン状態を破棄する
         // (サインアウト API を呼ぶとそれも 401 になるため、状態と cookie だけを消す)
-        withContext(() => useUserStore()).updateUser(null)
+        userStore.updateUser(null)
         authCookie().value = null
       }
     }
