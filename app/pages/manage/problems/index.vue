@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 
 definePageMeta({
   middleware: 'authenticated',
@@ -18,7 +18,10 @@ const headers = [
   { title: '', key: 'edit', sortable: false }
 ]
 
-const { data: problems } = await useApi(ManageProblems.getProblems, [])
+const manageProblemsRepo = manageProblemsApi()
+const { data: problems } = await useAsyncData('manage:problems', () =>
+  manageProblemsRepo.list()
+)
 
 const items = computed(() =>
   problems.value

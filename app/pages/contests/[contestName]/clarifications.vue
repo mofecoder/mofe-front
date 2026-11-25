@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Contests from '~/utils/apis/Contests'
+import { contestsApi } from '~/utils/apis'
 import { useUserStore } from '~/store/user'
 import { formatDate } from '~/utils/formatting'
 
@@ -15,6 +15,7 @@ useHead(() => ({
   title: `質問 - ${contest.value?.name}`
 }))
 
+const contestsRepo = contestsApi()
 const editingId = ref<number | null>(null)
 const questionFlag = ref(false)
 
@@ -34,14 +35,9 @@ const question = () => {
 }
 
 const submitQuestion = async (task: string | null, content: string) => {
-  await api(
-    Contests.createClarification,
-    [contestName.value!],
-    {},
-    {
-      clarification: { task, question: content }
-    }
-  )
+  await contestsRepo.createClarification(contestName.value!, {
+    clarification: { task, question: content }
+  })
   await updateClarifications(true)
   questionFlag.value = false
 }

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { VForm } from 'vuetify/components'
-import type { FetchError } from 'ofetch'
 import { checkPasswordFormat } from '~/utils/validation'
 import { useUserStore } from '~/store/user'
-import Auth from '~/utils/apis/Auth'
+import { authApi } from '~/utils/apis'
 
 const router = useRouter()
 const route = useRoute()
@@ -39,14 +38,16 @@ const message = ref('')
 const loading = ref(false)
 const form = ref<VForm>()
 
-const handleError = (
-  e: FetchError<{ success: false; errors: string[] }> | null | undefined
-) => {
-  if (!e || !e.data) {
-    error.value = '処理に失敗しました。'
-    return
-  }
-  error.value = e.data.errors.join('\n')
+const authRepo = authApi()
+
+// パスワード変更は統一エラー形式 ({ error })、
+// リセットメールの送信は devise_token_auth の形式 ({ errors: [] }) で返る
+const handleError = (e: unknown) => {
+  const data = getApiError(e) as { errors?: unknown } | undefined
+  error.value = Array.isArray(data?.errors)
+    ? data.errors.join('\n')
+    : getErrorMessage(e, '処理に失敗しました。')
+  loading.value = false
 }
 
 const submit = async () => {
@@ -54,39 +55,32 @@ const submit = async () => {
   loading.value = true
 
   if (resetToken.value) {
-    const { data, error } = await useApi(
-      Auth.resetPassword,
-      [],
-      {},
-      {
+    try {
+      await authRepo.resetPassword({
         user: {
           password: params.password,
           passwordConfirmation: params.passwordConfirmation,
           resetPasswordToken: resetToken.value
         }
-      }
-    )
-    if (!data.value) {
-      handleError(error.value)
+      })
+    } catch (e) {
+      handleError(e)
       return
     }
     await router.push('/auth/signin')
   } else {
-    const { data, error } = await useApi(
-      Auth.resetPasswordRequest,
-      [],
-      {},
-      {
+    let res
+    try {
+      res = await authRepo.resetPasswordRequest({
         email: params.email,
         redirectUrl: '/auth/reset-password'
-      }
-    )
-    if (!data.value) {
-      handleError(error.value)
+      })
+    } catch (e) {
+      handleError(e)
       return
     }
     loading.value = false
-    message.value = data.value.message
+    message.value = res.message
   }
 }
 const valid = ref(false)

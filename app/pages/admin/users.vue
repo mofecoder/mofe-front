@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Admin from '~/utils/apis/Admin'
+import { adminApi } from '~/utils/apis'
 import type { User } from '~/types/adminUser'
 import { formatDate } from '~/utils/formatting'
 import type { DataTableHeader } from '~/types/datatable'
@@ -13,7 +13,10 @@ useHead({
   title: 'ユーザの管理'
 })
 
-const { data: users, refresh } = await useApi(Admin.getUsers, [])
+const adminRepo = adminApi()
+const { data: users, refresh } = await useAsyncData('admin:users', () =>
+  adminRepo.users()
+)
 const headers = [
   { title: 'ユーザ名', key: 'name' },
   { title: '権限', key: 'role' },
@@ -33,7 +36,7 @@ const items = computed(() =>
 )
 
 const update = async (userId: number, role: User['role']) => {
-  await api(Admin.updateUser, [userId], {}, { role })
+  await adminRepo.updateUserRole(userId, { role })
   await refresh()
 }
 

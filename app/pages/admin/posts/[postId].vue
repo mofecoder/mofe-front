@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { definePageMeta } from '#imports'
-import Posts from '~/utils/apis/Posts'
+import { postsApi } from '~/utils/apis'
 import type { Post } from '~/types/post'
 import { STATUS_TABLE } from '~/constants/posts'
 
@@ -41,8 +41,10 @@ const post = ref<PostType>({
   content: '',
   publicStatus: 'private'
 })
+const postsRepo = postsApi()
 if (postId.value) {
-  const { data } = await useApi(Posts.getPost, [postId.value])
+  const id = postId.value
+  const { data } = await useAsyncData(`post:${id}`, () => postsRepo.get(id))
   if (data.value)
     post.value = {
       id: data.value.id,
@@ -59,28 +61,15 @@ const statuses = Object.entries(STATUS_TABLE).map(([key, value]) => ({
 
 const router = useRouter()
 async function submit() {
+  const body = {
+    title: post.value.title,
+    content: post.value.content,
+    publicStatus: post.value.publicStatus
+  }
   if (isCreating.value) {
-    await api(
-      Posts.createPost,
-      [],
-      {},
-      {
-        title: post.value.title,
-        content: post.value.content,
-        publicStatus: post.value.publicStatus
-      }
-    )
+    await postsRepo.create(body)
   } else {
-    await api(
-      Posts.updatePost,
-      [postId.value!],
-      {},
-      {
-        title: post.value.title,
-        content: post.value.content,
-        publicStatus: post.value.publicStatus
-      }
-    )
+    await postsRepo.update(postId.value!, body)
   }
   await router.push('/admin/posts')
 }

@@ -1,4 +1,3 @@
-import { Api } from '~/types/api'
 import type { Contest, ContestDetail } from '~/types/contest'
 import type { StandingData } from '~/types/standings'
 import type { Clarification } from '~/types/clarification'
@@ -18,154 +17,112 @@ export type SubmissionResponse = {
 }
 export type FilterOptions = { task: string[]; user: string; status: string[] }
 
-function formatSubmissionsUrl(
-  url: string,
-  page?: number,
-  count?: number,
-  sortBy?: SortItem[],
-  filter?: FilterOptions
-) {
-  const data = []
-  if (page != null) data.push(['page', page])
-  if (count != null) data.push(['count', count])
-  if (filter || sortBy) {
-    const options: {
-      sort?: { target: string; desc: boolean }[]
-      filter?: { target: string; value: string[] }[]
-    } = {}
-    if (sortBy && sortBy.length) {
-      options.sort = sortBy
-        .filter((s) => s.order !== false)
-        .map((s) => ({ target: s.key, desc: s.order === 'desc' }))
-    }
-    if (filter && Object.values(filter).some((x) => x)) {
-      options.filter = Object.entries(filter)
-        .map((f) => ({
-          target: f[0],
-          value: Array.isArray(f[1]) ? f[1] : [f[1]]
-        }))
-        .filter((f) => f.value.filter((x) => x).length)
-    }
-    data.push(['options', JSON.stringify(options)])
-  }
-  const query = data.map((a) => `${a[0]}=${a[1]}`).join('&')
-  if (query) url += `?${query}`
-  return url
-}
-
-const getContests = new Api<Contests>('/contests')
-const getContest = new Api<ContestDetail, [string]>(
-  ([slug]) => `/contests/${slug}`
-)
-const getStandings = new Api<StandingData, [string, boolean, boolean]>(
-  ([slug, excludeOpen, teamOnly]) => {
-    const options = []
-    if (excludeOpen) options.push('exclude_open')
-    if (teamOnly) options.push('team_only')
-    return `/contests/${slug}/standings?${options.join('&')}`
-  }
-)
-
-const getClarifications = new Api<Clarification[], [string]>(
-  ([slug]) => `/contests/${slug}/clarifications`
-)
-
-const getClarification = new Api<Clarification, [string, number]>(
-  ([slug, id]) => `/contests/${slug}/clarifications/${id}`
-)
-
-const updateClarification = new Api<
-  Clarification,
-  [string, number],
-  { answer: string; publish: boolean }
->(([slug, id]) => `/contests/${slug}/clarifications/${id}`, 'PUT')
-
-const createClarification = new Api<
-  Clarification,
-  [string],
-  { clarification: { task: string | null; question: string } }
->(([slug]) => `/contests/${slug}/clarifications`, 'POST')
-
-type GetSubmissionParams = {
-  slug: string
+export type SubmissionsQuery = {
   page?: number
   count?: number
   sortBy?: SortItem[]
   filter?: FilterOptions
 }
 
-const getAllSubmissions = new Api<SubmissionResponse, GetSubmissionParams>(
-  ({ slug, page, count, sortBy, filter }) =>
-    formatSubmissionsUrl(
-      `/contests/${slug}/submissions/all`,
-      page,
-      count,
-      sortBy,
-      filter
-    )
-)
+export type StandingsQuery = {
+  excludeOpen?: boolean
+  teamOnly?: boolean
+  sortColumn?: string | null
+  order?: 'asc' | 'desc' | null
+}
 
-const getMySubmissions = new Api<SubmissionResponse, GetSubmissionParams>(
-  ({ slug, page, count, sortBy, filter }) =>
-    formatSubmissionsUrl(
-      `/contests/${slug}/submissions`,
-      page,
-      count,
-      sortBy,
-      filter
-    )
-)
-
-const rejudge = new Api<Submit, [string]>(
-  ([slug]) => `/contests/${slug}/rejudge`,
-  'POST'
-)
-
-const getSubmission = new Api<SubmissionDetail, [string, number]>(
-  ([contestSlug, id]) => `/contests/${contestSlug}/submissions/${id}`
-)
-
-const togglePublishStatus = new Api<{ public: boolean }, [string, number]>(
-  ([contestSlug, id]) =>
-    `/contests/${contestSlug}/submissions/${id}/toggle_published`,
-  'PATCH'
-)
-
-const register = new Api<void, [string], { password?: string; open?: boolean }>(
-  ([slug]) => `/contests/${slug}/registrations`,
-  'POST'
-)
-
-const teamRegister = new Api<
-  { message: string },
-  [string],
-  {
-    name: string
-    passphrase: string
-    password?: string
-    open?: boolean
+// 提出一覧のクエリを backend の形式に変換する
+// sort=-date,user (先頭の - は降順) / user=foo / task[]=A / status[]=AC
+export function toSubmissionsQuery(q: SubmissionsQuery) {
+  const sort = (q.sortBy ?? [])
+    .filter((s) => s.order !== false)
+    .map((s) => (s.order === 'desc' ? `-${s.key}` : s.key))
+    .join(',')
+  const task = q.filter?.task.filter((x) => x) ?? []
+  const status = q.filter?.status.filter((x) => x) ?? []
+  return {
+    page: q.page,
+    count: q.count,
+    sort: sort || undefined,
+    user: q.filter?.user || undefined,
+    'task[]': task.length ? task : undefined,
+    'status[]': status.length ? status : undefined
   }
->(([slug]) => `/contests/${slug}/registrations/team`, 'POST')
+}
 
-const unregister = new Api<void, [string]>(
-  ([slug]) => `/contests/${slug}/registrations`,
-  'DELETE'
-)
+export const contestsApi = () => {
+  const api = useNuxtApp().$api
+  return {
+    list: () => api<Contests>('/contests'),
+    get: (slug: string) => api<ContestDetail>(`/contests/${slug}`),
+    standings: (slug: string, q: StandingsQuery = {}) =>
+      api<StandingData>(`/contests/${slug}/standings`, {
+        query: {
+          exclude_open: q.excludeOpen || undefined,
+          team_only: q.teamOnly || undefined,
+          sort_column: q.sortColumn || undefined,
+          order: q.order || undefined
+        }
+      }),
 
-export default {
-  getContests,
-  getContest,
-  getStandings,
-  getClarifications,
-  getClarification,
-  updateClarification,
-  createClarification,
-  getAllSubmissions,
-  getMySubmissions,
-  getSubmission,
-  rejudge,
-  register,
-  teamRegister,
-  unregister,
-  togglePublishStatus
+    clarifications: (slug: string) =>
+      api<Clarification[]>(`/contests/${slug}/clarifications`),
+    clarification: (p: { slug: string; id: number }) =>
+      api<Clarification>(`/contests/${p.slug}/clarifications/${p.id}`),
+    createClarification: (
+      slug: string,
+      body: { clarification: { task: string | null; question: string } }
+    ) =>
+      api<Clarification>(`/contests/${slug}/clarifications`, {
+        method: 'POST',
+        body
+      }),
+    updateClarification: (
+      p: { slug: string; id: number },
+      body: { answer: string; publish: boolean }
+    ) =>
+      api<Clarification>(`/contests/${p.slug}/clarifications/${p.id}`, {
+        method: 'PUT',
+        body
+      }),
+
+    allSubmissions: (slug: string, q: SubmissionsQuery = {}) =>
+      api<SubmissionResponse>(`/contests/${slug}/submissions/all`, {
+        query: toSubmissionsQuery(q)
+      }),
+    mySubmissions: (slug: string, q: SubmissionsQuery = {}) =>
+      api<SubmissionResponse>(`/contests/${slug}/submissions`, {
+        query: toSubmissionsQuery(q)
+      }),
+    submission: (p: { slug: string; id: number }) =>
+      api<SubmissionDetail>(`/contests/${p.slug}/submissions/${p.id}`),
+    togglePublished: (p: { slug: string; id: number }) =>
+      api<{ public: boolean }>(
+        `/contests/${p.slug}/submissions/${p.id}/toggle_published`,
+        { method: 'PATCH' }
+      ),
+    rejudge: (slug: string, body: { submissionIds: number[] }) =>
+      api<unknown>(`/contests/${slug}/rejudge`, { method: 'POST', body }),
+
+    register: (slug: string, body: { password?: string; open?: boolean }) =>
+      api<unknown>(`/contests/${slug}/registrations`, { method: 'POST', body }),
+    teamRegister: (
+      slug: string,
+      body: {
+        name: string
+        passphrase: string
+        password?: string
+        open?: boolean
+      }
+    ) =>
+      api<{ message: string }>(`/contests/${slug}/registrations/team`, {
+        method: 'POST',
+        body
+      }),
+    unregister: (slug: string) =>
+      api<{ message: string | null } | undefined>(
+        `/contests/${slug}/registrations`,
+        { method: 'DELETE' }
+      )
+  }
 }

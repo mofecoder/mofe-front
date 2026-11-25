@@ -3,7 +3,7 @@ import EditCard from '~/components/manage/problems/EditCard.vue'
 import EditTestcasesCard from '~/components/manage/problems/EditTestcasesCard.vue'
 import EditJudgeCard from '~/components/manage/problems/EditJudgeCard.vue'
 import CheckProblemCard from '~/components/manage/problems/CheckProblemCard.vue'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 
 definePageMeta({
   middleware: 'authenticated',
@@ -16,9 +16,11 @@ definePageMeta({
 
 const route = useRoute()
 const problemId = computed(() => parseInt(route.params.problemId as string))
-const { data: problem, refresh } = await useApi(ManageProblems.getProblem, [
-  problemId.value
-])
+const manageProblemsRepo = manageProblemsApi()
+const { data: problem, refresh } = await useAsyncData(
+  () => `manage:problem:${problemId.value}`,
+  () => manageProblemsRepo.get(problemId.value)
+)
 
 useHead(() => ({
   title: `[${problemId.value}] 問題の編集`

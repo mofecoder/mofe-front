@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Difficulties } from '~/constants/difficulty'
-import ManageProblems from '~/utils/apis/ManageProblems'
+import { manageProblemsApi } from '~/utils/apis'
 import type { Difficulty } from '~/types/task'
 import type { ProblemDetail } from '~/types/problems'
 
@@ -22,6 +22,7 @@ const problem = ref({
 })
 
 const router = useRouter()
+const manageProblemsRepo = manageProblemsApi()
 
 const modals = reactive({
   problemStatement: false,
@@ -33,11 +34,9 @@ const modals = reactive({
 
 const onSubmit = async () => {
   if (!problem.value) return
-  const { data, error } = await useApi(
-    ManageProblems.createProblem,
-    [],
-    {},
-    {
+  let created
+  try {
+    created = await manageProblemsRepo.create({
       problem: {
         name: problem.value.name,
         difficulty: problem.value.difficulty as Difficulty,
@@ -50,13 +49,12 @@ const onSubmit = async () => {
         submissionLimit1: 5,
         submissionLimit2: 60
       }
-    }
-  )
-  if (error.value || !data.value) {
-    alert('問題の作成に失敗しました')
+    })
+  } catch (e) {
+    alert(getErrorMessage(e, '問題の作成に失敗しました'))
     return
   }
-  await router.push(`/manage/problems/${data.value.id}`)
+  await router.push(`/manage/problems/${created.id}`)
 }
 </script>
 

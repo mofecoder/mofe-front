@@ -1,5 +1,6 @@
-import { Api } from '~/types/api'
+import type { FetchOptions } from 'ofetch'
 import type {
+  AggregateType,
   Problem,
   ProblemDetail,
   ProblemParams,
@@ -7,144 +8,118 @@ import type {
   TestcaseSet
 } from '~/types/problems'
 import type { Problem as AdminProblem } from '~/types/contestAdmin'
-type UploadResponseType = { messages: string[] }
-type TestcasesResponseType = {
+
+export type TestcasesResponse = {
   testcaseSets: TestcaseSet[]
   testcases: Testcase[]
 }
-type TestcaseResponseType = {
-  id: number
+export type TestcaseParams = {
   name: string
   input: string
   output: string
   explanation: string | null
 }
+export type TestcaseResponse = TestcaseParams & { id: number }
+export type TestcaseSetParams = {
+  name: string
+  points: string
+  aggregateType: AggregateType
+}
 
-const getProblems = new Api<Problem[]>('/problems')
+// 呼び出し側から渡せるリクエストの追加オプション
+type RequestOptions = Pick<FetchOptions, 'signal' | 'retry' | 'timeout'>
 
-const getProblem = new Api<ProblemDetail, [number]>(([id]) => `/problems/${id}`)
-const updateProblem = new Api<
-  ProblemDetail,
-  [number],
-  { problem: ProblemParams }
->(([id]) => `/problems/${id}`, 'PUT')
+export const manageProblemsApi = () => {
+  const api = useNuxtApp().$api
+  return {
+    list: () => api<Problem[]>('/problems'),
+    unsetProblems: () =>
+      api<AdminProblem[]>('/manage/problems/unset_problems'),
+    get: (id: number) => api<ProblemDetail>(`/problems/${id}`),
+    create: (body: { problem: ProblemParams }) =>
+      api<ProblemDetail>('/problems', { method: 'POST', body }),
+    update: (id: number, body: { problem: ProblemParams }) =>
+      api<ProblemDetail>(`/problems/${id}`, { method: 'PUT', body }),
 
-const getUnsetProblems = new Api<AdminProblem[], []>(
-  '/manage/problems/unset_problems'
-)
+    addTester: (id: number, body: { userName: string }) =>
+      api<unknown>(`/problems/${id}/tester_relations`, { method: 'POST', body }),
+    removeTester: (id: number, body: { userName: string }) =>
+      api<unknown>(`/problems/${id}/tester_relations`, {
+        method: 'DELETE',
+        body
+      }),
 
-const createProblem = new Api<ProblemDetail, [], { problem: ProblemParams }>(
-  '/problems',
-  'POST'
-)
+    testcases: (id: number) =>
+      api<TestcasesResponse>(`/problems/${id}/testcases`),
+    testcase: (p: { problemId: number; testcaseId: number }) =>
+      api<TestcaseResponse>(
+        `/problems/${p.problemId}/testcases/${p.testcaseId}`
+      ),
+    createTestcase: (id: number, body: TestcaseParams) =>
+      api<unknown>(`/problems/${id}/testcases`, { method: 'POST', body }),
+    updateTestcase: (
+      p: { problemId: number; testcaseId: number },
+      body: TestcaseParams
+    ) =>
+      api<unknown>(`/problems/${p.problemId}/testcases/${p.testcaseId}`, {
+        method: 'PUT',
+        body
+      }),
+    deleteTestcase: (p: { problemId: number; testcaseId: number }) =>
+      api<unknown>(`/problems/${p.problemId}/testcases/${p.testcaseId}`, {
+        method: 'DELETE'
+      }),
+    deleteTestcases: (id: number, body: { testcases: number[] }) =>
+      api<unknown>(`/problems/${id}/testcases/delete_multiple`, {
+        method: 'DELETE',
+        body
+      }),
+    uploadTestcases: (id: number, form: FormData, opts: RequestOptions = {}) =>
+      api<{ messages: string[] }>(`/problems/${id}/testcases/upload`, {
+        method: 'POST',
+        body: form,
+        ...opts
+      }),
+    changeTestcaseState: (
+      p: { problemId: number; testcaseId: number },
+      body: { testcaseSetId: number; state: boolean }
+    ) =>
+      api<unknown>(
+        `/problems/${p.problemId}/testcases/${p.testcaseId}/change_state`,
+        { method: 'PATCH', body }
+      ),
+    addToTestcaseSet: (
+      id: number,
+      body: { testcaseIds: number[]; testcaseSetId: number }
+    ) =>
+      api<unknown>(`/problems/${id}/testcases/change_state_multiple`, {
+        method: 'PATCH',
+        body
+      }),
 
-const addTester = new Api<void, [number]>(
-  ([id]) => `/problems/${id}/tester_relations`,
-  'POST'
-)
-const removeTester = new Api<void, [number]>(
-  ([id]) => `/problems/${id}/tester_relations`,
-  'DELETE'
-)
+    testcaseSet: (p: { problemId: number; testcaseSetId: number }) =>
+      api<TestcaseSet>(
+        `/problems/${p.problemId}/testcase_sets/${p.testcaseSetId}`
+      ),
+    createTestcaseSet: (id: number, body: TestcaseSetParams) =>
+      api<unknown>(`/problems/${id}/testcase_sets`, { method: 'POST', body }),
+    updateTestcaseSet: (
+      p: { problemId: number; testcaseSetId: number },
+      body: TestcaseSetParams
+    ) =>
+      api<unknown>(`/problems/${p.problemId}/testcase_sets/${p.testcaseSetId}`, {
+        method: 'PUT',
+        body
+      }),
+    deleteTestcaseSet: (p: { problemId: number; testcaseSetId: number }) =>
+      api<unknown>(`/problems/${p.problemId}/testcase_sets/${p.testcaseSetId}`, {
+        method: 'DELETE'
+      }),
 
-const getTestcases = new Api<TestcasesResponseType, [number]>(
-  ([id]) => `/problems/${id}/testcases`
-)
-
-const getTestcase = new Api<TestcaseResponseType, [number, number]>(
-  ([id, testcaseId]) => `/problems/${id}/testcases/${testcaseId}`
-)
-
-const deleteTestcase = new Api<void, [number, number]>(
-  ([id, testcaseId]) => `/problems/${id}/testcases/${testcaseId}`,
-  'DELETE'
-)
-
-const createTestcase = new Api<void, [number]>(
-  ([id]) => `/problems/${id}/testcases`,
-  'POST'
-)
-
-const updateTestcase = new Api<void, [number, number]>(
-  ([id, testcaseId]) => `/problems/${id}/testcases/${testcaseId}`,
-  'PUT'
-)
-
-const getTestcaseSet = new Api<TestcaseSet, [number, number]>(
-  ([id, testcaseSetId]) => `/problems/${id}/testcase_sets/${testcaseSetId}`
-)
-
-const deleteMultipleTestcases = new Api<
-  void,
-  [number],
-  { testcases: number[] }
->(([id]) => `/problems/${id}/testcases/delete_multiple`, 'DELETE')
-
-const createTestcaseSet = new Api<void, [number]>(
-  ([id]) => `/problems/${id}/testcase_sets`,
-  'POST'
-)
-
-const updateTestcaseSet = new Api<void, [number, number]>(
-  ([id, testcaseSetId]) => `/problems/${id}/testcase_sets/${testcaseSetId}`,
-  'PUT'
-)
-
-const deleteTestcaseSet = new Api<void, [number, number]>(
-  ([id, testcaseSetId]) => `/problems/${id}/testcase_sets/${testcaseSetId}`,
-  'DELETE'
-)
-
-const uploadTestcases = new Api<UploadResponseType, [number]>(
-  ([id]) => `/problems/${id}/testcases/upload`,
-  'POST',
-  {}
-)
-
-const changeTestcaseState = new Api<void, [number, number]>(
-  ([id, testcaseId]) => `/problems/${id}/testcases/${testcaseId}/change_state`,
-  'PATCH'
-)
-
-const addToTestcaseSetMultiple = new Api<
-  void,
-  [number],
-  { testcaseIds: number[]; testcaseSetId: number }
->(([id]) => `/problems/${id}/testcases/change_state_multiple`, 'PATCH')
-
-const updateChecker = new Api<string, [number]>(
-  ([id]) => `/problems/${id}/checker`,
-  'POST',
-  {}
-)
-
-const downloadChecker = new Api<string, [number]>(
-  ([id]) => `/problems/${id}/checker`,
-  'GET',
-  {}
-)
-
-export default {
-  getProblems,
-  getProblem,
-  getUnsetProblems,
-  updateProblem,
-  createProblem,
-  addTester,
-  removeTester,
-  getTestcases,
-  getTestcase,
-  deleteTestcase,
-  createTestcase,
-  updateTestcase,
-  deleteMultipleTestcases,
-  getTestcaseSet,
-  createTestcaseSet,
-  updateTestcaseSet,
-  deleteTestcaseSet,
-  uploadTestcases,
-  changeTestcaseState,
-  updateChecker,
-  addToTestcaseSetMultiple,
-  downloadChecker
+    // FormData (type / file) で送る
+    updateChecker: (id: number, form: FormData) =>
+      api<string>(`/problems/${id}/checker`, { method: 'POST', body: form }),
+    downloadChecker: (id: number) =>
+      api<string>(`/problems/${id}/checker`, { responseType: 'text' })
+  }
 }

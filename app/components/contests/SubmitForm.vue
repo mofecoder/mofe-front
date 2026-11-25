@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { FetchError } from 'ofetch'
 import languages from '~/constants/languages'
-import Tasks from '~/utils/apis/Tasks'
+import { tasksApi } from '~/utils/apis'
 import type { ProblemDetail } from '~/types/problems'
 import type { TaskDetail } from '~/types/task'
 
@@ -11,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const tasksRepo = tasksApi()
 
 const submitted = ref(false)
 const sourceFileText = ref<string | null>(null)
@@ -76,23 +76,14 @@ async function submit() {
   }
   submitted.value = true
   try {
-    await api(
-      Tasks.submit,
-      {
-        contestSlug: props.contestSlug,
-        taskSlug: props.problem.slug,
-        lang: language.value!.innerName
-      },
-      {
-        headers: { 'Content-Type': 'text/plain' },
-        query: { lang: language.value!.innerName }
-      },
-      sourceCode
+    await tasksRepo.submit(
+      { contestSlug: props.contestSlug, taskSlug: props.problem.slug },
+      { lang: language.value!.innerName, source: sourceCode }
     )
     await router.push(`/contests/${props.contestSlug}/submissions/me`)
   } catch (err) {
-    if (err instanceof FetchError && err.status === 425) {
-      error.value = err.data?.error
+    if (getErrorStatus(err) === 425) {
+      error.value = getErrorMessage(err, '提出制限により提出できません。')
     } else {
       alert(`提出に失敗しました。`)
       console.error(err)
