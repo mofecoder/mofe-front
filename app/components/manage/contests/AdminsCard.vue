@@ -2,11 +2,11 @@
 defineProps<{
   loading?: boolean
   users: string[]
-  error?: string
+  error?: string | string[]
 }>()
 
 defineEmits<{
-  add: [user: string]
+  add: [users: string[]]
   remove: [user: string]
 }>()
 </script>
@@ -20,6 +20,7 @@ defineEmits<{
         placeholder="管理者を追加"
         :loading="loading"
         :error="error"
+        bulk
         @add="(u) => $emit('add', u)"
         @remove="(u) => $emit('remove', u)"
       >

@@ -1,5 +1,6 @@
 import { Api } from '~/types/api'
 import type {
+  AddAdminsResult,
   Contest,
   ContestCreateParam,
   ContestDetailManage,
@@ -36,7 +37,7 @@ const removeTask = new Api<void, [string, string]>(
   'PUT'
 )
 
-const addAdmin = new Api<void, [string], { userName: string }>(
+const addAdmin = new Api<AddAdminsResult, [string], { userNames: string[] }>(
   ([contestSlug]) => `/contests/${contestSlug}/contest_admins`,
   'POST'
 )

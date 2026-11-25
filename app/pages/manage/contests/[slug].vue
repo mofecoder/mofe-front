@@ -152,24 +152,26 @@ const remove = async (slug: string) => {
   loading.tasks = false
 }
 
-const adminsError = ref('')
-const addAdmin = async (user: string) => {
+const adminsError = ref<string[]>([])
+const addAdmin = async (users: string[]) => {
   loading.admins = true
   try {
-    await api(
+    const result = await api(
       ManageContests.addAdmin,
       [contest.slug],
       {},
       {
-        userName: user
+        userNames: users
       }
     )
-    adminsError.value = ''
+    adminsError.value = result.errors.map(
+      ({ userName, error }) => `${userName}: ${error}`
+    )
   } catch (error: unknown) {
     if (error instanceof FetchError && error?.data?.error) {
-      adminsError.value = error.data.error
+      adminsError.value = [error.data.error]
     } else {
-      adminsError.value = 'コンテスト管理者の追加に失敗しました。'
+      adminsError.value = ['コンテスト管理者の追加に失敗しました。']
     }
   } finally {
     await reload()
