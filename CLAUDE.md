@@ -17,10 +17,12 @@
 
 Nuxt 4 (`compatibilityVersion: 4`) + Vuetify 4 + Pinia。ソースは `app/` 配下。
 
-- **API 層**: `app/utils/apis/*.ts` で、`Api` クラス (`app/types/api.ts`) のインスタンスとしてエンドポイント (path / method / options) を宣言する。`.POST` などの getter でメソッド違いを派生させる。
-  - 呼び出しは `useApi(api, args, options, body)` (`composables/useApi.ts`) → `useHttp` (`composables/useHttp.ts`) → `useFetch`。composable 外では `utils/api.ts` の `api()`。
-  - `useHttp` は cookie (`AUTH_COOKIE_NAME`) の認証トークン (client / accessToken / uid) をヘッダーに付与し、リクエスト body を snake_case、レスポンスを camelCase に自動変換 (`utils/http.ts`)。401 で `userStore.signOut()` と cookie 削除を行い、`useLoadingIndicator` と連動する。
-  - devise token auth 風のヘッダーローテーションは `store/user.ts` の `onResponse` が cookie を更新して処理する。
+- **API 層**: 共通クライアント `$api` (`plugins/api.ts`、`$fetch.create`) と、`app/utils/apis/*.ts` の repository 関数 (`contestsApi()`、`manageProblemsApi()` など) で構成する。
+  - repository 関数は名前付き引数を受け取り `$api` を呼ぶ。パスパラメータが 2 つ以上なら `{ problemId, testcaseId }` のような名前付きのオブジェクトで受ける。factory (`xxxApi()`) は内部で `useNuxtApp()` を使うので、setup や action の先頭 (await の前) で呼ぶ。
+  - setup 直下での取得は `useAsyncData(key, () => repo.xxx())`。引数が reactive なら key を関数にして条件を含める。イベントハンドラや store の action では直接 `await` して `try/catch` する (ハンドラ内で `useFetch` / `useAsyncData` を使わない)。
+  - `$api` は cookie (`AUTH_COOKIE_NAME`) の認証トークンをヘッダーに付与し、JSON の body を snake_case、JSON のレスポンスを camelCase に変換する (`utils/http.ts`)。**query は変換しない**ので、repository でワイヤー上のキー (`exclude_open`、`task[]` など) を書く。
+  - レスポンスに認証ヘッダーがあれば cookie を更新し、401 ならユーザー状態と cookie を消す。`useLoadingIndicator` とも連動する。
+  - エラーは backend の統一形式 `{ error, details? }` (`types/apiError.ts`)。`utils/apiError.ts` の `getErrorMessage(e, fallback)` / `getErrorStatus(e)` で読む (`FetchError` と `useAsyncData` の `error` の両方に使える)。
 - **状態管理**: `app/store/` の Pinia ストア (`user.ts`, `contest.ts`)。
 - **認証**: `middleware/user.global.ts` が全ルートで `fetchUser()` を実行。`authenticated.ts` (要ログイン) と `admin.ts` (role が admin) がページ単位のガード。
 - **SSR 設定** (`nuxt.config.ts` の `routeRules`): `/admin/**` と `/manage/**` は `ssr: false`、`/privacy_policy` は prerender。
