@@ -9,7 +9,6 @@ const props = withDefaults(
     loading?: boolean
     error?: string | string[]
     users: string[]
-    // true のとき、複数ユーザ名のペーストで一括追加する
     bulk?: boolean
   }>(),
   {
@@ -110,7 +109,6 @@ const onPaste = (event: ClipboardEvent) => {
         >追加</v-btn
       >
     </div>
-    <!-- 入力欄の幅に縛られないよう、エラーは入力欄の外にまとめて表示する -->
     <div
       v-if="errorMessages.length"
       class="text-error text-caption mt-1"
