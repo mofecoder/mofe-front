@@ -223,7 +223,7 @@ const removeTester = async (name: string) => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.statement"
               :rules="rules.required"
               label="問題文 (Markdown)"
@@ -254,7 +254,7 @@ const removeTester = async (name: string) => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.constraints"
               :rules="rules.required"
               label="制約 (Markdown)"
@@ -291,7 +291,7 @@ const removeTester = async (name: string) => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.partialScores"
               :disabled="!usePartialScores"
               label="部分点 (Markdown)"
@@ -322,7 +322,7 @@ const removeTester = async (name: string) => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.inputFormat"
               :rules="rules.required"
               label="入力 (Markdown)"
@@ -358,7 +358,7 @@ const removeTester = async (name: string) => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.outputFormat"
               :rules="rules.required"
               label="出力 (Markdown)"

@@ -92,7 +92,7 @@ const onSubmit = async () => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.statement"
               label="問題文 (Markdown)"
               variant="outlined"
@@ -119,7 +119,7 @@ const onSubmit = async () => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.constraints"
               label="制約 (Markdown)"
               variant="outlined"
@@ -146,7 +146,7 @@ const onSubmit = async () => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.partialScores"
               label="部分点 (Markdown)"
               variant="outlined"
@@ -173,7 +173,7 @@ const onSubmit = async () => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.inputFormat"
               label="入力 (Markdown)"
               variant="outlined"
@@ -205,7 +205,7 @@ const onSubmit = async () => {
         </v-row>
         <v-row>
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.outputFormat"
               label="出力 (Markdown)"
               variant="outlined"

@@ -110,7 +110,7 @@ async function submit() {
         </v-row>
         <v-row>
           <v-col cols="12" class="py-1">
-            <v-textarea
+            <MarkdownTextarea
               v-model="post.content"
               :rules="rules.required"
               label="内容"
