@@ -212,18 +212,11 @@ const removeTester = async (name: string) => {
         </v-row>
         <!-- 問題文 -->
         <v-row class="justify-end">
-          <v-btn
-            class="mr-4"
-            variant="text"
-            width="auto"
-            color="purple"
-            @click="modals.problemStatement = true"
-            >プレビュー
-          </v-btn>
+          <MarkdownPreviewButton @click="modals.problemStatement = true" />
         </v-row>
-        <v-row>
+        <v-row class="mt-1">
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.statement"
               :rules="rules.required"
               label="問題文 (Markdown)"
@@ -243,18 +236,11 @@ const removeTester = async (name: string) => {
         />
         <!-- 制約 -->
         <v-row class="justify-end">
-          <v-btn
-            class="mr-4"
-            variant="text"
-            width="auto"
-            color="purple"
-            @click="modals.constraints = true"
-            >プレビュー
-          </v-btn>
+          <MarkdownPreviewButton @click="modals.constraints = true" />
         </v-row>
-        <v-row>
+        <v-row class="mt-1">
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.constraints"
               :rules="rules.required"
               label="制約 (Markdown)"
@@ -276,22 +262,15 @@ const removeTester = async (name: string) => {
         <v-row class="justify-space-between">
           <v-checkbox
             v-model="usePartialScores"
+            density="compact"
             label="部分点を表示する"
             hide-details
           />
-          <v-btn
-            class="mr-4"
-            variant="text"
-            width="auto"
-            color="purple"
-            @click="modals.partialScores = true"
-          >
-            プレビュー
-          </v-btn>
+          <MarkdownPreviewButton @click="modals.partialScores = true" />
         </v-row>
-        <v-row>
+        <v-row class="mt-1">
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.partialScores"
               :disabled="!usePartialScores"
               label="部分点 (Markdown)"
@@ -311,18 +290,11 @@ const removeTester = async (name: string) => {
         />
         <!-- 入力 -->
         <v-row class="justify-end">
-          <v-btn
-            class="mr-4"
-            variant="text"
-            width="auto"
-            color="purple"
-            @click="modals.input = true"
-            >プレビュー
-          </v-btn>
+          <MarkdownPreviewButton @click="modals.input = true" />
         </v-row>
-        <v-row>
+        <v-row class="mt-1">
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.inputFormat"
               :rules="rules.required"
               label="入力 (Markdown)"
@@ -347,18 +319,11 @@ const removeTester = async (name: string) => {
         />
         <!-- 出力 -->
         <v-row class="justify-end">
-          <v-btn
-            class="mr-4"
-            variant="text"
-            width="auto"
-            color="purple"
-            @click="modals.output = true"
-            >プレビュー
-          </v-btn>
+          <MarkdownPreviewButton @click="modals.output = true" />
         </v-row>
-        <v-row>
+        <v-row class="mt-1">
           <v-col cols="12" class="pt-0 pb-2">
-            <v-textarea
+            <MarkdownTextarea
               v-model="problem.outputFormat"
               :rules="rules.required"
               label="出力 (Markdown)"

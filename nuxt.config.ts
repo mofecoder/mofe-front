@@ -60,6 +60,7 @@ const nuxtConfig = defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: '',
+      apiV4Base: '',
       gaTrackingId: ''
     }
   },

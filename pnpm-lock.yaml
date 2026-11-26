@@ -224,6 +224,9 @@ importers:
       pinia:
         specifier: ^4.1.0
         version: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.46(typescript@5.9.3))
+      spark-md5:
+        specifier: ^3.0.2
+        version: 3.0.2
       vue:
         specifier: ^3.5.46
         version: 3.5.46(typescript@5.9.3)
@@ -294,6 +297,9 @@ importers:
       '@types/node':
         specifier: ^22.20.2
         version: 22.20.2
+      '@types/spark-md5':
+        specifier: ^3.0.5
+        version: 3.0.5
       '@vitejs/plugin-vue':
         specifier: ^6.0.10
         version: 6.0.11(vite@8.3.8(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.107.1)(terser@5.44.0)(yaml@2.8.1))(vue@3.5.46(typescript@5.9.3))
@@ -2317,6 +2323,9 @@ packages:
 
   '@types/source-list-map@0.1.6':
     resolution: {integrity: sha512-5JcVt1u5HDmlXkwOD2nslZVllBBc7HDuOICfiZah2Z0is8M8g+ddAEawbmd3VjedfDHBzxCaXLs07QEmb7y54g==}
+
+  '@types/spark-md5@3.0.5':
+    resolution: {integrity: sha512-lWf05dnD42DLVKQJZrDHtWFidcLrHuip01CtnC2/S6AMhX4t9ZlEUj4iuRlAnts0PQk7KESOqKxeGE/b6sIPGg==}
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
@@ -6182,6 +6191,9 @@ packages:
     resolution: {integrity: sha512-d8EqvL+k/SOXCreS/SUzg2ciyHqBBLcN/yuRjFsbvVhHTE2pgei7oAhmPM7kWFbkX6OSMQfUq4KbkF3au9lhYQ==}
     engines: {node: '>= 12'}
 
+  spark-md5@3.0.2:
+    resolution: {integrity: sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==}
+
   spdx-exceptions@2.5.0:
     resolution: {integrity: sha512-PiU42r+xO4UbUS1buo3LPJkjlO7430Xn5SVAhdpzzsPHsjbYVflnnFdATgabnLude+Cqu25p6N+g2lw/PFsa4w==}
 
@@ -9776,6 +9788,8 @@ snapshots:
       '@types/send': 0.17.4
 
   '@types/source-list-map@0.1.6': {}
+
+  '@types/spark-md5@3.0.5': {}
 
   '@types/stack-utils@2.0.3': {}
 
@@ -14478,6 +14492,8 @@ snapshots:
   source-map@0.7.4: {}
 
   source-map@0.8.0: {}
+
+  spark-md5@3.0.2: {}
 
   spdx-exceptions@2.5.0: {}
 

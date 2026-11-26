@@ -23,6 +23,7 @@ function isJsonLike(data: unknown): boolean {
 
 // backend API 用の共通クライアント
 // 認証ヘッダーの付与、キーのケース変換、トークンの更新、401 時のサインアウトをまとめて行う
+// $api は v1 (/api/)、$apiV4 は v4 (/v4/) を呼ぶ。処理は共通で baseURL だけが違う
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
   const dayjs = useDayjs()
@@ -61,8 +62,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     return tokens
   }
 
-  const api = $fetch.create({
-    baseURL: config.public.apiBase,
+  const createApi = (baseURL: string) => $fetch.create({
+    baseURL,
     mode: 'cors',
     onRequest({ options }) {
       const tokens = readAuthTokens()
@@ -108,5 +109,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   })
 
-  return { provide: { api } }
+  const api = createApi(config.public.apiBase)
+  const apiV4 = createApi(config.public.apiV4Base)
+
+  return { provide: { api, apiV4 } }
 })

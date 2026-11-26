@@ -221,7 +221,7 @@ const password = computed({
       </v-row>
       <v-row>
         <v-col class="pt-0" cols="12">
-          <v-textarea
+          <MarkdownTextarea
             v-model="contestDescription"
             label="コンテスト詳細 (Markdown)"
             variant="outlined"
