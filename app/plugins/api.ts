@@ -1,5 +1,5 @@
 import type AuthTokens from '~/types/AuthTokens'
-import { AUTH_COOKIE_NAME } from '~/constants/cookies'
+import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '~/constants/cookies'
 import { useUserStore } from '~/store/user'
 import { log, toCamelCase, toSnakeCase } from '~/utils/http'
 
@@ -34,7 +34,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // 認証 cookie の有効期限。トークンを保存する直前に更新する
   let authExpires: Date | undefined
-  const authCookieOptions = { expires: () => authExpires }
+  const authCookieOptions = { ...AUTH_COOKIE_OPTIONS, expires: () => authExpires }
 
   // ofetch のフックは await の後に呼ばれるため、Nuxt のコンテキストがなく composable を呼べない。
   // サーバーでは nuxtApp.runWithContext も Promise を返すので (unctx の callAsync が async)、
@@ -45,13 +45,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     ? useCookie<AuthTokens | null>(AUTH_COOKIE_NAME, authCookieOptions)
     : null
   const serverOldAuthCookie = import.meta.server
-    ? useCookie<AuthTokens | null>('auth')
+    ? useCookie<AuthTokens | null>('auth', AUTH_COOKIE_OPTIONS)
     : null
   const authCookie = () =>
     serverAuthCookie ??
     useCookie<AuthTokens | null>(AUTH_COOKIE_NAME, authCookieOptions)
   const oldAuthCookie = () =>
-    serverOldAuthCookie ?? useCookie<AuthTokens | null>('auth')
+    serverOldAuthCookie ?? useCookie<AuthTokens | null>('auth', AUTH_COOKIE_OPTIONS)
 
   const readAuthTokens = () => {
     const auth = authCookie()

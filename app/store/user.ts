@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { AuthUser } from '~/types/AuthUser'
 import { authApi, type AuthErrorResponse } from '~/utils/apis'
-import { AUTH_COOKIE_NAME } from '~/constants/cookies'
+import { AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS } from '~/constants/cookies'
 
 interface UserState {
   user: AuthUser | null
@@ -16,7 +16,7 @@ function getAuthErrors(e: unknown): string[] {
 
 // トークンの更新 (cookie への保存) と 401 時の破棄は plugins/api.ts で共通に行う
 async function fetchUser() {
-  const cookie = useCookie(AUTH_COOKIE_NAME)
+  const cookie = useCookie(AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS)
   if (!cookie.value) return 'error'
   const auth = authApi()
   try {
@@ -84,7 +84,7 @@ export const useUserStore = defineStore('user', {
         await auth.signOut()
       } finally {
         this.updateUser(null)
-        useCookie(AUTH_COOKIE_NAME).value = null
+        useCookie(AUTH_COOKIE_NAME, AUTH_COOKIE_OPTIONS).value = null
       }
     },
     updateUser(user: AuthUser | null) {
