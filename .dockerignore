@@ -1,0 +1,31 @@
+# イメージに入れないファイル
+# 秘密情報 (.env は本番の公開 URL を build で使うので残す)
+service-account.json
+.env.local
+.env.*.local
+
+# 生成物・依存 (イメージ内で作り直す)
+node_modules
+.nuxt
+.output
+.data
+.vuetify
+coverage
+*.log
+
+# 開発用の設定やツールのファイル
+.git
+.gitignore
+.husky
+.idea
+.junie
+.claude
+.mcp.json
+.DS_Store
+.editorconfig
+.prettierrc
+mise.toml
+Dockerfile
+.dockerignore
+README.md
+CLAUDE.md
