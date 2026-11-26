@@ -26,6 +26,7 @@ Nuxt 4 (`compatibilityVersion: 4`) + Vuetify 4 + Pinia。ソースは `app/` 配
   - エラーは backend の統一形式 `{ error, details? }` (`types/apiError.ts`)。`utils/apiError.ts` の `getErrorMessage(e, fallback)` / `getErrorStatus(e)` で読む (`FetchError` と `useAsyncData` の `error` の両方に使える)。
 - **状態管理**: `app/store/` の Pinia ストア (`user.ts`, `contest.ts`)。
 - **認証**: `middleware/user.global.ts` が全ルートで `fetchUser()` を実行。`authenticated.ts` (要ログイン) と `admin.ts` (role が admin) がページ単位のガード。
+- **セキュリティヘッダー**: `server/plugins/security-headers.ts` (Nitro プラグイン) が全応答に `X-Frame-Options` などと CSP を付ける。CSP はまだ `Content-Security-Policy-Report-Only`。外部のスクリプト・スタイル・接続先を増やすときはここの許可リストも更新する。
 - **SSR 設定** (`nuxt.config.ts` の `routeRules`): `/admin/**` と `/manage/**` は `ssr: false`、`/privacy_policy` は prerender。
 - **UI**: Vuetify 4 (`vite-plugin-vuetify` を `vite:extendConfig` フックで追加)。`vite.optimizeDeps.include` に VOverlay などが入っているのは Vuetify 4 の z-index 問題の回避策なので削除しない。
 - **画像アップロード**: Markdown の編集欄は `components/MarkdownTextarea.vue` (v-textarea のラッパー) を使う。writer / admin にはボタン・ドラッグ＆ドロップ・貼り付けでの画像アップロードが付き、完了するとカーソル位置に `![](公開 URL)` を挿入する。処理は `composables/useImageUpload.ts` (形式とサイズの確認 → JPEG / WebP の再エンコードでメタデータ除去 (`utils/imageSanitizer.ts`) → MD5 → `POST /v4/uploads` → ストレージへ直接 PUT → complete)。ストレージへの PUT は `$api` を通さない。
