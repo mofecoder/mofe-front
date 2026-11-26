@@ -9,7 +9,7 @@ import { ImageUploadError } from '~/utils/imageSanitizer'
 defineOptions({ inheritAttrs: false })
 
 const model = defineModel<string | null | undefined>({ default: '' })
-const props = defineProps<{ disabled?: boolean }>()
+const props = defineProps<{ disabled?: boolean; readonly?: boolean }>()
 const attrs = useAttrs()
 
 const userStore = useUserStore()
@@ -17,7 +17,9 @@ const userStore = useUserStore()
 const canUpload = computed(() =>
   ['writer', 'admin'].includes(userStore.user?.role ?? '')
 )
-const enabled = computed(() => canUpload.value && !props.disabled)
+const enabled = computed(
+  () => canUpload.value && !props.disabled && !props.readonly
+)
 
 const { upload } = useImageUpload()
 
@@ -161,6 +163,7 @@ function onFileSelected(e: Event) {
       v-model="model"
       v-bind="attrs"
       :disabled="disabled"
+      :readonly="readonly"
       :loading="uploading"
     />
     <div v-if="canUpload" class="d-flex align-center flex-wrap ga-2 mb-2">

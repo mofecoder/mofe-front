@@ -147,11 +147,11 @@ const check = (v: string) => {
                 />
               </v-col>
               <v-col cols="12">
-                <v-textarea
+                <MarkdownTextarea
                   v-model="params.explanation"
                   rows="2"
                   :readonly="readonly"
-                  label="説明"
+                  label="説明 (Markdown)"
                 />
               </v-col>
             </v-row>
