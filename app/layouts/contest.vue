@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import 'dayjs/locale/ja'
 import { useContestStore } from '~/store/contest'
 import { useUserStore } from '~/store/user'
 
 const contestStore = useContestStore()
 const userStore = useUserStore()
 const dayjs = useDayjs()
-dayjs.locale('ja')
 const drawer = ref<boolean | null>(null)
 
 const { contest, contestName, updateContest } = useContest(true)
@@ -91,7 +89,7 @@ const role = computed(() => {
         <EnvironmentChip class="ml-4 mr-2" />
         <div class="contest-header__info md-1 ml-md-4">
           <div class="contest-header__info__title">コンテスト日時</div>
-          <div v-for="text in contestTime" :key="text" v-text="text" />
+          <div v-for="text in contestTime" :key="text">{{ text }}</div>
         </div>
       </template>
       <v-spacer />

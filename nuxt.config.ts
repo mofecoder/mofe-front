@@ -70,6 +70,11 @@ const nuxtConfig = defineNuxtConfig({
     '/admin/**': { ssr: false },
     '/manage/**': { ssr: false }
   },
+  nitro: {
+    // nitro は node_modules を副作用なしとして tree-shaking するため、
+    // 副作用 import の dayjs/locale/ja がサーバーバンドルから消えて SSR が英語表記になる。
+    moduleSideEffects: ['dayjs/locale/']
+  },
   future: {
     compatibilityVersion: 4
   },
