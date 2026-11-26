@@ -10,7 +10,7 @@
 - `pnpm build` / `pnpm generate` / `pnpm start`
 - `pnpm lint` (`eslint --fix .`) / `pnpm lint:nofix` (`eslint .`)
 - husky の pre-commit で lint-staged が `*.{js,ts,vue}` に `eslint --fix` を実行する
-- `pnpm test` (jest) は **実質機能しない**。設定が Nuxt 2 時代のもの (`vue-jest`、`<rootDir>/components` 参照) で、テストファイルも存在しない
+- 自動テストはない (Nuxt 2 時代の jest の設定は動かなかったので削除した)。変更の確認は `pnpm lint:nofix` と `pnpm build`、必要ならブラウザで行う
 - バックエンド API のベース URL は `NUXT_PUBLIC_API_BASE` (`.env` は `https://api.mofecoder.com/api`)。ローカル用スタブは `kichi2004/cafecoder-stub` (README 参照)
 
 ## アーキテクチャ

@@ -1,9 +1,7 @@
 allowBuilds:
-  '@firebase/util': true
   '@parcel/watcher': true
   core-js: true
   esbuild: true
-  protobufjs: true
   unrs-resolver: true
   vue-demi: true
 
