@@ -30,7 +30,7 @@ Nuxt 4 (`compatibilityVersion: 4`) + Vuetify 4 + Pinia。ソースは `app/` 配
 - **SSR 設定** (`nuxt.config.ts` の `routeRules`): `/admin/**` と `/manage/**` は `ssr: false`、`/privacy_policy` は prerender。
 - **UI**: Vuetify 4 (`vite-plugin-vuetify` を `vite:extendConfig` フックで追加)。`vite.optimizeDeps.include` に VOverlay などが入っているのは Vuetify 4 の z-index 問題の回避策なので削除しない。
 - **画像アップロード**: Markdown の編集欄は `components/MarkdownTextarea.vue` (v-textarea のラッパー) を使う。writer / admin にはボタン・ドラッグ＆ドロップ・貼り付けでの画像アップロードが付き、完了するとカーソル位置に `![](公開 URL)` を挿入する。処理は `composables/useImageUpload.ts` (形式とサイズの確認 → JPEG / WebP の再エンコードでメタデータ除去 (`utils/imageSanitizer.ts`) → MD5 → `POST /v4/uploads` → ストレージへ直接 PUT → complete)。ストレージへの PUT は `$api` を通さない。
-- **Markdown / 数式 / エディタ**: `plugins/markdownit.ts` + `components/MarkdownContent.vue` (markdown-it + texmath + KaTeX + highlight.js)。KaTeX の脆弱性は pnpm override で対応済み。コードエディタは CodeMirror 5 (`plugins/codemirror.client.ts`, `components/CodeEditor.vue`)。
+- **Markdown / 数式 / エディタ**: `plugins/markdownit.ts` + `components/MarkdownContent.vue` (markdown-it + texmath + KaTeX + highlight.js)。KaTeX は脆弱性の修正版 (0.18.2 以上) を直接使っている。コードエディタは CodeMirror 5 (`plugins/codemirror.client.ts`, `components/CodeEditor.vue`)。
 - **レイアウト / ページ**: `layouts/` は default / contest / top の 3 種。コンテスト配下は `pages/contests/[contestName]/` と `components/contests/`、管理画面は `pages/manage/` と `components/manage/`。
 - 定数は `app/constants/`、型は `app/types/` に集約。`app/types/contestAdmin.js` と `contestAdmin.ts` が重複して存在する (`.js` は CommonJS 形式のコンパイル残骸)。型は `.ts` 側を編集すること。
 
